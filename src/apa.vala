@@ -15,41 +15,52 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-
-
 namespace Apa {
 
-    internal static bool version = false;
+    public static int run (ref string[] argv) {
+        
+        var ca = CommandArgs.parse (ref argv);
 
-    const OptionEntry[] OPTION_ENTRIES = {
-        { "version", 'v', OptionFlags.NONE, OptionArg.NONE, ref version, N_("Print version information and exit"), null },
-        { null }
-    };
-
-    internal OptionContext option_context;
-
-    public static int run (string[] args) {
-        option_context = new OptionContext ("- apa install libgio-devel");
-
-        option_context.add_main_entries (OPTION_ENTRIES, Config.GETTEXT_PACKAGE);
-        option_context.set_summary ("ALT Packages Assistant");
-
-        try {
-            option_context.parse (ref args);
-
-        } catch (Error e) {
-            stderr.printf ("%s\n", e.message);
-            return 1;
+        if ("-v" in ca.options || "--version" in ca.options) {
+            print_version ();
         }
 
-        if (version) {
-            print ("%s %s\n".printf (
-                Config.NAME,
-                Config.VERSION
-            ));
-			return 0;
+        if ("-h" in ca.options || "--help" in ca.options) {
+            print_help ();
         }
 
-        return 0;
+        switch (ca.command) {
+            case "install":
+                Get.install (ca.command_argv, ca.options);
+                return 0;
+
+            case "remove":
+                Get.remove (ca.command_argv, ca.options);
+                return 0;
+
+            case "version":
+                print_version ();
+                return 0;
+
+            case "help":
+                print_help ();
+                return 0;
+
+            default:
+                print_help ();
+                return 1;
+        }
+    }
+
+    internal static void print_help () {
+        print ("help!\n");
+    }
+
+    internal static void print_version () {
+        print (
+            "%s %s\n",
+            Config.NAME,
+            Config.VERSION
+        );
     }
 }

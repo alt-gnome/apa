@@ -15,14 +15,27 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-public static int main (string[] argv) {
-    Intl.bindtextdomain (Config.GETTEXT_PACKAGE, Config.GNOMELOCALEDIR);
-    Intl.bind_textdomain_codeset (Config.GETTEXT_PACKAGE, "UTF-8");
-    Intl.textdomain (Config.GETTEXT_PACKAGE);
+namespace Apa.Get {
 
-    Environment.set_prgname (Config.NAME);
+    public static void install (string[] packages, string[] options) {
+        var a = new Array<string> ();
 
-    var fargv = argv[1:argv.length];
+        a.append_val ("apt-get");
+        a.append_val ("install");
+        a.append_vals (options, options.length);
+        a.append_vals (packages, packages.length);
 
-    return Apa.run (ref fargv);
+        spawn_command (a.data);
+    }
+
+    public static void remove (string[] packages, string[] options) {
+        var a = new Array<string> ();
+
+        a.append_val ("apt-get");
+        a.append_val ("remove");
+        a.append_vals (options, options.length);
+        a.append_vals (packages, packages.length);
+
+        spawn_command (a.data);
+    }
 }

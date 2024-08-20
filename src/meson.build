@@ -3,8 +3,11 @@ vapi_sources = files(
 )
 
 apa_code_sources = files (
-  'apa.vala', 
-  'main.vala', 
+  'apa-get.vala',
+  'apa.vala',
+  'command-args.vala',
+  'main.vala',
+  'utils.vala',
 )
 
 apa_sources = [
