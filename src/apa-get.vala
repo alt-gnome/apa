@@ -17,25 +17,37 @@
 
 namespace Apa.Get {
 
-    public static void install (string[] packages, string[] options) {
-        var a = new Array<string> ();
+    public async int install (string[] packages, string[] options) {
+        var arr = new string[2 + packages.length + options.length];
 
-        a.append_val ("apt-get");
-        a.append_val ("install");
-        a.append_vals (options, options.length);
-        a.append_vals (packages, packages.length);
+        arr[0] = "apt-get";
+        arr[1] = "install";
 
-        spawn_command (a.data);
+        for (int i = 0; i < options.length; i++) {
+            arr[i + 2] = options[i];
+        }
+
+        for (int i = 0; i < packages.length; i++) {
+            arr[i + 2 + options.length] = packages[i];
+        }
+
+        return yield spawn_command (arr);
     }
 
-    public static void remove (string[] packages, string[] options) {
-        var a = new Array<string> ();
+    public async int remove (string[] packages, string[] options) {
+        var arr = new string[2 + packages.length + options.length];
 
-        a.append_val ("apt-get");
-        a.append_val ("remove");
-        a.append_vals (options, options.length);
-        a.append_vals (packages, packages.length);
+        arr[0] = "apt-get";
+        arr[1] = "remove";
 
-        spawn_command (a.data);
+        for (int i = 0; i < options.length; i++) {
+            arr[i + 2] = options[i];
+        }
+
+        for (int i = 0; i < packages.length; i++) {
+            arr[i + 2 + options.length] = packages[i];
+        }
+
+        return yield spawn_command (arr);
     }
 }

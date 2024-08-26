@@ -17,62 +17,49 @@
 
 namespace Apa {
 
-    private static bool process_line (IOChannel channel, IOCondition condition) {
-        try {
-            string line;
-            channel.read_line (out line, null, null);
-            if (line == null) {
-                return false;
-            }
-            print (line);
-
-        } catch (Error e) {
-            print ("Error: %s\n", e.message);
-            return false;
+    public async int spawn_command (string[] spawn_args) {
+        if (Config.IS_DEVEL) {
+            print ("Run command:\n\t%s\n", string.joinv (" ", spawn_args));
         }
 
-        return true;
-    }
-
-    public static void spawn_command (string[] spawn_args) {
-        MainLoop loop = new MainLoop ();
+        int status_code = 0;
 
         try {
             Pid child_pid;
-            int standard_input;
-            int standard_output;
-            int standard_error;
 
-            Process.spawn_async_with_pipes (
+            Process.spawn_async_with_fds (
                 null,
                 spawn_args,
                 null,
-                SpawnFlags.SEARCH_PATH | SpawnFlags.DO_NOT_REAP_CHILD | SpawnFlags.CHILD_INHERITS_STDIN,
+                SpawnFlags.SEARCH_PATH | SpawnFlags.CHILD_INHERITS_STDIN | SpawnFlags.DO_NOT_REAP_CHILD,
                 null,
                 out child_pid,
-                out standard_input,
-                out standard_output,
-                out standard_error
+                -1,
+                stdout.fileno (),
+                stderr.fileno ()
             );
 
-            IOChannel output = new IOChannel.unix_new (standard_output);
-            output.add_watch (IOCondition.IN | IOCondition.HUP, (channel, condition) => {
-                return process_line (channel, condition);
-            });
-
-            IOChannel error = new IOChannel.unix_new (standard_error);
-            error.add_watch (IOCondition.IN | IOCondition.HUP, (channel, condition) => {
-                return process_line (channel, condition);
-            });
+            //  // stdout:
+            //  IOChannel output = new IOChannel.unix_new (stdout.fileno ());
+            //  output.add_watch (IOCondition.IN | IOCondition.HUP, (channel, condition) => {
+            //      string line;
+            //      channel.read_line (out line, null, null);
+            //      print ("%s: %s", "123", line);
+            //      return true;
+            //  });
 
             ChildWatch.add (child_pid, (pid, status) => {
+                status_code = Process.exit_status (status);
                 Process.close_pid (pid);
-                loop.quit ();
+                Idle.add (spawn_command.callback);
             });
 
-            loop.run ();
         } catch (SpawnError e) {
-            print ("Error: %s\n", e.message);
+            error (e.message);
         }
+
+        yield;
+
+        return status_code;
     }
 }

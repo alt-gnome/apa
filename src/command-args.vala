@@ -21,7 +21,7 @@ public struct Apa.CommandArgs {
     public string[] command_argv;
     public string[] options;
 
-    public static CommandArgs parse (ref string[] argv) {
+    public static CommandArgs parse (string[] argv) {
         var command = "";
         var command_argv_array = new Array<string> ();
         var options_array = new Array<string> ();

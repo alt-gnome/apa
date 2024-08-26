@@ -17,26 +17,26 @@
 
 namespace Apa {
 
-    public static int run (ref string[] argv) {
+    public async int run (string[] argv) {
         
-        var ca = CommandArgs.parse (ref argv);
+        var ca = CommandArgs.parse (argv);
 
         if ("-v" in ca.options || "--version" in ca.options) {
             print_version ();
+            return 0;
         }
 
         if ("-h" in ca.options || "--help" in ca.options) {
             print_help ();
+            return 0;
         }
 
         switch (ca.command) {
             case "install":
-                Get.install (ca.command_argv, ca.options);
-                return 0;
+                return yield Get.install (ca.command_argv, ca.options);
 
             case "remove":
-                Get.remove (ca.command_argv, ca.options);
-                return 0;
+                return yield Get.remove (ca.command_argv, ca.options);
 
             case "version":
                 print_version ();
@@ -52,11 +52,11 @@ namespace Apa {
         }
     }
 
-    internal static void print_help () {
+    internal void print_help () {
         print ("help!\n");
     }
 
-    internal static void print_version () {
+    internal void print_version () {
         print (
             "%s %s\n",
             Config.NAME,
