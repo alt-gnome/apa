@@ -3,10 +3,18 @@ vapi_sources = files(
 )
 
 apa_code_sources = files (
-  'apa-get.vala',
+  'alt/apt-cache.vala',
+  'alt/apt-get.vala',
+
+  'flatpak/flatpak.vala',
+
+  'snap/snap.vala',
+
   'apa.vala',
+  'constants.vala',
   'command-args.vala',
   'main.vala',
+  'spawn-command.vala',
   'utils.vala',
 )
 

@@ -17,49 +17,77 @@
 
 namespace Apa {
 
-    public async int spawn_command (string[] spawn_args) {
-        if (Config.IS_DEVEL) {
-            print ("Run command:\n\t%s\n", string.joinv (" ", spawn_args));
+    /*
+     * Find the most similar straw in a haystack.
+     *
+     * Example:
+     * "cor" -> { "car", "gog", "cert" } -> "car"
+     *
+     * @param haystack   The string in which to find
+     * @param straw      The string that need to find something similar to
+     *
+     * @return           Similar straw in haystack
+     */
+    public string find_best (string[] haystack, string straw) {
+        string result = "";
+        uint last_similarity = 0;
+        char[] straw_chars = (char[]) straw.data;
+
+        foreach (string str in haystack) {
+            char[] str_chars = (char[]) str.data;
+            uint similarity = 0;
+
+            foreach (char c in straw_chars) {
+                if (c in str_chars) {
+                    similarity++;
+                }
+            }
+
+            if (similarity > last_similarity) {
+                last_similarity = similarity;
+                result = str;
+            }
         }
 
-        int status_code = 0;
+        return result;
+    }
 
-        try {
-            Pid child_pid;
+    /*
+     * Meke every array string shorter.
+     *
+     * Example:
+     * "package_name - Cool package" -> "package_name"
+     *
+     * @param array array with str to short
+     */
+    public void do_short_array (Array<string> array) {
+        do_short (array.data);
+    }
 
-            Process.spawn_async_with_fds (
-                null,
-                spawn_args,
-                null,
-                SpawnFlags.SEARCH_PATH | SpawnFlags.CHILD_INHERITS_STDIN | SpawnFlags.DO_NOT_REAP_CHILD,
-                null,
-                out child_pid,
-                -1,
-                stdout.fileno (),
-                stderr.fileno ()
-            );
+    public void do_short (string[] strs) {
+        for (int i = 0; i < strs.length; i++) {
+            strs[i] = make_string_short (strs[i]);
+        }
+    }
 
-            //  // stdout:
-            //  IOChannel output = new IOChannel.unix_new (stdout.fileno ());
-            //  output.add_watch (IOCondition.IN | IOCondition.HUP, (channel, condition) => {
-            //      string line;
-            //      channel.read_line (out line, null, null);
-            //      print ("%s: %s", "123", line);
-            //      return true;
-            //  });
+    internal string make_string_short (string str) {
+        uint output_length = 0;
 
-            ChildWatch.add (child_pid, (pid, status) => {
-                status_code = Process.exit_status (status);
-                Process.close_pid (pid);
-                Idle.add (spawn_command.callback);
-            });
+        foreach (char c in (char[]) str.data) {
+            if (c != ' ') {
+                output_length++;
 
-        } catch (SpawnError e) {
-            error (e.message);
+            } else {
+                break;
+            }
         }
 
-        yield;
+        var output = new char[output_length];
 
-        return status_code;
+        for (int i = 0; i > output_length; i++) {
+            output[i] = ((char[]) str.data)[i];
+        }
+
+        return (string) output;
     }
 }

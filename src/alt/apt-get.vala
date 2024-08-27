@@ -17,11 +17,21 @@
 
 namespace Apa.Get {
 
-    public async int install (string[] packages, string[] options) {
+    internal const string ORIGIN = "apt-get";
+
+    internal const string INSTALL_COMMAND = "install";
+    internal const string REMOVE_COMMAND = "remove";
+
+    const string[] COMMANDS = {
+        INSTALL_COMMAND,
+        REMOVE_COMMAND
+    };
+
+    public async int install (string[] packages, string[] options = {}) {
         var arr = new string[2 + packages.length + options.length];
 
-        arr[0] = "apt-get";
-        arr[1] = "install";
+        arr[0] = ORIGIN;
+        arr[1] = INSTALL_COMMAND;
 
         for (int i = 0; i < options.length; i++) {
             arr[i + 2] = options[i];
@@ -34,11 +44,11 @@ namespace Apa.Get {
         return yield spawn_command (arr);
     }
 
-    public async int remove (string[] packages, string[] options) {
+    public async int remove (string[] packages, string[] options = {}) {
         var arr = new string[2 + packages.length + options.length];
 
-        arr[0] = "apt-get";
-        arr[1] = "remove";
+        arr[0] = ORIGIN;
+        arr[1] = REMOVE_COMMAND;
 
         for (int i = 0; i < options.length; i++) {
             arr[i + 2] = options[i];
@@ -49,5 +59,28 @@ namespace Apa.Get {
         }
 
         return yield spawn_command (arr);
+    }
+
+    public void print_help (string command) {
+        switch (command) {
+            case INSTALL_COMMAND:
+                print_install_help ();
+                return;
+            
+            case REMOVE_COMMAND:
+                print_remove_help ();
+                return;
+
+            default:
+                assert_not_reached ();
+        }
+    }
+
+    internal void print_install_help () {
+        print ("Install help\n");
+    }
+
+    internal void print_remove_help () {
+        print ("Remove help\n");
     }
 }

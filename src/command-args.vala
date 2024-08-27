@@ -17,7 +17,7 @@
 
 public struct Apa.CommandArgs {
 
-    public string command;
+    public string? command;
     public string[] command_argv;
     public string[] options;
 
