@@ -31,15 +31,27 @@ namespace Apa {
     public string? find_best (string[] haystack, string straw) {
         string result = "";
         uint last_similarity = 0;
-        char[] straw_chars = (char[]) straw.data;
+        var straw_chars = (char[]) straw.down ().data;
 
         foreach (string str in haystack) {
-            char[] str_chars = (char[]) str.data;
+            var str_chars = (char[]) str.dup ().down ().data;
             uint similarity = 0;
 
-            foreach (char c in straw_chars) {
-                if (c in str_chars) {
-                    similarity++;
+            for (int straw_i = 0; straw_i < straw_chars.length; straw_i++) {
+                if (straw_chars[straw_i] == '-') {
+                    continue;
+                }
+
+                for (int str_i = 0; str_i < str_chars.length; str_i++) {
+                    if (str_chars[str_i] == '-') {
+                        continue;
+                    }
+
+                    if (straw_chars[straw_i] == str_chars[str_i]) {
+                        similarity++;
+                        str_chars[str_i] = '-';
+                        break;
+                    }
                 }
             }
 
