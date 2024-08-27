@@ -61,10 +61,10 @@ namespace Apa {
      * @param array array with str to short
      */
     public void do_short_array (Array<string> array) {
-        do_short (array.data);
+        do_short (ref array.data);
     }
 
-    public void do_short (string[] strs) {
+    public void do_short (ref string[] strs) {
         for (int i = 0; i < strs.length; i++) {
             strs[i] = make_string_short (strs[i]);
         }
