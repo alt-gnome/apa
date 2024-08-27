@@ -72,20 +72,20 @@ namespace Apa {
 
     internal string make_string_short (string str) {
         uint output_length = 0;
+        var str_chars = (char[]) str.data;
 
-        foreach (char c in (char[]) str.data) {
-            if (c != ' ') {
-                output_length++;
-
-            } else {
+        foreach (char c in str_chars) {
+            if (c == ' ') {
                 break;
             }
+
+            output_length++;
         }
 
         var output = new char[output_length];
 
-        for (int i = 0; i > output_length; i++) {
-            output[i] = ((char[]) str.data)[i];
+        for (int i = 0; i < output_length; i++) {
+            output[i] = str_chars[i];
         }
 
         return (string) output;
