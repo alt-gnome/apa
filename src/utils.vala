@@ -28,7 +28,7 @@ namespace Apa {
      *
      * @return           Similar straw in haystack
      */
-    public string find_best (string[] haystack, string straw) {
+    public string? find_best (string[] haystack, string straw) {
         string result = "";
         uint last_similarity = 0;
         char[] straw_chars = (char[]) straw.data;
@@ -49,7 +49,7 @@ namespace Apa {
             }
         }
 
-        return result;
+        return result == "" ? null : result;
     }
 
     /*

@@ -75,7 +75,11 @@ namespace Apa {
                 return status;
             }
 
-            var possible_package_name = find_best (result.data, package_name);
+            string? possible_package_name = find_best (result.data, package_name);
+
+            if (possible_package_name == null) {
+                return 0;
+            }
 
             print (_("A package with a similar name found:  '%s'\n"), possible_package_name);
             print (_("Do you want to install it? [Y/n] "));
