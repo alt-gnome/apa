@@ -96,6 +96,10 @@ namespace Apa {
 
         print_devel ("The child process is completed with status %i".printf (status_code));
 
+        if (result != null) {
+            print_devel ("Command result:\n\n%s".printf (string.joinv ("", result.data)));
+        }
+
         return status_code;
     }
 }
