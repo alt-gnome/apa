@@ -28,14 +28,16 @@ namespace Apa {
      *
      * @return           Similar straw in haystack
      */
-    public string? find_best (string[] haystack, string straw) {
-        string result = "";
-        uint last_similarity = 0;
+    public string[]? find_best (string[] haystack, string straw) {
+        var results = new string[3];
+        int[] last_similaritys = { -10000, -10000, -10000 };
         var straw_chars = (char[]) straw.down ().data;
+        int k = (int) (straw.length * 1.5);
 
         foreach (string str in haystack) {
             var str_chars = (char[]) str.dup ().down ().data;
-            uint similarity = 0;
+            int similarity = 0;
+            int similarity_diff = -1;
 
             for (int straw_i = 0; straw_i < straw_chars.length; straw_i++) {
                 if (straw_chars[straw_i] == '-') {
@@ -48,20 +50,56 @@ namespace Apa {
                     }
 
                     if (straw_chars[straw_i] == str_chars[str_i]) {
+                        if (similarity_diff == -1) {
+                            (str_i - straw_i).abs ();
+                        }
+
                         similarity++;
+                        similarity -= (straw_i - str_i).abs () - similarity_diff; 
                         str_chars[str_i] = '-';
                         break;
                     }
                 }
             }
 
-            if (similarity > last_similarity) {
-                last_similarity = similarity;
-                result = str;
+            if (str.length > k) {
+                similarity -= (str.length - k) / (k - straw.length);
+            } else {
+                similarity += (straw.length - str.length - (k - straw.length)) / (k - straw.length);
+            }
+
+            print_devel ("%s : %i\n".printf (str, similarity));
+
+            if (similarity > last_similaritys[0]) {
+                if (last_similaritys[0] > last_similaritys[1]) {
+                    if (last_similaritys[1] > last_similaritys[2]) {
+                        last_similaritys[2] = last_similaritys[1];
+                        results[2] = results[1];
+                    }
+
+                    last_similaritys[1] = last_similaritys[0];
+                    results[1] = results[0];
+                }
+
+                last_similaritys[0] = similarity;
+                results[0] = str;
+
+            } else if (similarity > last_similaritys[1]) {
+                if (last_similaritys[1] > last_similaritys[2]) {
+                    last_similaritys[2] = last_similaritys[1];
+                    results[2] = results[1];
+                }
+
+                last_similaritys[1] = similarity;
+                results[1] = str;
+
+            } else if (similarity > last_similaritys[2]) {
+                last_similaritys[2] = similarity;
+                results[2] = str;
             }
         }
 
-        return result == "" ? null : result;
+        return results[0] == "" && results[1] == "" && results[2] == "" ? null : results;
     }
 
     /*

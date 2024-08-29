@@ -39,7 +39,7 @@ namespace Apa {
                 return yield Get.remove (ca.command_argv, ca.options);
 
             case "search":
-                return yield Cache.search (string.joinv (" ", ca.command_argv), ca.options);
+                return yield Cache.search (ca.command_argv, ca.options);
 
             case "version":
                 print_apa_version ();
@@ -65,8 +65,8 @@ namespace Apa {
 
             var result = new Array<string> ();
             yield Cache.search (
-                package_name,
-                {},
+                { package_name },
+                { "--names-only" },
                 true,
                 result
             );
@@ -75,21 +75,28 @@ namespace Apa {
                 return status;
             }
 
-            string? possible_package_name = find_best (result.data, package_name);
+            string[]? possible_package_names = find_best (result.data, package_name);
 
-            if (possible_package_name == null) {
+            if (possible_package_names == null) {
                 return 0;
             }
 
-            print (_("A package with a similar name found:  '%s'\n"), possible_package_name);
-            print (_("Do you want to install it? [Y/n] "));
+            print (_("A packages with a similar name found.\n"));
+            for (int i = 0; i < possible_package_names.length; i++) {
+                print ("\t%i) %s\n", i + 1, possible_package_names[i]);
+            }
+            while (true) {
+                print (_("\nChoose which on to install: [1 by default, 0 to exit] "));
+                var input = stdin.read_line ().strip ();
 
-            var input = stdin.read_line ().strip ();
-            if (_("Y").down () == input.down () || input == "") {
-                return yield Get.install ({ possible_package_name });
-
-            } else {
-                return 0;                    
+                int input_int;
+                if (int.try_parse (input, out input_int)) {
+                    if (input_int == 0) {
+                        return 0;
+                    } else if (input_int >= 1 && input_int <= 3) {
+                        return yield Get.install ({ possible_package_names[input_int - 1] });
+                    }
+                }
             }
         }
 

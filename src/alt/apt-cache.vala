@@ -28,7 +28,7 @@ namespace Apa.Cache {
     };
 
     public async int search (
-        string regex,
+        string[] regexs,
         string[] options,
         bool is_short = false,
         Array<string>? result = null
@@ -37,10 +37,13 @@ namespace Apa.Cache {
 
         arr[0] = COMMAND;
         arr[1] = SEARCH_COMMAND;
-        arr[2] = regex;
 
         for (int i = 0; i < options.length; i++) {
-            arr[i + 3] = options[i];
+            arr[i + 2] = options[i];
+        }
+
+        for (int i = 0; i < regexs.length; i++) {
+            arr[i + 2 + options.length] = regexs[i];
         }
 
         var status = yield spawn_command (arr, result);
