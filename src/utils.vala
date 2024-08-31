@@ -17,6 +17,11 @@
 
 namespace Apa {
 
+    internal struct FindBestData {
+        public string package_name;
+        public int similarity;
+    }
+
     /*
      * Find the most similar straw in a haystack.
      *
@@ -28,78 +33,67 @@ namespace Apa {
      *
      * @return           Similar straw in haystack
      */
-    public string[]? find_best (string[] haystack, string straw) {
-        var results = new string[3];
-        int[] last_similaritys = { -10000, -10000, -10000 };
-        var straw_chars = (char[]) straw.down ().data;
-        int k = (int) (straw.length * 1.5);
+    public string?[]? find_best (string[] strs, string original) {
+        var pre_results = new Array<FindBestData> ();
+        var original_chars = (char[]) original.down ().data;
 
-        foreach (string str in haystack) {
-            var str_chars = (char[]) str.dup ().down ().data;
+        foreach (string str in strs) {
+            var str_chars = (char[]) str.down ().data;
             int similarity = 0;
-            int similarity_diff = -1;
+            int comp_offset = -1;
 
-            for (int straw_i = 0; straw_i < straw_chars.length; straw_i++) {
-                if (straw_chars[straw_i] == '-') {
-                    continue;
-                }
+            int original_i = 0;
+            int str_i = 0;
 
-                for (int str_i = 0; str_i < str_chars.length; str_i++) {
-                    if (str_chars[str_i] == '-') {
-                        continue;
-                    }
+            for (original_i = 0; original_i < original_chars.length; original_i++) {
+                for (str_i = comp_offset == -1 ? 0 : comp_offset + original_i; str_i < str_chars.length; str_i++) {
+                    if (original_chars[original_i] == str_chars[str_i]) {
+                        int _comp_offset = (str_i - original_i).abs ();
 
-                    if (straw_chars[straw_i] == str_chars[str_i]) {
-                        if (similarity_diff == -1) {
-                            (str_i - straw_i).abs ();
+                        if (comp_offset == -1) { 
+                            similarity += _comp_offset;
                         }
 
+                        comp_offset = _comp_offset;
+
                         similarity++;
-                        similarity -= (straw_i - str_i).abs () - similarity_diff; 
-                        str_chars[str_i] = '-';
+
+                        str_chars[str_i] = ' ';
                         break;
+
+                    } else {
+                        similarity--;
                     }
                 }
             }
 
-            if (str.length > k) {
-                similarity -= (str.length - k) / (k - straw.length);
-            } else {
-                similarity += (straw.length - str.length - (k - straw.length)) / (k - straw.length);
-            }
-
-            print_devel ("%s : %i\n".printf (str, similarity));
-
-            if (similarity > last_similaritys[0]) {
-                if (last_similaritys[0] > last_similaritys[1]) {
-                    if (last_similaritys[1] > last_similaritys[2]) {
-                        last_similaritys[2] = last_similaritys[1];
-                        results[2] = results[1];
-                    }
-
-                    last_similaritys[1] = last_similaritys[0];
-                    results[1] = results[0];
-                }
-
-                last_similaritys[0] = similarity;
-                results[0] = str;
-
-            } else if (similarity > last_similaritys[1]) {
-                if (last_similaritys[1] > last_similaritys[2]) {
-                    last_similaritys[2] = last_similaritys[1];
-                    results[2] = results[1];
-                }
-
-                last_similaritys[1] = similarity;
-                results[1] = str;
-
-            } else if (similarity > last_similaritys[2]) {
-                last_similaritys[2] = similarity;
-                results[2] = str;
-            }
+            pre_results.append_val ({str, similarity});
         }
 
-        return results[0] == "" && results[1] == "" && results[2] == "" ? null : results;
+        pre_results.sort ((a, b) => {
+            return (int) (a.similarity < b.similarity) - (int) (a.similarity > b.similarity);
+        });
+
+        if (pre_results.length == 0) {
+            return null;
+        }
+
+        string?[] results = { null, null, null };
+
+        for (int i = 0; i < results.length; i++) {
+            if (pre_results.length < i + 1) {
+                break;
+            }
+
+            if (pre_results.index (i).similarity > 0) {
+                results[i] = pre_results.index (i).package_name;
+
+            } else {
+                break;
+            }
+        }
+        
+        return results;
     }
 
     /*

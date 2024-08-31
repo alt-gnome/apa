@@ -83,11 +83,18 @@ namespace Apa {
 
             print (_("A packages with a similar name found.\n"));
             for (int i = 0; i < possible_package_names.length; i++) {
-                print ("\t%i) %s\n", i + 1, possible_package_names[i]);
+                if (possible_package_names[i] != null) {
+                    print ("\t%i) %s\n", i + 1, possible_package_names[i]);
+                }
             }
+
             while (true) {
                 print (_("\nChoose which on to install: [1 by default, 0 to exit] "));
                 var input = stdin.read_line ().strip ();
+
+                if (input == "") {
+                    input = "1";
+                }
 
                 int input_int;
                 if (int.try_parse (input, out input_int)) {
