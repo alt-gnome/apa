@@ -61,50 +61,67 @@ namespace Apa {
         var status = yield Get.install (ca.command_argv, ca.options);
 
         if (status == 100) {
-            string package_name = ca.command_argv[0];
-
-            var result = new Array<string> ();
-            yield Cache.search (
-                { package_name },
-                { "--names-only" },
-                true,
-                result
-            );
-
-            if (result.length == 0) {
+            if (!is_root ()) {
+                print (_("Need root previlegies for this command\n"));
                 return status;
             }
 
-            string[]? possible_package_names = find_best (result.data, package_name);
-
-            if (possible_package_names == null) {
-                return 0;
+            if (ca.command_argv.length > 1) {
+                print (_("Some packages wasn't found\n"));
             }
 
-            print (_("A packages with a similar name found.\n"));
-            for (int i = 0; i < possible_package_names.length; i++) {
-                if (possible_package_names[i] != null) {
-                    print ("\t%i) %s\n", i + 1, possible_package_names[i]);
+            string[] packages_to_install = new string[ca.command_argv.length];
+
+            for (int arg_i = 0; arg_i < ca.command_argv.length; arg_i++) {
+                var result = new Array<string> ();
+                yield Cache.search (
+                    { ca.command_argv[arg_i] },
+                    { "--names-only" },
+                    true,
+                    result
+                );
+
+                string[]? possible_package_names = find_best (result.data, ca.command_argv[arg_i]);
+
+                if (possible_package_names == null) {
+                    print (_("Package '%s' wasn't found\n"), ca.command_argv[arg_i]);
+                    return status;
                 }
-            }
 
-            while (true) {
-                print (_("\nChoose which on to install: [1 by default, 0 to exit] "));
-                var input = stdin.read_line ().strip ();
-
-                if (input == "") {
-                    input = "1";
+                if (possible_package_names[0] == ca.command_argv[arg_i]) {
+                    packages_to_install[arg_i] = ca.command_argv[arg_i];
+                    continue;
                 }
 
-                int input_int;
-                if (int.try_parse (input, out input_int)) {
-                    if (input_int == 0) {
-                        return 0;
-                    } else if (input_int >= 1 && input_int <= 3) {
-                        return yield Get.install ({ possible_package_names[input_int - 1] });
+                print (_("A packages with a similar name found:\n"));
+                for (int i = 0; i < possible_package_names.length; i++) {
+                    if (possible_package_names[i] != null) {
+                        print ("\t%i) %s\n", i + 1, possible_package_names[i]);
+                    }
+                }
+
+                while (true) {
+                    print (_("\nChoose which on to install: [1 by default, 0 to exit] "));
+                    var input = stdin.read_line ().strip ();
+
+                    if (input == "") {
+                        input = "1";
+                    }
+
+                    int input_int;
+                    if (int.try_parse (input, out input_int)) {
+                        if (input_int != 0) {
+                            packages_to_install[arg_i] = possible_package_names[input_int - 1];
+                            break;
+
+                        } else {
+                            return 0;
+                        }
                     }
                 }
             }
+
+            return yield Get.install (packages_to_install, ca.options);
         }
 
         return status;

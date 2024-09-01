@@ -134,4 +134,34 @@ namespace Apa {
 
         return (string) output;
     }
+
+    public bool is_root () {
+        string output;
+        string error;
+
+        try {
+            Process.spawn_sync (
+                null,
+                { "id", "-u" },
+                null,
+                SpawnFlags.SEARCH_PATH,
+                null,
+                out output,
+                out error,
+                null
+            );
+
+        } catch (SpawnError e) {
+            GLib.error (e.message);
+        }
+
+        output = output.strip ();
+
+        int output_int;
+        if (int.try_parse (output, out output_int)) {
+            return output_int == 0;
+        }
+
+        return false;
+    }
 }
