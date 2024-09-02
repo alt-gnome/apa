@@ -15,18 +15,30 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+public struct Apa.ArgOption {
+    public string name;
+    public string value;
+}
+
 public struct Apa.CommandArgs {
 
     public string? command;
     public string[] command_argv;
     public string[] options;
+    public ArgOption[] arg_options;
 
     public static CommandArgs parse (string[] argv) {
         var command = "";
         var command_argv_array = new Array<string> ();
         var options_array = new Array<string> ();
+        var arg_options_array = new Array<ArgOption> ();
 
         foreach (var arg in argv) {
+            if ("=" in arg) {
+                var arg_option_div = arg.split ("=");
+                arg_options_array.append_val ({ arg_option_div[0], arg_option_div[1] });
+            }
+
             if (arg.has_prefix ("-") || arg.has_prefix ("--")) {
                 options_array.append_val (arg);
 
@@ -41,7 +53,8 @@ public struct Apa.CommandArgs {
         return {
             command,
             command_argv_array.data,
-            options_array.data
+            options_array.data,
+            arg_options_array.data
         };
     }
 }
