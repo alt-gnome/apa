@@ -22,17 +22,18 @@ namespace Apa {
     internal const string ORIGIN = "rpm";
 
     public async int list (string[] options = {}) {
-        var arr = new string[3 + options.length];
+        int base_length = 3;
 
-        arr[0] = ORIGIN;
-        arr[1] = "-q";
-        arr[2] = "-a";
+        string[] arr = new string[base_length + options.length] {
+            ORIGIN,
+            "-q", "-a"
+        };
 
         for (int i = 0; i < options.length; i++) {
             switch (options[i]) {
                 case "-a":
                 case "--all":
-                    arr[i + 3] = "-a";
+                    arr[i + base_length] = "-a";
                     break;
 
                 default:

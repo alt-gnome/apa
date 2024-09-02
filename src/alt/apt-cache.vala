@@ -19,7 +19,7 @@
 
 namespace Apa.Cache {
 
-    internal const string COMMAND = "apt-cache";
+    internal const string ORIGIN = "apt-cache";
 
     internal const string SEARCH_COMMAND = "search";
 
@@ -33,17 +33,19 @@ namespace Apa.Cache {
         bool is_short = false,
         Array<string>? result = null
     ) {
-        var arr = new string[3 + options.length];
+        int base_length = 2;
 
-        arr[0] = COMMAND;
-        arr[1] = SEARCH_COMMAND;
+        string[] arr = new string[base_length + options.length] {
+            ORIGIN,
+            SEARCH_COMMAND
+        };
 
         for (int i = 0; i < options.length; i++) {
-            arr[i + 2] = options[i];
+            arr[i + base_length] = options[i];
         }
 
         for (int i = 0; i < regexs.length; i++) {
-            arr[i + 2 + options.length] = regexs[i];
+            arr[i + base_length + options.length] = regexs[i];
         }
 
         var status = yield spawn_command (arr, result);

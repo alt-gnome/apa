@@ -17,6 +17,10 @@
 
 namespace Apa {
 
+    internal const string LIST_COMMAND = "list";
+    internal const string HELP_COMMAND = "help";
+    internal const string VERSION_COMMAND = "version";
+
     public async int run (string[] argv) {
         
         var ca = CommandArgs.parse (argv);
@@ -32,23 +36,23 @@ namespace Apa {
         }
 
         switch (ca.command) {
-            case "install":
+            case Get.INSTALL_COMMAND:
                 return yield apa_install (ca);
 
-            case "remove":
+            case Get.REMOVE_COMMAND:
                 return yield Get.remove (ca.command_argv, ca.options);
 
-            case "search":
+            case Cache.SEARCH_COMMAND:
                 return yield Cache.search (ca.command_argv, ca.options);
 
-            case "list":
+            case LIST_COMMAND:
                 return yield list (ca.options);
 
-            case "version":
+            case VERSION_COMMAND:
                 print_apa_version ();
                 return 0;
 
-            case "help":
+            case HELP_COMMAND:
                 print_apa_help ();
                 return 0;
 
@@ -103,8 +107,10 @@ namespace Apa {
                     }
                 }
 
+                print ("\n");
+
                 while (true) {
-                    print (_("\nChoose which on to install: [1 by default, 0 to exit] "));
+                    print (_("Choose which on to install: [1 by default, 0 to exit] "));
                     var input = stdin.read_line ().strip ();
 
                     if (input == "") {
@@ -113,11 +119,11 @@ namespace Apa {
 
                     int input_int;
                     if (int.try_parse (input, out input_int)) {
-                        if (input_int != 0) {
+                        if (input_int > 0 && input_int <= 3 && possible_package_names[input_int - 1] != null) {
                             packages_to_install[arg_i] = possible_package_names[input_int - 1];
                             break;
 
-                        } else {
+                        } else if (input_int == 0) {
                             return 0;
                         }
                     }
