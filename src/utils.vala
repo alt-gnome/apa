@@ -15,12 +15,12 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-namespace Apa {
+internal struct Apa.FindBestData {
+    public string package_name;
+    public int similarity;
+}
 
-    internal struct FindBestData {
-        public string package_name;
-        public int similarity;
-    }
+namespace Apa {
 
     /*
      * Find the most similar straw in a haystack.
