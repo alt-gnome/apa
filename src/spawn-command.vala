@@ -23,7 +23,7 @@ namespace Apa {
         string[] spawn_args,
         Array<string>? result = null
     ) {
-        print_devel ("Child%s procces started:\n\t%s".printf (
+        print_devel ("Child%s procces prepared:\n\t%s".printf (
             result != null ? " silent" : "",
             string.joinv (" ", spawn_args)
         ));
@@ -91,6 +91,8 @@ namespace Apa {
         } catch (SpawnError e) {
             error (e.message);
         }
+
+        print_devel ("Child procces created");
 
         yield;
 
