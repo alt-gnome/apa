@@ -41,6 +41,9 @@ namespace Apa {
             case "search":
                 return yield Cache.search (ca.command_argv, ca.options);
 
+            case "list":
+                return yield list (ca.options);
+
             case "version":
                 print_apa_version ();
                 return 0;

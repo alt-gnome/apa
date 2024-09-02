@@ -6,6 +6,8 @@ apa_code_sources = files (
   'alt/apt-cache.vala',
   'alt/apt-get.vala',
 
+  'apa/list.vala',
+
   'flatpak/flatpak.vala',
 
   'snap/snap.vala',
