@@ -35,17 +35,26 @@ namespace Apa.Cache {
     ) {
         int base_length = 2;
 
-        string[] arr = new string[base_length + options.length] {
+        string[] arr = new string[base_length + regexs.length + options.length] {
             ORIGIN,
             SEARCH_COMMAND
         };
 
         for (int i = 0; i < options.length; i++) {
-            arr[i + base_length] = options[i];
+            switch (options[i]) {
+                case "-n":
+                case "--names-only":
+                    arr[i + base_length] = "--names-only";
+                    break;
+
+                default:
+                    print (_("Command line option '%s' is not known.\n"), options[i]);
+                    return 1;
+            }
         }
 
         for (int i = 0; i < regexs.length; i++) {
-            arr[i + base_length + options.length] = regexs[i];
+            arr[i + options.length + base_length] = regexs[i];
         }
 
         var status = yield spawn_command (arr, result);
