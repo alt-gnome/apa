@@ -34,23 +34,22 @@ namespace Apa {
             Pid child_pid;
 
             if (result != null) {
-                int standard_output;
-                int standard_error;
+                int output;
 
                 Process.spawn_async_with_pipes (
                     null,
                     spawn_args,
                     null,
-                    SpawnFlags.SEARCH_PATH | SpawnFlags.DO_NOT_REAP_CHILD,
+                    SpawnFlags.SEARCH_PATH | SpawnFlags.DO_NOT_REAP_CHILD | SpawnFlags.STDERR_TO_DEV_NULL,
                     null,
                     out child_pid,
                     null,
-                    out standard_output,
-                    out standard_error
+                    out output,
+                    null
                 );
 
-                IOChannel output = new IOChannel.unix_new (standard_output);
-                output.add_watch (IOCondition.IN | IOCondition.HUP, (channel, condition) => {
+                IOChannel output_channel = new IOChannel.unix_new (output);
+                output_channel.add_watch (IOCondition.IN | IOCondition.HUP, (channel, condition) => {
                     if ((condition & IOCondition.HUP) != 0) {
                         return false;
                     }
