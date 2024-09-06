@@ -83,9 +83,16 @@ namespace Apa {
             string[] packages_to_install = new string[ca.command_argv.length];
 
             for (int arg_i = 0; arg_i < ca.command_argv.length; arg_i++) {
+                char[] package_chars = (char[]) ca.command_argv[arg_i].data;
+                string[] char_string = new string[ca.command_argv[arg_i].length];
+
+                for (int i = 0; i < ca.command_argv[arg_i].length; i++) {
+                    char_string[i] = package_chars[i].to_string ();
+                }
+
                 var result = new Array<string> ();
                 yield Cache.search (
-                    { ca.command_argv[arg_i] },
+                    { string.joinv (".*", char_string) },
                     { "--names-only" },
                     true,
                     result
