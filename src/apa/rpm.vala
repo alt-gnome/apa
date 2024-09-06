@@ -17,8 +17,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-namespace Apa {
-    
+namespace Apa.Rpm {
+
     internal const string ORIGIN = "rpm";
 
     public async int list (string[] options = {}) {
@@ -41,6 +41,45 @@ namespace Apa {
                     return 1;
             }
         }
+
+        return yield spawn_command (arr);
+    }
+
+    public async int info (string package_name, string[] options = {}) {
+        int base_length;
+        string[] arr;
+
+        if (options.length == 0) {
+            base_length = 3;
+
+            arr = new string[base_length + options.length + 1] {
+                ORIGIN,
+                "-q", "-i"
+            };
+ 
+        } else {
+            base_length = 2;
+
+            arr = new string[base_length + options.length + 1] {
+                ORIGIN,
+                "-q"
+            };
+        }
+
+        for (int i = 0; i < options.length; i++) {
+            switch (options[i]) {
+                case "-f":
+                case "--files":
+                    arr[i + base_length] = "-l";
+                    break;
+
+                default:
+                    print (_("Command line option \"%s\" is not known.\n"), options[i]);
+                    return 1;
+            }
+        }
+
+        arr[arr.length - 1] = package_name;
 
         return yield spawn_command (arr);
     }

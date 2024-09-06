@@ -18,6 +18,7 @@
 namespace Apa {
 
     internal const string LIST_COMMAND = "list";
+    internal const string INFO_COMMAND = "info";
     internal const string HELP_COMMAND = "help";
     internal const string VERSION_COMMAND = "version";
 
@@ -52,7 +53,10 @@ namespace Apa {
                 return yield Cache.search (ca.command_argv, ca.options);
 
             case LIST_COMMAND:
-                return yield list (ca.options);
+                return yield Rpm.list (ca.options);
+
+            case INFO_COMMAND:
+                return yield apa_info (ca);
 
             case VERSION_COMMAND:
                 print_apa_version ();
@@ -142,6 +146,24 @@ namespace Apa {
         }
 
         return status;
+    }
+
+    internal async int apa_info (CommandArgs ca) {
+        int status_code = 0;
+
+        foreach (string package_name in ca.command_argv) {
+            print (_("Info for \"%s\":\n"), package_name);
+            status_code = yield Rpm.info (package_name, ca.options);
+            if (status_code != 0) {
+                return status_code;
+            }
+
+            if (package_name != ca.command_argv[ca.command_argv.length - 1]) {
+                print ("\n");
+            }
+        }
+
+        return 0;
     }
 
     internal void print_help (string command) {
