@@ -42,6 +42,9 @@ namespace Apa {
             case Get.REMOVE_COMMAND:
                 return yield Get.remove (ca.command_argv, ca.options);
 
+            case Get.UPDATE_COMMAND:
+                return yield Get.update ();
+
             case Cache.SEARCH_COMMAND:
                 return yield Cache.search (ca.command_argv, ca.options);
 

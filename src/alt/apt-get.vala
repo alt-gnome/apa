@@ -21,10 +21,12 @@ namespace Apa.Get {
 
     internal const string INSTALL_COMMAND = "install";
     internal const string REMOVE_COMMAND = "remove";
+    internal const string UPDATE_COMMAND = "update";
 
     const string[] COMMANDS = {
         INSTALL_COMMAND,
-        REMOVE_COMMAND
+        REMOVE_COMMAND,
+        UPDATE_COMMAND
     };
 
     public async int install (string[] packages, string[] options = {}) {
@@ -82,6 +84,17 @@ namespace Apa.Get {
         for (int i = 0; i < packages.length; i++) {
             arr[i + options.length + base_length] = packages[i];
         }
+
+        return yield spawn_command (arr);
+    }
+
+    public async int update () {
+        int base_length = 2;
+
+        string[] arr = new string[base_length] {
+            ORIGIN,
+            UPDATE_COMMAND
+        };
 
         return yield spawn_command (arr);
     }
