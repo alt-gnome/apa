@@ -39,6 +39,7 @@ namespace Apa {
         switch (ca.command) {
             case Get.INSTALL_COMMAND:
                 check_is_root (ca.command);
+                check_internet_connection ();
                 return yield apa_install (ca);
 
             case Get.REMOVE_COMMAND:
@@ -47,9 +48,11 @@ namespace Apa {
 
             case Get.UPDATE_COMMAND:
                 check_is_root (ca.command);
+                check_internet_connection ();
                 return yield Get.update ();
 
             case Cache.SEARCH_COMMAND:
+                check_internet_connection ();
                 return yield Cache.search (ca.command_argv, ca.options);
 
             case LIST_COMMAND:
@@ -206,7 +209,18 @@ namespace Apa {
             return;
         }
 
-        print (_("Need root previlegies for \"%s\" command\n"), command);
+        print (_("Need root previlegies for \"%s\" command."), command);
+        print (_("Aborting\n"));
+        Process.exit (100);
+    }
+
+    public void check_internet_connection () {
+        if (has_internet_connection ()) {
+            return;
+        }
+
+        print (_("No internet connection.\n"));
+        print (_("Aborting\n"));
         Process.exit (100);
     }
 }

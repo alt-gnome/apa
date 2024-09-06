@@ -164,4 +164,31 @@ namespace Apa {
 
         return false;
     }
+
+    public bool has_internet_connection () {
+        int status_code;
+
+        try {
+            Process.spawn_sync (
+                null,
+                { "ping", "ya.ru", "-c", "1" },
+                null,
+                SpawnFlags.SEARCH_PATH | SpawnFlags.STDOUT_TO_DEV_NULL | SpawnFlags.STDERR_TO_DEV_NULL,
+                null,
+                null,
+                null,
+                out status_code
+            );
+
+        } catch (SpawnError e) {
+            GLib.error (e.message);
+        }
+
+        if (status_code == 0) {
+            return true;
+
+        } else {
+            return false;
+        }
+    }
 }
