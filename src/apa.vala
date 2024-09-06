@@ -106,7 +106,7 @@ namespace Apa {
                 string[]? possible_package_names = find_best (result.data, ca.command_argv[arg_i]);
 
                 if (possible_package_names == null) {
-                    print (_("Package \"%s\" wasn't found\n"), ca.command_argv[arg_i]);
+                    print (_("Package \"%s\" not found\n"), ca.command_argv[arg_i]);
                     return status;
                 }
 
