@@ -48,7 +48,7 @@ namespace Apa.Cache {
                     break;
 
                 default:
-                    print (_("Command line option '%s' is not known.\n"), options[i]);
+                    print (_("Command line option\"%s\" is not known.\n"), options[i]);
                     return 1;
             }
         }

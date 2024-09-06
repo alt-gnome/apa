@@ -63,7 +63,7 @@ namespace Apa {
                 return 0;
 
             default:
-                print (_("Unknown command '%s'\n\n"), ca.command);
+                print (_("Unknown command \"%s\"\n\n"), ca.command);
 
                 print_apa_help ();
                 return 1;
@@ -74,11 +74,6 @@ namespace Apa {
         var status = yield Get.install (ca.command_argv, ca.options);
 
         if (status == 100) {
-            if (!is_root ()) {
-                print (_("Need root previlegies for this command\n"));
-                return status;
-            }
-
             if (ca.command_argv.length > 1) {
                 print (_("Some packages wasn't found\n"));
             }
@@ -104,7 +99,7 @@ namespace Apa {
                 string[]? possible_package_names = find_best (result.data, ca.command_argv[arg_i]);
 
                 if (possible_package_names == null) {
-                    print (_("Package '%s' wasn't found\n"), ca.command_argv[arg_i]);
+                    print (_("Package \"%s\" wasn't found\n"), ca.command_argv[arg_i]);
                     return status;
                 }
 
