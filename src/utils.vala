@@ -92,7 +92,11 @@ namespace Apa {
                 break;
             }
         }
-        
+
+        if (results[0] == null ) {
+            return null;
+        }
+
         return results;
     }
 
