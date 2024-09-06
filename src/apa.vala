@@ -37,12 +37,15 @@ namespace Apa {
 
         switch (ca.command) {
             case Get.INSTALL_COMMAND:
+                check_is_root (ca.command);
                 return yield apa_install (ca);
 
             case Get.REMOVE_COMMAND:
+                check_is_root (ca.command);
                 return yield Get.remove (ca.command_argv, ca.options);
 
             case Get.UPDATE_COMMAND:
+                check_is_root (ca.command);
                 return yield Get.update ();
 
             case Cache.SEARCH_COMMAND:
@@ -179,5 +182,14 @@ namespace Apa {
                 Constants.Colors.ENDC
             );
         }
+    }
+
+    public void check_is_root (string command) {
+        if (is_root ()) {
+            return;
+        }
+
+        print (_("Need root previlegies for \"%s\" command\n"), command);
+        Process.exit (100);
     }
 }
