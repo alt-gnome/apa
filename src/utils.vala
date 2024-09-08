@@ -114,29 +114,8 @@ namespace Apa {
 
     public void do_short (ref string[] strs) {
         for (int i = 0; i < strs.length; i++) {
-            strs[i] = make_string_short (strs[i]);
+            strs[i] = strs[i].split (" ")[0];
         }
-    }
-
-    internal string make_string_short (string str) {
-        uint output_length = 0;
-        var str_chars = (char[]) str.data;
-
-        foreach (char c in str_chars) {
-            if (c == ' ') {
-                break;
-            }
-
-            output_length++;
-        }
-
-        var output = new char[output_length];
-
-        for (int i = 0; i < output_length; i++) {
-            output[i] = str_chars[i];
-        }
-
-        return (string) output;
     }
 
     public bool is_root () {
