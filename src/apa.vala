@@ -209,7 +209,7 @@ namespace Apa {
             return;
         }
 
-        print (_("Need root previlegies for \"%s\" command."), command);
+        print (_("Need root previlegies for \"%s\" command.\n"), command);
         print (_("Aborting\n"));
         Process.exit (100);
     }
