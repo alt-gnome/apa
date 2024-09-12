@@ -18,6 +18,17 @@ apa_dependencies = [
   gio
 ]
 
+add_project_arguments(
+  '-include', 'config.h',
+  language: ['c']
+)
+
+add_project_arguments(
+  '--target-glib', '2.76',
+  '--vapidir', meson.current_source_dir(),
+  language: ['vala']
+)
+
 version_suffix = ''
 
 if get_option('is_devel')
@@ -40,3 +51,4 @@ config_h_dir = include_directories('.')
 
 subdir ('po')
 subdir ('src')
+subdir ('test')
