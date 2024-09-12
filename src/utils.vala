@@ -33,22 +33,22 @@ namespace Apa {
      *
      * @return           Similar straw in haystack
      */
-    public string?[]? find_best (string[] strs, string original) {
+    public string?[]? fuzzy_search (string query, string[] data) {
         var pre_results = new Array<FindBestData> ();
-        var original_chars = (char[]) original.down ().data;
+        var query_chars = (char[]) query.down ().data;
 
-        foreach (string str in strs) {
+        foreach (string str in data) {
             var str_chars = (char[]) str.down ().data;
             int similarity = 0;
             int comp_offset = -1;
 
-            int original_i = 0;
+            int query_i = 0;
             int str_i = 0;
 
-            for (original_i = 0; original_i < original_chars.length; original_i++) {
-                for (str_i = comp_offset == -1 ? 0 : comp_offset + original_i; str_i < str_chars.length; str_i++) {
-                    if (original_chars[original_i] == str_chars[str_i]) {
-                        int _comp_offset = (str_i - original_i).abs ();
+            for (query_i = 0; query_i < query_chars.length; query_i++) {
+                for (str_i = comp_offset == -1 ? 0 : comp_offset + query_i; str_i < str_chars.length; str_i++) {
+                    if (query_chars[query_i] == str_chars[str_i]) {
+                        int _comp_offset = (str_i - query_i).abs ();
 
                         if (comp_offset == -1) { 
                             similarity += _comp_offset;

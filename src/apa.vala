@@ -103,7 +103,7 @@ namespace Apa {
                     result
                 );
 
-                string[]? possible_package_names = find_best (result.data, ca.command_argv[arg_i]);
+                string[]? possible_package_names = fuzzy_search (ca.command_argv[arg_i], result.data);
 
                 if (possible_package_names == null) {
                     print (_("Package \"%s\" not found\n"), ca.command_argv[arg_i]);
