@@ -61,7 +61,7 @@ namespace Apa {
                     } catch (Error e) {
                         error (e.message);
                     }
-                    
+
                     result.append_val (line);
 
                     return true;

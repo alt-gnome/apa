@@ -23,7 +23,7 @@ namespace Apa {
     internal const string VERSION_COMMAND = "version";
 
     public async int run (string[] argv) {
-        
+
         var ca = CommandArgs.parse (argv);
 
         if ("-v" in ca.options || "--version" in ca.options) {

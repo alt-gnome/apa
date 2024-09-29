@@ -1,3 +1,5 @@
+// ind-check=skip-file
+
 public void fuzzy_search_test_base (
     string[] data,
     string query,
@@ -63,8 +65,14 @@ public int main (string[] args) {
         string query = "pytest";
 
         var expected_result = new List<Array<string?>> ();
-        expected_result.append (new Array<string?>.take ({ "python2-pytest", "python3-pytest" }));
-        expected_result.append (new Array<string?>.take ({ "python2-pytest", "python3-pytest" }));
+        expected_result.append (new Array<string?>.take ({
+            "python2-pytest",
+            "python3-pytest"
+        }));
+        expected_result.append (new Array<string?>.take ({
+            "python2-pytest",
+            "python3-pytest"
+        }));
         expected_result.append (new Array<string?>.take ({ "python3-pytest-cov" }));
 
         fuzzy_search_test_base (data, query, expected_result);
@@ -105,7 +113,11 @@ public int main (string[] args) {
         var expected_result = new List<Array<string?>> ();
         expected_result.append (new Array<string?>.take ({ "perl-base" }));
         expected_result.append (new Array<string?>.take ({ "perl-utils" }));
-        expected_result.append (new Array<string?>.take ({ "perl-Data-Dumper", "perl-Test-Simple", "ruby-perl-bridge" }));
+        expected_result.append (new Array<string?>.take ({
+            "perl-Data-Dumper",
+            "perl-Test-Simple",
+            "ruby-perl-bridge"
+        }));
 
         fuzzy_search_test_base (data, query, expected_result);
     });
@@ -204,8 +216,14 @@ public int main (string[] args) {
 
         var expected_result = new List<Array<string?>> ();
         expected_result.append (new Array<string?>.take ({ "gzip" }));
-        expected_result.append (new Array<string?>.take ({ "bzip2", "unzip" }));
-        expected_result.append (new Array<string?>.take ({ "bzip2", "unzip" }));
+        expected_result.append (new Array<string?>.take ({
+            "bzip2",
+            "unzip"
+        }));
+        expected_result.append (new Array<string?>.take ({
+            "bzip2",
+            "unzip"
+        }));
 
         fuzzy_search_test_base (data, query, expected_result);
     });
@@ -249,7 +267,7 @@ public int main (string[] args) {
 
         fuzzy_search_test_base (data, query, expected_result);
     });
-    
+
     Test.add_func ("/utils/fuzzy-search/11", () => {
         string[] data = {
             "nginx",
@@ -264,8 +282,14 @@ public int main (string[] args) {
 
         var expected_result = new List<Array<string?>> ();
         expected_result.append (new Array<string?>.take ({ "nginx" }));
-        expected_result.append (new Array<string?>.take ({ "nginx-full", "nginx-core" }));
-        expected_result.append (new Array<string?>.take ({ "nginx-full", "nginx-core" }));
+        expected_result.append (new Array<string?>.take ({
+            "nginx-full",
+            "nginx-core"
+        }));
+        expected_result.append (new Array<string?>.take ({
+            "nginx-full",
+            "nginx-core"
+        }));
 
         fuzzy_search_test_base (data, query, expected_result);
     });
@@ -282,8 +306,14 @@ public int main (string[] args) {
         string query = "pytestt";
 
         var expected_result = new List<Array<string?>> ();
-        expected_result.append (new Array<string?>.take ({ "python3-pytest", "python2-pytest" }));
-        expected_result.append (new Array<string?>.take ({ "python3-pytest", "python2-pytest" }));
+        expected_result.append (new Array<string?>.take ({
+            "python3-pytest",
+            "python2-pytest"
+        }));
+        expected_result.append (new Array<string?>.take ({
+            "python3-pytest",
+            "python2-pytest"
+        }));
         expected_result.append (new Array<string?>.take ({ null }));
 
         fuzzy_search_test_base (data, query, expected_result);
@@ -301,8 +331,14 @@ public int main (string[] args) {
 
         var expected_result = new List<Array<string?>> ();
         expected_result.append (new Array<string?>.take ({ "perl-utils" }));
-        expected_result.append (new Array<string?>.take ({ "perl-Test-Simple", "perl-Data-Dumper" }));
-        expected_result.append (new Array<string?>.take ({ "perl-Test-Simple", "perl-Data-Dumper" }));
+        expected_result.append (new Array<string?>.take ({
+            "perl-Test-Simple",
+            "perl-Data-Dumper"
+        }));
+        expected_result.append (new Array<string?>.take ({
+            "perl-Test-Simple",
+            "perl-Data-Dumper"
+        }));
 
         fuzzy_search_test_base (data, query, expected_result);
     });

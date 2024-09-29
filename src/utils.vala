@@ -50,7 +50,7 @@ namespace Apa {
                     if (query_chars[query_i] == str_chars[str_i]) {
                         int _comp_offset = (str_i - query_i).abs ();
 
-                        if (comp_offset == -1) { 
+                        if (comp_offset == -1) {
                             similarity += _comp_offset;
                         }
 

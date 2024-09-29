@@ -56,7 +56,7 @@ namespace Apa.Rpm {
                 ORIGIN,
                 "-q", "-i"
             };
- 
+
         } else {
             base_length = 2;
 

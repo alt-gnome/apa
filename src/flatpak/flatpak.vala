@@ -18,5 +18,5 @@
  */
 
 namespace Apa.Flatpak {
-    
+
 }

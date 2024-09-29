@@ -104,7 +104,7 @@ namespace Apa.Get {
             case INSTALL_COMMAND:
                 print_install_help ();
                 return;
-            
+
             case REMOVE_COMMAND:
                 print_remove_help ();
                 return;
