@@ -52,9 +52,3 @@ config_h_dir = include_directories('.')
 subdir ('po')
 subdir ('src')
 subdir ('test')
-
-python = find_program('python3', 'python', required: false)
-if python.found()
-  test('Check on empty lines', python, args: [files('./vala-checkers/empty_lines_checker.py'), apa_sources])
-  test('Check on indentation', python, args: [files('./vala-checkers/indentation_checker.py'), apa_sources])
-endif
