@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 Rirusha
+ * Copyright 2024 Vladimir Vaskov
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, version 3
@@ -29,32 +29,39 @@ public struct Apa.CommandArgs {
 
     public static CommandArgs parse (string[] argv) {
         var command = "";
-        var command_argv_array = new Array<string> ();
-        var options_array = new Array<string> ();
-        var arg_options_array = new Array<ArgOption> ();
+        var command_argv_array = new Gee.ArrayList<string> ();
+        var options_array = new Gee.ArrayList<string> ();
+        var arg_options_array = new Gee.ArrayList<ArgOption?> ();
 
         foreach (var arg in argv) {
             if ("=" in arg) {
                 var arg_option_div = arg.split ("=");
-                arg_options_array.append_val ({ arg_option_div[0], arg_option_div[1] });
+                arg_options_array.add ({ arg_option_div[0], arg_option_div[1] });
             }
 
-            if (arg.has_prefix ("-") || arg.has_prefix ("--")) {
-                options_array.append_val (arg);
+            if (arg.has_prefix ("--")) {
+                options_array.add (arg);
+
+            } else if (arg.has_prefix ("-")) {
+                foreach (char c in (char[]) (arg.data)) {
+                    if (c != '-') {
+                        options_array.add (c.to_string ("-%c"));
+                    }
+                };
 
             } else if (command == "") {
                 command = arg;
 
             } else {
-                command_argv_array.append_val (arg);
+                command_argv_array.add (arg);
             }
         }
 
         return {
             command,
-            command_argv_array.data,
-            options_array.data,
-            arg_options_array.data
+            command_argv_array.to_array (),
+            options_array.to_array (),
+            (ArgOption[]) arg_options_array.to_array ()
         };
     }
 }

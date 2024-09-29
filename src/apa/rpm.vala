@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024 Rirusha
+ * Copyright (C) 2024 Vladimir Vaskov
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,65 +22,55 @@ namespace Apa.Rpm {
     internal const string ORIGIN = "rpm";
 
     public async int list (string[] options = {}) {
-        int base_length = 3;
-
-        string[] arr = new string[base_length + options.length] {
+        var arr = new Gee.ArrayList<string>.wrap ({
             ORIGIN,
             "-q", "-a"
-        };
+        });
 
-        for (int i = 0; i < options.length; i++) {
-            switch (options[i]) {
+        foreach (string option in options) {
+            switch (option) {
+                case "-q":
+                case "--query":
+                    arr.add ("-q");
+                    break;
+
                 case "-a":
                 case "--all":
-                    arr[i + base_length] = "-a";
+                    arr.add ("-a");
                     break;
 
                 default:
-                    print (_("Command line option \"%s\" is not known.\n"), options[i]);
+                    print (_("Command line option \"%s\" is not known.\n"), option);
                     return 1;
             }
         }
 
-        return yield spawn_command (arr);
+        return yield spawn_command (arr.to_array ());
     }
 
     public async int info (string package_name, string[] options = {}) {
-        int base_length;
-        string[] arr;
+        var arr = new Gee.ArrayList<string>.wrap ({ ORIGIN, "-i" });
 
         if (options.length == 0) {
-            base_length = 3;
+            arr.add_all_array ({ "-q" });
 
-            arr = new string[base_length + options.length + 1] {
-                ORIGIN,
-                "-q", "-i"
-            };
-
-        } else {
-            base_length = 2;
-
-            arr = new string[base_length + options.length + 1] {
-                ORIGIN,
-                "-q"
-            };
         }
 
-        for (int i = 0; i < options.length; i++) {
-            switch (options[i]) {
+        foreach (string option in options) {
+            switch (option) {
                 case "-f":
                 case "--files":
-                    arr[i + base_length] = "-l";
+                    arr.add ("-l");
                     break;
 
                 default:
-                    print (_("Command line option \"%s\" is not known.\n"), options[i]);
+                    print (_("Command line option \"%s\" is not known.\n"), option);
                     return 1;
             }
         }
 
-        arr[arr.length - 1] = package_name;
+        arr.add (package_name);
 
-        return yield spawn_command (arr);
+        return yield spawn_command (arr.to_array ());
     }
 }

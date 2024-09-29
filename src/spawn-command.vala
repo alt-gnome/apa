@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024 Rirusha
+ * Copyright (C) 2024 Vladimir Vaskov
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,10 +21,10 @@ namespace Apa {
 
     async int spawn_command (
         string[] spawn_args,
-        Array<string>? result = null
+        Gee.ArrayList<string>? result = null
     ) {
         print_devel ("Child%s procces prepared:\n\t%s".printf (
-            result != null ? " silent" : "",
+            result != null ? " resulted" : "",
             string.joinv (" ", spawn_args)
         ));
 
@@ -38,7 +38,7 @@ namespace Apa {
 
                 Process.spawn_async_with_pipes (
                     null,
-                    spawn_args,
+                    spawn_args.copy (),
                     null,
                     SpawnFlags.SEARCH_PATH | SpawnFlags.DO_NOT_REAP_CHILD | SpawnFlags.STDERR_TO_DEV_NULL,
                     null,
@@ -62,7 +62,7 @@ namespace Apa {
                         error (e.message);
                     }
 
-                    result.append_val (line);
+                    result.add (line);
 
                     return true;
                 });
@@ -70,7 +70,7 @@ namespace Apa {
             } else {
                 Process.spawn_async_with_fds (
                     null,
-                    spawn_args,
+                    spawn_args.copy (),
                     null,
                     SpawnFlags.SEARCH_PATH | SpawnFlags.CHILD_INHERITS_STDIN | SpawnFlags.DO_NOT_REAP_CHILD,
                     null,
@@ -98,7 +98,7 @@ namespace Apa {
         print_devel ("The child process is completed with status %i".printf (status_code));
 
         if (result != null) {
-            print_devel ("Command result:\n\n%s".printf (string.joinv ("", result.data)));
+            print_devel ("Command result:\n\n%s".printf (string.joinv ("", result.to_array ())));
         }
 
         return status_code;

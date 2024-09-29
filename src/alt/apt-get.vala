@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 Rirusha
+ * Copyright 2024 Vladimir Vaskov
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, version 3
@@ -19,94 +19,111 @@ namespace Apa.Get {
 
     internal const string ORIGIN = "apt-get";
 
-    internal const string INSTALL_COMMAND = "install";
-    internal const string REMOVE_COMMAND = "remove";
-    internal const string UPDATE_COMMAND = "update";
+    internal const string INSTALL = "install";
+    internal const string REMOVE = "remove";
+    internal const string UPDATE = "update";
 
     const string[] COMMANDS = {
-        INSTALL_COMMAND,
-        REMOVE_COMMAND,
-        UPDATE_COMMAND
+        INSTALL,
+        REMOVE,
+        UPDATE
     };
 
     public async int install (string[] packages, string[] options = {}) {
-        int base_length = 6;
-
-        string[] arr = new string[base_length + packages.length + options.length] {
+        var arr = new Gee.ArrayList<string>.wrap ({
             ORIGIN,
-            INSTALL_COMMAND,
+            INSTALL,
             // https://bugzilla.altlinux.com/44670
             "-o", "APT::Install::VirtualVersion=true",
             "-o", "APT::Install::Virtual=true"
-        };
+        });
 
-        for (int i = 0; i < options.length; i++) {
-            switch (options[i]) {
+        foreach (string option in options) {
+            switch (option) {
                 case "-d":
                 case "--download-only":
-                    arr[i + base_length] = "-d";
+                    arr.add ("-d");
+                    break;
+
+                case "-s":
+                case "--silent":
+                    arr.add ("-qq");
                     break;
 
                 default:
-                    print (_("Command line option \"%s\" is not known.\n"), options[i]);
+                    print (_("Command line option \"%s\" is not known.\n"), option);
                     return 1;
             }
         }
 
-        for (int i = 0; i < packages.length; i++) {
-            arr[i + options.length + base_length] = packages[i];
-        }
+        arr.add_all_array (packages);
 
-        return yield spawn_command (arr);
+        return yield spawn_command (arr.to_array ());
     }
 
     public async int remove (string[] packages, string[] options = {}) {
-        int base_length = 2;
-
-        string[] arr = new string[base_length + packages.length + options.length] {
+        var arr = new Gee.ArrayList<string>.wrap ({
             ORIGIN,
-            REMOVE_COMMAND
-        };
+            REMOVE
+        });
 
-        for (int i = 0; i < options.length; i++) {
-            switch (options[i]) {
-                case "-d":
-                case "--download-only":
-                    arr[i + base_length] = "-d";
+        foreach (string option in options) {
+            switch (option) {
+                case "-D":
+                case "--with-dependecies":
+                    arr.add ("-D");
+                    break;
+
+                case "-s":
+                case "--silent":
+                    arr.add ("-qq");
                     break;
 
                 default:
-                    print (_("Command line option \"%s\" is not known.\n"), options[i]);
+                    print (_("Command line option \"%s\" is not known.\n"), option);
                     return 1;
             }
         }
 
-        for (int i = 0; i < packages.length; i++) {
-            arr[i + options.length + base_length] = packages[i];
-        }
+        arr.add_all_array (packages);
 
-        return yield spawn_command (arr);
+        return yield spawn_command (arr.to_array ());
     }
 
-    public async int update () {
-        int base_length = 2;
-
-        string[] arr = new string[base_length] {
+    public async int update (string[] options = {}) {
+        var arr = new Gee.ArrayList<string>.wrap ({
             ORIGIN,
-            UPDATE_COMMAND
-        };
+            UPDATE
+        });
 
-        return yield spawn_command (arr);
+        foreach (string option in options) {
+            switch (option) {
+                case "-s":
+                case "--silent":
+                    arr.add ("-qq");
+                    break;
+
+                default:
+                    print (_("Command line option \"%s\" is not known.\n"), option);
+                    return 1;
+            }
+        }
+
+        return yield spawn_command (arr.to_array ());
     }
 
     public void print_help (string command) {
         switch (command) {
-            case INSTALL_COMMAND:
+            case INSTALL:
                 print_install_help ();
                 return;
 
-            case REMOVE_COMMAND:
+            case REMOVE:
                 print_remove_help ();
+                return;
+
+            case UPDATE:
+                print_update_help ();
                 return;
 
             default:
@@ -120,5 +137,9 @@ namespace Apa.Get {
 
     internal void print_remove_help () {
         print ("Remove help\n");
+    }
+
+    internal void print_update_help () {
+        print ("Update help\n");
     }
 }

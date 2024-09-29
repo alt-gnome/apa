@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024 Rirusha
+ * Copyright (C) 2024 Vladimir Vaskov
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,30 +21,27 @@ namespace Apa.Cache {
 
     internal const string ORIGIN = "apt-cache";
 
-    internal const string SEARCH_COMMAND = "search";
+    internal const string SEARCH = "search";
 
     const string[] COMMANDS = {
-        SEARCH_COMMAND
+        SEARCH
     };
 
     public async int search (
         string[] regexs,
         string[] options,
-        bool is_short = false,
-        Array<string>? result = null
+        Gee.ArrayList<string>? result = null
     ) {
-        int base_length = 2;
-
-        string[] arr = new string[base_length + regexs.length + options.length] {
+        var arr = new Gee.ArrayList<string>.wrap ({
             ORIGIN,
-            SEARCH_COMMAND
-        };
+            SEARCH
+        });
 
         for (int i = 0; i < options.length; i++) {
             switch (options[i]) {
                 case "-n":
                 case "--names-only":
-                    arr[i + base_length] = "--names-only";
+                    arr.add ("--names-only");
                     break;
 
                 default:
@@ -53,22 +50,14 @@ namespace Apa.Cache {
             }
         }
 
-        for (int i = 0; i < regexs.length; i++) {
-            arr[i + options.length + base_length] = regexs[i];
-        }
+        arr.add_all_array (regexs);
 
-        var status = yield spawn_command (arr, result);
-
-        if (is_short) {
-            do_short_array (result);
-        }
-
-        return status;
+        return yield spawn_command (arr.to_array (), result);
     }
 
     public void print_help (string command) {
         switch (command) {
-            case SEARCH_COMMAND:
+            case SEARCH:
                 print_search_help ();
                 return;
 

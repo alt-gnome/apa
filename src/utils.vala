@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 Rirusha
+ * Copyright 2024 Vladimir Vaskov
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, version 3
@@ -34,7 +34,7 @@ namespace Apa {
      * @return           Similar straw in haystack
      */
     public string?[]? fuzzy_search (string query, string[] data) {
-        var pre_results = new Array<FindBestData> ();
+        var pre_results = new Gee.ArrayList<FindBestData?> ();
         var query_chars = (char[]) query.down ().data;
 
         foreach (string str in data) {
@@ -67,26 +67,26 @@ namespace Apa {
                 }
             }
 
-            pre_results.append_val ({str, similarity});
+            pre_results.add ({str, similarity});
         }
 
         pre_results.sort ((a, b) => {
             return (int) (a.similarity < b.similarity) - (int) (a.similarity > b.similarity);
         });
 
-        if (pre_results.length == 0) {
+        if (pre_results.size == 0) {
             return null;
         }
 
         string?[] results = { null, null, null };
 
         for (int i = 0; i < results.length; i++) {
-            if (pre_results.length < i + 1) {
+            if (pre_results.size < i + 1) {
                 break;
             }
 
-            if (pre_results.index (i).similarity > 0) {
-                results[i] = pre_results.index (i).package_name;
+            if (pre_results[i].similarity > 0) {
+                results[i] = pre_results[i].package_name;
 
             } else {
                 break;
@@ -108,14 +108,20 @@ namespace Apa {
      *
      * @param array array with str to short
      */
-    public void do_short_array (Array<string> array) {
-        do_short (ref array.data);
+    public void do_short_array_list (ref Gee.ArrayList<string> array) {
+        for (int i = 0; i < array.size; i++) {
+            array[i] = do_short (array[i]);
+        }
     }
 
-    public void do_short (ref string[] strs) {
-        for (int i = 0; i < strs.length; i++) {
-            strs[i] = strs[i].split (" ")[0];
+    public void do_short_data (ref string[] data) {
+        for (int i = 0; i < data.length; i++) {
+            data[i] = do_short (data[i]);
         }
+    }
+
+    public string do_short (string str) {
+        return str.split (" ")[0];
     }
 
     public bool is_root () {

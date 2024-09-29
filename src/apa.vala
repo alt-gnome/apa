@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 Rirusha
+ * Copyright 2024 Vladimir Vaskov
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, version 3
@@ -37,21 +37,21 @@ namespace Apa {
         }
 
         switch (ca.command) {
-            case Get.INSTALL_COMMAND:
+            case Get.INSTALL:
                 check_is_root (ca.command);
                 check_internet_connection ();
                 return yield apa_install (ca);
 
-            case Get.REMOVE_COMMAND:
+            case Get.REMOVE:
                 check_is_root (ca.command);
                 return yield Get.remove (ca.command_argv, ca.options);
 
-            case Get.UPDATE_COMMAND:
+            case Get.UPDATE:
                 check_is_root (ca.command);
                 check_internet_connection ();
                 return yield Get.update ();
 
-            case Cache.SEARCH_COMMAND:
+            case Cache.SEARCH:
                 check_internet_connection ();
                 return yield Cache.search (ca.command_argv, ca.options);
 
@@ -95,15 +95,16 @@ namespace Apa {
                     char_string[i] = package_chars[i].to_string ();
                 }
 
-                var result = new Array<string> ();
+                var result = new Gee.ArrayList<string> ();
                 yield Cache.search (
                     { string.joinv (".*", char_string) },
                     { "--names-only" },
-                    true,
                     result
                 );
 
-                string[]? possible_package_names = fuzzy_search (ca.command_argv[arg_i], result.data);
+                do_short_array_list (ref result);
+
+                string[]? possible_package_names = fuzzy_search (ca.command_argv[arg_i], result.to_array ());
 
                 if (possible_package_names == null) {
                     print (_("Package \"%s\" not found\n"), ca.command_argv[arg_i]);
