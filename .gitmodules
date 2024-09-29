@@ -1,0 +1,3 @@
+[submodule "vala-checkers"]
+	path = vala-checkers
+	url = git@ssh.gitlab.gnome.org:Rirusha/vala-checkers.git
