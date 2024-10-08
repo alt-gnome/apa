@@ -22,7 +22,7 @@ namespace Apa {
     internal const string HELP_COMMAND = "help";
     internal const string VERSION_COMMAND = "version";
 
-    public async int run (string[] argv) {
+    public int run (string[] argv) {
 
         var ca = CommandArgs.parse (argv);
 
@@ -40,26 +40,26 @@ namespace Apa {
             case Get.INSTALL:
                 check_is_root (ca.command);
                 check_internet_connection ();
-                return yield apa_install (ca);
+                return apa_install (ca);
 
             case Get.REMOVE:
                 check_is_root (ca.command);
-                return yield Get.remove (ca.command_argv, ca.options);
+                return Get.remove (ca.command_argv, ca.options);
 
             case Get.UPDATE:
                 check_is_root (ca.command);
                 check_internet_connection ();
-                return yield Get.update ();
+                return Get.update ();
 
             case Cache.SEARCH:
                 check_internet_connection ();
-                return yield Cache.search (ca.command_argv, ca.options);
+                return Cache.search (ca.command_argv, ca.options, null);
 
             case LIST_COMMAND:
-                return yield Rpm.list (ca.options);
+                return Rpm.list (ca.options);
 
             case INFO_COMMAND:
-                return yield apa_info (ca);
+                return apa_info (ca);
 
             case VERSION_COMMAND:
                 print_apa_version ();
@@ -77,8 +77,8 @@ namespace Apa {
         }
     }
 
-    internal async int apa_install (CommandArgs ca) {
-        var status = yield Get.install (ca.command_argv, ca.options);
+    internal int apa_install (CommandArgs ca) {
+        var status = Get.install (ca.command_argv, ca.options);
 
         if (status == 100) {
             if (ca.command_argv.length > 1) {
@@ -96,7 +96,7 @@ namespace Apa {
                 }
 
                 var result = new Gee.ArrayList<string> ();
-                yield Cache.search (
+                Cache.search (
                     { string.joinv (".*", char_string) },
                     { "--names-only" },
                     result
@@ -146,18 +146,18 @@ namespace Apa {
                 }
             }
 
-            return yield Get.install (packages_to_install, ca.options);
+            return Get.install (packages_to_install, ca.options);
         }
 
         return status;
     }
 
-    internal async int apa_info (CommandArgs ca) {
+    internal int apa_info (CommandArgs ca) {
         int status_code = 0;
 
         foreach (string package_name in ca.command_argv) {
             print (_("Info for \"%s\":\n"), package_name);
-            status_code = yield Rpm.info (package_name, ca.options);
+            status_code = Rpm.info (package_name, ca.options);
             if (status_code != 0) {
                 return status_code;
             }
@@ -216,6 +216,10 @@ namespace Apa {
     }
 
     public void check_internet_connection () {
+        if (!Config.EXPERIMENTAL_CHECK_IC) {
+            return;
+        }
+
         if (has_internet_connection ()) {
             return;
         }

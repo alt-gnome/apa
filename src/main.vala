@@ -24,17 +24,5 @@ public static int main (string[] argv) {
 
     Environment.set_prgname (Config.NAME);
 
-    var fargv = argv[1:argv.length];
-
-    int exit_status = 0;
-    var loop = new MainLoop ();
-
-    Apa.run.begin (fargv, (obj, res) => {
-        exit_status = Apa.run.end (res);
-        loop.quit ();
-    });
-
-    loop.run ();
-
-    return exit_status;
+    return Apa.run (argv[1:argv.length]);
 }

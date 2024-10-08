@@ -42,6 +42,7 @@ endif
 conf = configuration_data()
 conf.set_quoted('NAME', meson.project_name())
 conf.set10('IS_DEVEL', get_option('is_devel'))
+conf.set10('EXPERIMENTAL_CHECK_IC', get_option('experimental_check_ic'))
 conf.set_quoted('VERSION', '@0@@1@'.format (meson.project_version(), version_suffix))
 conf.set_quoted('G_LOG_DOMAIN', meson.project_name())
 conf.set_quoted('GETTEXT_PACKAGE', meson.project_name())

@@ -29,7 +29,7 @@ namespace Apa.Get {
         UPDATE
     };
 
-    public async int install (string[] packages, string[] options = {}) {
+    public int install (string[] packages, string[] options = {}) {
         var arr = new Gee.ArrayList<string>.wrap ({
             ORIGIN,
             INSTALL,
@@ -58,10 +58,10 @@ namespace Apa.Get {
 
         arr.add_all_array (packages);
 
-        return yield spawn_command (arr.to_array ());
+        return spawn_command (arr.to_array ());
     }
 
-    public async int remove (string[] packages, string[] options = {}) {
+    public int remove (string[] packages, string[] options = {}) {
         var arr = new Gee.ArrayList<string>.wrap ({
             ORIGIN,
             REMOVE
@@ -87,10 +87,10 @@ namespace Apa.Get {
 
         arr.add_all_array (packages);
 
-        return yield spawn_command (arr.to_array ());
+        return spawn_command (arr.to_array ());
     }
 
-    public async int update (string[] options = {}) {
+    public int update (string[] options = {}) {
         var arr = new Gee.ArrayList<string>.wrap ({
             ORIGIN,
             UPDATE
@@ -109,7 +109,7 @@ namespace Apa.Get {
             }
         }
 
-        return yield spawn_command (arr.to_array ());
+        return spawn_command (arr.to_array ());
     }
 
     public void print_help (string command) {

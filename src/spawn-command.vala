@@ -19,81 +19,47 @@
 
 namespace Apa {
 
-    async int spawn_command (
+    int spawn_command (
         string[] spawn_args,
         Gee.ArrayList<string>? result = null
     ) {
-        print_devel ("Child%s procces prepared:\n\t%s".printf (
-            result != null ? " resulted" : "",
+        print_devel ("Child procces prepared:\n\t%s".printf (
             string.joinv (" ", spawn_args)
         ));
 
         int status_code = 0;
+        SubprocessFlags flags = SEARCH_PATH_FROM_ENVP;
 
-        try {
-            Pid child_pid;
+        if (result != null) {
+            flags |= STDOUT_PIPE | STDERR_PIPE;
 
-            if (result != null) {
-                int output;
-
-                Process.spawn_async_with_pipes (
-                    null,
-                    spawn_args.copy (),
-                    null,
-                    SpawnFlags.SEARCH_PATH | SpawnFlags.DO_NOT_REAP_CHILD | SpawnFlags.STDERR_TO_DEV_NULL,
-                    null,
-                    out child_pid,
-                    null,
-                    out output,
-                    null
-                );
-
-                IOChannel output_channel = new IOChannel.unix_new (output);
-                output_channel.add_watch (IOCondition.IN | IOCondition.HUP, (channel, condition) => {
-                    if ((condition & IOCondition.HUP) != 0) {
-                        return false;
-                    }
-
-                    string line;
-                    try {
-                        channel.read_line (out line, null, null);
-
-                    } catch (Error e) {
-                        error (e.message);
-                    }
-
-                    result.add (line);
-
-                    return true;
-                });
-
-            } else {
-                Process.spawn_async_with_fds (
-                    null,
-                    spawn_args.copy (),
-                    null,
-                    SpawnFlags.SEARCH_PATH | SpawnFlags.CHILD_INHERITS_STDIN | SpawnFlags.DO_NOT_REAP_CHILD,
-                    null,
-                    out child_pid,
-                    -1,
-                    stdout.fileno (),
-                    stderr.fileno ()
-                );
-            }
-
-            ChildWatch.add (child_pid, (pid, status) => {
-                status_code = Process.exit_status (status);
-                Process.close_pid (pid);
-                Idle.add (spawn_command.callback);
-            });
-
-        } catch (SpawnError e) {
-            error (e.message);
+        } else {
+            flags |= INHERIT_FDS;
         }
 
-        print_devel ("Child procces created");
+        try {
+            var sp = new Subprocess.newv (spawn_args.copy (), flags);
+            print_devel ("Child procces created");
 
-        yield;
+            string? stdout_buf;
+            string? stderr_buf;
+            bool success = sp.communicate_utf8 (null, null, out stdout_buf, out stderr_buf);
+            if (success) {
+                print_devel ("Coomunicate: success");
+
+            } else {
+                print_devel ("Coomunicate: failed");
+            }
+
+            status_code = sp.get_exit_status ();
+
+            if (stdout_buf != null) {
+                result.add_all_array (stdout_buf.strip ().split ("\n"));
+            }
+
+        } catch (Error e) {
+            error (e.message);
+        }
 
         print_devel ("The child process is completed with status %i".printf (status_code));
 

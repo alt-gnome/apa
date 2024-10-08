@@ -3,3 +3,8 @@ option(
   type: 'boolean',
   value: false
 )
+option(
+  'experimental_check_ic',
+  type: 'boolean',
+  value: false
+)

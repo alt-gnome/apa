@@ -27,10 +27,10 @@ namespace Apa.Cache {
         SEARCH
     };
 
-    public async int search (
+    public int search (
         string[] regexs,
         string[] options,
-        Gee.ArrayList<string>? result = null
+        Gee.ArrayList<string>? result
     ) {
         var arr = new Gee.ArrayList<string>.wrap ({
             ORIGIN,
@@ -52,7 +52,7 @@ namespace Apa.Cache {
 
         arr.add_all_array (regexs);
 
-        return yield spawn_command (arr.to_array (), result);
+        return spawn_command (arr.to_array (), result);
     }
 
     public void print_help (string command) {
