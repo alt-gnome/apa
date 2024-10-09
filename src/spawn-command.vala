@@ -19,8 +19,12 @@
 
 namespace Apa {
 
-    int spawn_command (
+    /**
+     * If result is not `null`, then `stdout > result`
+     */
+    int spawn_command_full (
         string[] spawn_args,
+        bool is_quiet = false,
         Gee.ArrayList<string>? result = null
     ) {
         print_devel ("Child procces prepared:\n\t%s".printf (
@@ -28,13 +32,16 @@ namespace Apa {
         ));
 
         int status_code = 0;
-        SubprocessFlags flags = SEARCH_PATH_FROM_ENVP;
+        SubprocessFlags flags = SubprocessFlags.SEARCH_PATH_FROM_ENVP;
 
         if (result != null) {
-            flags |= STDOUT_PIPE | STDERR_PIPE;
+            flags |= SubprocessFlags.STDOUT_PIPE | SubprocessFlags.STDERR_PIPE;
 
         } else {
-            flags |= INHERIT_FDS;
+            if (is_quiet) {
+                flags |= SubprocessFlags.STDOUT_SILENCE;
+            }
+            flags |= SubprocessFlags.INHERIT_FDS | SubprocessFlags.STDIN_INHERIT;
         }
 
         try {
@@ -43,13 +50,7 @@ namespace Apa {
 
             string? stdout_buf;
             string? stderr_buf;
-            bool success = sp.communicate_utf8 (null, null, out stdout_buf, out stderr_buf);
-            if (success) {
-                print_devel ("Coomunicate: success");
-
-            } else {
-                print_devel ("Coomunicate: failed");
-            }
+            sp.communicate_utf8 (null, null, out stdout_buf, out stderr_buf);
 
             status_code = sp.get_exit_status ();
 
@@ -68,5 +69,19 @@ namespace Apa {
         }
 
         return status_code;
+    }
+
+    int spawn_command (
+        string[] spawn_args,
+        bool is_quiet = false
+    ) {
+        return spawn_command_full (spawn_args, is_quiet, null);
+    }
+
+    int spawn_command_with_result (
+        string[] spawn_args,
+        Gee.ArrayList<string>? result
+    ) {
+        return spawn_command_full (spawn_args, false, result);
     }
 }

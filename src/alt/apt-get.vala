@@ -38,6 +38,8 @@ namespace Apa.Get {
             "-o", "APT::Install::Virtual=true"
         });
 
+        bool is_quiet = false;
+
         foreach (string option in options) {
             switch (option) {
                 case "-d":
@@ -45,9 +47,9 @@ namespace Apa.Get {
                     arr.add ("-d");
                     break;
 
-                case "-s":
-                case "--silent":
-                    arr.add ("-qq");
+                case "-q":
+                case "--quiet":
+                    is_quiet = true;
                     break;
 
                 default:
@@ -58,7 +60,7 @@ namespace Apa.Get {
 
         arr.add_all_array (packages);
 
-        return spawn_command (arr.to_array ());
+        return spawn_command (arr.to_array (), is_quiet);
     }
 
     public int remove (string[] packages, string[] options = {}) {
@@ -67,6 +69,8 @@ namespace Apa.Get {
             REMOVE
         });
 
+        bool is_quiet = false;
+
         foreach (string option in options) {
             switch (option) {
                 case "-D":
@@ -74,9 +78,9 @@ namespace Apa.Get {
                     arr.add ("-D");
                     break;
 
-                case "-s":
-                case "--silent":
-                    arr.add ("-qq");
+                case "-q":
+                case "--quiet":
+                    is_quiet = true;
                     break;
 
                 default:
@@ -87,7 +91,7 @@ namespace Apa.Get {
 
         arr.add_all_array (packages);
 
-        return spawn_command (arr.to_array ());
+        return spawn_command (arr.to_array (), is_quiet);
     }
 
     public int update (string[] options = {}) {
@@ -96,11 +100,13 @@ namespace Apa.Get {
             UPDATE
         });
 
+        bool is_quiet = false;
+
         foreach (string option in options) {
             switch (option) {
-                case "-s":
-                case "--silent":
-                    arr.add ("-qq");
+                case "-q":
+                case "--quiet":
+                    is_quiet = true;
                     break;
 
                 default:
@@ -109,7 +115,7 @@ namespace Apa.Get {
             }
         }
 
-        return spawn_command (arr.to_array ());
+        return spawn_command (arr.to_array (), is_quiet);
     }
 
     public void print_help (string command) {

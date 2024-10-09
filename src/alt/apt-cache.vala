@@ -52,7 +52,7 @@ namespace Apa.Cache {
 
         arr.add_all_array (regexs);
 
-        return spawn_command (arr.to_array (), result);
+        return spawn_command_with_result (arr.to_array (), result);
     }
 
     public void print_help (string command) {
