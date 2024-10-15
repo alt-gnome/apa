@@ -23,7 +23,6 @@ public static int main (string[] argv) {
     Intl.textdomain (Config.GETTEXT_PACKAGE);
 
     Environment.set_prgname (Config.NAME);
-    Environment.set_variable ("LC_ALL", "ru_RU.UTF-8", true);
 
     var fargv = argv[1:argv.length];
 
