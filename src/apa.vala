@@ -22,17 +22,17 @@ namespace Apa {
     internal const string HELP_COMMAND = "help";
     internal const string VERSION_COMMAND = "version";
 
-    public int run (string[] argv) {
+    public async int run (string[] argv) {
 
         var ca = CommandArgs.parse (argv);
 
-        if ("-v" in ca.options || "--version" in ca.options) {
-            print_apa_version ();
+        if ("-h" in ca.options || "--help" in ca.options) {
+            print_help (ca.command);
             return 0;
         }
 
-        if ("-h" in ca.options || "--help" in ca.options) {
-            print_help (ca.command);
+        if ("-v" in ca.options || "--version" in ca.options) {
+            print_apa_version ();
             return 0;
         }
 
@@ -40,26 +40,26 @@ namespace Apa {
             case Get.INSTALL:
                 check_is_root (ca.command);
                 check_internet_connection ();
-                return apa_install (ca);
+                return yield apa_install (ca);
 
             case Get.REMOVE:
                 check_is_root (ca.command);
-                return Get.remove (ca.command_argv, ca.options);
+                return yield Get.remove (ca.command_argv, ca.options);
 
             case Get.UPDATE:
                 check_is_root (ca.command);
                 check_internet_connection ();
-                return Get.update ();
+                return yield Get.update ();
 
             case Cache.SEARCH:
                 check_internet_connection ();
-                return Cache.search (ca.command_argv, ca.options, null);
+                return yield Cache.search (ca.command_argv, ca.options, null);
 
             case LIST_COMMAND:
-                return Rpm.list (ca.options);
+                return yield Rpm.list (ca.options);
 
             case INFO_COMMAND:
-                return apa_info (ca);
+                return yield apa_info (ca);
 
             case VERSION_COMMAND:
                 print_apa_version ();
@@ -77,8 +77,10 @@ namespace Apa {
         }
     }
 
-    internal int apa_install (CommandArgs ca) {
-        var status = Get.install (ca.command_argv, ca.options);
+    internal async int apa_install (CommandArgs ca) {
+        var status = yield Get.install (ca.command_argv, ca.options);
+
+        print (status.to_string ());
 
         if (status == 100) {
             if (ca.command_argv.length > 1) {
@@ -96,7 +98,7 @@ namespace Apa {
                 }
 
                 var result = new Gee.ArrayList<string> ();
-                Cache.search (
+                yield Cache.search (
                     { string.joinv (".*", char_string) },
                     { "--names-only" },
                     result
@@ -146,18 +148,18 @@ namespace Apa {
                 }
             }
 
-            return Get.install (packages_to_install, ca.options);
+            return yield Get.install (packages_to_install, ca.options);
         }
 
         return status;
     }
 
-    internal int apa_info (CommandArgs ca) {
+    internal async int apa_info (CommandArgs ca) {
         int status_code = 0;
 
         foreach (string package_name in ca.command_argv) {
             print (_("Info for \"%s\":\n"), package_name);
-            status_code = Rpm.info (package_name, ca.options);
+            status_code = yield Rpm.info (package_name, ca.options);
             if (status_code != 0) {
                 return status_code;
             }
@@ -170,15 +172,18 @@ namespace Apa {
         return 0;
     }
 
-    internal void print_help (string command) {
+    internal void print_help (string? command) {
         if (command in Get.COMMANDS) {
             Get.print_help (command);
 
         } else if (command in Cache.COMMANDS) {
             Cache.print_help (command);
 
+        } else if (command == null) {
+            print_apa_help ();
+
         } else {
-            assert_not_reached ();
+            print (_("Unknown command \"%s\".\nTry `apa --help` to see all commands.\n"), command);
         }
     }
 

@@ -28,7 +28,7 @@ public struct Apa.CommandArgs {
     public ArgOption[] arg_options;
 
     public static CommandArgs parse (string[] argv) {
-        var command = "";
+        string? command = null;
         var command_argv_array = new Gee.ArrayList<string> ();
         var options_array = new Gee.ArrayList<string> ();
         var arg_options_array = new Gee.ArrayList<ArgOption?> ();
@@ -49,7 +49,7 @@ public struct Apa.CommandArgs {
                     }
                 };
 
-            } else if (command == "") {
+            } else if (command == null) {
                 command = arg;
 
             } else {

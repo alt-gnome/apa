@@ -21,7 +21,7 @@ namespace Apa.Rpm {
 
     internal const string ORIGIN = "rpm";
 
-    public int list (
+    public async int list (
         string[] options = {},
         Gee.ArrayList<string>? result = null
     ) {
@@ -48,18 +48,18 @@ namespace Apa.Rpm {
             }
         }
 
-        return spawn_command_with_result (arr.to_array (), result);
+        return yield spawn_command_with_result (arr, result, null);
     }
 
-    public int info (
+    public async int info (
         string package_name,
         string[] options = {},
         Gee.ArrayList<string>? result = null
     ) {
-        var arr = new Gee.ArrayList<string>.wrap ({ ORIGIN, "-i" });
+        var arr = new Gee.ArrayList<string>.wrap ({ ORIGIN, "-q" });
 
         if (options.length == 0) {
-            arr.add_all_array ({ "-q" });
+            arr.add_all_array ({ "-i" });
 
         }
 
@@ -78,6 +78,6 @@ namespace Apa.Rpm {
 
         arr.add (package_name);
 
-        return spawn_command_with_result (arr.to_array (), result);
+        return yield spawn_command_with_result (arr, result, null);
     }
 }
