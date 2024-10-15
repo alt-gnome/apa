@@ -53,7 +53,7 @@ namespace Apa {
 
             case Cache.SEARCH:
                 check_internet_connection ();
-                return yield Cache.search (ca.command_argv, ca.options, null);
+                return yield Cache.search (ca.command_argv, ca.options);
 
             case LIST_COMMAND:
                 return yield Rpm.list (ca.options);
@@ -70,7 +70,7 @@ namespace Apa {
                 return 0;
 
             default:
-                print (_("Unknown command \"%s\"\n\n"), ca.command);
+                print (_("Unknown command \"%s\"\n\n").printf (ca.command));
 
                 print_apa_help ();
                 return 1;
@@ -78,11 +78,17 @@ namespace Apa {
     }
 
     internal async int apa_install (CommandArgs ca) {
-        var status = yield Get.install (ca.command_argv, ca.options);
+        var error = new Gee.ArrayList<string> ();
+        var status = yield Get.install (ca.command_argv, ca.options, error);
 
         print (status.to_string ());
 
         if (status == 100) {
+            foreach (string a in error) {
+                print_devel (a);
+                return status;
+            }
+
             if (ca.command_argv.length > 1) {
                 print (_("Some packages wasn't found\n"));
             }
@@ -101,6 +107,7 @@ namespace Apa {
                 yield Cache.search (
                     { string.joinv (".*", char_string) },
                     { "--names-only" },
+                    true,
                     result
                 );
 
@@ -109,7 +116,7 @@ namespace Apa {
                 string[]? possible_package_names = fuzzy_search (ca.command_argv[arg_i], result.to_array ());
 
                 if (possible_package_names == null) {
-                    print (_("Package \"%s\" not found\n"), ca.command_argv[arg_i]);
+                    print (_("Package \"%s\" not found\n").printf (ca.command_argv[arg_i]));
                     return status;
                 }
 
@@ -121,7 +128,7 @@ namespace Apa {
                 print (_("A packages with a similar name found:\n"));
                 for (int i = 0; i < possible_package_names.length; i++) {
                     if (possible_package_names[i] != null) {
-                        print ("\t%i) %s\n", i + 1, possible_package_names[i]);
+                        print ("\t%i) %s\n".printf (i + 1, possible_package_names[i]));
                     }
                 }
 
@@ -158,7 +165,7 @@ namespace Apa {
         int status_code = 0;
 
         foreach (string package_name in ca.command_argv) {
-            print (_("Info for \"%s\":\n"), package_name);
+            print (_("Info for \"%s\":\n").printf (package_name));
             status_code = yield Rpm.info (package_name, ca.options);
             if (status_code != 0) {
                 return status_code;
@@ -183,7 +190,7 @@ namespace Apa {
             print_apa_help ();
 
         } else {
-            print (_("Unknown command \"%s\".\nTry `apa --help` to see all commands.\n"), command);
+            print (_("Unknown command \"%s\".\nTry `apa --help` to see all commands.\n").printf (command));
         }
     }
 
@@ -192,22 +199,10 @@ namespace Apa {
     }
 
     internal void print_apa_version () {
-        print (
-            "%s %s\n",
+        print ("%s %s\n".printf (
             Config.NAME,
             Config.VERSION
-        );
-    }
-
-    public void print_devel (string str) {
-        if (Config.IS_DEVEL) {
-            print (
-                "\n%sDEBUG\n%s%s\n\n",
-                Constants.Colors.CYAN,
-                str,
-                Constants.Colors.ENDC
-            );
-        }
+        ));
     }
 
     public void check_is_root (string command) {
@@ -215,7 +210,7 @@ namespace Apa {
             return;
         }
 
-        print (_("Need root previlegies for \"%s\" command.\n"), command);
+        print (_("Need root previlegies for \"%s\" command.\n").printf (command));
         print (_("Aborting\n"));
         Process.exit (100);
     }

@@ -24,15 +24,20 @@ namespace Apa {
     /**
      * If result is not `null`, then `stdout > result`
      */
-    async int spawn_command_full (Gee.ArrayList<string> spawn_args,
-                                  Gee.ArrayList<string>? result = null,
-                                  Gee.ArrayList<string>? error_result = null,
-                                  Cancellable? cancellable = null) {
+    async int spawn_command_full (
+        Gee.ArrayList<string> spawn_args,
+        bool is_silence = false,
+        Gee.ArrayList<string>? result = null,
+        Gee.ArrayList<string>? error = null
+    ) {
 
-        var last_sequence = new Gee.ArrayList<char> ();
-        var buf = new uint8[1];
+        //  var buf = new uint8[2];
+        int c = 0;
 
-        print_devel ("Child process prepared:\n\t%s".printf (string.joinv (" ", spawn_args.to_array ())));
+        print_devel ("Child%s process prepared:\n\t%s".printf (
+            is_silence ? " (silence)" : "",
+            string.joinv (" ", spawn_args.to_array ())
+        ));
 
         Pid child_pid;
         int std_output;
@@ -41,28 +46,51 @@ namespace Apa {
         int status_code = 0;
 
         try {
-            Process.spawn_async_with_pipes_and_fds (null,
-                                                    spawn_args.to_array ().copy (),
-                                                    null,
-                                                    SpawnFlags.DO_NOT_REAP_CHILD |
-                                                    SpawnFlags.CHILD_INHERITS_STDIN |
-                                                    SpawnFlags.SEARCH_PATH,
-                                                    null,
-                                                    -1,
-                                                    -1,
-                                                    -1,
-                                                    {},
-                                                    {},
-                                                    out child_pid,
-                                                    null,
-                                                    out std_output, out
-                                                    std_error);
+            Process.spawn_async_with_pipes_and_fds (
+                null,
+                spawn_args.to_array ().copy (),
+                null,
+                SpawnFlags.DO_NOT_REAP_CHILD |
+                SpawnFlags.CHILD_INHERITS_STDIN |
+                SpawnFlags.SEARCH_PATH,
+                null,
+                -1,
+                -1,
+                -1,
+                {},
+                {},
+                out child_pid,
+                null,
+                out std_output,
+                out std_error
+            );
 
             print_devel ("Child process created");
 
             stdout_fd = FileStream.fdopen (std_output, "r");
 
-            if (error_result != null) {
+            if (result != null) {
+                IOChannel output_channel = new IOChannel.unix_new (std_output);
+                output_channel.add_watch (IOCondition.IN | IOCondition.HUP, (channel, condition) => {
+                    if (condition == IOCondition.HUP) {
+                        return false;
+                    }
+
+                    try {
+                        string line;
+                        channel.read_line (out line, null, null);
+
+                        result.add (line);
+
+                    } catch (Error e) {
+                        print_error (e.message);
+                    }
+
+                    return true;
+                });
+            }
+
+            if (error != null) {
                 IOChannel error_channel = new IOChannel.unix_new (std_error);
                 error_channel.add_watch (IOCondition.IN | IOCondition.HUP, (channel, condition) => {
                     if (condition == IOCondition.HUP) {
@@ -72,11 +100,11 @@ namespace Apa {
                     try {
                         string line;
                         channel.read_line (out line, null, null);
-                        print (line);
-                        error_result.add (line);
+
+                        error.add (line);
 
                     } catch (Error e) {
-                        error (e.message);
+                        print_error (e.message);
                     }
 
                     return true;
@@ -84,30 +112,14 @@ namespace Apa {
             }
 
             ChildWatch.add (child_pid, (pid, wait_status) => {
-                // Triggered when the child indicated by child_pid exits
                 Process.close_pid (pid);
                 status_code = Process.exit_status (wait_status);
                 Idle.add (spawn_command_full.callback);
             });
 
-            size_t read_size = 0;
-
-            while (!cancellable.is_cancelled ()) {
-                read_size = stdout_fd.read (buf);
-                if (read_size == 0) {
-                    break;
-
-                } else {
-                    char last_char = (char) buf[0];
-                    print (last_char.to_string ());
-
-                    if (result != null) {
-                        last_sequence.add (last_char);
-
-                        if (last_char == '\n') {
-                            result.add ((string) last_sequence.to_array ());
-                        }
-                    }
+            while ((c = stdout_fd.getc ()) >= 0) {
+                if (!is_silence) {
+                    print (((char) c).to_string ());
                 }
 
                 Idle.add (spawn_command_full.callback);
@@ -115,7 +127,7 @@ namespace Apa {
             }
 
         } catch (SpawnError e) {
-            error (e.message);
+            print_error (e.message);
         }
 
         yield;
@@ -129,14 +141,10 @@ namespace Apa {
         return status_code;
     }
 
-    async int spawn_command (Gee.ArrayList<string> spawn_args,
-                             Gee.ArrayList<string>? error_result) {
-        return yield spawn_command_full (spawn_args, null, error_result);
-    }
-
-    async int spawn_command_with_result (Gee.ArrayList<string> spawn_args,
-                                         Gee.ArrayList<string> result,
-                                         Gee.ArrayList<string>? error_result) {
-        return yield spawn_command_full (spawn_args, result, error_result);
+    async int spawn_command (
+        Gee.ArrayList<string> spawn_args,
+        Gee.ArrayList<string>? error_result
+    ) {
+        return yield spawn_command_full (spawn_args, false, null, error_result);
     }
 }

@@ -29,7 +29,9 @@ namespace Apa.Get {
         UPDATE
     };
 
-    public async int install (string[] packages, string[] options = {}) {
+    public async int install (string[] packages,
+                              string[] options = {},
+                              Gee.ArrayList<string>? error = null) {
         var arr = new Gee.ArrayList<string>.wrap ({
             ORIGIN,
             INSTALL,
@@ -53,17 +55,19 @@ namespace Apa.Get {
                     break;
 
                 default:
-                    print (_("Command line option \"%s\" is not known.\n"), option);
+                    print (_("Command line option \"%s\" is not known.\n").printf (option));
                     return 1;
             }
         }
 
         arr.add_all_array (packages);
 
-        return yield spawn_command (arr, new Gee.ArrayList<string> ());
+        return yield spawn_command (arr, error);
     }
 
-    public async int remove (string[] packages, string[] options = {}) {
+    public async int remove (string[] packages,
+                             string[] options = {},
+                             Gee.ArrayList<string>? error = null) {
         var arr = new Gee.ArrayList<string>.wrap ({
             ORIGIN,
             REMOVE
@@ -84,17 +88,18 @@ namespace Apa.Get {
                     break;
 
                 default:
-                    print (_("Command line option \"%s\" is not known.\n"), option);
+                    print (_("Command line option \"%s\" is not known.\n").printf (option));
                     return 1;
             }
         }
 
         arr.add_all_array (packages);
 
-        return yield spawn_command (arr, null);
+        return yield spawn_command (arr, error);
     }
 
-    public async int update (string[] options = {}) {
+    public async int update (string[] options = {},
+                             Gee.ArrayList<string>? error = null) {
         var arr = new Gee.ArrayList<string>.wrap ({
             ORIGIN,
             UPDATE
@@ -110,12 +115,12 @@ namespace Apa.Get {
                     break;
 
                 default:
-                    print (_("Command line option \"%s\" is not known.\n"), option);
+                    print (_("Command line option \"%s\" is not known.\n").printf (option));
                     return 1;
             }
         }
 
-        return yield spawn_command (arr, null);
+        return yield spawn_command (arr, error);
     }
 
     public void print_help (string command) {

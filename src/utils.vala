@@ -180,4 +180,28 @@ namespace Apa {
             return false;
         }
     }
+
+    public void print (string str) {
+        foreach (uint8 c in str.data) {
+            stdout.putc ((char) c);
+        }
+    }
+
+    public void print_devel (string str) {
+        if (Config.IS_DEVEL) {
+            print ("\n%sDEBUG\n%s%s\n\n".printf (
+                Constants.Colors.CYAN,
+                str,
+                Constants.Colors.ENDC
+            ));
+        }
+    }
+
+    public void print_error (string str) {
+        print ("%sE:%s %s\n".printf (
+            Constants.Colors.FAIL,
+            str,
+            Constants.Colors.ENDC
+        ));
+    }
 }

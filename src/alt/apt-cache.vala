@@ -27,11 +27,11 @@ namespace Apa.Cache {
         SEARCH
     };
 
-    public async int search (
-        string[] regexs,
-        string[] options,
-        Gee.ArrayList<string>? result
-    ) {
+    public async int search (string[] regexs,
+                             string[] options,
+                             bool is_silence = false,
+                             Gee.ArrayList<string>? result = null,
+                             Gee.ArrayList<string>? error = null) {
         var arr = new Gee.ArrayList<string>.wrap ({
             ORIGIN,
             SEARCH
@@ -45,14 +45,14 @@ namespace Apa.Cache {
                     break;
 
                 default:
-                    print (_("Command line option \"%s\" is not known.\n"), options[i]);
+                    print (_("Command line option \"%s\" is not known.\n").printf (options[i]));
                     return 1;
             }
         }
 
         arr.add_all_array (regexs);
 
-        return yield spawn_command_with_result (arr, result, null);
+        return yield spawn_command_full (arr, is_silence, result, error);
     }
 
     public void print_help (string command) {
