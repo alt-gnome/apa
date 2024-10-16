@@ -1,0 +1,73 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the apa package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: apa\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-10-16 11:41+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/alt/apt-cache.vala:47 src/alt/apt-get.vala:58 src/alt/apt-get.vala:91
+#: src/alt/apt-get.vala:118 src/apa/rpm.vala:45 src/apa/rpm.vala:72
+#, c-format
+msgid "Command line option \"%s\" is not known.\n"
+msgstr ""
+
+#: src/apa.vala:73 src/apa.vala:208
+#, c-format
+msgid "Unknown command \"%s\".\n"
+msgstr ""
+
+#: src/apa.vala:86
+#, c-format
+msgid "Couldn't find package %s"
+msgstr ""
+
+#: src/apa.vala:109
+msgid "Some packages wasn't found\n"
+msgstr ""
+
+#: src/apa.vala:134
+#, c-format
+msgid "Package \"%s\" not found\n"
+msgstr ""
+
+#: src/apa.vala:143
+msgid "A packages with a similar name found:\n"
+msgstr ""
+
+#: src/apa.vala:153
+msgid "Choose which on to install: [1 by default, 0 to exit] "
+msgstr ""
+
+#: src/apa.vala:183
+#, c-format
+msgid "Info for \"%s\":\n"
+msgstr ""
+
+#: src/apa.vala:209
+msgid "Try `apa --help` to see all commands.\n"
+msgstr ""
+
+#: src/apa.vala:229
+#, c-format
+msgid "Need root previlegies for \"%s\" command.\n"
+msgstr ""
+
+#: src/apa.vala:230 src/apa.vala:244
+msgid "Aborting\n"
+msgstr ""
+
+#: src/apa.vala:243
+msgid "No internet connection.\n"
+msgstr ""

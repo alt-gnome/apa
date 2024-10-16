@@ -1,0 +1,76 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the apa package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Valdimir Vaskov <rirusha@altlinux.org>, 2024.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: apa\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-10-16 11:41+0300\n"
+"PO-Revision-Date: 2024-10-16 11:44+0300\n"
+"Last-Translator: Vladimir Vaskov <rirusha@altlinux.org>\n"
+"Language-Team: Russian <rirusha@altlinux.org>\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Gtranslator 47.0\n"
+
+#: src/alt/apt-cache.vala:47 src/alt/apt-get.vala:58 src/alt/apt-get.vala:91
+#: src/alt/apt-get.vala:118 src/apa/rpm.vala:45 src/apa/rpm.vala:72
+#, c-format
+msgid "Command line option \"%s\" is not known.\n"
+msgstr "Неизвестная опция \"%s\"\n"
+
+#: src/apa.vala:73 src/apa.vala:208
+#, c-format
+msgid "Unknown command \"%s\".\n"
+msgstr "Неизвестная команда \"%s\".\n"
+
+#: src/apa.vala:86
+#, c-format
+msgid "Couldn't find package %s"
+msgstr "Невозможно найти пакет %s"
+
+#: src/apa.vala:109
+msgid "Some packages wasn't found\n"
+msgstr "Некоторые пакеты не были найдены\n"
+
+#: src/apa.vala:134
+#, c-format
+msgid "Package \"%s\" not found\n"
+msgstr "Пакет \"%s\" не найден\n"
+
+#: src/apa.vala:143
+msgid "A packages with a similar name found:\n"
+msgstr "Пакет с походим именем найден:\n"
+
+#: src/apa.vala:153
+msgid "Choose which on to install: [1 by default, 0 to exit] "
+msgstr "Выберите, какой установить: [1 по-умолчанию, 0 для выхода] "
+
+#: src/apa.vala:183
+#, c-format
+msgid "Info for \"%s\":\n"
+msgstr "Информация по \"%s\":\n"
+
+#: src/apa.vala:209
+msgid "Try `apa --help` to see all commands.\n"
+msgstr "Попробуйте `apa --help` чтобы посмотреть все команды.\n"
+
+#: src/apa.vala:229
+#, c-format
+msgid "Need root previlegies for \"%s\" command.\n"
+msgstr "Нужны привелегии суперпользователя для команды \"%s\".\n"
+
+#: src/apa.vala:230 src/apa.vala:244
+msgid "Aborting\n"
+msgstr "Отмена\n"
+
+#: src/apa.vala:243
+msgid "No internet connection.\n"
+msgstr "Нет интернет соединения.\n"

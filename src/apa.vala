@@ -70,7 +70,7 @@ namespace Apa {
                 return 0;
 
             default:
-                print (_("Unknown command \"%s\"\n\n").printf (ca.command));
+                print (_("Unknown command \"%s\".\n").printf (ca.command));
 
                 print_apa_help ();
                 return 1;
@@ -80,10 +80,26 @@ namespace Apa {
     internal async int apa_install (CommandArgs ca) {
         var error = new Gee.ArrayList<string> ();
         var status = yield Get.install (ca.command_argv, ca.options, error);
-
-        print (status.to_string ());
+        string error_message = error[0];
+        string couldnt_find_packages_translated_pattern = (dgettext (
+            "apt",
+            "Couldn't find package %s"
+        )).replace ("%s", ".*");
 
         if (status == 100) {
+            var regex = new Regex (
+                couldnt_find_packages_translated_pattern,
+                RegexCompileFlags.OPTIMIZE,
+                RegexMatchFlags.NOTEMPTY
+            );
+
+            print_devel (couldnt_find_packages_translated_pattern);
+
+            if (regex.match (error_message, 0, null)) {
+                print ("ГДЕ ПАКЕТ СУКА\n");
+                return status;
+            }
+
             foreach (string a in error) {
                 print_devel (a);
                 return status;
@@ -107,7 +123,6 @@ namespace Apa {
                 yield Cache.search (
                     { string.joinv (".*", char_string) },
                     { "--names-only" },
-                    true,
                     result
                 );
 
@@ -190,7 +205,8 @@ namespace Apa {
             print_apa_help ();
 
         } else {
-            print (_("Unknown command \"%s\".\nTry `apa --help` to see all commands.\n").printf (command));
+            print (_("Unknown command \"%s\".\n").printf (command));
+            print (_("Try `apa --help` to see all commands.\n"));
         }
     }
 

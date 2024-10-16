@@ -19,19 +19,16 @@
 
 namespace Apa {
 
-    FileStream? stdout_fd;
-
     /**
      * If result is not `null`, then `stdout > result`
      */
     async int spawn_command_full (
         Gee.ArrayList<string> spawn_args,
-        bool is_silence = false,
         Gee.ArrayList<string>? result = null,
         Gee.ArrayList<string>? error = null
     ) {
         print_devel ("Child%s process prepared:\n\t%s".printf (
-            is_silence ? " (silence)" : "",
+            result == null ? " (silence)" : "",
             string.joinv (" ", spawn_args.to_array ())
         ));
 
@@ -42,30 +39,46 @@ namespace Apa {
         int status_code = 0;
 
         try {
-            Process.spawn_async_with_pipes_and_fds (
-                null,
-                spawn_args.to_array ().copy (),
-                null,
-                SpawnFlags.DO_NOT_REAP_CHILD |
-                SpawnFlags.CHILD_INHERITS_STDIN |
-                SpawnFlags.SEARCH_PATH,
-                null,
-                -1,
-                -1,
-                -1,
-                {},
-                {},
-                out child_pid,
-                null,
-                out std_output,
-                out std_error
-            );
+            if (result == null) {
+                Process.spawn_async_with_pipes_and_fds (
+                    null,
+                    spawn_args.to_array ().copy (),
+                    null,
+                    SpawnFlags.DO_NOT_REAP_CHILD |
+                    SpawnFlags.CHILD_INHERITS_STDIN |
+                    SpawnFlags.SEARCH_PATH,
+                    null,
+                    -1,
+                    stdout.fileno (),
+                    -1,
+                    {},
+                    {},
+                    out child_pid,
+                    null,
+                    null,
+                    out std_error
+                );
 
-            print_devel ("Child process created");
+            } else {
+                Process.spawn_async_with_pipes_and_fds (
+                    null,
+                    spawn_args.to_array ().copy (),
+                    null,
+                    SpawnFlags.DO_NOT_REAP_CHILD |
+                    SpawnFlags.CHILD_INHERITS_STDIN |
+                    SpawnFlags.SEARCH_PATH,
+                    null,
+                    -1,
+                    -1,
+                    -1,
+                    {},
+                    {},
+                    out child_pid,
+                    null,
+                    out std_output,
+                    out std_error
+                );
 
-            stdout_fd = FileStream.fdopen (std_output, "r");
-
-            if (result != null) {
                 IOChannel output_channel = new IOChannel.unix_new (std_output);
                 output_channel.add_watch (IOCondition.IN | IOCondition.HUP, (channel, condition) => {
                     if (condition == IOCondition.HUP) {
@@ -85,6 +98,8 @@ namespace Apa {
                     return true;
                 });
             }
+
+            print_devel ("Child process created");
 
             if (error != null) {
                 IOChannel error_channel = new IOChannel.unix_new (std_error);
@@ -113,14 +128,14 @@ namespace Apa {
                 Idle.add (spawn_command_full.callback);
             });
 
-            if (!is_silence) {
-                int c = 0;
-                while ((c = stdout_fd.getc ()) >= 0) {
-                    print_char ((char) c);
-                    Idle.add (spawn_command_full.callback);
-                    yield;
-                }
-            }
+            //  if (!is_silence) {
+            //      int c = 0;
+            //      while ((c = stdout_fd.getc ()) >= 0) {
+            //          print_char ((char) c);
+            //          Idle.add (spawn_command_full.callback);
+            //          yield;
+            //      }
+            //  }
 
         } catch (SpawnError e) {
             print_error (e.message);
@@ -139,8 +154,8 @@ namespace Apa {
 
     async int spawn_command (
         Gee.ArrayList<string> spawn_args,
-        Gee.ArrayList<string>? error_result
+        Gee.ArrayList<string>? error
     ) {
-        return yield spawn_command_full (spawn_args, false, null, error_result);
+        return yield spawn_command_full (spawn_args, null, error);
     }
 }

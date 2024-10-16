@@ -181,11 +181,6 @@ namespace Apa {
         }
     }
 
-    public void print_char (char c) {
-        stdout.putc ((char) c);
-        stdout.flush ();
-    }
-
     public void print (string str) {
         stdout.puts (str);
         stdout.flush ();

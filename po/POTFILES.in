@@ -1,0 +1,4 @@
+src/alt/apt-cache.vala
+src/alt/apt-get.vala
+src/apa/rpm.vala
+src/apa.vala
