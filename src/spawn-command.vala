@@ -30,10 +30,6 @@ namespace Apa {
         Gee.ArrayList<string>? result = null,
         Gee.ArrayList<string>? error = null
     ) {
-
-        //  var buf = new uint8[2];
-        int c = 0;
-
         print_devel ("Child%s process prepared:\n\t%s".printf (
             is_silence ? " (silence)" : "",
             string.joinv (" ", spawn_args.to_array ())
@@ -117,13 +113,13 @@ namespace Apa {
                 Idle.add (spawn_command_full.callback);
             });
 
-            while ((c = stdout_fd.getc ()) >= 0) {
-                if (!is_silence) {
-                    print (((char) c).to_string ());
+            if (!is_silence) {
+                int c = 0;
+                while ((c = stdout_fd.getc ()) >= 0) {
+                    print_char ((char) c);
+                    Idle.add (spawn_command_full.callback);
+                    yield;
                 }
-
-                Idle.add (spawn_command_full.callback);
-                yield;
             }
 
         } catch (SpawnError e) {

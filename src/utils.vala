@@ -181,10 +181,14 @@ namespace Apa {
         }
     }
 
+    public void print_char (char c) {
+        stdout.putc ((char) c);
+        stdout.flush ();
+    }
+
     public void print (string str) {
-        foreach (uint8 c in str.data) {
-            stdout.putc ((char) c);
-        }
+        stdout.puts (str);
+        stdout.flush ();
     }
 
     public void print_devel (string str) {
