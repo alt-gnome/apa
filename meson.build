@@ -33,9 +33,13 @@ add_project_arguments(
 
 version_suffix = ''
 
+find_program ('apt-get', required: true)
+find_program ('rpm', required: true)
+find_program ('apt-repo', required: true)
+
 if get_option('is_devel')
   find_program('git', required: true)
-  vcs_tag = run_command('git', 'rev-parse', '--short', 'HEAD').stdout().strip()
+  vcs_tag = run_command('git', 'rev-parse', '--short', 'HEAD', check: false).stdout().strip()
   version_suffix = '-dev.' + vcs_tag
 endif
 
