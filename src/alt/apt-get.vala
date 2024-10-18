@@ -20,7 +20,6 @@ namespace Apa.Get {
     internal const string ORIGIN = "apt-get";
 
     internal const string INSTALL = "install";
-    internal const string INSTALL_INTL = _("install");
     internal const string REMOVE = "remove";
     internal const string UPDATE = "update";
 

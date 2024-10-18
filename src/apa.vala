@@ -37,7 +37,6 @@ namespace Apa {
         }
 
         switch (ca.command) {
-            case Get.INSTALL_INTL:
             case Get.INSTALL:
                 check_is_root (ca.command);
                 check_internet_connection ();
