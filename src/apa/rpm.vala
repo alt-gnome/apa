@@ -42,7 +42,7 @@ namespace Apa.Rpm {
                     break;
 
                 default:
-                    print (_("Command line option \"%s\" is not known.\n").printf (option));
+                    print (_("Unknown option '%s'").printf (option));
                     return 1;
             }
         }
@@ -69,7 +69,7 @@ namespace Apa.Rpm {
                     break;
 
                 default:
-                    print (_("Command line option \"%s\" is not known.\n").printf (option));
+                    print (_("Unknown option '%s'").printf (option));
                     return 1;
             }
         }

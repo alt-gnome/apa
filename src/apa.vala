@@ -37,6 +37,7 @@ namespace Apa {
         }
 
         switch (ca.command) {
+            case Get.INSTALL_INTL:
             case Get.INSTALL:
                 check_is_root (ca.command);
                 check_internet_connection ();
@@ -69,8 +70,12 @@ namespace Apa {
                 print_apa_help ();
                 return 0;
 
+            case null:
+                print_apa_help ();
+                return 1;
+
             default:
-                print (_("Unknown command \"%s\".\n").printf (ca.command));
+                print (_("Unknown command '%s'").printf (ca.command));
 
                 print_apa_help ();
                 return 1;
@@ -80,33 +85,39 @@ namespace Apa {
     internal async int apa_install (CommandArgs ca) {
         var error = new Gee.ArrayList<string> ();
         var status = yield Get.install (ca.command_argv, ca.options, error);
-        string error_message = error[0];
-        string couldnt_find_packages_translated_pattern = (dgettext (
-            "apt",
-            "Couldn't find package %s"
-        )).replace ("%s", ".*");
 
         if (status == 100) {
-            var regex = new Regex (
-                couldnt_find_packages_translated_pattern,
-                RegexCompileFlags.OPTIMIZE,
-                RegexMatchFlags.NOTEMPTY
-            );
+            string error_message = "";
 
-            print_devel (couldnt_find_packages_translated_pattern);
+            if (error.size > 0) {
+                error_message = error[0];
+            }
 
-            if (regex.match (error_message, 0, null)) {
-                print ("ГДЕ ПАКЕТ СУКА\n");
-                return status;
+            try {
+                string couldnt_find_packages_translated_pattern = (dgettext (
+                    "apt",
+                    "Couldn't find package %s"
+                )).replace ("%s", ".*");
+
+                var regex = new Regex (
+                    couldnt_find_packages_translated_pattern,
+                    RegexCompileFlags.OPTIMIZE,
+                    RegexMatchFlags.NOTEMPTY
+                );
+
+                if (regex.match (error_message, 0, null)) {
+                    print (_("Some packages wasn't found"));
+                    return status;
+                }
+
+            } catch (Error e) {
+                print_error (e.message);
+                return 1;
             }
 
             foreach (string a in error) {
                 print_devel (a);
                 return status;
-            }
-
-            if (ca.command_argv.length > 1) {
-                print (_("Some packages wasn't found\n"));
             }
 
             string[] packages_to_install = new string[ca.command_argv.length];
@@ -131,7 +142,7 @@ namespace Apa {
                 string[]? possible_package_names = fuzzy_search (ca.command_argv[arg_i], result.to_array ());
 
                 if (possible_package_names == null) {
-                    print (_("Package \"%s\" not found\n").printf (ca.command_argv[arg_i]));
+                    print (_("Package '%s' not found").printf (ca.command_argv[arg_i]));
                     return status;
                 }
 
@@ -140,14 +151,14 @@ namespace Apa {
                     continue;
                 }
 
-                print (_("A packages with a similar name found:\n"));
+                print (_("A packages with a similar name found:"));
                 for (int i = 0; i < possible_package_names.length; i++) {
                     if (possible_package_names[i] != null) {
-                        print ("\t%i) %s\n".printf (i + 1, possible_package_names[i]));
+                        print ("\t%i) %s".printf (i + 1, possible_package_names[i]));
                     }
                 }
 
-                print ("\n");
+                print ("");
 
                 while (true) {
                     print (_("Choose which on to install: [1 by default, 0 to exit] "));
@@ -180,14 +191,14 @@ namespace Apa {
         int status_code = 0;
 
         foreach (string package_name in ca.command_argv) {
-            print (_("Info for \"%s\":\n").printf (package_name));
+            print (_("Info for '%s':").printf (package_name));
             status_code = yield Rpm.info (package_name, ca.options);
             if (status_code != 0) {
                 return status_code;
             }
 
             if (package_name != ca.command_argv[ca.command_argv.length - 1]) {
-                print ("\n");
+                print ("");
             }
         }
 
@@ -205,17 +216,17 @@ namespace Apa {
             print_apa_help ();
 
         } else {
-            print (_("Unknown command \"%s\".\n").printf (command));
-            print (_("Try `apa --help` to see all commands.\n"));
+            print (_("Unknown command '%s'").printf (command));
+            print (_("Try `apa --help` to see all commands"));
         }
     }
 
     internal void print_apa_help () {
-        print ("apa help\n");
+        print ("apa help");
     }
 
     internal void print_apa_version () {
-        print ("%s %s\n".printf (
+        print ("%s %s".printf (
             Config.NAME,
             Config.VERSION
         ));
@@ -226,8 +237,8 @@ namespace Apa {
             return;
         }
 
-        print (_("Need root previlegies for \"%s\" command.\n").printf (command));
-        print (_("Aborting\n"));
+        print (_("Need root previlegies for '%s' command").printf (command));
+        print (_("Aborting."));
         Process.exit (100);
     }
 
@@ -240,8 +251,8 @@ namespace Apa {
             return;
         }
 
-        print (_("No internet connection.\n"));
-        print (_("Aborting\n"));
+        print (_("No internet connection"));
+        print (_("Aborting."));
         Process.exit (100);
     }
 }

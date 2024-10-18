@@ -44,7 +44,7 @@ namespace Apa.Cache {
                     break;
 
                 default:
-                    print (_("Command line option \"%s\" is not known.\n").printf (options[i]));
+                    print (_("Unknown option '%s'").printf (options[i]));
                     return 1;
             }
         }
@@ -66,6 +66,6 @@ namespace Apa.Cache {
     }
 
     internal void print_search_help () {
-        print ("Search help\n");
+        print ("Search help");
     }
 }

@@ -22,20 +22,22 @@ public static int main (string[] argv) {
     Intl.bindtextdomain ("apt", Config.GNOMELOCALEDIR);
     Intl.bind_textdomain_codeset (Config.GETTEXT_PACKAGE, "UTF-8");
     Intl.bind_textdomain_codeset ("apt", "UTF-8");
-    Intl.textdomain (Config.GETTEXT_PACKAGE);
+
+    if (!Apa.locale_init ()) {
+        warning ("Locale not supported by C library.\n\tUsing the fallback 'C' locale.");
+    }
 
     Environment.set_prgname (Config.NAME);
 
     var fargv = argv[1:argv.length];
 
     int exit_status = 0;
-    var loop = new MainLoop ();
 
+    var loop = new MainLoop ();
     Apa.run.begin (fargv, (obj, res) => {
         exit_status = Apa.run.end (res);
         loop.quit ();
     });
-
     loop.run ();
 
     return exit_status;

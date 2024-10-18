@@ -2,7 +2,7 @@ project(
   'apa',
   ['vala', 'c'],
   version : '0.1.0',
-  meson_version: '>= 0.62.0',
+  meson_version: '>= 1.0.0',
   license: 'GPL-3.0-or-later',
 )
 
@@ -50,8 +50,8 @@ conf.set10('EXPERIMENTAL_CHECK_IC', get_option('experimental_check_ic'))
 conf.set_quoted('VERSION', meson.project_version() + version_suffix)
 conf.set_quoted('G_LOG_DOMAIN', meson.project_name())
 conf.set_quoted('GETTEXT_PACKAGE', meson.project_name())
-conf.set_quoted('DATADIR', join_paths(get_option('prefix'), get_option('datadir')))
-conf.set_quoted('GNOMELOCALEDIR', join_paths(get_option('prefix'), get_option('localedir')))
+conf.set_quoted('DATADIR', get_option('prefix') / get_option('datadir'))
+conf.set_quoted('GNOMELOCALEDIR', get_option('prefix') / get_option('localedir'))
 
 configure_file(output: 'config.h', configuration: conf)
 config_h_dir = include_directories('.')

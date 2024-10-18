@@ -154,6 +154,17 @@ namespace Apa {
         return false;
     }
 
+    public bool locale_init () {
+        foreach (string lang in Intl.get_language_names ()) {
+            if (Intl.setlocale (LocaleCategory.ALL, lang) != null) {
+                message (lang);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public bool has_internet_connection () {
         int status_code;
 
@@ -183,12 +194,19 @@ namespace Apa {
 
     public void print (string str) {
         stdout.puts (str);
+        stdout.putc ('\n');
         stdout.flush ();
+    }
+
+    internal void print_err (string str) {
+        stderr.puts (str);
+        stderr.putc ('\n');
+        stderr.flush ();
     }
 
     public void print_devel (string str) {
         if (Config.IS_DEVEL) {
-            print ("\n%sDEBUG\n%s%s\n\n".printf (
+            print ("\n%sDEBUG\n%s%s\n".printf (
                 Constants.Colors.CYAN,
                 str,
                 Constants.Colors.ENDC
@@ -197,7 +215,7 @@ namespace Apa {
     }
 
     public void print_error (string str) {
-        print ("%sE:%s %s\n".printf (
+        print_err ("%sE: %s %s".printf (
             Constants.Colors.FAIL,
             str,
             Constants.Colors.ENDC

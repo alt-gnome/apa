@@ -20,6 +20,7 @@ namespace Apa.Get {
     internal const string ORIGIN = "apt-get";
 
     internal const string INSTALL = "install";
+    internal const string INSTALL_INTL = _("install");
     internal const string REMOVE = "remove";
     internal const string UPDATE = "update";
 
@@ -32,6 +33,12 @@ namespace Apa.Get {
     public async int install (string[] packages,
                               string[] options = {},
                               Gee.ArrayList<string>? error = null) {
+        if (packages.length == 0) {
+            print_error (_("No packages to install"));
+            print_install_help ();
+            return 1;
+        }
+
         var arr = new Gee.ArrayList<string>.wrap ({
             ORIGIN,
             INSTALL,
@@ -55,7 +62,7 @@ namespace Apa.Get {
                     break;
 
                 default:
-                    print (_("Command line option \"%s\" is not known.\n").printf (option));
+                    print (_("Unknown option '%s'").printf (option));
                     return 1;
             }
         }
@@ -88,7 +95,7 @@ namespace Apa.Get {
                     break;
 
                 default:
-                    print (_("Command line option \"%s\" is not known.\n").printf (option));
+                    print (_("Unknown option '%s'").printf (option));
                     return 1;
             }
         }
@@ -115,7 +122,7 @@ namespace Apa.Get {
                     break;
 
                 default:
-                    print (_("Command line option \"%s\" is not known.\n").printf (option));
+                    print (_("Unknown option '%s'").printf (option));
                     return 1;
             }
         }
@@ -143,14 +150,14 @@ namespace Apa.Get {
     }
 
     internal void print_install_help () {
-        print ("Install help\n");
+        print ("Install help");
     }
 
     internal void print_remove_help () {
-        print ("Remove help\n");
+        print ("Remove help");
     }
 
     internal void print_update_help () {
-        print ("Update help\n");
+        print ("Update help");
     }
 }

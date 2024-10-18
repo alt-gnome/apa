@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: apa\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-16 11:41+0300\n"
+"POT-Creation-Date: 2024-10-18 15:15+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,57 +17,61 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/alt/apt-cache.vala:47 src/alt/apt-get.vala:58 src/alt/apt-get.vala:91
-#: src/alt/apt-get.vala:118 src/apa/rpm.vala:45 src/apa/rpm.vala:72
+#: src/alt/apt-cache.vala:47 src/alt/apt-get.vala:59 src/alt/apt-get.vala:92
+#: src/alt/apt-get.vala:119 src/apa/rpm.vala:45 src/apa/rpm.vala:72
 #, c-format
-msgid "Command line option \"%s\" is not known.\n"
+msgid "Unknown option '%s'"
 msgstr ""
 
-#: src/apa.vala:73 src/apa.vala:208
-#, c-format
-msgid "Unknown command \"%s\".\n"
+#: src/alt/apt-get.vala:23
+msgid "install"
 msgstr ""
 
-#: src/apa.vala:86
+#: src/apa.vala:78 src/apa.vala:213
+#, c-format
+msgid "Unknown command '%s'"
+msgstr ""
+
+#: src/apa.vala:91
 #, c-format
 msgid "Couldn't find package %s"
 msgstr ""
 
-#: src/apa.vala:109
-msgid "Some packages wasn't found\n"
+#: src/apa.vala:103
+msgid "Some packages wasn't found"
 msgstr ""
 
-#: src/apa.vala:134
+#: src/apa.vala:139
 #, c-format
-msgid "Package \"%s\" not found\n"
+msgid "Package '%s' not found"
 msgstr ""
 
-#: src/apa.vala:143
-msgid "A packages with a similar name found:\n"
+#: src/apa.vala:148
+msgid "A packages with a similar name found:"
 msgstr ""
 
-#: src/apa.vala:153
+#: src/apa.vala:158
 msgid "Choose which on to install: [1 by default, 0 to exit] "
 msgstr ""
 
-#: src/apa.vala:183
+#: src/apa.vala:188
 #, c-format
-msgid "Info for \"%s\":\n"
+msgid "Info for '%s':"
 msgstr ""
 
-#: src/apa.vala:209
-msgid "Try `apa --help` to see all commands.\n"
+#: src/apa.vala:214
+msgid "Try `apa --help` to see all commands"
 msgstr ""
 
-#: src/apa.vala:229
+#: src/apa.vala:234
 #, c-format
-msgid "Need root previlegies for \"%s\" command.\n"
+msgid "Need root previlegies for '%s' command"
 msgstr ""
 
-#: src/apa.vala:230 src/apa.vala:244
-msgid "Aborting\n"
+#: src/apa.vala:235 src/apa.vala:249
+msgid "Aborting."
 msgstr ""
 
-#: src/apa.vala:243
-msgid "No internet connection.\n"
+#: src/apa.vala:248
+msgid "No internet connection"
 msgstr ""
