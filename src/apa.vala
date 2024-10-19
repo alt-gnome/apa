@@ -19,6 +19,7 @@ namespace Apa {
 
     internal const string LIST_COMMAND = "list";
     internal const string INFO_COMMAND = "info";
+    internal const string MOO_COMMAND = "moo";
     internal const string HELP_COMMAND = "help";
     internal const string VERSION_COMMAND = "version";
 
@@ -36,54 +37,63 @@ namespace Apa {
             return 0;
         }
 
-        switch (ca.command) {
-            case Get.INSTALL:
-                check_is_root (ca.command);
-                check_internet_connection ();
-                return yield apa_install (ca);
+        try {
+            switch (ca.command) {
+                case Get.INSTALL:
+                    check_is_root (ca.command);
+                    check_internet_connection ();
+                    return yield apa_install (ca);
 
-            case Get.REMOVE:
-                check_is_root (ca.command);
-                return yield Get.remove (ca.command_argv, ca.options);
+                case Get.REMOVE:
+                    check_is_root (ca.command);
+                    return yield Get.remove (ca.command_argv, ca.options);
 
-            case Get.UPDATE:
-                check_is_root (ca.command);
-                check_internet_connection ();
-                return yield Get.update ();
+                case Get.UPDATE:
+                    check_is_root (ca.command);
+                    check_internet_connection ();
+                    return yield Get.update ();
 
-            case Cache.SEARCH:
-                check_internet_connection ();
-                return yield Cache.search (ca.command_argv, ca.options);
+                case Cache.SEARCH:
+                    check_internet_connection ();
+                    return yield Cache.search (ca.command_argv, ca.options);
 
-            case LIST_COMMAND:
-                return yield Rpm.list (ca.options);
+                case LIST_COMMAND:
+                    return yield Rpm.list (ca.options);
 
-            case INFO_COMMAND:
-                return yield apa_info (ca);
+                case INFO_COMMAND:
+                    return yield apa_info (ca);
 
-            case VERSION_COMMAND:
-                print_apa_version ();
-                return 0;
+                case MOO_COMMAND:
+                    print (Moo.get_moo (), false);
+                    return 0;
 
-            case HELP_COMMAND:
-                print_apa_help ();
-                return 0;
+                case VERSION_COMMAND:
+                    print_apa_version ();
+                    return 0;
 
-            case null:
-                print_apa_help ();
-                return 1;
+                case HELP_COMMAND:
+                    print (Help.APA, false);
+                    return 0;
 
-            default:
-                print (_("Unknown command '%s'").printf (ca.command));
+                case null:
+                    print (Help.APA, false);
+                    return 100;
 
-                print_apa_help ();
-                return 1;
+                default:
+                    print_error (_("Unknown command '%s'").printf (ca.command));
+                    print (Help.APA, false);
+                    return 100;
+            }
+
+        } catch (Error e) {
+            print_error (e.message);
+            return 100;
         }
     }
 
-    internal async int apa_install (CommandArgs ca) {
+    internal async int apa_install (CommandArgs ca) throws CommonCommandError, Get.CommandError {
         var error = new Gee.ArrayList<string> ();
-        var status = yield Get.install (ca.command_argv, ca.options, error);
+        var status = yield Get.install (ca.command_argv, ca.options, ca.arg_options, error);
 
         if (status == 100) {
             string error_message = "";
@@ -212,16 +222,12 @@ namespace Apa {
             Cache.print_help (command);
 
         } else if (command == null) {
-            print_apa_help ();
+            print (Help.APA, false);
 
         } else {
             print (_("Unknown command '%s'").printf (command));
             print (_("Try `apa --help` to see all commands"));
         }
-    }
-
-    internal void print_apa_help () {
-        print ("apa help");
     }
 
     internal void print_apa_version () {

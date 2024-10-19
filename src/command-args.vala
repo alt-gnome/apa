@@ -23,9 +23,9 @@ public struct Apa.ArgOption {
 public struct Apa.CommandArgs {
 
     public string? command;
-    public string[] command_argv;
     public string[] options;
-    public ArgOption[] arg_options;
+    public ArgOption?[] arg_options;
+    public string[] command_argv;
 
     public static CommandArgs parse (string[] argv) {
         string? command = null;
@@ -35,11 +35,10 @@ public struct Apa.CommandArgs {
 
         foreach (var arg in argv) {
             if ("=" in arg) {
-                var arg_option_div = arg.split ("=");
+                var arg_option_div = arg.split ("=", 2);
                 arg_options_array.add ({ arg_option_div[0], arg_option_div[1] });
-            }
 
-            if (arg.has_prefix ("--")) {
+            } else if (arg.has_prefix ("--")) {
                 options_array.add (arg);
 
             } else if (arg.has_prefix ("-")) {
@@ -59,9 +58,9 @@ public struct Apa.CommandArgs {
 
         return {
             command,
-            command_argv_array.to_array (),
             options_array.to_array (),
-            (ArgOption[]) arg_options_array.to_array ()
+            (ArgOption?[]) arg_options_array.to_array (),
+            command_argv_array.to_array ()
         };
     }
 }

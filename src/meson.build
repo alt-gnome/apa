@@ -14,7 +14,9 @@ apa_no_main_code_sources = files (
 
   'apa.vala',
   'constants.vala',
+  'helps.vala',
   'command-args.vala',
+  'moo.vala',
   'spawn-command.vala',
   'utils.vala',
 )

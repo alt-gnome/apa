@@ -15,12 +15,65 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-internal struct Apa.FindBestData {
+struct Apa.FindBestData {
     public string package_name;
     public int similarity;
 }
 
+public struct Apa.OptionData {
+    public string short_option;
+    public string long_option;
+    public string target_option;
+
+    public bool contains (string option) {
+        return option == short_option || option == long_option;
+    }
+}
+
+public errordomain Apa.CommonCommandError {
+    UNKNOWN_COMMAND,
+    UNKNOWN_OPTION,
+}
+
 namespace Apa {
+
+    public void set_options (
+        ref Gee.ArrayList<string> spawn_arr,
+        Gee.ArrayList<string> current_options,
+        Gee.ArrayList<ArgOption?> current_arg_options,
+        OptionData[] possible_options
+    ) {
+        var added_options = new Gee.ArrayList<string> ();
+        var added_arg_options = new Gee.ArrayList<ArgOption?> ((el1, el2) => {
+            return el1.name == el2.name && el1.value == el2.value;
+        });
+
+        foreach (var option in current_options) {
+            foreach (var option_data in possible_options) {
+                if (option in option_data) {
+                    added_options.add (option);
+
+                    spawn_arr.add (option_data.target_option);
+                    break;
+                }
+            }
+        }
+
+        foreach (var option in current_arg_options) {
+            foreach (var option_data in possible_options) {
+                if (option.name in option_data) {
+                    added_arg_options.add (option);
+
+                    spawn_arr.add (option_data.target_option);
+                    spawn_arr.add (option.value);
+                    break;
+                }
+            }
+        }
+
+        current_options.remove_all (added_options);
+        current_arg_options.remove_all (added_arg_options);
+    }
 
     /*
      * Find the most similar straw in a haystack.
@@ -157,7 +210,6 @@ namespace Apa {
     public bool locale_init () {
         foreach (string lang in Intl.get_language_names ()) {
             if (Intl.setlocale (LocaleCategory.ALL, lang) != null) {
-                message (lang);
                 return true;
             }
         }
@@ -192,9 +244,11 @@ namespace Apa {
         }
     }
 
-    public void print (string str) {
+    public void print (string str, bool with_return = true) {
         stdout.puts (str);
-        stdout.putc ('\n');
+        if (with_return) {
+            stdout.putc ('\n');
+        }
         stdout.flush ();
     }
 

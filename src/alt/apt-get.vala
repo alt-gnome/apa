@@ -17,6 +17,10 @@
 
 namespace Apa.Get {
 
+    public errordomain CommandError {
+        NO_PACKAGES
+    }
+
     internal const string ORIGIN = "apt-get";
 
     internal const string INSTALL = "install";
@@ -29,46 +33,111 @@ namespace Apa.Get {
         UPDATE
     };
 
+    //  bool hide_progress;
+    //  bool quiet;
+    //  bool simulate;
+    //  bool yes;
+    //  bool fix;
+    //  bool detailed_version;
+
+    public void set_common_options (
+        ref Gee.ArrayList<string> spawn_arr,
+        Gee.ArrayList<string> current_options,
+        Gee.ArrayList<ArgOption?> current_arg_options
+    ) {
+        set_options (
+            ref spawn_arr,
+            current_options,
+            current_arg_options,
+            {
+                {
+                    "-o", "--option",
+                    "-o"
+                },
+                {
+                    "-h", "--hide-progress",
+                    "-q"
+                },
+                {
+                    "-q", "--quiet",
+                    "-qq"
+                },
+                {
+                    "-s", "--simulate",
+                    "-s"
+                },
+                {
+                    "-y", "--yes",
+                    "-y"
+                },
+                {
+                    "-f", "--fix",
+                    "-f"
+                },
+                {
+                    "-V", "--version-detailed",
+                    "-V"
+                }
+            }
+        );
+    }
+
     public async int install (string[] packages,
                               string[] options = {},
-                              Gee.ArrayList<string>? error = null) {
+                              ArgOption?[] arg_options = {},
+                              Gee.ArrayList<string>? error = null) throws CommonCommandError, CommandError {
         if (packages.length == 0) {
-            print_error (_("No packages to install"));
-            print_install_help ();
-            return 1;
+            print (Help.INSTALL, false);
+            throw new CommandError.NO_PACKAGES (_("No packages to install"));
         }
 
-        var arr = new Gee.ArrayList<string>.wrap ({
-            ORIGIN,
-            INSTALL,
-            // https://bugzilla.altlinux.com/44670
-            "-o", "APT::Install::VirtualVersion=true",
-            "-o", "APT::Install::Virtual=true"
+        var spawn_arr = new Gee.ArrayList<string>.wrap ({ ORIGIN, INSTALL });
+        var current_options = new Gee.ArrayList<string>.wrap (options);
+        var current_arg_options = new Gee.ArrayList<ArgOption?>.wrap ((ArgOption?[]) arg_options, (el1, el2) => {
+            return el1.name == el2.name && el1.value == el2.value;
         });
 
-        bool is_quiet = false;
+        if ("-N" in current_options || "--no-virtual" in current_options) {
+            current_options.remove ("-N");
+            current_options.remove ("--no-virtual");
 
-        foreach (string option in options) {
-            switch (option) {
-                case "-d":
-                case "--download-only":
-                    arr.add ("-d");
-                    break;
-
-                case "-q":
-                case "--quiet":
-                    is_quiet = true;
-                    break;
-
-                default:
-                    print (_("Unknown option '%s'").printf (option));
-                    return 1;
-            }
+        } else {
+            // https://bugzilla.altlinux.com/44670
+            current_arg_options.add_all_array ({
+                { "-o", "APT::Install-Recommends=false" },
+                { "-o", "APT::AutoRemove::RecommendsImportant=false" }
+            });
         }
 
-        arr.add_all_array (packages);
+        set_common_options (ref spawn_arr, current_options, current_arg_options);
+        set_options (
+            ref spawn_arr,
+            current_options,
+            current_arg_options,
+            {
+                {
+                    "-d", "--download-only",
+                    "-d"
+                },
+                {
+                    "-b", "--build",
+                    "-b"
+                }
+            }
+        );
 
-        return yield spawn_command (arr, error);
+        foreach (var current_option in current_options) {
+            throw new CommonCommandError.UNKNOWN_OPTION (_("Unknown option '%s'").printf (current_option));
+        }
+        foreach (var current_arg_option in current_arg_options) {
+            throw new CommonCommandError.UNKNOWN_OPTION (_("Unknown option with value '%s'").printf (
+                current_arg_option.name
+            ));
+        }
+
+        spawn_arr.add_all_array (packages);
+
+        return yield spawn_command (spawn_arr, error);
     }
 
     public async int remove (string[] packages,
@@ -79,18 +148,11 @@ namespace Apa.Get {
             REMOVE
         });
 
-        bool is_quiet = false;
-
         foreach (string option in options) {
             switch (option) {
                 case "-D":
                 case "--with-dependecies":
                     arr.add ("-D");
-                    break;
-
-                case "-q":
-                case "--quiet":
-                    is_quiet = true;
                     break;
 
                 default:
@@ -111,13 +173,11 @@ namespace Apa.Get {
             UPDATE
         });
 
-        bool is_quiet = false;
-
         foreach (string option in options) {
             switch (option) {
-                case "-q":
-                case "--quiet":
-                    is_quiet = true;
+                case "-u":
+                case "--updatable-show":
+                    arr.add ("-u");
                     break;
 
                 default:
@@ -129,10 +189,12 @@ namespace Apa.Get {
         return yield spawn_command (arr, error);
     }
 
+
+
     public void print_help (string command) {
         switch (command) {
             case INSTALL:
-                print_install_help ();
+                print (Help.INSTALL, false);
                 return;
 
             case REMOVE:
@@ -146,10 +208,6 @@ namespace Apa.Get {
             default:
                 assert_not_reached ();
         }
-    }
-
-    internal void print_install_help () {
-        print ("Install help");
     }
 
     internal void print_remove_help () {
