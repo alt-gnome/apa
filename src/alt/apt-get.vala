@@ -15,36 +15,27 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-namespace Apa.Get {
+public sealed class Apa.Get : Origin {
 
-    public errordomain CommandError {
-        NO_PACKAGES
-    }
+    protected override string origin { get; default = "apt-get"; }
 
-    internal const string ORIGIN = "apt-get";
+    public const string INSTALL = "install";
+    public const string REMOVE = "remove";
+    public const string UPDATE = "update";
 
-    internal const string INSTALL = "install";
-    internal const string REMOVE = "remove";
-    internal const string UPDATE = "update";
-
-    const string[] COMMANDS = {
+    public const string[] COMMANDS = {
         INSTALL,
         REMOVE,
         UPDATE
     };
 
-    //  bool hide_progress;
-    //  bool quiet;
-    //  bool simulate;
-    //  bool yes;
-    //  bool fix;
-    //  bool detailed_version;
+    Get () {}
 
-    public void set_common_options (
-        ref Gee.ArrayList<string> spawn_arr,
-        Gee.ArrayList<string> current_options,
-        Gee.ArrayList<ArgOption?> current_arg_options
-    ) {
+    void set_common_options () {
+        assert (spawn_arr != null);
+        assert (current_options != null);
+        assert (current_arg_options != null);
+
         set_options (
             ref spawn_arr,
             current_options,
@@ -82,20 +73,30 @@ namespace Apa.Get {
         );
     }
 
-    public async int install (string[] packages,
-                              string[] options = {},
-                              ArgOption?[] arg_options = {},
-                              Gee.ArrayList<string>? error = null) throws CommonCommandError, CommandError {
+    public static async int install (
+        string[] packages,
+        string[] options = {},
+        ArgOption?[] arg_options = {},
+        Gee.ArrayList<string>? error = null
+    ) throws CommonCommandError, CommandError {
         if (packages.length == 0) {
             print (Help.INSTALL, false);
             throw new CommandError.NO_PACKAGES (_("No packages to install"));
         }
 
-        var spawn_arr = new Gee.ArrayList<string>.wrap ({ ORIGIN, INSTALL });
-        var current_options = new Gee.ArrayList<string>.wrap (options);
-        var current_arg_options = new Gee.ArrayList<ArgOption?>.wrap ((ArgOption?[]) arg_options, (el1, el2) => {
-            return el1.name == el2.name && el1.value == el2.value;
-        });
+        return yield new Get ().internal_install (packages, options, arg_options, error);
+    }
+
+    public async int internal_install (
+        string[] packages,
+        string[] options = {},
+        ArgOption?[] arg_options = {},
+        Gee.ArrayList<string>? error = null
+    ) throws CommonCommandError, CommandError {
+        spawn_arr.add (INSTALL);
+
+        current_options.add_all_array (options);
+        current_arg_options.add_all_array (arg_options);
 
         if ("-N" in current_options || "--no-virtual" in current_options) {
             current_options.remove ("-N");
@@ -104,12 +105,12 @@ namespace Apa.Get {
         } else {
             // https://bugzilla.altlinux.com/44670
             current_arg_options.add_all_array ({
-                { "-o", "APT::Install-Recommends=false" },
-                { "-o", "APT::AutoRemove::RecommendsImportant=false" }
+                { "-o", "APT::Install::VirtualVersion=true" },
+                { "-o", "APT::Install::Virtual=true" }
             });
         }
 
-        set_common_options (ref spawn_arr, current_options, current_arg_options);
+        set_common_options ();
         set_options (
             ref spawn_arr,
             current_options,
@@ -126,95 +127,91 @@ namespace Apa.Get {
             }
         );
 
-        foreach (var current_option in current_options) {
-            throw new CommonCommandError.UNKNOWN_OPTION (_("Unknown option '%s'").printf (current_option));
-        }
-        foreach (var current_arg_option in current_arg_options) {
-            throw new CommonCommandError.UNKNOWN_OPTION (_("Unknown option with value '%s'").printf (
-                current_arg_option.name
-            ));
-        }
+        post_set_check ();
 
         spawn_arr.add_all_array (packages);
 
         return yield spawn_command (spawn_arr, error);
     }
 
-    public async int remove (string[] packages,
-                             string[] options = {},
-                             Gee.ArrayList<string>? error = null) {
-        var arr = new Gee.ArrayList<string>.wrap ({
-            ORIGIN,
-            REMOVE
-        });
+    public static async int remove (
+        string[] packages,
+        string[] options = {},
+        ArgOption?[] arg_options = {},
+        Gee.ArrayList<string>? error = null
+    ) throws CommonCommandError, CommandError {
+        if (packages.length == 0) {
+            print (Help.INSTALL, false);
+            throw new CommandError.NO_PACKAGES (_("No packages to remove"));
+        }
 
-        foreach (string option in options) {
-            switch (option) {
-                case "-D":
-                case "--with-dependecies":
-                    arr.add ("-D");
-                    break;
+        return yield new Get ().internal_remove (packages, options, arg_options, error);
+    }
 
-                default:
-                    print (_("Unknown option '%s'").printf (option));
-                    return 1;
+    public async int internal_remove (
+        string[] packages,
+        string[] options = {},
+        ArgOption?[] arg_options = {},
+        Gee.ArrayList<string>? error = null
+    ) throws CommonCommandError, CommandError {
+        spawn_arr.add (REMOVE);
+
+        current_options.add_all_array (options);
+        current_arg_options.add_all_array (arg_options);
+
+        set_common_options ();
+        set_options (
+            ref spawn_arr,
+            current_options,
+            current_arg_options,
+            {
+                {
+                    "-D", "--with-dependecies",
+                    "-D"
+                }
             }
-        }
+        );
 
-        arr.add_all_array (packages);
+        post_set_check ();
 
-        return yield spawn_command (arr, error);
+        spawn_arr.add_all_array (packages);
+
+        return yield spawn_command (spawn_arr, error);
     }
 
-    public async int update (string[] options = {},
-                             Gee.ArrayList<string>? error = null) {
-        var arr = new Gee.ArrayList<string>.wrap ({
-            ORIGIN,
-            UPDATE
-        });
+    public static async int update (
+        string[] options = {},
+        ArgOption?[] arg_options = {},
+        Gee.ArrayList<string>? error = null
+    ) throws CommonCommandError, CommandError {
+        return yield new Get ().internal_update (options, arg_options, error);
+    }
 
-        foreach (string option in options) {
-            switch (option) {
-                case "-u":
-                case "--updatable-show":
-                    arr.add ("-u");
-                    break;
+    public async int internal_update (
+        string[] options = {},
+        ArgOption?[] arg_options = {},
+        Gee.ArrayList<string>? error = null
+    ) throws CommonCommandError, CommandError {
+        spawn_arr.add (UPDATE);
 
-                default:
-                    print (_("Unknown option '%s'").printf (option));
-                    return 1;
+        current_options.add_all_array (options);
+        current_arg_options.add_all_array (arg_options);
+
+        set_common_options ();
+        set_options (
+            ref spawn_arr,
+            current_options,
+            current_arg_options,
+            {
+                {
+                    "-u", "--updatable-show",
+                    "-u"
+                }
             }
-        }
+        );
 
-        return yield spawn_command (arr, error);
-    }
+        post_set_check ();
 
-
-
-    public void print_help (string command) {
-        switch (command) {
-            case INSTALL:
-                print (Help.INSTALL, false);
-                return;
-
-            case REMOVE:
-                print_remove_help ();
-                return;
-
-            case UPDATE:
-                print_update_help ();
-                return;
-
-            default:
-                assert_not_reached ();
-        }
-    }
-
-    internal void print_remove_help () {
-        print ("Remove help");
-    }
-
-    internal void print_update_help () {
-        print ("Update help");
+        return yield spawn_command (spawn_arr, error);
     }
 }

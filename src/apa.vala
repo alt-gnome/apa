@@ -28,21 +28,20 @@ namespace Apa {
         var ca = CommandArgs.parse (argv);
 
         if ("-h" in ca.options || "--help" in ca.options) {
-            print_help (ca.command);
-            return 0;
+            Help.print_help (ca.command);
+            return Constants.ExitCode.SUCCESS;
         }
 
         if ("-v" in ca.options || "--version" in ca.options) {
-            print_apa_version ();
-            return 0;
+            print (get_version ());
+            return Constants.ExitCode.SUCCESS;
         }
 
         try {
             switch (ca.command) {
                 case Get.INSTALL:
                     check_is_root (ca.command);
-                    check_internet_connection ();
-                    return yield apa_install (ca);
+                    return yield install (ca);
 
                 case Get.REMOVE:
                     check_is_root (ca.command);
@@ -50,84 +49,77 @@ namespace Apa {
 
                 case Get.UPDATE:
                     check_is_root (ca.command);
-                    check_internet_connection ();
                     return yield Get.update ();
 
                 case Cache.SEARCH:
-                    check_internet_connection ();
                     return yield Cache.search (ca.command_argv, ca.options);
 
                 case LIST_COMMAND:
                     return yield Rpm.list (ca.options);
 
                 case INFO_COMMAND:
-                    return yield apa_info (ca);
+                    return yield info (ca);
 
                 case MOO_COMMAND:
-                    print (Moo.get_moo (), false);
-                    return 0;
+                    return apa_moo (ca);
 
                 case VERSION_COMMAND:
-                    print_apa_version ();
-                    return 0;
+                    print (get_version ());
+                    return Constants.ExitCode.SUCCESS;
 
                 case HELP_COMMAND:
                     print (Help.APA, false);
-                    return 0;
+                    return Constants.ExitCode.SUCCESS;
 
                 case null:
                     print (Help.APA, false);
-                    return 100;
+                    return Constants.ExitCode.BASE_ERROR;
 
                 default:
                     print_error (_("Unknown command '%s'").printf (ca.command));
                     print (Help.APA, false);
-                    return 100;
+                    return Constants.ExitCode.BASE_ERROR;
             }
 
         } catch (Error e) {
             print_error (e.message);
-            return 100;
+            return Constants.ExitCode.BASE_ERROR;
         }
     }
 
-    internal async int apa_install (CommandArgs ca) throws CommonCommandError, Get.CommandError {
+    internal async int install (CommandArgs ca) throws CommonCommandError, CommandError {
         var error = new Gee.ArrayList<string> ();
         var status = yield Get.install (ca.command_argv, ca.options, ca.arg_options, error);
 
-        if (status == 100) {
+        if (status != Constants.ExitCode.SUCCESS) {
             string error_message = "";
 
             if (error.size > 0) {
-                error_message = error[0];
-            }
+                error_message = normalize_error (error);
 
-            try {
-                string couldnt_find_packages_translated_pattern = (dgettext (
-                    "apt",
-                    "Couldn't find package %s"
-                )).replace ("%s", ".*");
+                switch (detect_error (error_message)) {
+                    case ErrorType.COULDNT_FIND_PACKAGE:
+                        print (_("Some packages not found"));
+                        break;
 
-                var regex = new Regex (
-                    couldnt_find_packages_translated_pattern,
-                    RegexCompileFlags.OPTIMIZE,
-                    RegexMatchFlags.NOTEMPTY
-                );
+                    case ErrorType.PACKAGE_VIRTUAL_WITH_MULTIPLE_GOOD_PROIDERS:
+                        foreach (var err in error) {
+                            print (err);
+                        }
+                        print_error (error_message);
+                        print (_("You can avoid this error running command without '-N'/'--no-virtual' option"));
+                        break;
 
-                if (regex.match (error_message, 0, null)) {
-                    print (_("Some packages wasn't found"));
-                    return status;
+                    case ErrorType.NONE:
+                        print_error (_("Unknown error message: '%s'").printf (error_message));
+                        return Constants.ExitCode.BASE_ERROR;
+
+                    default:
+                        assert_not_reached ();
                 }
-
-            } catch (Error e) {
-                print_error (e.message);
-                return 1;
             }
 
-            foreach (string a in error) {
-                print_devel (a);
-                return status;
-            }
+            return status;
 
             string[] packages_to_install = new string[ca.command_argv.length];
 
@@ -184,7 +176,7 @@ namespace Apa {
                             break;
 
                         } else if (input_int == 0) {
-                            return 0;
+                            return Constants.ExitCode.SUCCESS;
                         }
                     }
                 }
@@ -196,8 +188,8 @@ namespace Apa {
         return status;
     }
 
-    internal async int apa_info (CommandArgs ca) {
-        int status_code = 0;
+    internal async int info (CommandArgs ca) {
+        int status_code = Constants.ExitCode.SUCCESS;
 
         foreach (string package_name in ca.command_argv) {
             print (_("Info for '%s':").printf (package_name));
@@ -211,30 +203,18 @@ namespace Apa {
             }
         }
 
-        return 0;
+        return Constants.ExitCode.SUCCESS;
     }
 
-    internal void print_help (string? command) {
-        if (command in Get.COMMANDS) {
-            Get.print_help (command);
-
-        } else if (command in Cache.COMMANDS) {
-            Cache.print_help (command);
-
-        } else if (command == null) {
-            print (Help.APA, false);
+    int apa_moo (CommandArgs ca) {
+        if (ca.command_argv.length > 0) {
+            print (Moo.get_moo (ca.command_argv[0]), false);
 
         } else {
-            print (_("Unknown command '%s'").printf (command));
-            print (_("Try `apa --help` to see all commands"));
+            print (Moo.get_moo (), false);
         }
-    }
 
-    internal void print_apa_version () {
-        print ("%s %s".printf (
-            Config.NAME,
-            Config.VERSION
-        ));
+        return Constants.ExitCode.SUCCESS;
     }
 
     public void check_is_root (string command) {
@@ -242,22 +222,8 @@ namespace Apa {
             return;
         }
 
-        print (_("Need root previlegies for '%s' command").printf (command));
+        print_error (_("Need root previlegies for '%s' command").printf (command));
         print (_("Aborting."));
-        Process.exit (100);
-    }
-
-    public void check_internet_connection () {
-        if (!Config.EXPERIMENTAL_CHECK_IC) {
-            return;
-        }
-
-        if (has_internet_connection ()) {
-            return;
-        }
-
-        print (_("No internet connection"));
-        print (_("Aborting."));
-        Process.exit (100);
+        Process.exit (Constants.ExitCode.BASE_ERROR);
     }
 }

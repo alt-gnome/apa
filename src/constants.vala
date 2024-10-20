@@ -18,6 +18,12 @@
  */
 
 namespace Apa.Constants {
+
+    namespace ExitCode {
+        public const int SUCCESS = 0;
+        public const int BASE_ERROR = 100;
+    }
+
     namespace Colors {
         public const string HEADER = "\033[95m";
         public const string OKBLUE = "\033[94m";

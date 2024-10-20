@@ -19,13 +19,17 @@
 
 namespace Apa.Moo {
 
-    public string get_moo () {
-        return MOO.printf (PHRASES[Random.int_range (0, PHRASES.length)]);
+    public string get_moo (string? phrase = null) {
+        if (phrase != null) {
+            return MOO.printf (phrase);
+
+        } else {
+            return MOO.printf (PHRASES[Random.int_range (0, PHRASES.length)]);
+        }
     }
 
     const string MOO =
 """
-
           .=     ,        =.
   _  _   /'/    )\,/,/(_   \ \
    `//-.|  (  ,\\)\//\)\/_  ) |
@@ -50,5 +54,6 @@ Art by Joan Stark
     const string[] PHRASES = {
         "With great power comes great responsibility",
         "I am your Father",
+        "I use ALT btw…"
     };
 }

@@ -28,7 +28,7 @@ namespace Apa {
         Gee.ArrayList<string>? error = null
     ) {
         print_devel ("Child%s process prepared:\n\t%s".printf (
-            result == null ? " (silence)" : "",
+            result != null ? " (silence)" : "",
             string.joinv (" ", spawn_args.to_array ())
         ));
 
@@ -36,7 +36,7 @@ namespace Apa {
         int std_output;
         int std_error;
 
-        int status_code = 0;
+        int status_code = Constants.ExitCode.SUCCESS;
 
         try {
             if (result == null) {

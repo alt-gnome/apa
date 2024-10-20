@@ -35,7 +35,24 @@ public errordomain Apa.CommonCommandError {
     UNKNOWN_OPTION,
 }
 
+public errordomain Apa.CommandError {
+    NO_PACKAGES
+}
+
+public enum Apa.ErrorType {
+    COULDNT_FIND_PACKAGE,
+    PACKAGE_VIRTUAL_WITH_MULTIPLE_GOOD_PROIDERS,
+    NONE,
+}
+
 namespace Apa {
+
+    public string get_version () {
+        return "%s %s".printf (
+            Config.NAME,
+            Config.VERSION
+        );
+    }
 
     public void set_options (
         ref Gee.ArrayList<string> spawn_arr,
@@ -242,6 +259,64 @@ namespace Apa {
         } else {
             return false;
         }
+    }
+
+    public ErrorType detect_error (string error_message) {
+        // Should be aligned with ErrorType enum
+        string[] apt_error = {
+            "Couldn't find package %s",
+            "Package %s is a virtual package with multiple good providers.\n",
+        };
+
+        try {
+            string pattern;
+            Regex regex;
+
+            for (int i = 0; i < apt_error.length; i++) {
+                pattern = (dgettext (
+                    "apt",
+                    apt_error[i]
+                )).replace ("%s", ".*");
+
+                regex = new Regex (
+                    pattern,
+                    RegexCompileFlags.OPTIMIZE,
+                    RegexMatchFlags.NOTEMPTY
+                );
+
+                if (regex.match (error_message, 0, null)) {
+                    return (ErrorType) i;
+                }
+            }
+
+        } catch (Error e) {
+            print_error (e.message);
+        }
+
+        return NONE;
+    }
+
+    public string normalize_error (Gee.ArrayList<string> error) {
+        string error_message = "";
+
+        for (int i = error.size - 1; i >= 0; i--) {
+            if (error[i].strip () != "") {
+                error_message = error[i].replace ("E: ", "");
+                error.remove_at (i);
+                break;
+
+            } else {
+                error.remove_at (i);
+            }
+        }
+
+        for (int i = 0; i < error.size; i++) {
+            if (error[i][error[i].length - 1] == '\n') {
+                error[i] = error[i][0:error[i].length - 1];
+            }
+        }
+
+        return error_message;
     }
 
     public void print (string str, bool with_return = true) {
