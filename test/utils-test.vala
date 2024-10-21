@@ -7,24 +7,33 @@ public void fuzzy_search_test_base (
 ) {
     string?[]? result = Apa.fuzzy_search (query, data);
 
+    string debug_info = "Query: %s\nData: { %s }".printf (query, string.joinv (", ", data));
+
     if (result == null) {
         if (expected_result == null) {
             return;
 
         } else {
+            string[] expected = new string[expected_result.length ()];
+            for (int i = 0; i < expected.length; i++) {
+                expected[i] = string.joinv (" | ", expected_result.nth (i).data.data);
+            }
+
             Test.fail_printf (
-                "\nExpected one of:\n%s\nGot:\n%s",
-                string.joinv ("\n", expected_result.nth (0).data.data),
-                "`null`"
+                "\n\nExpected:\n\t%s\n\nGot:\n\t%s\n\n%s\n",
+                string.joinv ("\n\t", expected),
+                "`null`",
+                debug_info
             );
         }
 
     } else {
         if (expected_result == null) {
             Test.fail_printf (
-                "\nExpected:\n%s\nGot:\n%s",
+                "\n\nExpected:\n\t%s\n\nGot:\n\t%s\n\n%s\n",
                 "'null`",
-                string.joinv ("\n", result)
+                string.joinv ("\n\t", result),
+                debug_info
             );
         }
     }
@@ -32,10 +41,11 @@ public void fuzzy_search_test_base (
     for (int i = 0; i < result.length; i++) {
         if (!(result[i] in expected_result.nth (i).data.data)) {
             Test.fail_printf (
-                "\nExpected one of:\n%s\nGot:\n%s\nOn %i",
-                string.joinv ("\n", expected_result.nth (i).data.data),
+                "\n\nExpected one of:\n\t%s\n\nGot:\n\t%s\nOn %i\n\n%s\n",
+                string.joinv ("\n\t", expected_result.nth (i).data.data),
                 result[i],
-                i
+                i,
+                debug_info
             );
         }
     }

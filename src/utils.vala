@@ -261,22 +261,23 @@ namespace Apa {
         }
     }
 
-    public ErrorType detect_error (ref string error_message) {
+    public ErrorType detect_error (string error_message, out string package = null) {
         // Should be aligned with ErrorType enum
-        string[] apt_error = {
+        string[] apt_errors = {
             "Couldn't find package %s",
             "Package %s is a virtual package with multiple good providers.\n",
         };
 
-        try {
-            string pattern;
-            Regex regex;
+        string pattern;
+        Regex regex;
+        package = null;
 
-            for (int i = 0; i < apt_error.length; i++) {
+        try {
+            for (int i = 0; i < apt_errors.length; i++) {
                 pattern = (dgettext (
                     "apt",
-                    apt_error[i]
-                )).replace ("%s", ".*");
+                    apt_errors[i]
+                )).replace ("%s", "(.*)");
 
                 regex = new Regex (
                     pattern,
@@ -284,8 +285,10 @@ namespace Apa {
                     RegexMatchFlags.NOTEMPTY
                 );
 
-                if (regex.match (error_message, 0, null)) {
-                    error_message = error_message.strip ();
+                MatchInfo match_info;
+                if (regex.match (error_message, 0, out match_info)) {
+                    package = match_info.fetch (1);
+                    print_devel (match_info.fetch (0));
                     return (ErrorType) i;
                 }
             }
@@ -350,5 +353,54 @@ namespace Apa {
             str,
             Constants.Colors.ENDC
         ));
+    }
+
+    public string? give_choice (string[] variants) {
+        for (int i = 0; i < variants.length; i++) {
+            if (variants[i] != null) {
+                print ("\t%i) %s".printf (i + 1, variants[i]));
+            }
+        }
+
+        print ("");
+
+        while (true) {
+            print (_("Choose which on to install: [1 by default, 0 to exit] "), false);
+            var input = stdin.read_line ().strip ();
+
+            if (input == "") {
+                input = "1";
+            }
+
+            int input_int;
+            if (int.try_parse (input, out input_int)) {
+                if (input_int > 0 && input_int <= 3 && variants[input_int - 1] != null) {
+                    return variants[input_int - 1];
+
+                } else if (input_int == 0) {
+                    return null;
+                }
+            }
+        }
+    }
+
+    public void replace_strings_in_array (ref string[] array, string old_string, string new_string) {
+        for (int i = 0; i < array.length; i++) {
+            if (array[i] == old_string) {
+                array[i] = new_string;
+            }
+        }
+    }
+
+    public void replace_strings_in_array_list (ref Gee.ArrayList<string> array, string old_string, string new_string) {
+        for (int i = 0; i < array.size; i++) {
+            if (array[i] == old_string) {
+                array[i] = new_string;
+            }
+        }
+    }
+
+    public void print_issue () {
+        print (_("You can create issue here https://github.com/alt-gnome/apa/issues"));
     }
 }

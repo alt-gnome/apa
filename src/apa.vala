@@ -87,105 +87,108 @@ namespace Apa {
         }
     }
 
-    internal async int install (CommandArgs ca) throws CommonCommandError, CommandError {
-        var error = new Gee.ArrayList<string> ();
-        var status = yield Get.install (ca.command_argv, ca.options, ca.arg_options, error);
+    internal async int install (owned CommandArgs ca) throws CommonCommandError, CommandError {
+        while (true) {
+            var error = new Gee.ArrayList<string> ();
+            var status = yield Get.install (ca.command_argv, ca.options, ca.arg_options, error);
 
-        if (status != Constants.ExitCode.SUCCESS) {
-            string error_message = "";
+            if (status != Constants.ExitCode.SUCCESS && error.size > 0) {
 
-            if (error.size > 0) {
-                error_message = normalize_error (error);
+                string error_message = normalize_error (error);
+                string? package;
 
-                switch (detect_error (ref error_message)) {
+                switch (detect_error (error_message, out package)) {
                     case ErrorType.COULDNT_FIND_PACKAGE:
                         print (_("Some packages not found"));
+
+                        string[] packages_to_install = new string[ca.command_argv.length];
+
+                        for (int arg_i = 0; arg_i < ca.command_argv.length; arg_i++) {
+                            char[] package_chars = (char[]) ca.command_argv[arg_i].data;
+                            string[] char_string = new string[ca.command_argv[arg_i].length];
+
+                            for (int i = 0; i < ca.command_argv[arg_i].length; i++) {
+                                char_string[i] = package_chars[i].to_string ();
+                            }
+
+                            var result = new Gee.ArrayList<string> ();
+                            yield Cache.search (
+                                { string.joinv (".*", char_string) },
+                                { "--names-only" },
+                                result
+                            );
+
+                            do_short_array_list (ref result);
+
+                            string[]? possible_package_names = fuzzy_search (ca.command_argv[arg_i], result.to_array ());
+
+                            if (possible_package_names == null) {
+                                print (_("Package '%s' not found").printf (ca.command_argv[arg_i]));
+                                return status;
+                            }
+
+                            if (possible_package_names[0] == ca.command_argv[arg_i]) {
+                                packages_to_install[arg_i] = ca.command_argv[arg_i];
+                                continue;
+                            }
+
+                            print (_("A packages with a similar name found:"));
+                            var answer = give_choice (possible_package_names);
+
+                            if (answer != null) {
+                                packages_to_install[arg_i] = answer;
+
+                            } else {
+                                return status;
+                            }
+                        }
+
+                        ca.command_argv = packages_to_install;
                         break;
 
                     case ErrorType.PACKAGE_VIRTUAL_WITH_MULTIPLE_GOOD_PROIDERS:
+                        error_message = error_message[0:error_message.length - 2] + ":";
+                        print (error_message);
+
+                        var packages = new Gee.ArrayList<string> ();
                         foreach (var err in error) {
-                            print (err);
+                            if (err.has_prefix ("  ")) {
+                                string[] strs = err.strip ().split (" ");
+                                if (strs[strs.length - 1].has_suffix ("]") && strs[strs.length - 1].has_prefix ("[")) {
+                                    packages.add ("%s (%s)".printf (
+                                        strs[0],
+                                        strs[strs.length - 1][1: strs[strs.length - 1].length - 1]
+                                    ));
+
+                                } else {
+                                    packages.add (strs[0]);
+                                }
+                            }
                         }
-                        print_error (error_message);
-                        print (_("You can avoid this error running command without '-N'/'--no-virtual' option"));
+
+                        var answer = give_choice (packages.to_array ());
+
+                        if (answer != null) {
+                            replace_strings_in_array (ref ca.command_argv, package, answer.split (" ")[0]);
+
+                        } else {
+                            return status;
+                        }
                         break;
 
                     case ErrorType.NONE:
                         print_error (_("Unknown error message: '%s'").printf (error_message));
+                        print_issue ();
                         return Constants.ExitCode.BASE_ERROR;
 
                     default:
                         assert_not_reached ();
                 }
+
+            } else {
+                return status;
             }
-
-            return status;
-
-            string[] packages_to_install = new string[ca.command_argv.length];
-
-            for (int arg_i = 0; arg_i < ca.command_argv.length; arg_i++) {
-                char[] package_chars = (char[]) ca.command_argv[arg_i].data;
-                string[] char_string = new string[ca.command_argv[arg_i].length];
-
-                for (int i = 0; i < ca.command_argv[arg_i].length; i++) {
-                    char_string[i] = package_chars[i].to_string ();
-                }
-
-                var result = new Gee.ArrayList<string> ();
-                yield Cache.search (
-                    { string.joinv (".*", char_string) },
-                    { "--names-only" },
-                    result
-                );
-
-                do_short_array_list (ref result);
-
-                string[]? possible_package_names = fuzzy_search (ca.command_argv[arg_i], result.to_array ());
-
-                if (possible_package_names == null) {
-                    print (_("Package '%s' not found").printf (ca.command_argv[arg_i]));
-                    return status;
-                }
-
-                if (possible_package_names[0] == ca.command_argv[arg_i]) {
-                    packages_to_install[arg_i] = ca.command_argv[arg_i];
-                    continue;
-                }
-
-                print (_("A packages with a similar name found:"));
-                for (int i = 0; i < possible_package_names.length; i++) {
-                    if (possible_package_names[i] != null) {
-                        print ("\t%i) %s".printf (i + 1, possible_package_names[i]));
-                    }
-                }
-
-                print ("");
-
-                while (true) {
-                    print (_("Choose which on to install: [1 by default, 0 to exit] "));
-                    var input = stdin.read_line ().strip ();
-
-                    if (input == "") {
-                        input = "1";
-                    }
-
-                    int input_int;
-                    if (int.try_parse (input, out input_int)) {
-                        if (input_int > 0 && input_int <= 3 && possible_package_names[input_int - 1] != null) {
-                            packages_to_install[arg_i] = possible_package_names[input_int - 1];
-                            break;
-
-                        } else if (input_int == 0) {
-                            return Constants.ExitCode.SUCCESS;
-                        }
-                    }
-                }
-            }
-
-            return yield Get.install (packages_to_install, ca.options);
         }
-
-        return status;
     }
 
     internal async int info (CommandArgs ca) {

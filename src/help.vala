@@ -89,7 +89,6 @@ Options:
     -V, --version-detailed
     -d, --download-only
     -b, --build
-    -N, --no-virtual
     -o=?, --option=?
 
 """;

@@ -98,18 +98,6 @@ public sealed class Apa.Get : Origin {
         current_options.add_all_array (options);
         current_arg_options.add_all_array (arg_options);
 
-        if ("-N" in current_options || "--no-virtual" in current_options) {
-            current_options.remove ("-N");
-            current_options.remove ("--no-virtual");
-
-        } else {
-            // https://bugzilla.altlinux.com/44670
-            current_arg_options.add_all_array ({
-                { "-o", "APT::Install::VirtualVersion=true" },
-                { "-o", "APT::Install::Virtual=true" }
-            });
-        }
-
         set_common_options ();
         set_options (
             ref spawn_arr,
