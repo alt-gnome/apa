@@ -13,7 +13,7 @@ public void fuzzy_search_test_base (
 
         } else {
             Test.fail_printf (
-                "\nExpected on of:\n%s\nGot:\n%s",
+                "\nExpected one of:\n%s\nGot:\n%s",
                 string.joinv ("\n", expected_result.nth (0).data.data),
                 "`null`"
             );
@@ -32,7 +32,7 @@ public void fuzzy_search_test_base (
     for (int i = 0; i < result.length; i++) {
         if (!(result[i] in expected_result.nth (i).data.data)) {
             Test.fail_printf (
-                "\nExpected on of:\n%s\nGot:\n%s\nOn %i",
+                "\nExpected one of:\n%s\nGot:\n%s\nOn %i",
                 string.joinv ("\n", expected_result.nth (i).data.data),
                 result[i],
                 i
