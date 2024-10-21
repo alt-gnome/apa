@@ -132,7 +132,7 @@ namespace Apa {
                                 continue;
                             }
 
-                            print (_("A packages with a similar name found:"));
+                            print (_("A packages with a similar name were found:"));
                             var answer = give_choice (possible_package_names);
 
                             if (answer != null) {
