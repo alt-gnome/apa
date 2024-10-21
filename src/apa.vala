@@ -97,7 +97,7 @@ namespace Apa {
             if (error.size > 0) {
                 error_message = normalize_error (error);
 
-                switch (detect_error (error_message)) {
+                switch (detect_error (ref error_message)) {
                     case ErrorType.COULDNT_FIND_PACKAGE:
                         print (_("Some packages not found"));
                         break;

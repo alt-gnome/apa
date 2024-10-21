@@ -261,7 +261,7 @@ namespace Apa {
         }
     }
 
-    public ErrorType detect_error (string error_message) {
+    public ErrorType detect_error (ref string error_message) {
         // Should be aligned with ErrorType enum
         string[] apt_error = {
             "Couldn't find package %s",
@@ -285,6 +285,7 @@ namespace Apa {
                 );
 
                 if (regex.match (error_message, 0, null)) {
+                    error_message = error_message.strip ();
                     return (ErrorType) i;
                 }
             }
