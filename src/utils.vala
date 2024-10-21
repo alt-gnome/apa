@@ -96,7 +96,7 @@ namespace Apa {
      * Find the most similar straw in a haystack.
      *
      * Example:
-     * "cor" -> { "car", "gog", "cert" } -> "car"
+     * "cor" -> { "car", "gog", "cert" } -> { "car", null, null }
      *
      * @param haystack   The string in which to find
      * @param straw      The string that need to find something similar to
