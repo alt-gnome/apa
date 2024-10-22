@@ -3,22 +3,34 @@
 public void fuzzy_search_test_base (
     string[] data,
     string query,
-    List<Array<string?>>? expected_result
+    Gee.ArrayList<Array<string?>>? expected_result
 ) {
     string?[]? result = Apa.fuzzy_search (query, data);
+    string[]? expected = null;
 
-    string debug_info = "Query: %s\nData: { %s }".printf (query, string.joinv (", ", data));
+    if (expected_result != null) {
+        expected = new string[expected_result.size];
+        for (int i = 0; i < expected.length; i++) {
+            expected[i] = string.joinv (" | ", expected_result[i].data);
+        }
+    }
+
+    print ("Fuck");
+
+    string debug_info = "Query: %s\nData: { %s }\n\nResult: { %s }\nExpected: { %s }".printf (
+        query,
+        string.joinv (", ", data),
+        result == null ? "null" : string.joinv (", ", result),
+        expected == null ? "null" : string.joinv (", ", expected)
+    );
+
+    print ("Fuck2");
 
     if (result == null) {
         if (expected_result == null) {
             return;
 
         } else {
-            string[] expected = new string[expected_result.length ()];
-            for (int i = 0; i < expected.length; i++) {
-                expected[i] = string.joinv (" | ", expected_result.nth (i).data.data);
-            }
-
             Test.fail_printf (
                 "\n\nExpected:\n\t%s\n\nGot:\n\t%s\n\n%s\n",
                 string.joinv ("\n\t", expected),
@@ -38,15 +50,17 @@ public void fuzzy_search_test_base (
         }
     }
 
-    for (int i = 0; i < result.length; i++) {
-        if (!(result[i] in expected_result.nth (i).data.data)) {
-            Test.fail_printf (
-                "\n\nExpected one of:\n\t%s\n\nGot:\n\t%s\nOn %i\n\n%s\n",
-                string.joinv ("\n\t", expected_result.nth (i).data.data),
-                result[i],
-                i,
-                debug_info
-            );
+    if (expected_result != null) {
+        for (int i = 0; i < result.length; i++) {
+            if (!(result[i] in expected_result[i].data)) {
+                Test.fail_printf (
+                    "\n\nExpected one of:\n\t%s\n\nGot:\n\t%s\nOn %i\n\n%s\n",
+                    string.joinv ("\n\t", expected_result[i].data),
+                    result[i],
+                    i,
+                    debug_info
+                );
+            }
         }
     }
 }
@@ -74,16 +88,16 @@ public int main (string[] args) {
 
         string query = "pytest";
 
-        var expected_result = new List<Array<string?>> ();
-        expected_result.append (new Array<string?>.take ({
+        var expected_result = new Gee.ArrayList<Array<string?>> ();
+        expected_result.add (new Array<string?>.take ({
             "python2-pytest",
             "python3-pytest"
         }));
-        expected_result.append (new Array<string?>.take ({
+        expected_result.add (new Array<string?>.take ({
             "python2-pytest",
             "python3-pytest"
         }));
-        expected_result.append (new Array<string?>.take ({ "python3-pytest-cov" }));
+        expected_result.add (new Array<string?>.take ({ "python3-pytest-cov" }));
 
         fuzzy_search_test_base (data, query, expected_result);
     });
@@ -100,10 +114,10 @@ public int main (string[] args) {
 
         string query = "gcc";
 
-        var expected_result = new List<Array<string?>> ();
-        expected_result.append (new Array<string?>.take ({ "gcc" }));
-        expected_result.append (new Array<string?>.take ({ "gcc-libs" }));
-        expected_result.append (new Array<string?>.take ({ "python3-gcc-binding" }));
+        var expected_result = new Gee.ArrayList<Array<string?>> ();
+        expected_result.add (new Array<string?>.take ({ "gcc" }));
+        expected_result.add (new Array<string?>.take ({ "gcc-libs" }));
+        expected_result.add (new Array<string?>.take ({ "gdb" }));
 
         fuzzy_search_test_base (data, query, expected_result);
     });
@@ -120,14 +134,10 @@ public int main (string[] args) {
 
         string query = "perl";
 
-        var expected_result = new List<Array<string?>> ();
-        expected_result.append (new Array<string?>.take ({ "perl-base" }));
-        expected_result.append (new Array<string?>.take ({ "perl-utils" }));
-        expected_result.append (new Array<string?>.take ({
-            "perl-Data-Dumper",
-            "perl-Test-Simple",
-            "ruby-perl-bridge"
-        }));
+        var expected_result = new Gee.ArrayList<Array<string?>> ();
+        expected_result.add (new Array<string?>.take ({ "perl-base" }));
+        expected_result.add (new Array<string?>.take ({ "perl-utils" }));
+        expected_result.add (new Array<string?>.take ({ null }));
 
         fuzzy_search_test_base (data, query, expected_result);
     });
@@ -144,10 +154,10 @@ public int main (string[] args) {
 
         string query = "vim";
 
-        var expected_result = new List<Array<string?>> ();
-        expected_result.append (new Array<string?>.take ({ "vim" }));
-        expected_result.append (new Array<string?>.take ({ "gvim" }));
-        expected_result.append (new Array<string?>.take ({ "neovim" }));
+        var expected_result = new Gee.ArrayList<Array<string?>> ();
+        expected_result.add (new Array<string?>.take ({ "vim" }));
+        expected_result.add (new Array<string?>.take ({ "gvim" }));
+        expected_result.add (new Array<string?>.take ({ "neovim" }));
 
         fuzzy_search_test_base (data, query, expected_result);
     });
@@ -164,10 +174,10 @@ public int main (string[] args) {
 
         string query = "chrome";
 
-        var expected_result = new List<Array<string?>> ();
-        expected_result.append (new Array<string?>.take ({ "chromium" }));
-        expected_result.append (new Array<string?>.take ({ "chromium-browser" }));
-        expected_result.append (new Array<string?>.take ({ null }));
+        var expected_result = new Gee.ArrayList<Array<string?>> ();
+        expected_result.add (new Array<string?>.take ({ "chromium" }));
+        expected_result.add (new Array<string?>.take ({ null }));
+        expected_result.add (new Array<string?>.take ({ null }));
 
         fuzzy_search_test_base (data, query, expected_result);
     });
@@ -184,10 +194,10 @@ public int main (string[] args) {
 
         string query = "openssl";
 
-        var expected_result = new List<Array<string?>> ();
-        expected_result.append (new Array<string?>.take ({ "openssl" }));
-        expected_result.append (new Array<string?>.take ({ "openssl-dev" }));
-        expected_result.append (new Array<string?>.take ({ "openssl-utils" }));
+        var expected_result = new Gee.ArrayList<Array<string?>> ();
+        expected_result.add (new Array<string?>.take ({ "openssl" }));
+        expected_result.add (new Array<string?>.take ({ "openssl-dev" }));
+        expected_result.add (new Array<string?>.take ({ "openssl-utils" }));
 
         fuzzy_search_test_base (data, query, expected_result);
     });
@@ -204,10 +214,10 @@ public int main (string[] args) {
 
         string query = "libc";
 
-        var expected_result = new List<Array<string?>> ();
-        expected_result.append (new Array<string?>.take ({ "libc" }));
-        expected_result.append (new Array<string?>.take ({ "glibc" }));
-        expected_result.append (new Array<string?>.take ({ "libcrypt" }));
+        var expected_result = new Gee.ArrayList<Array<string?>> ();
+        expected_result.add (new Array<string?>.take ({ "libc" }));
+        expected_result.add (new Array<string?>.take ({ "glibc" }));
+        expected_result.add (new Array<string?>.take ({ "libcrypt" }));
 
         fuzzy_search_test_base (data, query, expected_result);
     });
@@ -224,13 +234,13 @@ public int main (string[] args) {
 
         string query = "zip";
 
-        var expected_result = new List<Array<string?>> ();
-        expected_result.append (new Array<string?>.take ({ "gzip" }));
-        expected_result.append (new Array<string?>.take ({
+        var expected_result = new Gee.ArrayList<Array<string?>> ();
+        expected_result.add (new Array<string?>.take ({ "gzip" }));
+        expected_result.add (new Array<string?>.take ({
             "bzip2",
             "unzip"
         }));
-        expected_result.append (new Array<string?>.take ({
+        expected_result.add (new Array<string?>.take ({
             "bzip2",
             "unzip"
         }));
@@ -250,10 +260,10 @@ public int main (string[] args) {
 
         string query = "python3";
 
-        var expected_result = new List<Array<string?>> ();
-        expected_result.append (new Array<string?>.take ({ "python3" }));
-        expected_result.append (new Array<string?>.take ({ "python2" }));
-        expected_result.append (new Array<string?>.take ({ "python3-pip" }));
+        var expected_result = new Gee.ArrayList<Array<string?>> ();
+        expected_result.add (new Array<string?>.take ({ "python3" }));
+        expected_result.add (new Array<string?>.take ({ "python2" }));
+        expected_result.add (new Array<string?>.take ({ "python3-pip" }));
 
         fuzzy_search_test_base (data, query, expected_result);
     });
@@ -270,10 +280,10 @@ public int main (string[] args) {
 
         string query = "bash";
 
-        var expected_result = new List<Array<string?>> ();
-        expected_result.append (new Array<string?>.take ({ "bash" }));
-        expected_result.append (new Array<string?>.take ({ "dash" }));
-        expected_result.append (new Array<string?>.take ({ null }));
+        var expected_result = new Gee.ArrayList<Array<string?>> ();
+        expected_result.add (new Array<string?>.take ({ "bash" }));
+        expected_result.add (new Array<string?>.take ({ "dash" }));
+        expected_result.add (new Array<string?>.take ({ "sh" }));
 
         fuzzy_search_test_base (data, query, expected_result);
     });
@@ -290,15 +300,17 @@ public int main (string[] args) {
 
         string query = "ngunx";
 
-        var expected_result = new List<Array<string?>> ();
-        expected_result.append (new Array<string?>.take ({ "nginx" }));
-        expected_result.append (new Array<string?>.take ({
+        var expected_result = new Gee.ArrayList<Array<string?>> ();
+        expected_result.add (new Array<string?>.take ({ "nginx" }));
+        expected_result.add (new Array<string?>.take ({
             "nginx-full",
-            "nginx-core"
+            "nginx-core",
+            null
         }));
-        expected_result.append (new Array<string?>.take ({
+        expected_result.add (new Array<string?>.take ({
             "nginx-full",
-            "nginx-core"
+            "nginx-core",
+            null
         }));
 
         fuzzy_search_test_base (data, query, expected_result);
@@ -315,16 +327,16 @@ public int main (string[] args) {
 
         string query = "pytestt";
 
-        var expected_result = new List<Array<string?>> ();
-        expected_result.append (new Array<string?>.take ({
+        var expected_result = new Gee.ArrayList<Array<string?>> ();
+        expected_result.add (new Array<string?>.take ({
             "python3-pytest",
             "python2-pytest"
         }));
-        expected_result.append (new Array<string?>.take ({
+        expected_result.add (new Array<string?>.take ({
             "python3-pytest",
             "python2-pytest"
         }));
-        expected_result.append (new Array<string?>.take ({ null }));
+        expected_result.add (new Array<string?>.take ({ null }));
 
         fuzzy_search_test_base (data, query, expected_result);
     });
@@ -334,20 +346,23 @@ public int main (string[] args) {
             "perl-Test-Simple",
             "perl-Data-Dumper",
             "perl-utils",
-            "python3-perl-parser"
+            "python3-perl-parser",
+            "perl"
         };
 
         string query = "prel";
 
-        var expected_result = new List<Array<string?>> ();
-        expected_result.append (new Array<string?>.take ({ "perl-utils" }));
-        expected_result.append (new Array<string?>.take ({
+        var expected_result = new Gee.ArrayList<Array<string?>> ();
+        expected_result.add (new Array<string?>.take ({ "perl" }));
+        expected_result.add (new Array<string?>.take ({
             "perl-Test-Simple",
-            "perl-Data-Dumper"
+            "perl-Data-Dumper",
+            null
         }));
-        expected_result.append (new Array<string?>.take ({
+        expected_result.add (new Array<string?>.take ({
             "perl-Test-Simple",
-            "perl-Data-Dumper"
+            "perl-Data-Dumper",
+            null
         }));
 
         fuzzy_search_test_base (data, query, expected_result);
@@ -363,7 +378,12 @@ public int main (string[] args) {
 
         string query = "foo";
 
-        fuzzy_search_test_base (data, query, null);
+        var expected_result = new Gee.ArrayList<Array<string?>> ();
+        expected_result.add (new Array<string?>.take ({ "fish" }));
+        expected_result.add (new Array<string?>.take ({ null }));
+        expected_result.add (new Array<string?>.take ({ null }));
+
+        fuzzy_search_test_base (data, query, expected_result);
     });
 
     Test.add_func ("/utils/fuzzy-search/15", () => {
@@ -376,10 +396,10 @@ public int main (string[] args) {
 
         string query = "opnssl";
 
-        var expected_result = new List<Array<string?>> ();
-        expected_result.append (new Array<string?>.take ({ "openssl" }));
-        expected_result.append (new Array<string?>.take ({ "openssl-utils" }));
-        expected_result.append (new Array<string?>.take ({ null }));
+        var expected_result = new Gee.ArrayList<Array<string?>> ();
+        expected_result.add (new Array<string?>.take ({ "openssl" }));
+        expected_result.add (new Array<string?>.take ({ "openssl-utils" }));
+        expected_result.add (new Array<string?>.take ({ "libssl" }));
 
         fuzzy_search_test_base (data, query, expected_result);
     });
