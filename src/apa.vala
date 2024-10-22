@@ -40,14 +40,17 @@ namespace Apa {
         try {
             switch (ca.command) {
                 case Get.INSTALL:
+                    check_pk_is_not_running ();
                     check_is_root (ca.command);
                     return yield install (ca);
 
                 case Get.REMOVE:
+                    check_pk_is_not_running ();
                     check_is_root (ca.command);
                     return yield Get.remove (ca.command_argv, ca.options);
 
                 case Get.UPDATE:
+                    check_pk_is_not_running ();
                     check_is_root (ca.command);
                     return yield Get.update ();
 
@@ -173,6 +176,10 @@ namespace Apa {
                         }
                         break;
 
+                    case ErrorType.UNABLE_TO_LOCK_DOWNLOAD_DIR:
+                        print_error (error_message.strip ());
+                        return status;
+
                     case ErrorType.NONE:
                         print_error (_("Unknown error message: '%s'").printf (error_message));
                         print_issue ();
@@ -223,6 +230,20 @@ namespace Apa {
         }
 
         print_error (_("Need root previlegies for '%s' command").printf (command));
+        print (_("Aborting."));
+        Process.exit (Constants.ExitCode.BASE_ERROR);
+    }
+
+    public void check_pk_is_not_running () {
+        try {
+            if (!pk_is_running ()) {
+                return;
+            }
+        } catch (Error e) {
+            print_error (e.message);
+        }
+
+        print_error (_("PackageKit is running"));
         print (_("Aborting."));
         Process.exit (Constants.ExitCode.BASE_ERROR);
     }

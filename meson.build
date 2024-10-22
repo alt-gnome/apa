@@ -12,12 +12,14 @@ glib = dependency ('glib-2.0', version: '>= 2.76')
 gobject = dependency ('gobject-2.0')
 gio = dependency ('gio-2.0')
 gee = dependency ('gee-0.8')
+pk = dependency('packagekit-glib2')
 
 apa_dependencies = [
   glib,
   gobject,
   gio,
   gee,
+  pk
 ]
 
 add_project_arguments(

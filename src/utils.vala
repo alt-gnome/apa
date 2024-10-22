@@ -92,6 +92,7 @@ public errordomain Apa.CommandError {
 public enum Apa.ErrorType {
     COULDNT_FIND_PACKAGE,
     PACKAGE_VIRTUAL_WITH_MULTIPLE_GOOD_PROIDERS,
+    UNABLE_TO_LOCK_DOWNLOAD_DIR,
     NONE,
 }
 
@@ -355,6 +356,7 @@ namespace Apa {
         string[] apt_errors = {
             "Couldn't find package %s",
             "Package %s is a virtual package with multiple good providers.\n",
+            "Unable to lock the download directory"
         };
 
         string pattern;
@@ -377,8 +379,10 @@ namespace Apa {
                 MatchInfo match_info;
                 if (regex.match (error_message, 0, out match_info)) {
                     package = match_info.fetch (1);
-                    print_devel (match_info.fetch (0));
                     return (ErrorType) i;
+
+                } else {
+                    print_devel ("\n%s\n%s\n".printf (apt_errors[i], pattern));
                 }
             }
 
@@ -499,5 +503,10 @@ namespace Apa {
 
     public void print_issue () {
         print (_("You can create issue here https://github.com/alt-gnome/apa/issues"));
+    }
+
+    public bool pk_is_running () throws Error {
+        var ch = new Pk.Control ();
+        return ch.locked;
     }
 }
