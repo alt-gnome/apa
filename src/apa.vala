@@ -55,7 +55,7 @@ namespace Apa {
                     return yield Cache.search (ca.command_argv, ca.options);
 
                 case LIST_COMMAND:
-                    return yield Rpm.list (ca.options);
+                    return yield Rpm.list_installed (ca.options);
 
                 case INFO_COMMAND:
                     return yield info (ca);

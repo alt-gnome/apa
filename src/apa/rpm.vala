@@ -21,7 +21,7 @@ namespace Apa.Rpm {
 
     internal const string ORIGIN = "rpm";
 
-    public async int list (string[] options = {},
+    public async int list_installed (string[] options = {},
                            Gee.ArrayList<string>? result = null,
                            Gee.ArrayList<string>? error = null) {
         var arr = new Gee.ArrayList<string>.wrap ({
