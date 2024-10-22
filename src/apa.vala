@@ -101,49 +101,46 @@ namespace Apa {
                     case ErrorType.COULDNT_FIND_PACKAGE:
                         print (_("Some packages not found"));
 
-                        string[] packages_to_install = new string[ca.command_argv.length];
+                        var search_result = new Gee.ArrayList<string> ();
+                        yield Cache.search ({ "." }, {}, search_result);
+                        do_short_array_list (ref search_result);
+                        var all_packages_set = new Gee.HashSet<string> ();
+                        all_packages_set.add_all (search_result);
 
                         for (int arg_i = 0; arg_i < ca.command_argv.length; arg_i++) {
-                            char[] package_chars = (char[]) ca.command_argv[arg_i].data;
-                            string[] char_string = new string[ca.command_argv[arg_i].length];
+                            var package_name = ca.command_argv[arg_i];
 
-                            for (int i = 0; i < ca.command_argv[arg_i].length; i++) {
-                                char_string[i] = package_chars[i].to_string ();
+                            if (package_name in all_packages_set) {
+                                continue;
                             }
+
+                            var package_name_straight = package_name.replace ("-", "");
 
                             var result = new Gee.ArrayList<string> ();
                             yield Cache.search (
-                                { string.joinv (".*", char_string) },
+                                { string.joinv (".*", split_chars (package_name_straight)) },
                                 { "--names-only" },
                                 result
                             );
-
                             do_short_array_list (ref result);
 
-                            string[]? possible_package_names = fuzzy_search (ca.command_argv[arg_i], result.to_array ());
+                            string[]? possible_package_names = fuzzy_search (package_name_straight, result.to_array ());
 
                             if (possible_package_names == null) {
-                                print (_("Package '%s' not found").printf (ca.command_argv[arg_i]));
+                                print (_("Package '%s' not found").printf (package_name));
                                 return status;
-                            }
-
-                            if (possible_package_names[0] == ca.command_argv[arg_i]) {
-                                packages_to_install[arg_i] = ca.command_argv[arg_i];
-                                continue;
                             }
 
                             print (_("A packages with a similar name were found:"));
                             var answer = give_choice (possible_package_names);
 
                             if (answer != null) {
-                                packages_to_install[arg_i] = answer;
+                                ca.command_argv[arg_i] = answer;
 
                             } else {
                                 return status;
                             }
                         }
-
-                        ca.command_argv = packages_to_install;
                         break;
 
                     case ErrorType.PACKAGE_VIRTUAL_WITH_MULTIPLE_GOOD_PROIDERS:

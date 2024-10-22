@@ -15,9 +15,59 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-struct Apa.FindBestData {
+struct FindBestData {
     public string package_name;
     public int similarity;
+}
+
+sealed class MatchData {
+
+    public string query_string;
+    public string origin_string;
+    public int start_index;
+    public Gee.ArrayList<char> match_str;
+    public int similarity = 4;
+    public int offset;
+    public int last_s_i = -1;
+
+    public MatchData (
+        string query_string,
+        string origin_string,
+        int start_index,
+        char first_char
+    ) {
+        this.query_string = query_string;
+        this.origin_string = origin_string;
+        this.start_index = start_index;
+        this.match_str = new Gee.ArrayList<char>.wrap ({ first_char });
+        this.offset = 0;
+    }
+
+    public bool try_add (int index, char c) {
+        if (index == match_str.size + start_index + offset && c == origin_string[index] && last_s_i < index) {
+            last_s_i = index;
+
+            match_str.add (c);
+            similarity += 2;
+            return true;
+
+        } else if (c == origin_string[index] && index > match_str.size + start_index + offset && last_s_i < index) {
+            last_s_i = index;
+
+            offset = index - match_str.size - start_index;
+
+            match_str.add (c);
+            similarity += 2;
+            return true;
+
+        }
+
+        return false;
+    }
+
+    public void close () {
+        similarity -= start_index + (origin_string.length - start_index - match_str.size - offset) + offset * 2;
+    }
 }
 
 public struct Apa.OptionData {
@@ -105,39 +155,82 @@ namespace Apa {
      */
     public string?[]? fuzzy_search (string query, string[] data) {
         var pre_results = new Gee.ArrayList<FindBestData?> ();
-        var query_chars = (char[]) query.down ().data;
+        // query internal
+        string q_in = query.down ();
 
         foreach (string str in data) {
-            var str_chars = (char[]) str.down ().data;
-            int similarity = 0;
-            int comp_offset = -1;
+            // str internal
+            string s_in = str.down ();
 
-            int query_i = 0;
-            int str_i = 0;
+            int q_i = 0;
+            int s_i = 0;
 
-            for (query_i = 0; query_i < query_chars.length; query_i++) {
-                for (str_i = comp_offset == -1 ? 0 : comp_offset + query_i; str_i < str_chars.length; str_i++) {
-                    if (query_chars[query_i] == str_chars[str_i]) {
-                        int _comp_offset = (str_i - query_i).abs ();
+            var matchs = new Gee.ArrayList<MatchData?> ();
+            var matchs_used = new Gee.ArrayList<MatchData?> ((el1, el2) => {
+                return el1.start_index == el2.start_index;
+            });
 
-                        if (comp_offset == -1) {
-                            similarity += _comp_offset;
+            for (q_i = 0; q_i < q_in.length; q_i++) {
+                char q_in_c = q_in[q_i];
+
+                matchs_used.clear ();
+
+                for (s_i = 0; s_i < s_in.length; s_i++) {
+                    char s_in_c = s_in[s_i];
+
+                    bool added = false;
+                    foreach (var match in matchs) {
+                        if (match in matchs_used) {
+                            continue;
                         }
 
-                        comp_offset = _comp_offset;
+                        added = match.try_add (s_i, q_in_c);
 
-                        similarity++;
+                        if (added) {
+                            matchs_used.add (match);
+                        }
+                    }
 
-                        str_chars[str_i] = ' ';
-                        break;
+                    if (!added && s_in_c == q_in_c) {
+                        matchs.insert (0, new MatchData (
+                            query,
+                            s_in,
+                            s_i,
+                            s_in_c
+                        ));
 
-                    } else {
-                        similarity--;
+                        matchs_used.add (matchs[0]);
                     }
                 }
             }
 
-            pre_results.add ({str, similarity});
+            foreach (var match in matchs) {
+                match.close ();
+            }
+
+            MatchData? top_match = null;
+            print ("Matches %s in %s".printf (query, str));
+            foreach (var match in matchs) {
+                print ("\t%s\t%d\t%d".printf (
+                    (string) match.match_str.to_array (),
+                    match.start_index,
+                    match.similarity
+                ));
+
+                if (top_match == null) {
+                    top_match = match;
+                    continue;
+                }
+
+                if (top_match.similarity < match.similarity) {
+                    top_match = match;
+                }
+            }
+            print ("\n\n");
+
+            if (top_match != null) {
+                pre_results.add ({str, top_match.similarity});
+            }
         }
 
         pre_results.sort ((a, b) => {
@@ -150,11 +243,7 @@ namespace Apa {
 
         string?[] results = { null, null, null };
 
-        for (int i = 0; i < results.length; i++) {
-            if (pre_results.size < i + 1) {
-                break;
-            }
-
+        for (int i = 0; i < results.length && i < pre_results.size; i++) {
             if (pre_results[i].similarity > 0) {
                 results[i] = pre_results[i].package_name;
 
@@ -398,6 +487,14 @@ namespace Apa {
                 array[i] = new_string;
             }
         }
+    }
+
+    public string[] split_chars (string str) {
+        string[] result = new string[str.length];
+        for (int i = 0; i < str.length; i++) {
+            result[i] = str[i].to_string ();
+        }
+        return result;
     }
 
     public void print_issue () {
