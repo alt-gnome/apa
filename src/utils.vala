@@ -365,10 +365,10 @@ namespace Apa {
 
         try {
             for (int i = 0; i < apt_errors.length; i++) {
-                pattern = (dgettext (
+                pattern = dgettext (
                     "apt",
                     apt_errors[i]
-                )).replace ("%s", "(.*)");
+                ).strip ().replace ("%s", "(.*)");
 
                 regex = new Regex (
                     pattern,
@@ -398,7 +398,7 @@ namespace Apa {
 
         for (int i = error.size - 1; i >= 0; i--) {
             if (error[i].strip () != "") {
-                error_message = error[i].replace ("E: ", "");
+                error_message = error[i].replace ("E: ", "").strip ();
                 error.remove_at (i);
                 break;
 

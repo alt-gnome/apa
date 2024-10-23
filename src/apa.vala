@@ -130,7 +130,7 @@ namespace Apa {
                             string[]? possible_package_names = fuzzy_search (package_name_straight, result.to_array ());
 
                             if (possible_package_names == null) {
-                                print (_("Package '%s' not found").printf (package_name));
+                                print_error (_("Package '%s' not found").printf (package_name));
                                 return status;
                             }
 
@@ -177,7 +177,7 @@ namespace Apa {
                         break;
 
                     case ErrorType.UNABLE_TO_LOCK_DOWNLOAD_DIR:
-                        print_error (error_message.strip ());
+                        print_error (_("APT is currently busy"));
                         return status;
 
                     case ErrorType.NONE:
