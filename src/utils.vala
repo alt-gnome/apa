@@ -507,6 +507,6 @@ namespace Apa {
 
     public bool pk_is_running () throws Error {
         var ch = new Pk.Control ();
-        return ch.locked;
+        return ch.get_transaction_list ().length > 0;
     }
 }
