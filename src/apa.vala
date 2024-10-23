@@ -17,11 +17,11 @@
 
 namespace Apa {
 
-    internal const string LIST_COMMAND = "list";
-    internal const string INFO_COMMAND = "info";
-    internal const string MOO_COMMAND = "moo";
-    internal const string HELP_COMMAND = "help";
-    internal const string VERSION_COMMAND = "version";
+    const string LIST_COMMAND = "list";
+    const string INFO_COMMAND = "info";
+    const string MOO_COMMAND = "moo";
+    const string HELP_COMMAND = "help";
+    const string VERSION_COMMAND = "version";
 
     public async int run (string[] argv) {
 
@@ -47,7 +47,7 @@ namespace Apa {
                 case Get.REMOVE:
                     check_pk_is_not_running ();
                     check_is_root (ca.command);
-                    return yield Get.remove (ca.command_argv, ca.options);
+                    return yield remove (ca);
 
                 case Get.UPDATE:
                     check_pk_is_not_running ();
@@ -64,7 +64,7 @@ namespace Apa {
                     return yield info (ca);
 
                 case MOO_COMMAND:
-                    return apa_moo (ca);
+                    return moo (ca);
 
                 case VERSION_COMMAND:
                     print (get_version ());
@@ -88,140 +88,6 @@ namespace Apa {
             print_error (e.message);
             return Constants.ExitCode.BASE_ERROR;
         }
-    }
-
-    internal async int install (owned CommandArgs ca) throws CommonCommandError, CommandError {
-        while (true) {
-            var error = new Gee.ArrayList<string> ();
-            var status = yield Get.install (ca.command_argv, ca.options, ca.arg_options, error);
-
-            if (status != Constants.ExitCode.SUCCESS && error.size > 0) {
-
-                string error_message = normalize_error (error);
-                string? package;
-
-                switch (detect_error (error_message, out package)) {
-                    case ErrorType.COULDNT_FIND_PACKAGE:
-                        print (_("Some packages not found"));
-
-                        var search_result = new Gee.ArrayList<string> ();
-                        yield Cache.search ({ "." }, {}, search_result);
-                        do_short_array_list (ref search_result);
-                        var all_packages_set = new Gee.HashSet<string> ();
-                        all_packages_set.add_all (search_result);
-
-                        for (int arg_i = 0; arg_i < ca.command_argv.length; arg_i++) {
-                            var package_name = ca.command_argv[arg_i];
-
-                            if (package_name in all_packages_set) {
-                                continue;
-                            }
-
-                            var package_name_straight = package_name.replace ("-", "");
-
-                            var result = new Gee.ArrayList<string> ();
-                            yield Cache.search (
-                                { string.joinv (".*", split_chars (package_name_straight)) },
-                                { "--names-only" },
-                                result
-                            );
-                            do_short_array_list (ref result);
-
-                            string[]? possible_package_names = fuzzy_search (package_name_straight, result.to_array ());
-
-                            if (possible_package_names == null) {
-                                print_error (_("Package '%s' not found").printf (package_name));
-                                return status;
-                            }
-
-                            print (_("A packages with a similar name were found:"));
-                            var answer = give_choice (possible_package_names);
-
-                            if (answer != null) {
-                                ca.command_argv[arg_i] = answer;
-
-                            } else {
-                                return status;
-                            }
-                        }
-                        break;
-
-                    case ErrorType.PACKAGE_VIRTUAL_WITH_MULTIPLE_GOOD_PROIDERS:
-                        error_message = error_message[0:error_message.length - 2] + ":";
-                        print (error_message);
-
-                        var packages = new Gee.ArrayList<string> ();
-                        foreach (var err in error) {
-                            if (err.has_prefix ("  ")) {
-                                string[] strs = err.strip ().split (" ");
-                                if (strs[strs.length - 1].has_suffix ("]") && strs[strs.length - 1].has_prefix ("[")) {
-                                    packages.add ("%s (%s)".printf (
-                                        strs[0],
-                                        strs[strs.length - 1][1: strs[strs.length - 1].length - 1]
-                                    ));
-
-                                } else {
-                                    packages.add (strs[0]);
-                                }
-                            }
-                        }
-
-                        var answer = give_choice (packages.to_array ());
-
-                        if (answer != null) {
-                            replace_strings_in_array (ref ca.command_argv, package, answer.split (" ")[0]);
-
-                        } else {
-                            return status;
-                        }
-                        break;
-
-                    case ErrorType.UNABLE_TO_LOCK_DOWNLOAD_DIR:
-                        print_error (_("APT is currently busy"));
-                        return status;
-
-                    case ErrorType.NONE:
-                        print_error (_("Unknown error message: '%s'").printf (error_message));
-                        print_issue ();
-                        return Constants.ExitCode.BASE_ERROR;
-
-                    default:
-                        assert_not_reached ();
-                }
-
-            } else {
-                return status;
-            }
-        }
-    }
-
-    internal async int info (CommandArgs ca) {
-        int status_code = Constants.ExitCode.SUCCESS;
-
-        foreach (string package_name in ca.command_argv) {
-            print (_("Info for '%s':").printf (package_name));
-            status_code = yield Rpm.info (package_name, ca.options);
-            if (status_code != 0) {
-                return status_code;
-            }
-
-            if (package_name != ca.command_argv[ca.command_argv.length - 1]) {
-                print ("");
-            }
-        }
-
-        return Constants.ExitCode.SUCCESS;
-    }
-
-    int apa_moo (CommandArgs ca) {
-        if (ca.command_argv.length > 0) {
-            print (Moo.get_moo (ca.command_argv[0]), false);
-
-        } else {
-            print (Moo.get_moo (), false);
-        }
-
-        return Constants.ExitCode.SUCCESS;
     }
 
     public void check_is_root (string command) {

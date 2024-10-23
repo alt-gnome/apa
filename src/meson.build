@@ -6,9 +6,14 @@ apa_no_main_code_sources = files (
   'alt/apt-cache.vala',
   'alt/apt-get.vala',
 
-  'apa/rpm.vala',
+  'apa/info.vala',
+  'apa/install.vala',
+  'apa/moo.vala',
+  'apa/remove.vala',
 
   'flatpak/flatpak.vala',
+
+  'rpm/rpm.vala',
 
   'snap/snap.vala',
 
@@ -17,7 +22,6 @@ apa_no_main_code_sources = files (
   'fuzzy-search.vala',
   'help.vala',
   'command-args.vala',
-  'moo.vala',
   'origin.vala',
   'spawn-command.vala',
   'utils.vala',
