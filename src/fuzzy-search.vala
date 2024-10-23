@@ -139,14 +139,7 @@ namespace Apa {
             }
 
             MatchData? top_match = null;
-            print ("Matches %s in %s".printf (query, str));
             foreach (var match in matchs) {
-                print ("\t%s\t%d\t%d".printf (
-                    (string) match.match_str.to_array (),
-                    match.start_index,
-                    match.similarity
-                ));
-
                 if (top_match == null) {
                     top_match = match;
                     continue;
@@ -156,7 +149,6 @@ namespace Apa {
                     top_match = match;
                 }
             }
-            print ("\n\n");
 
             if (top_match != null) {
                 pre_results.add ({str, top_match.similarity});
