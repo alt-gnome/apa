@@ -36,6 +36,11 @@ namespace Apa.Rpm {
                     arr.add ("-q");
                     break;
 
+                case "-n":
+                case "--names":
+                    arr.add ("--queryformat=%{NAME}\n");
+                    break;
+
                 case "-a":
                 case "--all":
                     arr.add ("-a");
@@ -47,7 +52,13 @@ namespace Apa.Rpm {
             }
         }
 
-        return yield spawn_command_full (arr, result, error);
+        var status = yield spawn_command_full (arr, result, error);
+
+        for (int i = 0; i < result.size; i++) {
+            result[i] = result[i].strip ();
+        }
+
+        return status;
     }
 
     public async int info (string package_name,

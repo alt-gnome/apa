@@ -34,7 +34,13 @@ public errordomain Apa.CommandError {
     NO_PACKAGES
 }
 
+namespace Apa.ChoiceResult {
+    public const string SKIP = "<skip-package>";
+}
+
 namespace Apa {
+    public const string SKIP_PACKAGE_SENTENCE = _("<skip package>");
+
     public string get_version () {
         return "%s %s".printf (
             Config.NAME,
@@ -176,17 +182,26 @@ namespace Apa {
         ));
     }
 
-    public string? give_choice (string[] variants) {
+    public string? give_choice (string[] variants, string action_name) {
+        if (variants.length == 0) {
+            return null;
+        }
+
         for (int i = 0; i < variants.length; i++) {
             if (variants[i] != null) {
-                print ("\t%i) %s".printf (i + 1, variants[i]));
+                if (i == 0) {
+                    print ("\t[%i] %s".printf (i + 1, variants[i]));
+
+                } else {
+                    print ("\t %i) %s".printf (i + 1, variants[i]));
+                }
             }
         }
 
         print ("");
 
         while (true) {
-            print (_("Choose which on to install: [1 by default, 0 to exit] "), false);
+            print (_("Choose which on to %s: (0 to exit, -1 to skip) ").printf (action_name), false);
             var input = stdin.read_line ().strip ();
 
             if (input == "") {
@@ -195,13 +210,39 @@ namespace Apa {
 
             int input_int;
             if (int.try_parse (input, out input_int)) {
-                if (input_int > 0 && input_int <= 3 && variants[input_int - 1] != null) {
+                if (input_int > 0 && input_int <= variants.length && variants[input_int - 1] != null) {
                     return variants[input_int - 1];
+
+                } else if (input_int == -1) {
+                    return ChoiceResult.SKIP;
 
                 } else if (input_int == 0) {
                     return null;
                 }
             }
+        }
+    }
+
+    public void remove_element_from_array_by_index (ref string[] array, int index) {
+        array.move (index + 1, index, array.length - index + 1);
+        array.resize (array.length - 1);
+    }
+
+    public void remove_element_from_array (ref string[] array, string element) {
+        bool found = false;
+
+        for (int i = 0; i < array.length; i++) {
+            if (array[i] == element) {
+                found = true;
+            }
+
+            if (found && array.length < i + 1) {
+                array[i] = array[i + 1];
+            }
+        }
+
+        if (found) {
+            array.resize (array.length - 1);
         }
     }
 

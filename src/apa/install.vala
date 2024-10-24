@@ -23,9 +23,9 @@ namespace Apa {
 
             if (status != Constants.ExitCode.SUCCESS && error.size > 0) {
                 string error_message = normalize_error (error);
-                string? package;
+                string? package_error_source;
 
-                switch (detect_error (error_message, out package)) {
+                switch (detect_error (error_message, out package_error_source)) {
                     case OriginErrorType.COULDNT_FIND_PACKAGE:
                         print (_("Some packages not found"));
 
@@ -60,10 +60,22 @@ namespace Apa {
                             }
 
                             print (_("A packages with a similar name were found:"));
-                            var answer = give_choice (possible_package_names);
+                            var answer = give_choice (possible_package_names, _("install"));
 
                             if (answer != null) {
-                                ca.command_argv[arg_i] = answer;
+                                switch (answer) {
+                                    case ChoiceResult.SKIP:
+                                        remove_element_from_array (ref ca.command_argv, package_name);
+                                        if (ca.command_argv.length == 0) {
+                                            print (_("There are no packages left to install"));
+                                            return 0;
+                                        }
+                                        break;
+
+                                    default:
+                                        ca.command_argv[arg_i] = answer;
+                                        break;
+                                }
 
                             } else {
                                 return status;
@@ -91,10 +103,22 @@ namespace Apa {
                             }
                         }
 
-                        var answer = give_choice (packages.to_array ());
+                        var answer = give_choice (packages.to_array (), _("install"));
 
                         if (answer != null) {
-                            replace_strings_in_array (ref ca.command_argv, package, answer.split (" ")[0]);
+                            switch (answer) {
+                                case ChoiceResult.SKIP:
+                                    remove_element_from_array (ref ca.command_argv, package_error_source);
+                                    if (ca.command_argv.length == 0) {
+                                        print (_("There are no packages left to install"));
+                                        return 0;
+                                    }
+                                    break;
+
+                                default:
+                                    replace_strings_in_array (ref ca.command_argv, package_error_source, answer.split (" ")[0]);
+                                    break;
+                            }
 
                         } else {
                             return status;

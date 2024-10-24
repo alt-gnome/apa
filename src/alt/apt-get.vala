@@ -129,7 +129,7 @@ public sealed class Apa.Get : Origin {
         Gee.ArrayList<string>? error = null
     ) throws CommonCommandError, CommandError {
         if (packages.length == 0) {
-            print (Help.INSTALL, false);
+            print (Help.REMOVE, false);
             throw new CommandError.NO_PACKAGES (_("No packages to remove"));
         }
 
