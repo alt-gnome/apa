@@ -26,7 +26,7 @@ namespace Apa {
                 string? package;
 
                 switch (detect_error (error_message, out package)) {
-                    case ErrorType.COULDNT_FIND_PACKAGE:
+                    case OriginErrorType.COULDNT_FIND_PACKAGE:
                         print (_("Some packages not found"));
 
                         var search_result = new Gee.ArrayList<string> ();
@@ -71,7 +71,7 @@ namespace Apa {
                         }
                         break;
 
-                    case ErrorType.PACKAGE_VIRTUAL_WITH_MULTIPLE_GOOD_PROIDERS:
+                    case OriginErrorType.PACKAGE_VIRTUAL_WITH_MULTIPLE_GOOD_PROIDERS:
                         error_message = error_message[0:error_message.length - 2] + ":";
                         print (error_message);
 
@@ -101,11 +101,11 @@ namespace Apa {
                         }
                         break;
 
-                    case ErrorType.UNABLE_TO_LOCK_DOWNLOAD_DIR:
+                    case OriginErrorType.UNABLE_TO_LOCK_DOWNLOAD_DIR:
                         print_error (_("APT is currently busy"));
                         return status;
 
-                    case ErrorType.NONE:
+                    case OriginErrorType.NONE:
                         print_error (_("Unknown error message: '%s'").printf (error_message));
                         print_issue ();
                         return Constants.ExitCode.BASE_ERROR;

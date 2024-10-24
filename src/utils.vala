@@ -34,15 +34,7 @@ public errordomain Apa.CommandError {
     NO_PACKAGES
 }
 
-public enum Apa.ErrorType {
-    COULDNT_FIND_PACKAGE,
-    PACKAGE_VIRTUAL_WITH_MULTIPLE_GOOD_PROIDERS,
-    UNABLE_TO_LOCK_DOWNLOAD_DIR,
-    NONE,
-}
-
 namespace Apa {
-
     public string get_version () {
         return "%s %s".printf (
             Config.NAME,
@@ -150,98 +142,6 @@ namespace Apa {
         }
 
         return false;
-    }
-
-    public bool has_internet_connection () {
-        int status_code;
-
-        try {
-            Process.spawn_sync (
-                null,
-                { "ping", "ya.ru", "-c", "1" },
-                null,
-                SpawnFlags.SEARCH_PATH | SpawnFlags.STDOUT_TO_DEV_NULL | SpawnFlags.STDERR_TO_DEV_NULL,
-                null,
-                null,
-                null,
-                out status_code
-            );
-
-        } catch (SpawnError e) {
-            GLib.error (e.message);
-        }
-
-        if (status_code == 0) {
-            return true;
-
-        } else {
-            return false;
-        }
-    }
-
-    public ErrorType detect_error (string error_message, out string package = null) {
-        // Should be aligned with ErrorType enum
-        string[] apt_errors = {
-            "Couldn't find package %s",
-            "Package %s is a virtual package with multiple good providers.\n",
-            "Unable to lock the download directory"
-        };
-
-        string pattern;
-        Regex regex;
-        package = null;
-
-        try {
-            for (int i = 0; i < apt_errors.length; i++) {
-                pattern = dgettext (
-                    "apt",
-                    apt_errors[i]
-                ).strip ().replace ("%s", "(.*)");
-
-                regex = new Regex (
-                    pattern,
-                    RegexCompileFlags.OPTIMIZE,
-                    RegexMatchFlags.NOTEMPTY
-                );
-
-                MatchInfo match_info;
-                if (regex.match (error_message, 0, out match_info)) {
-                    package = match_info.fetch (1);
-                    return (ErrorType) i;
-
-                } else {
-                    print_devel ("\n%s\n%s\n".printf (apt_errors[i], pattern));
-                }
-            }
-
-        } catch (Error e) {
-            print_error (e.message);
-        }
-
-        return NONE;
-    }
-
-    public string normalize_error (Gee.ArrayList<string> error) {
-        string error_message = "";
-
-        for (int i = error.size - 1; i >= 0; i--) {
-            if (error[i].strip () != "") {
-                error_message = error[i].replace ("E: ", "").strip ();
-                error.remove_at (i);
-                break;
-
-            } else {
-                error.remove_at (i);
-            }
-        }
-
-        for (int i = 0; i < error.size; i++) {
-            if (error[i][error[i].length - 1] == '\n') {
-                error[i] = error[i][0:error[i].length - 1];
-            }
-        }
-
-        return error_message;
     }
 
     public void print (string str, bool with_return = true) {
