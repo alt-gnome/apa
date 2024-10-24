@@ -49,25 +49,24 @@ namespace Apa {
                             }
 
                             print (_("A packages with a similar name were found:"));
-                            var answer = give_choice (possible_package_names, _("remove"));
+                            string? answer;
+                            var result = give_choice (possible_package_names, _("remove"), out answer);
 
-                            if (answer != null) {
-                                switch (answer) {
-                                    case ChoiceResult.SKIP:
-                                        remove_element_from_array (ref ca.command_argv, package_name);
-                                        if (ca.command_argv.length == 0) {
-                                            print (_("There are no packages left to remove"));
-                                            return 0;
-                                        }
-                                        break;
+                            switch (result) {
+                                case ChoiceResult.SKIP:
+                                    remove_element_from_array (ref ca.command_argv, package_name);
+                                    if (ca.command_argv.length == 0) {
+                                        print (_("There are no packages left to remove"));
+                                        return 0;
+                                    }
+                                    break;
 
-                                    default:
-                                        ca.command_argv[arg_i] = answer;
-                                        break;
-                                }
+                                case ChoiceResult.CHOSEN:
+                                    ca.command_argv[arg_i] = answer;
+                                    break;
 
-                            } else {
-                                return status;
+                                case ChoiceResult.EXIT:
+                                    return status;
                             }
                         }
                         break;
@@ -78,7 +77,6 @@ namespace Apa {
                         return Constants.ExitCode.BASE_ERROR;
 
                     default:
-                        print (detect_error (error_message, out package).to_string ());
                         assert_not_reached ();
                 }
 

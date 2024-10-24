@@ -34,8 +34,10 @@ public errordomain Apa.CommandError {
     NO_PACKAGES
 }
 
-namespace Apa.ChoiceResult {
-    public const string SKIP = "<skip-package>";
+public enum Apa.ChoiceResult {
+    SKIP,
+    CHOSEN,
+    EXIT,
 }
 
 namespace Apa {
@@ -182,9 +184,9 @@ namespace Apa {
         ));
     }
 
-    public string? give_choice (string[] variants, string action_name) {
+    public ChoiceResult give_choice (string[] variants, string action_name, out string? result = null) {
         if (variants.length == 0) {
-            return null;
+            return ChoiceResult.CHOSEN;
         }
 
         for (int i = 0; i < variants.length; i++) {
@@ -211,13 +213,14 @@ namespace Apa {
             int input_int;
             if (int.try_parse (input, out input_int)) {
                 if (input_int > 0 && input_int <= variants.length && variants[input_int - 1] != null) {
-                    return variants[input_int - 1];
+                    result = variants[input_int - 1];
+                    return ChoiceResult.CHOSEN;
 
                 } else if (input_int == -1) {
                     return ChoiceResult.SKIP;
 
                 } else if (input_int == 0) {
-                    return null;
+                    return ChoiceResult.EXIT;
                 }
             }
         }

@@ -29,11 +29,11 @@ namespace Apa {
                     case OriginErrorType.COULDNT_FIND_PACKAGE:
                         print (_("Some packages not found"));
 
-                        var search_result = new Gee.ArrayList<string> ();
-                        yield Cache.search ({ "." }, {}, search_result);
-                        do_short_array_list (ref search_result);
+                        var total_search_result = new Gee.ArrayList<string> ();
+                        yield Cache.search ({ "." }, {}, total_search_result);
+                        do_short_array_list (ref total_search_result);
                         var all_packages_set = new Gee.HashSet<string> ();
-                        all_packages_set.add_all (search_result);
+                        all_packages_set.add_all (total_search_result);
 
                         for (int arg_i = 0; arg_i < ca.command_argv.length; arg_i++) {
                             var package_name = ca.command_argv[arg_i];
@@ -44,15 +44,15 @@ namespace Apa {
 
                             var package_name_straight = package_name.replace ("-", "");
 
-                            var result = new Gee.ArrayList<string> ();
+                            var search_result = new Gee.ArrayList<string> ();
                             yield Cache.search (
                                 { string.joinv (".*", split_chars (package_name_straight)) },
                                 { "--names-only" },
-                                result
+                                search_result
                             );
-                            do_short_array_list (ref result);
+                            do_short_array_list (ref search_result);
 
-                            string[]? possible_package_names = fuzzy_search (package_name_straight, result.to_array ());
+                            string[]? possible_package_names = fuzzy_search (package_name_straight, search_result.to_array ());
 
                             if (possible_package_names == null) {
                                 print_error (_("Package '%s' not found").printf (package_name));
@@ -60,25 +60,24 @@ namespace Apa {
                             }
 
                             print (_("A packages with a similar name were found:"));
-                            var answer = give_choice (possible_package_names, _("install"));
+                            string? answer;
+                            var result = give_choice (possible_package_names, _("install"), out answer);
 
-                            if (answer != null) {
-                                switch (answer) {
-                                    case ChoiceResult.SKIP:
-                                        remove_element_from_array (ref ca.command_argv, package_name);
-                                        if (ca.command_argv.length == 0) {
-                                            print (_("There are no packages left to install"));
-                                            return 0;
-                                        }
-                                        break;
+                            switch (result) {
+                                case ChoiceResult.SKIP:
+                                    remove_element_from_array (ref ca.command_argv, package_name);
+                                    if (ca.command_argv.length == 0) {
+                                        print (_("There are no packages left to install"));
+                                        return 0;
+                                    }
+                                    break;
 
-                                    default:
-                                        ca.command_argv[arg_i] = answer;
-                                        break;
-                                }
+                                case ChoiceResult.CHOSEN:
+                                    ca.command_argv[arg_i] = answer;
+                                    break;
 
-                            } else {
-                                return status;
+                                case ChoiceResult.EXIT:
+                                    return status;
                             }
                         }
                         break;
@@ -103,25 +102,24 @@ namespace Apa {
                             }
                         }
 
-                        var answer = give_choice (packages.to_array (), _("install"));
+                        string? answer;
+                        var result = give_choice (packages.to_array (), _("install"), out answer);
 
-                        if (answer != null) {
-                            switch (answer) {
-                                case ChoiceResult.SKIP:
-                                    remove_element_from_array (ref ca.command_argv, package_error_source);
-                                    if (ca.command_argv.length == 0) {
-                                        print (_("There are no packages left to install"));
-                                        return 0;
-                                    }
-                                    break;
+                        switch (result) {
+                            case ChoiceResult.SKIP:
+                                remove_element_from_array (ref ca.command_argv, package_error_source);
+                                if (ca.command_argv.length == 0) {
+                                    print (_("There are no packages left to install"));
+                                    return 0;
+                                }
+                                break;
 
-                                default:
-                                    replace_strings_in_array (ref ca.command_argv, package_error_source, answer.split (" ")[0]);
-                                    break;
-                            }
+                            case ChoiceResult.CHOSEN:
+                                replace_strings_in_array (ref ca.command_argv, package_error_source, answer.split (" ")[0]);
+                                break;
 
-                        } else {
-                            return status;
+                            case ChoiceResult.EXIT:
+                                return status;
                         }
                         break;
 
