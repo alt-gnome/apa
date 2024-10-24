@@ -185,6 +185,8 @@ namespace Apa {
     }
 
     public ChoiceResult give_choice (string[] variants, string action_name, out string? result = null) {
+        result = null;
+
         if (variants.length == 0) {
             return ChoiceResult.CHOSEN;
         }
