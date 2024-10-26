@@ -3,8 +3,8 @@ vapi_sources = files(
 )
 
 apa_no_main_code_sources = files (
-  'alt/apt-cache.vala',
-  'alt/apt-get.vala',
+  'apt/apt-cache.vala',
+  'apt/apt-get.vala',
 
   'apa/info.vala',
   'apa/install.vala',
