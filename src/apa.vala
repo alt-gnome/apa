@@ -69,6 +69,7 @@ namespace Apa {
                     return yield Repo.repo_list (ca.options, ca.arg_options);
 
                 case Repo.TEST:
+                    check_is_root (ca.command);
                     return yield Repo.test (ca.command_argv, ca.options, ca.arg_options);
 
                 case LIST_COMMAND:
