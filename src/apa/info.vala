@@ -16,21 +16,26 @@
  */
 
 namespace Apa {
-    async int info (CommandArgs ca) {
-        int status_code = Constants.ExitCode.SUCCESS;
+    internal async int info (CommandArgs ca) throws CommandError {
+        while (true) {
+            var error = new Gee.ArrayList<string> ();
+            var status = yield Rpm.info (ca.command_argv, ca.options, ca.arg_options, null, error);
 
-        foreach (string package_name in ca.command_argv) {
-            print (_("Info for '%s':").printf (package_name));
-            status_code = yield Rpm.info (package_name, ca.options);
-            if (status_code != 0) {
-                return status_code;
-            }
+            if (status != Constants.ExitCode.SUCCESS && error.size > 0) {
+                string error_message = normalize_error (error);
+                string? package;
 
-            if (package_name != ca.command_argv[ca.command_argv.length - 1]) {
-                print ("");
+                switch (detect_error (error_message, out package)) {
+                    case OriginErrorType.NONE:
+                    default:
+                        print_error (_("Unknown error message: '%s'").printf (error_message));
+                        print_issue ();
+                        return Constants.ExitCode.BASE_ERROR;
+                }
+
+            } else {
+                return status;
             }
         }
-
-        return Constants.ExitCode.SUCCESS;
     }
 }

@@ -30,8 +30,7 @@ namespace Apa {
                         print (_("Some packages not found"));
 
                         var total_search_result = new Gee.ArrayList<string> ();
-                        yield Cache.search (
-                            { "." },
+                        yield Cache.list_all (
                             {},
                             ca.arg_options,
                             total_search_result,

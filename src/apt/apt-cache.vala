@@ -67,6 +67,16 @@
         );
     }
 
+    public static async int list_all (
+        string[] options = {},
+        ArgOption?[] arg_options = {},
+        Gee.ArrayList<string>? result = null,
+        Gee.ArrayList<string>? error = null,
+        bool ignore_unknown_options = false
+    ) throws CommandError {
+        return yield new Cache ().internal_search ({"."}, options, arg_options, result, error, ignore_unknown_options);
+    }
+
     public static async int search (
         string[] regexs,
         string[] options = {},

@@ -17,76 +17,126 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-namespace Apa.Rpm {
+/*
+ * Copyright 2024 Vladimir Vaskov
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, version 3
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
 
-    internal const string ORIGIN = "rpm";
+public sealed class Apa.Rpm : Origin {
 
-    public async int list_installed (string[] options = {},
-                           Gee.ArrayList<string>? result = null,
-                           Gee.ArrayList<string>? error = null) {
-        var arr = new Gee.ArrayList<string>.wrap ({
-            ORIGIN,
-            "-q", "-a"
-        });
+    protected override string origin { get; default = "rpm"; }
 
-        foreach (string option in options) {
-            switch (option) {
-                case "-q":
-                case "--query":
-                    arr.add ("-q");
-                    break;
+    public const string LIST = "list";
+    public const string INFO = "info";
 
-                case "-n":
-                case "--names":
-                    arr.add ("--queryformat=%{NAME}\n");
-                    break;
+    public const string[] COMMANDS = {
+        LIST,
+        INFO,
+    };
 
-                case "-a":
-                case "--all":
-                    arr.add ("-a");
-                    break;
+    Rpm () {}
 
-                default:
-                    print (_("Unknown option '%s'").printf (option));
-                    return 1;
-            }
-        }
-
-        var status = yield spawn_command_full (arr, result, error);
-
-        for (int i = 0; i < result.size; i++) {
-            result[i] = result[i].strip ();
-        }
-
-        return status;
+    public static async int list (
+        string[] options = {},
+        ArgOption?[] arg_options = {},
+        Gee.ArrayList<string>? result = null,
+        Gee.ArrayList<string>? error = null,
+        bool ignore_unknown_options = false
+    ) throws CommandError {
+        return yield new Rpm ().internal_list (options, arg_options, result, error, ignore_unknown_options);
     }
 
-    public async int info (string package_name,
-                           string[] options = {},
-                           Gee.ArrayList<string>? result = null,
-                           Gee.ArrayList<string>? error = null) {
-        var arr = new Gee.ArrayList<string>.wrap ({ ORIGIN, "-q" });
+    public async int internal_list (
+        string[] options = {},
+        ArgOption?[] arg_options = {},
+        Gee.ArrayList<string>? result = null,
+        Gee.ArrayList<string>? error = null,
+        bool ignore_unknown_options = false
+    ) throws CommandError {
+        current_options.add_all_array (options);
+        current_arg_options.add_all_array (arg_options);
 
-        if (options.length == 0) {
-            arr.add_all_array ({ "-i" });
+        spawn_arr.add ("-q");
+        spawn_arr.add ("-a");
 
-        }
-
-        foreach (string option in options) {
-            switch (option) {
-                case "-f":
-                case "--files":
-                    arr.add ("-l");
-                    break;
-
-                default:
-                    print (_("Unknown option '%s'").printf (option));
-                    return 1;
+        set_options (
+            ref spawn_arr,
+            current_options,
+            current_arg_options,
+            {
+                {
+                    "-s", "--short",
+                    "--queryformat=%{NAME}\n"
+                }
             }
+        );
+
+        if (!ignore_unknown_options) {
+            post_set_check ();
         }
 
-        arr.add (package_name);
+        return yield spawn_command_full (spawn_arr, result, error);
+    }
 
-        return yield spawn_command_full (arr, result, error);
+    public static async int info (
+        string[] packages = {},
+        string[] options = {},
+        ArgOption?[] arg_options = {},
+        Gee.ArrayList<string>? result = null,
+        Gee.ArrayList<string>? error = null,
+        bool ignore_unknown_options = false
+    ) throws CommandError {
+        if (packages.length == 0) {
+            throw new CommandError.NO_PACKAGES (_("No packages to show"));
+        }
+
+        return yield new Rpm ().internal_info (packages, options, arg_options, result, error, ignore_unknown_options);
+    }
+
+    public async int internal_info (
+        string[] packages = {},
+        string[] options = {},
+        ArgOption?[] arg_options = {},
+        Gee.ArrayList<string>? result = null,
+        Gee.ArrayList<string>? error = null,
+        bool ignore_unknown_options = false
+    ) throws CommandError {
+        current_options.add_all_array (options);
+        current_arg_options.add_all_array (arg_options);
+
+        spawn_arr.add ("-q");
+        spawn_arr.add ("-i");
+
+        set_options (
+            ref spawn_arr,
+            current_options,
+            current_arg_options,
+            {
+                {
+                    "-f", "--files",
+                    "-l"
+                }
+            }
+        );
+
+        if (!ignore_unknown_options) {
+            post_set_check ();
+        }
+
+        spawn_arr.add_all_array (packages);
+
+        return yield spawn_command_full (spawn_arr, result, error);
     }
 }

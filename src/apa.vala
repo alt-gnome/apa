@@ -73,7 +73,7 @@ namespace Apa {
                     return yield Repo.test (ca.command_argv, ca.options, ca.arg_options);
 
                 case LIST_COMMAND:
-                    return yield Rpm.list_installed (ca.options);
+                    return yield Rpm.list (ca.options, ca.arg_options);
 
                 case INFO_COMMAND:
                     return yield info (ca);
