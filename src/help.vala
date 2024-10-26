@@ -291,6 +291,10 @@ namespace Apa.Help {
         print ("");
     }
 
+    public void print_test () {
+        
+    }
+
     public void print_moo () {
         print (C_("cow", "Mooage:"));
         print ("\tapa moo [PHRASE]");

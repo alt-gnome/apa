@@ -63,7 +63,13 @@ namespace Apa {
                     return yield source (ca);
 
                 case Cache.SEARCH:
-                    return yield Cache.search (ca.command_argv, ca.options);
+                    return yield Cache.search (ca.command_argv, ca.options, ca.arg_options);
+
+                case Repo.REPO_LIST:
+                    return yield Repo.repo_list (ca.options, ca.arg_options);
+
+                case Repo.TEST:
+                    return yield Repo.test (ca.command_argv, ca.options, ca.arg_options);
 
                 case LIST_COMMAND:
                     return yield Rpm.list_installed (ca.options);
