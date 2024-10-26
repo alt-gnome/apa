@@ -127,6 +127,36 @@ namespace Apa.Help {
         );
     }
 
+    void print_common_cache_options () {
+        print ("");
+        print (_("Common options:"));
+        print ("");
+        print_option (
+            "-h, --hide-progress",
+            _("Hide progress bar, for logging")
+        );
+        print_option (
+            "-i, --important-only",
+            _("Show only important deps for the unmet command")
+        );
+        print_option (
+            "-s, --source-cache",
+            _("The source cache")
+        );
+        print_option (
+            "-p, --package-cache",
+            _("The package cache")
+        );
+        print_option (
+            "-c=?, --config=?",
+            _("Read this configuration file")
+        );
+        print_option (
+            "-o=?, --option=?",
+            _("Set an arbitary configuration option, eg -o=dir::cache=/tmp")
+        );
+    }
+
     string get_update_desc () {
         return C_(
             "update command",
@@ -159,6 +189,13 @@ namespace Apa.Help {
         return C_(
             "source command",
             "Command for source"
+        );
+    }
+
+    string get_search_desc () {
+        return C_(
+            "search command",
+            "Command for search"
         );
     }
 
@@ -244,6 +281,13 @@ namespace Apa.Help {
             "-b, --build",
             _("Build packages")
         );
+        print ("");
+    }
+
+    public void print_search () {
+        print (get_search_desc ());
+        print_usage ("apa search [OPTIONS[=VALUE]] <regex1> <regex2> ..");
+        print_common_cache_options ();
         print ("");
     }
 

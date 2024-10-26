@@ -99,10 +99,11 @@ public sealed class Apa.Get : Origin {
         current_options.add_all_array (options);
         current_arg_options.add_all_array (arg_options);
 
+        set_common_options ();
+
         if (!ignore_unknown_options) {
             post_set_check ();
         }
-
 
         spawn_arr.add (UPDATE);
 
@@ -195,7 +196,6 @@ public sealed class Apa.Get : Origin {
             post_set_check ();
         }
 
-
         spawn_arr.add (INSTALL);
         spawn_arr.add_all_array (packages);
 
@@ -244,7 +244,6 @@ public sealed class Apa.Get : Origin {
             post_set_check ();
         }
 
-
         spawn_arr.add (REMOVE);
         spawn_arr.add_all_array (packages);
 
@@ -292,7 +291,6 @@ public sealed class Apa.Get : Origin {
         if (!ignore_unknown_options) {
             post_set_check ();
         }
-
 
         spawn_arr.add (SOURCE);
         spawn_arr.add_all_array (packages);

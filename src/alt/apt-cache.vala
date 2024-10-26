@@ -17,9 +17,9 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-namespace Apa.Cache {
+ public sealed class Apa.Cache : Origin {
 
-    internal const string ORIGIN = "apt-cache";
+    protected override string origin { get; default = "apt-cache"; }
 
     internal const string SEARCH = "search";
 
@@ -27,45 +27,81 @@ namespace Apa.Cache {
         SEARCH
     };
 
-    public async int search (string[] regexs,
-                             string[] options,
-                             Gee.ArrayList<string>? result = null,
-                             Gee.ArrayList<string>? error = null) {
-        var arr = new Gee.ArrayList<string>.wrap ({
-            ORIGIN,
-            SEARCH
-        });
+    Cache () {}
 
-        for (int i = 0; i < options.length; i++) {
-            switch (options[i]) {
-                case "-n":
-                case "--names-only":
-                    arr.add ("--names-only");
-                    break;
+    void set_common_options () {
+        assert (spawn_arr != null);
+        assert (current_options != null);
+        assert (current_arg_options != null);
 
-                default:
-                    print (_("Unknown option '%s'").printf (options[i]));
-                    return 1;
+        set_options (
+            ref spawn_arr,
+            current_options,
+            current_arg_options,
+            {
+                {
+                    "-o", "--option",
+                    "-o"
+                },
+                {
+                    "-c", "--config",
+                    "-c"
+                },
+                {
+                    "-p", "--package-cache",
+                    "-p"
+                },
+                {
+                    "-s", "--source-cache",
+                    "-s"
+                },
+                {
+                    "-h", "--hide-progress",
+                    "-q"
+                },
+                {
+                    "-i", "--important-only",
+                    "-i"
+                }
             }
-        }
-
-        arr.add_all_array (regexs);
-
-        return yield spawn_command_full (arr, result, error);
+        );
     }
 
-    public void print_help (string command) {
-        switch (command) {
-            case SEARCH:
-                print_search_help ();
-                return;
-
-            default:
-                assert_not_reached ();
+    public static async int search (
+        string[] regexs,
+        string[] options = {},
+        ArgOption?[] arg_options = {},
+        Gee.ArrayList<string>? result = null,
+        Gee.ArrayList<string>? error = null,
+        bool ignore_unknown_options = false
+    ) throws CommandError {
+        if (regexs.length == 0) {
+            Help.print_search ();
+            throw new CommandError.NO_PACKAGES (_("Nothing to search"));
         }
+
+        return yield new Cache ().internal_search (regexs, options, arg_options, result, error, ignore_unknown_options);
     }
 
-    internal void print_search_help () {
-        print ("Search help");
+    public async int internal_search (
+        string[] regexs,
+        string[] options = {},
+        ArgOption?[] arg_options = {},
+        Gee.ArrayList<string>? result = null,
+        Gee.ArrayList<string>? error = null,
+        bool ignore_unknown_options = false
+    ) throws CommandError {
+        current_options.add_all_array (options);
+        current_arg_options.add_all_array (arg_options);
+
+        set_common_options ();
+
+        if (!ignore_unknown_options) {
+            post_set_check ();
+        }
+
+        spawn_arr.add (SEARCH);
+
+        return yield spawn_command_full (spawn_arr, result, error);
     }
 }

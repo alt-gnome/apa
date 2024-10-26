@@ -404,5 +404,13 @@ public int main (string[] args) {
         fuzzy_search_test_base (data, query, expected_result);
     });
 
+    Test.add_func ("/utils/fuzzy-search/16", () => {
+        string[] data = {};
+
+        string query = "something";
+
+        fuzzy_search_test_base (data, query, null);
+    });
+
     return Test.run ();
 }

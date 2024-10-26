@@ -27,12 +27,10 @@ namespace Apa {
 
                 switch (detect_error (error_message, out package)) {
                     case OriginErrorType.NONE:
+                    default:
                         print_error (_("Unknown error message: '%s'").printf (error_message));
                         print_issue ();
                         return Constants.ExitCode.BASE_ERROR;
-
-                    default:
-                        assert_not_reached ();
                 }
 
             } else {

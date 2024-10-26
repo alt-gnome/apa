@@ -30,7 +30,14 @@ namespace Apa {
                         print (_("Some packages not found"));
 
                         var total_search_result = new Gee.ArrayList<string> ();
-                        yield Cache.search ({ "." }, {}, total_search_result);
+                        yield Cache.search (
+                            { "." },
+                            {},
+                            ca.arg_options,
+                            total_search_result,
+                            null,
+                            true
+                        );
                         do_short_array_list (ref total_search_result);
                         var all_packages_set = new Gee.HashSet<string> ();
                         all_packages_set.add_all (total_search_result);
@@ -48,7 +55,10 @@ namespace Apa {
                             yield Cache.search (
                                 { string.joinv (".*", split_chars (package_name_straight)) },
                                 { "--names-only" },
-                                search_result
+                                ca.arg_options,
+                                search_result,
+                                null,
+                                true
                             );
                             do_short_array_list (ref search_result);
 
@@ -128,12 +138,10 @@ namespace Apa {
                         return status;
 
                     case OriginErrorType.NONE:
+                    default:
                         print_error (_("Unknown error message: '%s'").printf (error_message));
                         print_issue ();
                         return Constants.ExitCode.BASE_ERROR;
-
-                    default:
-                        assert_not_reached ();
                 }
 
             } else {
