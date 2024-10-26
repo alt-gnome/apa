@@ -65,6 +65,7 @@ Art by Joan Stark
             _("With great moower comes great resmoonsibility"),
             _("I am your Moother"),
             _("I use ALT btw…"),
+            _("Have you mooed today?"),
         };
     }
 }

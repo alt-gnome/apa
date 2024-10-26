@@ -16,7 +16,7 @@
  */
 
 namespace Apa {
-    internal async int install (owned CommandArgs ca) throws CommonCommandError, CommandError {
+    internal async int install (owned CommandArgs ca) throws CommandError {
         while (true) {
             var error = new Gee.ArrayList<string> ();
             var status = yield Get.install (ca.command_argv, ca.options, ca.arg_options, error);

@@ -16,7 +16,7 @@
  */
 
 namespace Apa {
-    internal async int remove (owned CommandArgs ca) throws CommonCommandError, CommandError {
+    internal async int remove (owned CommandArgs ca) throws CommandError {
         while (true) {
             var error = new Gee.ArrayList<string> ();
             var status = yield Get.remove (ca.command_argv, ca.options, ca.arg_options, error);

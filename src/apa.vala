@@ -39,6 +39,16 @@ namespace Apa {
 
         try {
             switch (ca.command) {
+                case Get.UPDATE:
+                    check_pk_is_not_running ();
+                    check_is_root (ca.command);
+                    return yield update (ca);
+
+                case Get.UPGRADE:
+                    check_pk_is_not_running ();
+                    check_is_root (ca.command);
+                    return yield upgrade (ca);
+
                 case Get.INSTALL:
                     check_pk_is_not_running ();
                     check_is_root (ca.command);
@@ -49,10 +59,8 @@ namespace Apa {
                     check_is_root (ca.command);
                     return yield remove (ca);
 
-                case Get.UPDATE:
-                    check_pk_is_not_running ();
-                    check_is_root (ca.command);
-                    return yield Get.update ();
+                case Get.SOURCE:
+                    return yield source (ca);
 
                 case Cache.SEARCH:
                     return yield Cache.search (ca.command_argv, ca.options);
@@ -71,16 +79,16 @@ namespace Apa {
                     return Constants.ExitCode.SUCCESS;
 
                 case HELP_COMMAND:
-                    print (Help.APA, false);
+                    Help.print_apa ();
                     return Constants.ExitCode.SUCCESS;
 
                 case null:
-                    print (Help.APA, false);
+                    Help.print_apa ();
                     return Constants.ExitCode.BASE_ERROR;
 
                 default:
                     print_error (_("Unknown command '%s'").printf (ca.command));
-                    print (Help.APA, false);
+                    Help.print_apa (false);
                     return Constants.ExitCode.BASE_ERROR;
             }
 
@@ -96,7 +104,6 @@ namespace Apa {
         }
 
         print_error (_("Need root previlegies for '%s' command").printf (command));
-        print (_("Aborting."));
         Process.exit (Constants.ExitCode.BASE_ERROR);
     }
 
@@ -110,7 +117,6 @@ namespace Apa {
         }
 
         print_error (_("PackageKit is running"));
-        print (_("Aborting."));
         Process.exit (Constants.ExitCode.BASE_ERROR);
     }
 }

@@ -21,16 +21,24 @@ namespace Apa.Help {
 
     void print_help (string? command) {
         switch (command) {
+            case Get.UPDATE:
+                print_update ();
+                return;
+
+            case Get.UPGRADE:
+                print_upgrade ();
+                return;
+
             case Get.INSTALL:
-                print (INSTALL, false);
+                print_install ();
                 return;
 
             case Get.REMOVE:
-                print (REMOVE, false);
+                print_remove ();
                 return;
 
-            case Get.UPDATE:
-                print (UPDATE, false);
+            case Get.SOURCE:
+                print_source ();
                 return;
 
             case Cache.SEARCH:
@@ -43,84 +51,214 @@ namespace Apa.Help {
                 assert_not_reached ();
 
             case Apa.MOO_COMMAND:
-                print (MOO, false);
+                print_moo ();
                 return;
 
             case Apa.VERSION_COMMAND:
-                print (VERSION, false);
+                print_version ();
                 return;
 
             case Apa.HELP_COMMAND:
-                print (APA, false);
+                print_apa ();
                 return;
 
             case null:
-                print (APA, false);
+                print_apa ();
                 return;
 
             default:
                 print_error (_("Unknown command '%s'").printf (command));
-                print (Help.APA, false);
+                print_apa ();
                 return;
         }
     }
 
-    public const string APA =
-_("""APA - ALT Packages Assistant. Your best friend in this cruel world of many package tools.
+    void print_usage (string usage) {
+        print ("");
+        print (_("Usage:"));
+        print ("\t" + usage);
+    }
 
-Usage: 
-        apa <command> ..
+    void print_option (string option, string desc) {
+        print ("\t" + option);
+        print ("\t\t" + desc);
+        print ("");
+    }
 
-Commands:
+    void print_common_get_options () {
+        print ("");
+        print (_("Common options:"));
+        print ("");
+        print_option (
+            "-h, --hide-progress",
+            _("Hide progress bar, for logging")
+        );
+        print_option (
+            "-q, --quiet",
+            _("Hide any command output")
+        );
+        print_option (
+            "-s, --simulate",
+            _("Simulate command execution")
+        );
+        print_option (
+            "-y, --yes",
+            _("Always yes")
+        );
+        print_option (
+            "-f, --fix",
+            _("Try fix")
+        );
+        print_option (
+            "-m, --missing-ignore",
+            _("Ignore mussing packages")
+        );
+        print_option (
+            "-V, --version-detailed",
+            _("Print detailed packages version")
+        );
+        print_option (
+            "-c=?, --config=?",
+            _("Read this configuration file")
+        );
+        print_option (
+            "-o=?, --option=?",
+            _("Set an arbitary configuration option, eg -o=dir::cache=/tmp")
+        );
+    }
 
-""");
+    string get_update_desc () {
+        return C_(
+            "update command",
+            "Command for update"
+        );
+    }
 
-    public const string INSTALL =
-"""Usage: 
-        apa install [OPTIONS[=VALUE]] <package1> <package2> ..
+    string get_upgrade_desc () {
+        return C_(
+            "upgrade command",
+            "Command for upgrade"
+        );
+    }
 
-Options:
+    string get_install_desc () {
+        return C_(
+            "instal command",
+            "Command for install"
+        );
+    }
 
-    -h, --hide-progress
-    -q, --quiet
-    -s, --simulate
-    -y, --yes
-    -f, --fix
-    -V, --version-detailed
-    -d, --download-only
-    -b, --build
-    -o=?, --option=?
+    string get_remove_desc () {
+        return C_(
+            "remove command",
+            "Command for remove"
+        );
+    }
 
-""";
+    string get_source_desc () {
+        return C_(
+            "source command",
+            "Command for source"
+        );
+    }
 
-public const string REMOVE =
-"""Usage: 
-        apa remove [OPTIONS[=VALUE]] <package1> <package2> ..
+    string get_version_desc () {
+        return C_(
+            "version command",
+            "Print APA version"
+        );
+    }
 
-Options:
+    public void print_apa (bool with_desc = true) {
+        if (with_desc) {
+            print (_("APA - ALT Packages Assistant. Your best friend in this cruel world of many package tools."));
+        }
+        print_usage ("apa <command> ..");
+        print (_("Commands:"));
+        print ("");
+        print_option (Get.INSTALL, get_install_desc ());
+        print ("");
+    }
 
-""";
+    public void print_update () {
+        print (get_update_desc ());
+        print_usage ("apa update [OPTIONS[=VALUE]]");
+        print_common_get_options ();
+        print ("");
+    }
 
-public const string UPDATE =
-"""Usage: 
-        apa update [OPTIONS[=VALUE]]
+    public void print_upgrade () {
+        print (get_upgrade_desc ());
+        print_usage ("apa upgrade [OPTIONS[=VALUE]]");
+        print_common_get_options ();
+        print ("");
+        print (_("Command options:"));
+        print ("");
+        print_option (
+            "-d, --download-only",
+            _("Only download packages, without installing")
+        );
+        print_option (
+            "-u, --upgraded-show",
+            _("Print upgraded packages")
+        );
+        print ("");
+    }
 
-Options:
+    public void print_install () {
+        print (get_install_desc ());
+        print_usage ("apa install [OPTIONS[=VALUE]] <package1> <package2> ..");
+        print_common_get_options ();
+        print ("");
+        print (_("Command options:"));
+        print ("");
+        print_option (
+            "-d, --download-only",
+            _("Only download packages, without installing")
+        );
+        print ("");
+    }
 
-""";
+    public void print_remove () {
+        print (get_remove_desc ());
+        print_usage ("apa remove [OPTIONS[=VALUE]] <package1> <package2> ..");
+        print_common_get_options ();
+        print ("");
+        print (_("Command options:"));
+        print ("");
+        print_option (
+            "-D, --with-dependecies",
+            _("Remove with dependencies")
+        );
+        print ("");
+    }
 
-public const string MOO =
-"""Mooage: 
-        apa moo [PHRASE]
+    public void print_source () {
+        print (get_source_desc ());
+        print_usage ("apa source [OPTIONS[=VALUE]] <package1> <package2> ..");
+        print_common_get_options ();
+        print ("");
+        print (_("Command options:"));
+        print ("");
+        print_option (
+            "-b, --build",
+            _("Build packages")
+        );
+        print ("");
+    }
 
-""";
+    public void print_moo () {
+        print (C_("cow", "Mooage:"));
+        print ("\tapa moo [PHRASE]");
+        print ("");
+    }
 
-public const string VERSION =
-"""Usage: 
-        apa version
-
-    Equal to:
-        apa --version
-
-""";
+    public void print_version () {
+        print (get_version_desc ());
+        print_usage ("apa version");
+        print ("");
+        print ("Equal to:");
+        print ("\tapa --version");
+        print ("");
+    }
 }

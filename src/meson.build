@@ -10,6 +10,9 @@ apa_no_main_code_sources = files (
   'apa/install.vala',
   'apa/moo.vala',
   'apa/remove.vala',
+  'apa/source.vala',
+  'apa/update.vala',
+  'apa/upgrade.vala',
 
   'flatpak/flatpak.vala',
 

@@ -25,13 +25,11 @@ public struct Apa.OptionData {
     }
 }
 
-public errordomain Apa.CommonCommandError {
+public errordomain Apa.CommandError {
     UNKNOWN_COMMAND,
     UNKNOWN_OPTION,
-}
-
-public errordomain Apa.CommandError {
-    NO_PACKAGES
+    NO_PACKAGES,
+    CANT_UPDATE
 }
 
 public enum Apa.ChoiceResult {
