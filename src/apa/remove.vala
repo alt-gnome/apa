@@ -30,7 +30,7 @@ namespace Apa {
                         print (_("Some packages not found"));
 
                         var installed_result = new Gee.ArrayList<string> ();
-                        yield Rpm.list ({ "-n" }, {}, installed_result);
+                        yield Rpm.list ({ "-s" }, {}, installed_result);
 
                         for (int arg_i = 0; arg_i < ca.command_argv.length; arg_i++) {
                             var package_name = ca.command_argv[arg_i];
