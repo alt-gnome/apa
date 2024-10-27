@@ -111,6 +111,7 @@
         }
 
         spawn_arr.add (SEARCH);
+        spawn_arr.add_all_array (regexs);
 
         return yield spawn_command_full (spawn_arr, result, error);
     }
