@@ -192,7 +192,7 @@ namespace Apa {
         for (int i = 0; i < variants.length; i++) {
             if (variants[i] != null) {
                 if (i == 0) {
-                    print ("\t[%i] %s".printf (i + 1, variants[i]));
+                    print ("\t*%i) %s".printf (i + 1, variants[i]));
 
                 } else {
                     print ("\t %i) %s".printf (i + 1, variants[i]));
