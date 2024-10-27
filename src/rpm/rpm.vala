@@ -87,7 +87,13 @@ public sealed class Apa.Rpm : Origin {
             post_set_check ();
         }
 
-        return yield spawn_command_full (spawn_arr, result, error);
+        var status = yield spawn_command_full (spawn_arr, result, error);
+
+        for (int i = 0; i < result.size; i++) {
+            result[i] = result[i].strip ();
+        }
+
+        return status;
     }
 
     public static async int info (
