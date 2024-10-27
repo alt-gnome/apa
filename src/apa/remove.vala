@@ -52,9 +52,11 @@ namespace Apa {
                             string? answer;
                             var result = give_choice (possible_package_names, _("remove"), out answer);
 
+                            bool skipped = false;
                             switch (result) {
                                 case ChoiceResult.SKIP:
-                                    remove_element_from_array (ref ca.command_argv, package_name);
+                                    remove_element_from_array_by_index (ref ca.command_argv, arg_i);
+                                    skipped = true;
                                     if (ca.command_argv.length == 0) {
                                         print (_("There are no packages left to remove"));
                                         return 0;
@@ -67,6 +69,10 @@ namespace Apa {
 
                                 case ChoiceResult.EXIT:
                                     return status;
+                            }
+
+                            if (skipped) {
+                                break;
                             }
                         }
                         break;
