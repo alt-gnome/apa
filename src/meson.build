@@ -42,7 +42,7 @@ apa_sources = [
   files (
     'main.vala'
   )
-] 
+]
 
 executable (
   meson.project_name(),
