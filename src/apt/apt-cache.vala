@@ -86,7 +86,6 @@
         bool ignore_unknown_options = false
     ) throws CommandError {
         if (regexs.length == 0) {
-            Help.print_search ();
             throw new CommandError.NO_PACKAGES (_("Nothing to search"));
         }
 

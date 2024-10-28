@@ -39,6 +39,11 @@ namespace Apa {
 
         try {
             switch (ca.command) {
+                case Get.DO:
+                    check_pk_is_not_running ();
+                    check_is_root (ca.command);
+                    return yield @do (ca);
+
                 case Get.UPDATE:
                     check_pk_is_not_running ();
                     check_is_root (ca.command);
@@ -53,6 +58,11 @@ namespace Apa {
                     check_pk_is_not_running ();
                     check_is_root (ca.command);
                     return yield install (ca);
+
+                case Get.REINSTALL:
+                    check_pk_is_not_running ();
+                    check_is_root (ca.command);
+                    return yield reinstall (ca);
 
                 case Get.REMOVE:
                     check_pk_is_not_running ();

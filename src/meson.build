@@ -7,9 +7,11 @@ apa_no_main_code_sources = files (
   'apt/apt-get.vala',
   'apt/apt-repo.vala',
 
+  'apa/do.vala',
   'apa/info.vala',
   'apa/install.vala',
   'apa/moo.vala',
+  'apa/reinstall.vala',
   'apa/remove.vala',
   'apa/source.vala',
   'apa/update.vala',

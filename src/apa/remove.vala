@@ -17,63 +17,53 @@
 
 namespace Apa {
     internal async int remove (owned CommandArgs ca) throws CommandError {
+        foreach (string package_name in ca.command_argv) {
+            if (package_name.has_suffix ("-") || package_name.has_suffix ("+")) {
+                print_error (_("For operation like '<package>+/- use 'do' commad instead'"));
+                return Constants.ExitCode.BASE_ERROR;
+            }
+        }
+
         while (true) {
             var error = new Gee.ArrayList<string> ();
             var status = yield Get.remove (ca.command_argv, ca.options, ca.arg_options, error);
 
             if (status != Constants.ExitCode.SUCCESS && error.size > 0) {
                 string error_message = normalize_error (error);
-                string? package;
-
-                switch (detect_error (error_message, out package)) {
+                string? package_error_source;
+                switch (detect_error (error_message, out package_error_source)) {
                     case OriginErrorType.COULDNT_FIND_PACKAGE:
-                        print (_("Some packages not found"));
+                        var package_name_straight = package_error_source.replace ("-", "");
 
                         var installed_result = new Gee.ArrayList<string> ();
                         yield Rpm.list ({ "-s" }, {}, installed_result);
 
-                        for (int arg_i = 0; arg_i < ca.command_argv.length; arg_i++) {
-                            var package_name = ca.command_argv[arg_i];
+                        string[]? possible_package_names = fuzzy_search (package_name_straight, installed_result.to_array ());
 
-                            if (package_name in installed_result) {
-                                continue;
-                            }
+                        if (possible_package_names == null) {
+                            print_error (_("Package '%s' not found").printf (package_error_source));
+                            return status;
+                        }
 
-                            var package_name_straight = package_name.replace ("-", "");
+                        print (_("Package %s not found, but packages with a similar name were found:").printf (package_error_source));
+                        string? answer;
+                        var result = give_choice (possible_package_names, _("remove"), out answer);
 
-                            string[]? possible_package_names = fuzzy_search (package_name_straight, installed_result.to_array ());
-
-                            if (possible_package_names == null) {
-                                print_error (_("Package '%s' not found").printf (package_name));
-                                return status;
-                            }
-
-                            print (_("A packages with a similar name were found:"));
-                            string? answer;
-                            var result = give_choice (possible_package_names, _("remove"), out answer);
-
-                            bool skipped = false;
-                            switch (result) {
-                                case ChoiceResult.SKIP:
-                                    remove_element_from_array_by_index (ref ca.command_argv, arg_i);
-                                    skipped = true;
-                                    if (ca.command_argv.length == 0) {
-                                        print (_("There are no packages left to remove"));
-                                        return 0;
-                                    }
-                                    break;
-
-                                case ChoiceResult.CHOSEN:
-                                    ca.command_argv[arg_i] = answer;
-                                    break;
-
-                                case ChoiceResult.EXIT:
-                                    return status;
-                            }
-
-                            if (skipped) {
+                        switch (result) {
+                            case ChoiceResult.SKIP:
+                                remove_element_from_array (ref ca.command_argv, package_error_source);
+                                if (ca.command_argv.length == 0) {
+                                    print (_("There are no packages left to remove"));
+                                    return 0;
+                                }
                                 break;
-                            }
+
+                            case ChoiceResult.CHOSEN:
+                                replace_strings_in_array (ref ca.command_argv, package_error_source, answer.split (" ")[0]);
+                                break;
+
+                            case ChoiceResult.EXIT:
+                                return status;
                         }
                         break;
 

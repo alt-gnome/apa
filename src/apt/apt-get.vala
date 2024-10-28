@@ -21,14 +21,18 @@ public sealed class Apa.Get : Origin {
 
     public const string UPDATE = "update";
     public const string UPGRADE = "upgrade";
+    public const string DO = "do";
     public const string INSTALL = "install";
+    public const string REINSTALL = "reinstall";
     public const string REMOVE = "remove";
     public const string SOURCE = "source";
 
     public const string[] COMMANDS = {
         UPDATE,
         UPGRADE,
+        DO,
         INSTALL,
+        REINSTALL,
         REMOVE,
         SOURCE,
     };
@@ -154,6 +158,71 @@ public sealed class Apa.Get : Origin {
         return yield spawn_command (spawn_arr, error);
     }
 
+    public static async int @do (
+        string[] packages,
+        string[] options = {},
+        ArgOption?[] arg_options = {},
+        Gee.ArrayList<string>? error = null,
+        bool ignore_unknown_options = false
+    ) throws CommandError {
+        if (packages.length == 0) {
+            throw new CommandError.NO_PACKAGES (_("No packages to do"));
+        }
+
+        foreach (string package in packages) {
+            if (package[package.length - 1] != '-' && package[package.length - 1] != '+') {
+                throw new CommandError.NO_PACKAGES (_("Don't know what to do with %s").printf (package));
+            }
+        }
+
+        return yield new Get ().internal_install (packages, options, arg_options, error, ignore_unknown_options);
+    }
+
+    public async int internal_do (
+        string[] packages,
+        string[] options = {},
+        ArgOption?[] arg_options = {},
+        Gee.ArrayList<string>? error = null,
+        bool ignore_unknown_options = false
+    ) throws CommandError {
+        current_options.add_all_array (options);
+        current_arg_options.add_all_array (arg_options);
+
+        set_common_options ();
+        set_options (
+            ref spawn_arr,
+            current_options,
+            current_arg_options,
+            {
+                {
+                    "-d", "--download-only",
+                    "-d"
+                },
+                {
+                    "-D", "--with-dependecies",
+                    "-D"
+                },
+                {
+                    "-F", "--force",
+                    "--reinstall"
+                },
+                {
+                    "-r", "--reinstall",
+                    "--reinstall"
+                }
+            }
+        );
+
+        if (!ignore_unknown_options) {
+            post_set_check ();
+        }
+
+        spawn_arr.add (INSTALL);
+        spawn_arr.add_all_array (packages);
+
+        return yield spawn_command (spawn_arr, error);
+    }
+
     public static async int install (
         string[] packages,
         string[] options = {},
@@ -162,7 +231,6 @@ public sealed class Apa.Get : Origin {
         bool ignore_unknown_options = false
     ) throws CommandError {
         if (packages.length == 0) {
-            Help.print_install ();
             throw new CommandError.NO_PACKAGES (_("No packages to install"));
         }
 
@@ -188,6 +256,14 @@ public sealed class Apa.Get : Origin {
                 {
                     "-d", "--download-only",
                     "-d"
+                },
+                {
+                    "-F", "--force",
+                    "--reinstall"
+                },
+                {
+                    "-r", "--reinstall",
+                    "--reinstall"
                 }
             }
         );
@@ -210,7 +286,6 @@ public sealed class Apa.Get : Origin {
         bool ignore_unknown_options = false
     ) throws CommandError {
         if (packages.length == 0) {
-            Help.print_remove ();
             throw new CommandError.NO_PACKAGES (_("No packages to remove"));
         }
 
@@ -258,7 +333,6 @@ public sealed class Apa.Get : Origin {
         bool ignore_unknown_options = false
     ) throws CommandError {
         if (packages.length == 0) {
-            Help.print_source ();
             throw new CommandError.NO_PACKAGES (_("No packages to download"));
         }
 

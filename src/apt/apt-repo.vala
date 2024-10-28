@@ -67,7 +67,6 @@ public sealed class Apa.Repo : Origin {
         bool ignore_unknown_options = false
     ) throws CommandError {
         if (tasks.length == 0) {
-            Help.print_test ();
             throw new CommandError.NO_PACKAGES (_("No packages to install"));
         }
 
