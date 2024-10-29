@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: apa\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-18 15:15+0300\n"
+"POT-Creation-Date: 2024-10-29 11:02+0300\n"
 "PO-Revision-Date: 2024-10-18 11:04+0300\n"
 "Last-Translator: Vladimir Vaskov <rirusha@altlinux.org>\n"
 "Language-Team: Russian <rirusha@altlinux.org>\n"
@@ -21,65 +21,271 @@ msgstr ""
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Gtranslator 47.0\n"
 
-#: src/alt/apt-cache.vala:47 src/alt/apt-get.vala:59 src/alt/apt-get.vala:92
-#: src/alt/apt-get.vala:119 src/apa/rpm.vala:45 src/apa/rpm.vala:72
+#: src/apa/do.vala:22
 #, c-format
-msgid "Unknown option '%s'"
-msgstr "Неизвестная опция '%s'"
+msgid "Unknown operation '%c' in '%s'"
+msgstr "Неизвестная операция '%c' в '%s'"
 
-#: src/alt/apt-get.vala:23
+#: src/apa/do.vala:73 src/apa/install.vala:57 src/apa/remove.vala:48
+#, c-format
+msgid "Package '%s' not found, but packages with a similar name were found:"
+msgstr "Пакет '%s' не найден, но были найдены пакеты с похожим названием:"
+
+#: src/apa/do.vala:75 src/apa/remove.vala:50
+msgid "remove"
+msgstr "удалить"
+
+#: src/apa/do.vala:81
+msgid "There are no packages left to do"
+msgstr ""
+
+#: src/apa/do.vala:121 src/apa/install.vala:59 src/apa/install.vala:100
 msgid "install"
 msgstr "установить"
 
-#: src/apa.vala:78 src/apa.vala:213
+#: src/apa/do.vala:127 src/apa/install.vala:65 src/apa/install.vala:106
+msgid "There are no packages left to install"
+msgstr "Не осталось пакетов для установки"
+
+#: src/apa/do.vala:146 src/apa/install.vala:121
+msgid "APT is currently busy"
+msgstr "APT в данный момент занят"
+
+#: src/apa/do.vala:151 src/apa/info.vala:31 src/apa/install.vala:126
+#: src/apa/remove.vala:72 src/apa/source.vala:31 src/apa/update.vala:31
+#: src/apa/upgrade.vala:38
 #, c-format
-msgid "Unknown command '%s'"
-msgstr "Неизвестная команда '%s'"
+msgid "Unknown error message: '%s'"
+msgstr "Сообщение о неизвестной ошибке: '%s'"
 
-#: src/apa.vala:91
-#, c-format
-msgid "Couldn't find package %s"
-msgstr "Невозможно найти пакет %s"
+#: src/apa/install.vala:22 src/apa/remove.vala:22
+msgid "For operation like '<package>+/-' use 'do' command instead"
+msgstr ""
+"Для такой операции, как '<пакет>+/-' используйте вместо этого команду 'do'"
 
-#: src/apa.vala:103
-msgid "Some packages wasn't found"
-msgstr "Некоторые пакеты не были найдены"
-
-#: src/apa.vala:139
+#: src/apa/install.vala:53 src/apa/remove.vala:44
 #, c-format
 msgid "Package '%s' not found"
 msgstr "Пакет '%s' не найден"
 
-#: src/apa.vala:148
-msgid "A packages with a similar name found:"
-msgstr "Пакет с похожим именем найден:"
+#: src/apa/moo.vala:65
+msgid "With great moower comes great resmoonsibility"
+msgstr ""
 
-#: src/apa.vala:158
-msgid "Choose which on to install: [1 by default, 0 to exit] "
-msgstr "Выберите, какой установить: [1 по-умолчанию, 0 для выхода] "
+#: src/apa/moo.vala:66
+msgid "I am your Moother"
+msgstr ""
 
-#: src/apa.vala:188
+#: src/apa/moo.vala:67
+msgid "I use ALT btw..."
+msgstr ""
+
+#: src/apa/moo.vala:68
+msgid "Have you mooed today?"
+msgstr ""
+
+#: src/apa/remove.vala:56
+msgid "There are no packages left to remove"
+msgstr "Больше не осталось пакетов, которые нужно было бы удалить"
+
+#: src/apa/upgrade.vala:23
+msgid "Can't update"
+msgstr "Не удается обновить"
+
+#: src/apa.vala:107 src/help.vala:70
 #, c-format
-msgid "Info for '%s':"
-msgstr "Информация по '%s':"
+msgid "Unknown command '%s'"
+msgstr "Неизвестная команда '%s'"
 
-#: src/apa.vala:214
-msgid "Try `apa --help` to see all commands"
-msgstr "Попробуйте `apa --help` чтобы посмотреть все команды"
-
-#: src/apa.vala:234
+#: src/apa.vala:123
 #, c-format
 msgid "Need root previlegies for '%s' command"
 msgstr "Нужны привелегии суперпользователя для команды '%s'"
 
-#: src/apa.vala:235 src/apa.vala:249
-msgid "Aborting."
-msgstr "Отмена."
+#: src/apa.vala:136
+msgid "PackageKit is running"
+msgstr "Запущен PackageKit"
 
-#: src/apa.vala:248
-msgid "No internet connection"
-msgstr "Нет интернет соединения"
+#: src/apt/apt-cache.vala:89
+msgid "No packages to search"
+msgstr "Нет пакетов для поиска"
 
+#: src/apt/apt-get.vala:169
+#, fuzzy
+msgid "No packages to do"
+msgstr "Нет пакетов для оперирования"
+
+#: src/apt/apt-get.vala:174
 #, c-format
-#~ msgid "Command line option '%s' is not known.\n"
-#~ msgstr "Неизвестная опция '%s'\n"
+msgid "It's not known what to do with %s"
+msgstr "Неизвестно, что делать с %s"
+
+#: src/apt/apt-get.vala:234 src/apt/apt-repo.vala:70
+msgid "No packages to install"
+msgstr "Нет пакетов для установки"
+
+#: src/apt/apt-get.vala:289
+msgid "No packages to remove"
+msgstr "Нет пакетов для удаления"
+
+#: src/apt/apt-get.vala:336
+msgid "No packages to download"
+msgstr "Нет пакетов для загрузки"
+
+#: src/help.vala:78
+msgid "Usage:"
+msgstr "Использование:"
+
+#: src/help.vala:90 src/help.vala:132
+msgid "Common options:"
+msgstr "Общие параметры:"
+
+#: src/help.vala:94 src/help.vala:136
+msgid "Hide progress bar for logging"
+msgstr "Скрыть индикатор выполнения для ведения журнала"
+
+#: src/help.vala:98
+msgid "Hide any command output"
+msgstr "Скрыть любой вывод команды"
+
+#: src/help.vala:102
+msgid "Simulate command execution"
+msgstr "Имитировать выполнение команды"
+
+#: src/help.vala:106
+msgid "Always 'yes'"
+msgstr "Всегда 'да'"
+
+#: src/help.vala:110
+msgid "Try to fix"
+msgstr "Попытаться починить"
+
+#: src/help.vala:114
+msgid "Ignore missing packages"
+msgstr "Игнорировать отсутствующие пакеты"
+
+#: src/help.vala:118
+msgid "Display detailed packages version"
+msgstr "Отображение подробной версии пакетов"
+
+#: src/help.vala:122 src/help.vala:152
+msgid "Read configuration file"
+msgstr "Чтение конфигурационного файла"
+
+#: src/help.vala:126 src/help.vala:156
+msgid "Set an arbitary configuration option, eg -o=dir::cache=/tmp"
+msgstr ""
+"Установка произвольного параметра конфигурации, например -o=dir::cache=/tmp"
+
+#: src/help.vala:140
+msgid "Show only important dependencies for the unmet command"
+msgstr "Показывать только важные зависимости для невыполненной команды"
+
+#: src/help.vala:144
+msgid "The source cache"
+msgstr "Исходный кэш"
+
+#: src/help.vala:148
+msgid "The package cache"
+msgstr "Кэш пакета"
+
+#: src/help.vala:163
+msgctxt "update command"
+msgid "Command for update"
+msgstr "Команда для обновления баз пакетов"
+
+#: src/help.vala:170
+msgctxt "upgrade command"
+msgid "Command for upgrade"
+msgstr "Команда для обновления всех пакетов"
+
+#: src/help.vala:177
+msgctxt "instal command"
+msgid "Command for install"
+msgstr "Команда для установки"
+
+#: src/help.vala:184
+msgctxt "remove command"
+msgid "Command for remove"
+msgstr "Команда для удаления"
+
+#: src/help.vala:191
+msgctxt "source command"
+msgid "Command for source"
+msgstr ""
+
+#: src/help.vala:198
+msgctxt "search command"
+msgid "Command for search"
+msgstr "Команда для поиска"
+
+#: src/help.vala:205
+msgctxt "version command"
+msgid "Display APA version"
+msgstr "Отображать версию APA"
+
+#: src/help.vala:211
+msgid ""
+"APA — ALT Packages Assistant. Your best friend in this cruel world of many "
+"package tools."
+msgstr ""
+"APA — ALT Packages Assistant. Ваш лучший друг в этом жестоком мире множества "
+"инструментов для упаковки."
+
+#: src/help.vala:214
+msgid "Commands:"
+msgstr "Команды:"
+
+#: src/help.vala:232 src/help.vala:250 src/help.vala:264 src/help.vala:278
+msgid "Command options:"
+msgstr "Параметры команды:"
+
+#: src/help.vala:236 src/help.vala:254
+msgid "Only download packages, without installing"
+msgstr "Только загружайте пакеты, не устанавливая их"
+
+#: src/help.vala:240
+msgid "Display upgraded packages"
+msgstr "Отображение обновленных пакетов"
+
+#: src/help.vala:268
+msgid "Remove with dependencies"
+msgstr "Удалить с зависимостями"
+
+#: src/help.vala:282
+msgid "Build packages"
+msgstr ""
+
+#: src/help.vala:299
+msgctxt "cow"
+msgid "Mooage:"
+msgstr ""
+
+#: src/origin.vala:38
+#, c-format
+msgid "Unknown option '%s'"
+msgstr "Неизвестная опция '%s'"
+
+#: src/origin.vala:41
+#, c-format
+msgid "Unknown option with value '%s'"
+msgstr "Неизвестный параметр со значением '%s'"
+
+#: src/rpm/rpm.vala:91
+msgid "No packages to show"
+msgstr "Никаких пакетов для отображения"
+
+#: src/utils.vala:42
+msgid "<skip package>"
+msgstr "<пропустить пакет>"
+
+#: src/utils.vala:206
+#, c-format
+msgid "Choose package to %s: (0 to exit, -1 to skip) "
+msgstr "Выберите, какой пакет %s: (0 для выхода, -1 для пропуска)"
+
+#: src/utils.vala:277
+msgid "You can create issue here https://github.com/alt-gnome/apa/issues"
+msgstr ""
+"Вы можете создать Задачу (Проблему) здесь https://github.com/alt-gnome/apa/"
+"issues"

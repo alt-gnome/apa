@@ -203,7 +203,7 @@ namespace Apa {
         print ("");
 
         while (true) {
-            print (_("Choose which on to %s: (0 to exit, -1 to skip) ").printf (action_name), false);
+            print (_("Choose package to %s: (0 to exit, -1 to skip) ").printf (action_name), false);
             var input = stdin.read_line ().strip ();
 
             if (input == "") {

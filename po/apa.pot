@@ -8,70 +8,273 @@ msgid ""
 msgstr ""
 "Project-Id-Version: apa\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-18 15:15+0300\n"
+"POT-Creation-Date: 2024-10-29 11:02+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/alt/apt-cache.vala:47 src/alt/apt-get.vala:59 src/alt/apt-get.vala:92
-#: src/alt/apt-get.vala:119 src/apa/rpm.vala:45 src/apa/rpm.vala:72
+#: src/apa/do.vala:22
 #, c-format
-msgid "Unknown option '%s'"
+msgid "Unknown operation '%c' in '%s'"
 msgstr ""
 
-#: src/alt/apt-get.vala:23
+#: src/apa/do.vala:73 src/apa/install.vala:57 src/apa/remove.vala:48
+#, c-format
+msgid "Package '%s' not found, but packages with a similar name were found:"
+msgstr ""
+
+#: src/apa/do.vala:75 src/apa/remove.vala:50
+msgid "remove"
+msgstr ""
+
+#: src/apa/do.vala:81
+msgid "There are no packages left to do"
+msgstr ""
+
+#: src/apa/do.vala:121 src/apa/install.vala:59 src/apa/install.vala:100
 msgid "install"
 msgstr ""
 
-#: src/apa.vala:78 src/apa.vala:213
+#: src/apa/do.vala:127 src/apa/install.vala:65 src/apa/install.vala:106
+msgid "There are no packages left to install"
+msgstr ""
+
+#: src/apa/do.vala:146 src/apa/install.vala:121
+msgid "APT is currently busy"
+msgstr ""
+
+#: src/apa/do.vala:151 src/apa/info.vala:31 src/apa/install.vala:126
+#: src/apa/remove.vala:72 src/apa/source.vala:31 src/apa/update.vala:31
+#: src/apa/upgrade.vala:38
 #, c-format
-msgid "Unknown command '%s'"
+msgid "Unknown error message: '%s'"
 msgstr ""
 
-#: src/apa.vala:91
-#, c-format
-msgid "Couldn't find package %s"
+#: src/apa/install.vala:22 src/apa/remove.vala:22
+msgid "For operation like '<package>+/-' use 'do' command instead"
 msgstr ""
 
-#: src/apa.vala:103
-msgid "Some packages wasn't found"
-msgstr ""
-
-#: src/apa.vala:139
+#: src/apa/install.vala:53 src/apa/remove.vala:44
 #, c-format
 msgid "Package '%s' not found"
 msgstr ""
 
-#: src/apa.vala:148
-msgid "A packages with a similar name found:"
+#: src/apa/moo.vala:65
+msgid "With great moower comes great resmoonsibility"
 msgstr ""
 
-#: src/apa.vala:158
-msgid "Choose which on to install: [1 by default, 0 to exit] "
+#: src/apa/moo.vala:66
+msgid "I am your Moother"
 msgstr ""
 
-#: src/apa.vala:188
+#: src/apa/moo.vala:67
+msgid "I use ALT btw..."
+msgstr ""
+
+#: src/apa/moo.vala:68
+msgid "Have you mooed today?"
+msgstr ""
+
+#: src/apa/remove.vala:56
+msgid "There are no packages left to remove"
+msgstr ""
+
+#: src/apa/upgrade.vala:23
+msgid "Can't update"
+msgstr ""
+
+#: src/apa.vala:107 src/help.vala:70
 #, c-format
-msgid "Info for '%s':"
+msgid "Unknown command '%s'"
 msgstr ""
 
-#: src/apa.vala:214
-msgid "Try `apa --help` to see all commands"
-msgstr ""
-
-#: src/apa.vala:234
+#: src/apa.vala:123
 #, c-format
 msgid "Need root previlegies for '%s' command"
 msgstr ""
 
-#: src/apa.vala:235 src/apa.vala:249
-msgid "Aborting."
+#: src/apa.vala:136
+msgid "PackageKit is running"
 msgstr ""
 
-#: src/apa.vala:248
-msgid "No internet connection"
+#: src/apt/apt-cache.vala:89
+msgid "No packages to search"
+msgstr ""
+
+#: src/apt/apt-get.vala:169
+msgid "No packages to do"
+msgstr ""
+
+#: src/apt/apt-get.vala:174
+#, c-format
+msgid "It's not known what to do with %s"
+msgstr ""
+
+#: src/apt/apt-get.vala:234 src/apt/apt-repo.vala:70
+msgid "No packages to install"
+msgstr ""
+
+#: src/apt/apt-get.vala:289
+msgid "No packages to remove"
+msgstr ""
+
+#: src/apt/apt-get.vala:336
+msgid "No packages to download"
+msgstr ""
+
+#: src/help.vala:78
+msgid "Usage:"
+msgstr ""
+
+#: src/help.vala:90 src/help.vala:132
+msgid "Common options:"
+msgstr ""
+
+#: src/help.vala:94 src/help.vala:136
+msgid "Hide progress bar for logging"
+msgstr ""
+
+#: src/help.vala:98
+msgid "Hide any command output"
+msgstr ""
+
+#: src/help.vala:102
+msgid "Simulate command execution"
+msgstr ""
+
+#: src/help.vala:106
+msgid "Always 'yes'"
+msgstr ""
+
+#: src/help.vala:110
+msgid "Try to fix"
+msgstr ""
+
+#: src/help.vala:114
+msgid "Ignore missing packages"
+msgstr ""
+
+#: src/help.vala:118
+msgid "Display detailed packages version"
+msgstr ""
+
+#: src/help.vala:122 src/help.vala:152
+msgid "Read configuration file"
+msgstr ""
+
+#: src/help.vala:126 src/help.vala:156
+msgid "Set an arbitary configuration option, eg -o=dir::cache=/tmp"
+msgstr ""
+
+#: src/help.vala:140
+msgid "Show only important dependencies for the unmet command"
+msgstr ""
+
+#: src/help.vala:144
+msgid "The source cache"
+msgstr ""
+
+#: src/help.vala:148
+msgid "The package cache"
+msgstr ""
+
+#: src/help.vala:163
+msgctxt "update command"
+msgid "Command for update"
+msgstr ""
+
+#: src/help.vala:170
+msgctxt "upgrade command"
+msgid "Command for upgrade"
+msgstr ""
+
+#: src/help.vala:177
+msgctxt "instal command"
+msgid "Command for install"
+msgstr ""
+
+#: src/help.vala:184
+msgctxt "remove command"
+msgid "Command for remove"
+msgstr ""
+
+#: src/help.vala:191
+msgctxt "source command"
+msgid "Command for source"
+msgstr ""
+
+#: src/help.vala:198
+msgctxt "search command"
+msgid "Command for search"
+msgstr ""
+
+#: src/help.vala:205
+msgctxt "version command"
+msgid "Display APA version"
+msgstr ""
+
+#: src/help.vala:211
+msgid ""
+"APA — ALT Packages Assistant. Your best friend in this cruel world of many "
+"package tools."
+msgstr ""
+
+#: src/help.vala:214
+msgid "Commands:"
+msgstr ""
+
+#: src/help.vala:232 src/help.vala:250 src/help.vala:264 src/help.vala:278
+msgid "Command options:"
+msgstr ""
+
+#: src/help.vala:236 src/help.vala:254
+msgid "Only download packages, without installing"
+msgstr ""
+
+#: src/help.vala:240
+msgid "Display upgraded packages"
+msgstr ""
+
+#: src/help.vala:268
+msgid "Remove with dependencies"
+msgstr ""
+
+#: src/help.vala:282
+msgid "Build packages"
+msgstr ""
+
+#: src/help.vala:299
+msgctxt "cow"
+msgid "Mooage:"
+msgstr ""
+
+#: src/origin.vala:38
+#, c-format
+msgid "Unknown option '%s'"
+msgstr ""
+
+#: src/origin.vala:41
+#, c-format
+msgid "Unknown option with value '%s'"
+msgstr ""
+
+#: src/rpm/rpm.vala:91
+msgid "No packages to show"
+msgstr ""
+
+#: src/utils.vala:42
+msgid "<skip package>"
+msgstr ""
+
+#: src/utils.vala:206
+#, c-format
+msgid "Choose package to %s: (0 to exit, -1 to skip) "
+msgstr ""
+
+#: src/utils.vala:277
+msgid "You can create issue here https://github.com/alt-gnome/apa/issues"
 msgstr ""
