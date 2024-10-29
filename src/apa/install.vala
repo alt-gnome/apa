@@ -16,8 +16,14 @@
  */
 
 namespace Apa {
-    internal async int install (owned CommandArgs ca) throws CommandError {
-        foreach (string package_name in ca.command_argv) {
+    internal async int install (
+        owned Gee.ArrayList<string> packages,
+        owned Gee.ArrayList<string> options,
+        owned Gee.ArrayList<ArgOption?> arg_options
+    ) throws CommandError {
+        var error = new Gee.ArrayList<string> ();
+
+        foreach (string package_name in packages) {
             if (package_name.has_suffix ("-") || package_name.has_suffix ("+")) {
                 print_error (_("For operation like '<package>+/- use 'do' commad instead'"));
                 return Constants.ExitCode.BASE_ERROR;
@@ -25,8 +31,8 @@ namespace Apa {
         }
 
         while (true) {
-            var error = new Gee.ArrayList<string> ();
-            var status = yield Get.install (ca.command_argv, ca.options, ca.arg_options, error);
+            error.clear ();
+            var status = yield Get.install (packages, options, arg_options, error);
 
             if (status != Constants.ExitCode.SUCCESS && error.size > 0) {
                 string error_message = normalize_error (error);
@@ -38,9 +44,9 @@ namespace Apa {
 
                         var search_result = new Gee.ArrayList<string> ();
                         yield Cache.search (
-                            { string.joinv (".*", split_chars (package_name_straight)) },
-                            { "--names-only" },
-                            ca.arg_options,
+                            new Gee.ArrayList<string>.wrap ({ string.joinv (".*", split_chars (package_name_straight)) }),
+                            new Gee.ArrayList<string>.wrap ({ "--names-only" }),
+                            arg_options,
                             search_result,
                             null,
                             true
@@ -60,15 +66,15 @@ namespace Apa {
 
                         switch (result) {
                             case ChoiceResult.SKIP:
-                                remove_element_from_array (ref ca.command_argv, package_error_source);
-                                if (ca.command_argv.length == 0) {
+                                packages.remove (package_error_source);
+                                if (packages.size == 0) {
                                     print (_("There are no packages left to install"));
                                     return 0;
                                 }
                                 break;
 
                             case ChoiceResult.CHOSEN:
-                                replace_strings_in_array (ref ca.command_argv, package_error_source, answer.split (" ")[0]);
+                                replace_strings_in_array_list (ref packages, package_error_source, answer.split (" ")[0]);
                                 break;
 
                             case ChoiceResult.EXIT:
@@ -80,36 +86,36 @@ namespace Apa {
                         error_message = error_message[0:error_message.length - 2] + ":";
                         print (error_message);
 
-                        var packages = new Gee.ArrayList<string> ();
+                        var choice_packages = new Gee.ArrayList<string> ();
                         foreach (var err in error) {
                             if (err.has_prefix ("  ")) {
                                 string[] strs = err.strip ().split (" ");
                                 if (strs[strs.length - 1].has_suffix ("]") && strs[strs.length - 1].has_prefix ("[")) {
-                                    packages.add ("%s (%s)".printf (
+                                    choice_packages.add ("%s (%s)".printf (
                                         strs[0],
                                         strs[strs.length - 1][1: strs[strs.length - 1].length - 1]
                                     ));
 
                                 } else {
-                                    packages.add (strs[0]);
+                                    choice_packages.add (strs[0]);
                                 }
                             }
                         }
 
                         string? answer;
-                        var result = give_choice (packages.to_array (), _("install"), out answer);
+                        var result = give_choice (choice_packages.to_array (), _("install"), out answer);
 
                         switch (result) {
                             case ChoiceResult.SKIP:
-                                remove_element_from_array (ref ca.command_argv, package_error_source);
-                                if (ca.command_argv.length == 0) {
+                                packages.remove (package_error_source);
+                                if (packages.size == 0) {
                                     print (_("There are no packages left to install"));
                                     return 0;
                                 }
                                 break;
 
                             case ChoiceResult.CHOSEN:
-                                replace_strings_in_array (ref ca.command_argv, package_error_source, answer.split (" ")[0]);
+                                replace_strings_in_array_list (ref packages, package_error_source, answer.split (" ")[0]);
                                 break;
 
                             case ChoiceResult.EXIT:

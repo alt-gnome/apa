@@ -23,9 +23,9 @@ public struct Apa.ArgOption {
 public struct Apa.CommandArgs {
 
     public string? command;
-    public string[] options;
-    public ArgOption?[] arg_options;
-    public string[] command_argv;
+    public Gee.ArrayList<string> options;
+    public Gee.ArrayList<ArgOption?> arg_options;
+    public Gee.ArrayList<string> command_argv;
 
     public static CommandArgs parse (string[] argv) {
         string? command = null;
@@ -58,9 +58,9 @@ public struct Apa.CommandArgs {
 
         return {
             command,
-            options_array.to_array (),
-            (ArgOption?[]) arg_options_array.to_array (),
-            command_argv_array.to_array ()
+            options_array,
+            arg_options_array,
+            command_argv_array
         };
     }
 }

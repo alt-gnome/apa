@@ -16,8 +16,12 @@
  */
 
 namespace Apa {
-    internal async int remove (owned CommandArgs ca) throws CommandError {
-        foreach (string package_name in ca.command_argv) {
+    internal async int remove (
+        owned Gee.ArrayList<string> packages,
+        owned Gee.ArrayList<string> options,
+        owned Gee.ArrayList<ArgOption?> arg_options
+    ) throws CommandError {
+        foreach (string package_name in packages) {
             if (package_name.has_suffix ("-") || package_name.has_suffix ("+")) {
                 print_error (_("For operation like '<package>+/- use 'do' commad instead'"));
                 return Constants.ExitCode.BASE_ERROR;
@@ -26,7 +30,7 @@ namespace Apa {
 
         while (true) {
             var error = new Gee.ArrayList<string> ();
-            var status = yield Get.remove (ca.command_argv, ca.options, ca.arg_options, error);
+            var status = yield Get.remove (packages, options, arg_options, error);
 
             if (status != Constants.ExitCode.SUCCESS && error.size > 0) {
                 string error_message = normalize_error (error);
@@ -36,7 +40,11 @@ namespace Apa {
                         var package_name_straight = package_error_source.replace ("-", "");
 
                         var installed_result = new Gee.ArrayList<string> ();
-                        yield Rpm.list ({ "-s" }, {}, installed_result);
+                        yield Rpm.list (
+                            new Gee.ArrayList<string>.wrap ({ "-s" }),
+                            new Gee.ArrayList<ArgOption?> (),
+                            installed_result
+                        );
 
                         string[]? possible_package_names = fuzzy_search (package_name_straight, installed_result.to_array ());
 
@@ -51,21 +59,29 @@ namespace Apa {
 
                         switch (result) {
                             case ChoiceResult.SKIP:
-                                remove_element_from_array (ref ca.command_argv, package_error_source);
-                                if (ca.command_argv.length == 0) {
+                                packages.remove (package_error_source);
+                                if (packages.size == 0) {
                                     print (_("There are no packages left to remove"));
                                     return 0;
                                 }
                                 break;
 
                             case ChoiceResult.CHOSEN:
-                                replace_strings_in_array (ref ca.command_argv, package_error_source, answer.split (" ")[0]);
+                                replace_strings_in_array_list (
+                                    ref packages,
+                                    package_error_source,
+                                    answer.split (" ")[0]
+                                );
                                 break;
 
                             case ChoiceResult.EXIT:
                                 return status;
                         }
                         break;
+
+                    case OriginErrorType.UNABLE_TO_LOCK_DOWNLOAD_DIR:
+                        print_error (_("APT is currently busy"));
+                        return status;
 
                     case OriginErrorType.NONE:
                     default:

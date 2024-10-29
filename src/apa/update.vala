@@ -16,16 +16,26 @@
  */
 
 namespace Apa {
-    internal async int update (owned CommandArgs ca, bool ignore_unknown_options = false) throws CommandError {
+    internal async int update (
+        owned Gee.ArrayList<string> options,
+        owned Gee.ArrayList<ArgOption?> arg_options,
+        bool ignore_unknown_options = false
+    ) throws CommandError {
+        var error = new Gee.ArrayList<string> ();
+
         while (true) {
-            var error = new Gee.ArrayList<string> ();
-            var status = yield Get.update (ca.options, ca.arg_options, error, ignore_unknown_options);
+            error.clear ();
+            var status = yield Get.update (options, arg_options, error, ignore_unknown_options);
 
             if (status != Constants.ExitCode.SUCCESS && error.size > 0) {
                 string error_message = normalize_error (error);
                 string? package;
 
                 switch (detect_error (error_message, out package)) {
+                    case OriginErrorType.UNABLE_TO_LOCK_DOWNLOAD_DIR:
+                        print_error (_("APT is currently busy"));
+                        return status;
+
                     case OriginErrorType.NONE:
                     default:
                         print_error (_("Unknown error message: '%s'").printf (error_message));

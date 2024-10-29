@@ -16,10 +16,14 @@
  */
 
 namespace Apa {
-    internal async int info (CommandArgs ca) throws CommandError {
+    internal async int info (
+        owned Gee.ArrayList<string> packages,
+        owned Gee.ArrayList<string> options,
+        owned Gee.ArrayList<ArgOption?> arg_options
+    ) throws CommandError {
         while (true) {
             var error = new Gee.ArrayList<string> ();
-            var status = yield Rpm.info (ca.command_argv, ca.options, ca.arg_options, null, error);
+            var status = yield Rpm.info (packages, options, arg_options, null, error);
 
             if (status != Constants.ExitCode.SUCCESS && error.size > 0) {
                 string error_message = normalize_error (error);

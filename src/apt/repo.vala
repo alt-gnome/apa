@@ -60,28 +60,34 @@ public sealed class Apa.Repo : Origin {
     }
 
     public static async int test (
-        string[] tasks,
-        string[] options = {},
-        ArgOption?[] arg_options = {},
+        Gee.ArrayList<string> tasks,
+        Gee.ArrayList<string> options,
+        Gee.ArrayList<ArgOption?> arg_options,
         Gee.ArrayList<string>? error = null,
         bool ignore_unknown_options = false
     ) throws CommandError {
-        if (tasks.length == 0) {
+        if (tasks.size == 0) {
             throw new CommandError.NO_PACKAGES (_("No packages to install"));
         }
 
-        return yield new Repo ().internal_test (tasks, options, arg_options, error, ignore_unknown_options);
+        return yield new Repo ().internal_test (
+            tasks,
+            options,
+            arg_options,
+            error,
+            ignore_unknown_options
+        );
     }
 
     public async int internal_test (
-        string[] tasks,
-        string[] options = {},
-        ArgOption?[] arg_options = {},
+        Gee.ArrayList<string> tasks,
+        Gee.ArrayList<string> options,
+        Gee.ArrayList<ArgOption?> arg_options,
         Gee.ArrayList<string>? error = null,
         bool ignore_unknown_options = false
     ) throws CommandError {
-        current_options.add_all_array (options);
-        current_arg_options.add_all_array (arg_options);
+        current_options.add_all (options);
+        current_arg_options.add_all (arg_options);
 
         set_common_options ();
 
@@ -90,28 +96,33 @@ public sealed class Apa.Repo : Origin {
         }
 
         spawn_arr.add (TEST);
-        spawn_arr.add_all_array (tasks);
+        spawn_arr.add_all (tasks);
 
         return yield spawn_command (spawn_arr, error);
     }
 
     public static async int repo_list (
-        string[] options = {},
-        ArgOption?[] arg_options = {},
+        Gee.ArrayList<string> options,
+        Gee.ArrayList<ArgOption?> arg_options,
         Gee.ArrayList<string>? error = null,
         bool ignore_unknown_options = false
     ) throws CommandError {
-        return yield new Repo ().internal_repo_list (options, arg_options, error, ignore_unknown_options);
+        return yield new Repo ().internal_repo_list (
+            options,
+            arg_options,
+            error,
+            ignore_unknown_options
+        );
     }
 
     public async int internal_repo_list (
-        string[] options = {},
-        ArgOption?[] arg_options = {},
+        Gee.ArrayList<string> options,
+        Gee.ArrayList<ArgOption?> arg_options,
         Gee.ArrayList<string>? error = null,
         bool ignore_unknown_options = false
     ) throws CommandError {
-        current_options.add_all_array (options);
-        current_arg_options.add_all_array (arg_options);
+        current_options.add_all (options);
+        current_arg_options.add_all (arg_options);
 
         set_common_options ();
         set_options (

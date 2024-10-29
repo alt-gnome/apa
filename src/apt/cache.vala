@@ -68,40 +68,54 @@
     }
 
     public static async int list_all (
-        string[] options = {},
-        ArgOption?[] arg_options = {},
+        Gee.ArrayList<string> options,
+        Gee.ArrayList<ArgOption?> arg_options,
         Gee.ArrayList<string>? result = null,
         Gee.ArrayList<string>? error = null,
         bool ignore_unknown_options = false
     ) throws CommandError {
-        return yield new Cache ().internal_search ({"."}, options, arg_options, result, error, ignore_unknown_options);
+        return yield new Cache ().internal_search (
+            new Gee.ArrayList<string>.wrap ({ "." }),
+            options,
+            arg_options,
+            result,
+            error,
+            ignore_unknown_options
+        );
     }
 
     public static async int search (
-        string[] regexs,
-        string[] options = {},
-        ArgOption?[] arg_options = {},
+        Gee.ArrayList<string> regexs,
+        Gee.ArrayList<string> options,
+        Gee.ArrayList<ArgOption?> arg_options,
         Gee.ArrayList<string>? result = null,
         Gee.ArrayList<string>? error = null,
         bool ignore_unknown_options = false
     ) throws CommandError {
-        if (regexs.length == 0) {
+        if (regexs.size == 0) {
             throw new CommandError.NO_PACKAGES (_("Nothing to search"));
         }
 
-        return yield new Cache ().internal_search (regexs, options, arg_options, result, error, ignore_unknown_options);
+        return yield new Cache ().internal_search (
+            regexs,
+            options,
+            arg_options,
+            result,
+            error,
+            ignore_unknown_options
+        );
     }
 
     public async int internal_search (
-        string[] regexs,
-        string[] options = {},
-        ArgOption?[] arg_options = {},
+        Gee.ArrayList<string> regexs,
+        Gee.ArrayList<string> options,
+        Gee.ArrayList<ArgOption?> arg_options,
         Gee.ArrayList<string>? result = null,
         Gee.ArrayList<string>? error = null,
         bool ignore_unknown_options = false
     ) throws CommandError {
-        current_options.add_all_array (options);
-        current_arg_options.add_all_array (arg_options);
+        current_options.add_all (options);
+        current_arg_options.add_all (arg_options);
 
         set_common_options ();
 
@@ -110,7 +124,7 @@
         }
 
         spawn_arr.add (SEARCH);
-        spawn_arr.add_all_array (regexs);
+        spawn_arr.add_all (regexs);
 
         return yield spawn_command_full (spawn_arr, result, error);
     }

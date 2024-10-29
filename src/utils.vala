@@ -27,9 +27,11 @@ public struct Apa.OptionData {
 
 public errordomain Apa.CommandError {
     UNKNOWN_COMMAND,
+    TO_MANY_ARGS,
     UNKNOWN_OPTION,
     NO_PACKAGES,
-    CANT_UPDATE
+    CANT_UPDATE,
+    CANT_UPDATE_KERNEL,
 }
 
 public enum Apa.ChoiceResult {
@@ -222,37 +224,6 @@ namespace Apa {
                 } else if (input_int == 0) {
                     return ChoiceResult.EXIT;
                 }
-            }
-        }
-    }
-
-    public void remove_element_from_array_by_index (ref string[] array, int index) {
-        array.move (index + 1, index, array.length - index + 1);
-        array.resize (array.length - 1);
-    }
-
-    public void remove_element_from_array (ref string[] array, string element) {
-        bool found = false;
-
-        for (int i = 0; i < array.length; i++) {
-            if (array[i] == element) {
-                found = true;
-            }
-
-            if (found && array.length < i + 1) {
-                array[i] = array[i + 1];
-            }
-        }
-
-        if (found) {
-            array.resize (array.length - 1);
-        }
-    }
-
-    public void replace_strings_in_array (ref string[] array, string old_string, string new_string) {
-        for (int i = 0; i < array.length; i++) {
-            if (array[i] == old_string) {
-                array[i] = new_string;
             }
         }
     }

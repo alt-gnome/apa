@@ -3,13 +3,10 @@ vapi_sources = files(
 )
 
 apa_no_main_code_sources = files (
-  'apt/apt-cache.vala',
-  'apt/apt-get.vala',
-  'apt/apt-repo.vala',
-
   'apa/do.vala',
   'apa/info.vala',
   'apa/install.vala',
+  'apa/kernel.vala',
   'apa/moo.vala',
   'apa/reinstall.vala',
   'apa/remove.vala',
@@ -17,11 +14,16 @@ apa_no_main_code_sources = files (
   'apa/update.vala',
   'apa/upgrade.vala',
 
+  'apt/cache.vala',
+  'apt/get.vala',
+  'apt/repo.vala',
+
   'flatpak/flatpak.vala',
 
-  'rpm/rpm.vala',
-
   'snap/snap.vala',
+
+  'utils-commands/rpm.vala',
+  'utils-commands/update-kernel.vala',
 
   'apa.vala',
   'constants.vala',

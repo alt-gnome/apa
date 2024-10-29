@@ -39,38 +39,43 @@ namespace Apa {
 
         try {
             switch (ca.command) {
+                case Kernel.KERNEL:
+                    check_pk_is_not_running ();
+                    check_is_root (ca.command);
+                    return yield kernel (ca.command_argv, ca.options, ca.arg_options);
+
                 case Get.DO:
                     check_pk_is_not_running ();
                     check_is_root (ca.command);
-                    return yield @do (ca);
+                    return yield @do (ca.command_argv, ca.options, ca.arg_options);
 
                 case Get.UPDATE:
                     check_pk_is_not_running ();
                     check_is_root (ca.command);
-                    return yield update (ca);
+                    return yield update (ca.options, ca.arg_options);
 
                 case Get.UPGRADE:
                     check_pk_is_not_running ();
                     check_is_root (ca.command);
-                    return yield upgrade (ca);
+                    return yield upgrade (ca.options, ca.arg_options);
 
                 case Get.INSTALL:
                     check_pk_is_not_running ();
                     check_is_root (ca.command);
-                    return yield install (ca);
+                    return yield install (ca.command_argv, ca.options, ca.arg_options);
 
                 case Get.REINSTALL:
                     check_pk_is_not_running ();
                     check_is_root (ca.command);
-                    return yield reinstall (ca);
+                    return yield reinstall (ca.command_argv, ca.options, ca.arg_options);
 
                 case Get.REMOVE:
                     check_pk_is_not_running ();
                     check_is_root (ca.command);
-                    return yield remove (ca);
+                    return yield remove (ca.command_argv, ca.options, ca.arg_options);
 
                 case Get.SOURCE:
-                    return yield source (ca);
+                    return yield source (ca.command_argv, ca.options, ca.arg_options);
 
                 case Cache.SEARCH:
                     return yield Cache.search (ca.command_argv, ca.options, ca.arg_options);
@@ -86,10 +91,10 @@ namespace Apa {
                     return yield Rpm.list (ca.options, ca.arg_options);
 
                 case INFO_COMMAND:
-                    return yield info (ca);
+                    return yield info (ca.command_argv, ca.options, ca.arg_options);
 
                 case MOO_COMMAND:
-                    return moo (ca);
+                    return moo (ca.command_argv);
 
                 case VERSION_COMMAND:
                     print (get_version ());

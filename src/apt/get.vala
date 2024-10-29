@@ -86,8 +86,8 @@ public sealed class Apa.Get : Origin {
     }
 
     public static async int update (
-        string[] options = {},
-        ArgOption?[] arg_options = {},
+        Gee.ArrayList<string> options,
+        Gee.ArrayList<ArgOption?> arg_options,
         Gee.ArrayList<string>? error = null,
         bool ignore_unknown_options = false
     ) throws CommandError {
@@ -95,13 +95,13 @@ public sealed class Apa.Get : Origin {
     }
 
     public async int internal_update (
-        string[] options = {},
-        ArgOption?[] arg_options = {},
+        Gee.ArrayList<string> options,
+        Gee.ArrayList<ArgOption?> arg_options,
         Gee.ArrayList<string>? error = null,
         bool ignore_unknown_options = false
     ) throws CommandError {
-        current_options.add_all_array (options);
-        current_arg_options.add_all_array (arg_options);
+        current_options.add_all (options);
+        current_arg_options.add_all (arg_options);
 
         set_common_options ();
 
@@ -115,8 +115,8 @@ public sealed class Apa.Get : Origin {
     }
 
     public static async int upgrade (
-        string[] options = {},
-        ArgOption?[] arg_options = {},
+        Gee.ArrayList<string> options,
+        Gee.ArrayList<ArgOption?> arg_options,
         Gee.ArrayList<string>? error = null,
         bool ignore_unknown_options = false
     ) throws CommandError {
@@ -124,13 +124,13 @@ public sealed class Apa.Get : Origin {
     }
 
     public async int internal_upgrade (
-        string[] options = {},
-        ArgOption?[] arg_options = {},
+        Gee.ArrayList<string> options,
+        Gee.ArrayList<ArgOption?> arg_options,
         Gee.ArrayList<string>? error = null,
         bool ignore_unknown_options = false
     ) throws CommandError {
-        current_options.add_all_array (options);
-        current_arg_options.add_all_array (arg_options);
+        current_options.add_all (options);
+        current_arg_options.add_all (arg_options);
 
         set_common_options ();
         set_options (
@@ -159,13 +159,13 @@ public sealed class Apa.Get : Origin {
     }
 
     public static async int @do (
-        string[] packages,
-        string[] options = {},
-        ArgOption?[] arg_options = {},
+        Gee.ArrayList<string> packages,
+        Gee.ArrayList<string> options,
+        Gee.ArrayList<ArgOption?> arg_options,
         Gee.ArrayList<string>? error = null,
         bool ignore_unknown_options = false
     ) throws CommandError {
-        if (packages.length == 0) {
+        if (packages.size == 0) {
             throw new CommandError.NO_PACKAGES (_("No packages to do"));
         }
 
@@ -175,18 +175,24 @@ public sealed class Apa.Get : Origin {
             }
         }
 
-        return yield new Get ().internal_install (packages, options, arg_options, error, ignore_unknown_options);
+        return yield new Get ().internal_do (
+            packages,
+            options,
+            arg_options,
+            error,
+            ignore_unknown_options
+        );
     }
 
     public async int internal_do (
-        string[] packages,
-        string[] options = {},
-        ArgOption?[] arg_options = {},
+        Gee.ArrayList<string> packages,
+        Gee.ArrayList<string> options,
+        Gee.ArrayList<ArgOption?> arg_options,
         Gee.ArrayList<string>? error = null,
         bool ignore_unknown_options = false
     ) throws CommandError {
-        current_options.add_all_array (options);
-        current_arg_options.add_all_array (arg_options);
+        current_options.add_all (options);
+        current_arg_options.add_all (arg_options);
 
         set_common_options ();
         set_options (
@@ -218,34 +224,40 @@ public sealed class Apa.Get : Origin {
         }
 
         spawn_arr.add (INSTALL);
-        spawn_arr.add_all_array (packages);
+        spawn_arr.add_all (packages);
 
         return yield spawn_command (spawn_arr, error);
     }
 
     public static async int install (
-        string[] packages,
-        string[] options = {},
-        ArgOption?[] arg_options = {},
+        Gee.ArrayList<string> packages,
+        Gee.ArrayList<string> options,
+        Gee.ArrayList<ArgOption?> arg_options,
         Gee.ArrayList<string>? error = null,
         bool ignore_unknown_options = false
     ) throws CommandError {
-        if (packages.length == 0) {
+        if (packages.size == 0) {
             throw new CommandError.NO_PACKAGES (_("No packages to install"));
         }
 
-        return yield new Get ().internal_install (packages, options, arg_options, error, ignore_unknown_options);
+        return yield new Get ().internal_install (
+            packages,
+            options,
+            arg_options,
+            error,
+            ignore_unknown_options
+        );
     }
 
     public async int internal_install (
-        string[] packages,
-        string[] options = {},
-        ArgOption?[] arg_options = {},
+        Gee.ArrayList<string> packages,
+        Gee.ArrayList<string> options,
+        Gee.ArrayList<ArgOption?> arg_options,
         Gee.ArrayList<string>? error = null,
         bool ignore_unknown_options = false
     ) throws CommandError {
-        current_options.add_all_array (options);
-        current_arg_options.add_all_array (arg_options);
+        current_options.add_all (options);
+        current_arg_options.add_all (arg_options);
 
         set_common_options ();
         set_options (
@@ -273,34 +285,40 @@ public sealed class Apa.Get : Origin {
         }
 
         spawn_arr.add (INSTALL);
-        spawn_arr.add_all_array (packages);
+        spawn_arr.add_all (packages);
 
         return yield spawn_command (spawn_arr, error);
     }
 
     public static async int remove (
-        string[] packages,
-        string[] options = {},
-        ArgOption?[] arg_options = {},
+        Gee.ArrayList<string> packages,
+        Gee.ArrayList<string> options,
+        Gee.ArrayList<ArgOption?> arg_options,
         Gee.ArrayList<string>? error = null,
         bool ignore_unknown_options = false
     ) throws CommandError {
-        if (packages.length == 0) {
+        if (packages.size == 0) {
             throw new CommandError.NO_PACKAGES (_("No packages to remove"));
         }
 
-        return yield new Get ().internal_remove (packages, options, arg_options, error, ignore_unknown_options);
+        return yield new Get ().internal_remove (
+            packages,
+            options,
+            arg_options,
+            error,
+            ignore_unknown_options
+        );
     }
 
     public async int internal_remove (
-        string[] packages,
-        string[] options = {},
-        ArgOption?[] arg_options = {},
+        Gee.ArrayList<string> packages,
+        Gee.ArrayList<string> options,
+        Gee.ArrayList<ArgOption?> arg_options,
         Gee.ArrayList<string>? error = null,
         bool ignore_unknown_options = false
     ) throws CommandError {
-        current_options.add_all_array (options);
-        current_arg_options.add_all_array (arg_options);
+        current_options.add_all (options);
+        current_arg_options.add_all (arg_options);
 
         set_common_options ();
         set_options (
@@ -320,34 +338,40 @@ public sealed class Apa.Get : Origin {
         }
 
         spawn_arr.add (REMOVE);
-        spawn_arr.add_all_array (packages);
+        spawn_arr.add_all (packages);
 
         return yield spawn_command (spawn_arr, error);
     }
 
     public static async int source (
-        string[] packages,
-        string[] options = {},
-        ArgOption?[] arg_options = {},
+        Gee.ArrayList<string> packages,
+        Gee.ArrayList<string> options,
+        Gee.ArrayList<ArgOption?> arg_options,
         Gee.ArrayList<string>? error = null,
         bool ignore_unknown_options = false
     ) throws CommandError {
-        if (packages.length == 0) {
+        if (packages.size == 0) {
             throw new CommandError.NO_PACKAGES (_("No packages to download"));
         }
 
-        return yield new Get ().internal_source (packages, options, arg_options, error, ignore_unknown_options);
+        return yield new Get ().internal_source (
+            packages,
+            options,
+            arg_options,
+            error,
+            ignore_unknown_options
+        );
     }
 
     public async int internal_source (
-        string[] packages,
-        string[] options = {},
-        ArgOption?[] arg_options = {},
+        Gee.ArrayList<string> packages,
+        Gee.ArrayList<string> options,
+        Gee.ArrayList<ArgOption?> arg_options,
         Gee.ArrayList<string>? error = null,
         bool ignore_unknown_options = false
     ) throws CommandError {
-        current_options.add_all_array (options);
-        current_arg_options.add_all_array (arg_options);
+        current_options.add_all (options);
+        current_arg_options.add_all (arg_options);
 
         set_common_options ();
         set_options (
@@ -367,7 +391,7 @@ public sealed class Apa.Get : Origin {
         }
 
         spawn_arr.add (SOURCE);
-        spawn_arr.add_all_array (packages);
+        spawn_arr.add_all (packages);
 
         return yield spawn_command (spawn_arr, error);
     }

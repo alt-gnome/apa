@@ -16,16 +16,23 @@
  */
 
 namespace Apa {
-    internal async int source (owned CommandArgs ca, bool ignore_unknown_options = false) throws CommandError {
+    internal async int source (
+        owned Gee.ArrayList<string> packages,
+        owned Gee.ArrayList<string> options,
+        owned Gee.ArrayList<ArgOption?> arg_options,
+        bool ignore_unknown_options = false
+    ) throws CommandError {
+        var error = new Gee.ArrayList<string> ();
+
         while (true) {
-            var error = new Gee.ArrayList<string> ();
-            var status = yield Get.source (ca.command_argv, ca.options, ca.arg_options, error);
+            error.clear ();
+            var status = yield Get.source (packages, options, arg_options, error);
 
             if (status != Constants.ExitCode.SUCCESS && error.size > 0) {
                 string error_message = normalize_error (error);
-                string? package;
+                string? package_error_source;
 
-                switch (detect_error (error_message, out package)) {
+                switch (detect_error (error_message, out package_error_source)) {
                     case OriginErrorType.NONE:
                     default:
                         print_error (_("Unknown error message: '%s'").printf (error_message));

@@ -32,24 +32,30 @@ public sealed class Apa.Rpm : Origin {
     Rpm () {}
 
     public static async int list (
-        string[] options = {},
-        ArgOption?[] arg_options = {},
+        Gee.ArrayList<string> options,
+        Gee.ArrayList<ArgOption?> arg_options,
         Gee.ArrayList<string>? result = null,
         Gee.ArrayList<string>? error = null,
         bool ignore_unknown_options = false
     ) throws CommandError {
-        return yield new Rpm ().internal_list (options, arg_options, result, error, ignore_unknown_options);
+        return yield new Rpm ().internal_list (
+            options,
+            arg_options,
+            result,
+            error,
+            ignore_unknown_options
+        );
     }
 
     public async int internal_list (
-        string[] options = {},
-        ArgOption?[] arg_options = {},
+        Gee.ArrayList<string> options,
+        Gee.ArrayList<ArgOption?> arg_options,
         Gee.ArrayList<string>? result = null,
         Gee.ArrayList<string>? error = null,
         bool ignore_unknown_options = false
     ) throws CommandError {
-        current_options.add_all_array (options);
-        current_arg_options.add_all_array (arg_options);
+        current_options.add_all (options);
+        current_arg_options.add_all (arg_options);
 
         spawn_arr.add ("-q");
         spawn_arr.add ("-a");
@@ -80,30 +86,37 @@ public sealed class Apa.Rpm : Origin {
     }
 
     public static async int info (
-        string[] packages = {},
-        string[] options = {},
-        ArgOption?[] arg_options = {},
+        Gee.ArrayList<string> packages,
+        Gee.ArrayList<string> options,
+        Gee.ArrayList<ArgOption?> arg_options,
         Gee.ArrayList<string>? result = null,
         Gee.ArrayList<string>? error = null,
         bool ignore_unknown_options = false
     ) throws CommandError {
-        if (packages.length == 0) {
+        if (packages.size == 0) {
             throw new CommandError.NO_PACKAGES (_("No packages to show"));
         }
 
-        return yield new Rpm ().internal_info (packages, options, arg_options, result, error, ignore_unknown_options);
+        return yield new Rpm ().internal_info (
+            packages,
+            options,
+            arg_options,
+            result,
+            error,
+            ignore_unknown_options
+        );
     }
 
     public async int internal_info (
-        string[] packages = {},
-        string[] options = {},
-        ArgOption?[] arg_options = {},
+        Gee.ArrayList<string> packages,
+        Gee.ArrayList<string> options,
+        Gee.ArrayList<ArgOption?> arg_options,
         Gee.ArrayList<string>? result = null,
         Gee.ArrayList<string>? error = null,
         bool ignore_unknown_options = false
     ) throws CommandError {
-        current_options.add_all_array (options);
-        current_arg_options.add_all_array (arg_options);
+        current_options.add_all (options);
+        current_arg_options.add_all (arg_options);
 
         spawn_arr.add ("-q");
         spawn_arr.add ("-i");
@@ -124,7 +137,7 @@ public sealed class Apa.Rpm : Origin {
             post_set_check ();
         }
 
-        spawn_arr.add_all_array (packages);
+        spawn_arr.add_all (packages);
 
         return yield spawn_command_full (spawn_arr, result, error);
     }

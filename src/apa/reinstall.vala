@@ -16,10 +16,13 @@
  */
 
 namespace Apa {
-    internal async int reinstall (owned CommandArgs ca) throws CommandError {
-        ca.options.resize (ca.options.length + 1);
-        ca.options[ca.options.length] = "--force";
+    internal async int reinstall (
+        owned Gee.ArrayList<string> packages,
+        owned Gee.ArrayList<string> options,
+        owned Gee.ArrayList<ArgOption?> arg_options
+    ) throws CommandError {
+        options.add ("-f");
 
-        return yield install (ca);
+        return yield install (packages, options, arg_options);
     }
 }

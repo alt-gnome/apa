@@ -67,7 +67,7 @@ namespace Apa.Help {
                 return;
 
             default:
-                print_error (_("Unknown command '%s'").printf (command));
+                print_error (_("No help for '%s'").printf (command));
                 print_apa ();
                 return;
         }
@@ -206,6 +206,13 @@ namespace Apa.Help {
         );
     }
 
+    string get_kernel_desc () {
+        return C_(
+            "kernel command",
+            "Command for kernel"
+        );
+    }
+
     public void print_apa (bool with_desc = true) {
         if (with_desc) {
             print (_("APA - ALT Packages Assistant. Your best friend in this cruel world of many package tools."));
@@ -289,6 +296,10 @@ namespace Apa.Help {
         print_usage ("apa search [OPTIONS[=VALUE]] <regex1> <regex2> ..");
         print_common_cache_options ();
         print ("");
+    }
+
+    public void print_kernel () {
+        print (get_kernel_desc ());
     }
 
     public void print_test () {
