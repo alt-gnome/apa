@@ -37,6 +37,7 @@ public abstract class Apa.Origin : Object {
         foreach (var current_option in current_options) {
             throw new CommandError.UNKNOWN_OPTION (_("Unknown option '%s'").printf (current_option));
         }
+
         foreach (var current_arg_option in current_arg_options) {
             throw new CommandError.UNKNOWN_OPTION (_("Unknown option with value '%s'").printf (
                 current_arg_option.name
