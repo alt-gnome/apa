@@ -236,6 +236,7 @@ public sealed class Apa.Get : Origin {
         Gee.ArrayList<string> options,
         Gee.ArrayList<ArgOption?> arg_options,
         Gee.ArrayList<string>? error = null,
+        Gee.ArrayList<string>? result = null,
         bool ignore_unknown_options = false
     ) throws CommandError {
         if (packages.size == 0) {
@@ -247,6 +248,7 @@ public sealed class Apa.Get : Origin {
             options,
             arg_options,
             error,
+            result,
             ignore_unknown_options
         );
     }
@@ -256,6 +258,7 @@ public sealed class Apa.Get : Origin {
         Gee.ArrayList<string> options,
         Gee.ArrayList<ArgOption?> arg_options,
         Gee.ArrayList<string>? error = null,
+        Gee.ArrayList<string>? result = null,
         bool ignore_unknown_options = false
     ) throws CommandError {
         current_options.add_all (options);
@@ -289,7 +292,7 @@ public sealed class Apa.Get : Origin {
         spawn_arr.add (INSTALL);
         spawn_arr.add_all (packages);
 
-        return yield spawn_command (spawn_arr, error);
+        return yield spawn_command_full (spawn_arr, result, error);
     }
 
     public static async int remove (

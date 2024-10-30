@@ -79,7 +79,7 @@ namespace Apa {
                                 assert_not_reached ();
                         }
 
-                        print (_("Package '%s' not found, but packages with a similar name were found:").printf (package_error_source_name));
+                        print (_("Package '%s' not found, but packages with a similar name were found").printf (package_error_source));
                         string? answer;
                         var result = give_choice (possible_package_names, _("remove"), out answer);
 
@@ -109,7 +109,7 @@ namespace Apa {
                         string do_package = find_package_in_do_list (ref packages, package_error_source);
                         char package_error_source_operation = do_package[do_package.length - 1];
 
-                        print (error_message[0:error_message.length - 1] + ":");
+                        print (error_message[0:error_message.length - 1].replace (package_error_source, "'%s'".printf (package_error_source)));
 
                         var choice_packages = new Gee.ArrayList<string> ();
                         foreach (var err in error) {
@@ -131,6 +131,56 @@ namespace Apa {
                         var result = give_choice (choice_packages.to_array (), _("install"), out answer);
 
                         switch (result) {
+                            case ChoiceResult.SKIP:
+                                packages.remove (do_package);
+                                if (packages.size == 0) {
+                                    print (_("There are no packages left to install"));
+                                    return 0;
+                                }
+                                break;
+
+                            case ChoiceResult.CHOSEN:
+                                replace_strings_in_array_list (
+                                    ref packages,
+                                    do_package,
+                                    answer.split (" ")[0] + package_error_source_operation.to_string ()
+                                );
+                                break;
+
+                            case ChoiceResult.EXIT:
+                                return status;
+                        }
+                        break;
+
+                    case OriginErrorType.NO_INSTALLATION_CANDIDAT:
+                        string do_package = find_package_in_do_list (ref packages, package_error_source);
+                        char package_error_source_operation = do_package[do_package.length - 1];
+
+                        print (error_message.replace (package_error_source, "'%s'".printf (package_error_source)));
+
+                        var result = new Gee.ArrayList<string> ();
+                        yield Get.install (packages, options, arg_options, error, result);
+
+                        var choice_packages = new Gee.ArrayList<string> ();
+                        foreach (var res in result) {
+                            if (res.has_prefix ("  ")) {
+                                string[] strs = res.strip ().split (" ");
+                                if (strs[strs.length - 1].has_suffix ("]") && strs[strs.length - 1].has_prefix ("[")) {
+                                    choice_packages.add ("%s (%s)".printf (
+                                        strs[0],
+                                        strs[strs.length - 1][1: strs[strs.length - 1].length - 1]
+                                    ));
+
+                                } else {
+                                    choice_packages.add (strs[0]);
+                                }
+                            }
+                        }
+
+                        string? answer;
+                        var result_choice = give_choice (choice_packages.to_array (), _("install"), out answer);
+
+                        switch (result_choice) {
                             case ChoiceResult.SKIP:
                                 packages.remove (do_package);
                                 if (packages.size == 0) {

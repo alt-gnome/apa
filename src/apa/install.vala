@@ -60,7 +60,7 @@ namespace Apa {
                             return status;
                         }
 
-                        print (_("Package '%s' not found, but packages with a similar name were found:").printf (package_error_source));
+                        print (_("Package '%s' not found, but packages with a similar name were found").printf (package_error_source));
                         string? answer;
                         var result = give_choice (possible_package_names, _("install"), out answer);
 
@@ -83,8 +83,7 @@ namespace Apa {
                         break;
 
                     case OriginErrorType.PACKAGE_VIRTUAL_WITH_MULTIPLE_GOOD_PROIDERS:
-                        error_message = error_message[0:error_message.length - 2] + ":";
-                        print (error_message);
+                        print (error_message[0:error_message.length - 1].replace (package_error_source, "'%s'".printf (package_error_source)));
 
                         var choice_packages = new Gee.ArrayList<string> ();
                         foreach (var err in error) {
@@ -126,6 +125,49 @@ namespace Apa {
                     case OriginErrorType.UNABLE_TO_LOCK_DOWNLOAD_DIR:
                         print_error (_("APT is currently busy"));
                         return status;
+
+                    case OriginErrorType.NO_INSTALLATION_CANDIDAT:
+                        print (error_message.replace (package_error_source, "'%s'".printf (package_error_source)));
+
+                        var result = new Gee.ArrayList<string> ();
+                        yield Get.install (packages, options, arg_options, error, result);
+
+                        var choice_packages = new Gee.ArrayList<string> ();
+                        foreach (var res in result) {
+                            if (res.has_prefix ("  ")) {
+                                string[] strs = res.strip ().split (" ");
+                                if (strs[strs.length - 1].has_suffix ("]") && strs[strs.length - 1].has_prefix ("[")) {
+                                    choice_packages.add ("%s (%s)".printf (
+                                        strs[0],
+                                        strs[strs.length - 1][1: strs[strs.length - 1].length - 1]
+                                    ));
+
+                                } else {
+                                    choice_packages.add (strs[0]);
+                                }
+                            }
+                        }
+
+                        string? answer;
+                        var result_choice = give_choice (choice_packages.to_array (), _("install"), out answer);
+
+                        switch (result_choice) {
+                            case ChoiceResult.SKIP:
+                                packages.remove (package_error_source);
+                                if (packages.size == 0) {
+                                    print (_("There are no packages left to install"));
+                                    return 0;
+                                }
+                                break;
+
+                            case ChoiceResult.CHOSEN:
+                                replace_strings_in_array_list (ref packages, package_error_source, answer.split (" ")[0]);
+                                break;
+
+                            case ChoiceResult.EXIT:
+                                return status;
+                        }
+                        break;
 
                     case OriginErrorType.NONE:
                     default:

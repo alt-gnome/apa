@@ -191,6 +191,9 @@ namespace Apa {
             return ChoiceResult.CHOSEN;
         }
 
+        print ("");
+        print (_("Choose package to install:"));
+
         for (int i = 0; i < variants.length; i++) {
             if (variants[i] != null) {
                 if (i == 0) {

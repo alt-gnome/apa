@@ -20,6 +20,7 @@ namespace Apa {
         COULDNT_FIND_PACKAGE,
         PACKAGE_VIRTUAL_WITH_MULTIPLE_GOOD_PROIDERS,
         UNABLE_TO_LOCK_DOWNLOAD_DIR,
+        NO_INSTALLATION_CANDIDAT,
         NONE,
     }
 
@@ -28,7 +29,8 @@ namespace Apa {
         string[] origin_errors = {
             "Couldn't find package %s",
             "Package %s is a virtual package with multiple good providers.\n",
-            "Unable to lock the download directory"
+            "Unable to lock the download directory",
+            "Package %s has no installation candidate"
         };
 
         string pattern;
