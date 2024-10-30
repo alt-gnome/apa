@@ -1,3 +1,4 @@
+src/apa/autoremove.vala
 src/apa/do.vala
 src/apa/info.vala
 src/apa/install.vala

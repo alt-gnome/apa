@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: apa\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-30 12:53+0300\n"
+"POT-Creation-Date: 2024-10-30 14:21+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,14 +17,21 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+#: src/apa/autoremove.vala:37 src/apa/do.vala:211 src/apa/info.vala:35
+#: src/apa/install.vala:174 src/apa/kernel.vala:41 src/apa/remove.vala:88
+#: src/apa/source.vala:38 src/apa/update.vala:41 src/apa/upgrade.vala:61
+#, c-format
+msgid "Unknown error message: '%s'"
+msgstr ""
+
 #: src/apa/do.vala:27
 #, c-format
 msgid "Unknown operation '%c' in '%s'"
 msgstr ""
 
-#: src/apa/do.vala:82 src/apa/install.vala:63 src/apa/remove.vala:56
+#: src/apa/do.vala:82 src/apa/install.vala:63
 #, c-format
-msgid "Package '%s' not found, but packages with a similar name were found:"
+msgid "Package '%s' not found, but packages with a similar name were found"
 msgstr ""
 
 #: src/apa/do.vala:84 src/apa/remove.vala:58
@@ -35,24 +42,19 @@ msgstr ""
 msgid "There are no packages left to do"
 msgstr ""
 
-#: src/apa/do.vala:131 src/apa/install.vala:65 src/apa/install.vala:106
+#: src/apa/do.vala:131 src/apa/do.vala:181 src/apa/install.vala:65
+#: src/apa/install.vala:105 src/apa/install.vala:152
 msgid "install"
 msgstr ""
 
-#: src/apa/do.vala:137 src/apa/install.vala:71 src/apa/install.vala:112
+#: src/apa/do.vala:137 src/apa/do.vala:187 src/apa/install.vala:71
+#: src/apa/install.vala:111 src/apa/install.vala:158
 msgid "There are no packages left to install"
 msgstr ""
 
-#: src/apa/do.vala:156 src/apa/install.vala:127 src/apa/remove.vala:83
+#: src/apa/do.vala:206 src/apa/install.vala:126 src/apa/remove.vala:83
 #: src/apa/update.vala:36 src/apa/upgrade.vala:56
 msgid "APT is currently busy"
-msgstr ""
-
-#: src/apa/do.vala:161 src/apa/info.vala:35 src/apa/install.vala:132
-#: src/apa/kernel.vala:41 src/apa/remove.vala:88 src/apa/source.vala:38
-#: src/apa/update.vala:41 src/apa/upgrade.vala:61
-#, c-format
-msgid "Unknown error message: '%s'"
 msgstr ""
 
 #: src/apa/install.vala:28 src/apa/remove.vala:26
@@ -84,6 +86,11 @@ msgstr ""
 msgid "Have you mooed today?"
 msgstr ""
 
+#: src/apa/remove.vala:56
+#, c-format
+msgid "Package '%s' not found, but packages with a similar name were found:"
+msgstr ""
+
 #: src/apa/remove.vala:64
 msgid "There are no packages left to remove"
 msgstr ""
@@ -92,17 +99,17 @@ msgstr ""
 msgid "Can't update kernel"
 msgstr ""
 
-#: src/apa.vala:112 src/utils-commands/update-kernel.vala:64
+#: src/apa.vala:117 src/utils-commands/update-kernel.vala:64
 #, c-format
 msgid "Unknown command '%s'"
 msgstr ""
 
-#: src/apa.vala:128
+#: src/apa.vala:133
 #, c-format
 msgid "Need root previlegies for '%s' command"
 msgstr ""
 
-#: src/apa.vala:141
+#: src/apa.vala:146
 msgid "PackageKit is running"
 msgstr ""
 
@@ -110,24 +117,24 @@ msgstr ""
 msgid "No packages to search"
 msgstr ""
 
-#: src/apt/get.vala:169
+#: src/apt/get.vala:171
 msgid "No packages to do"
 msgstr ""
 
-#: src/apt/get.vala:174
+#: src/apt/get.vala:176
 #, c-format
 msgid "It's not known what to do with %s"
 msgstr ""
 
-#: src/apt/get.vala:240 src/apt/repo.vala:70
+#: src/apt/get.vala:243 src/apt/repo.vala:70
 msgid "No packages to install"
 msgstr ""
 
-#: src/apt/get.vala:301
+#: src/apt/get.vala:306
 msgid "No packages to remove"
 msgstr ""
 
-#: src/apt/get.vala:354
+#: src/apt/get.vala:359
 msgid "No packages to download"
 msgstr ""
 
@@ -285,11 +292,15 @@ msgstr ""
 msgid "<skip package>"
 msgstr ""
 
-#: src/utils.vala:208
+#: src/utils.vala:195
+msgid "Choose package to install:"
+msgstr ""
+
+#: src/utils.vala:211
 #, c-format
 msgid "Choose package to %s: (0 to exit, -1 to skip) "
 msgstr ""
 
-#: src/utils.vala:259
+#: src/utils.vala:262
 msgid "You can create issue here https://github.com/alt-gnome/apa/issues"
 msgstr ""
