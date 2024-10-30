@@ -208,6 +208,7 @@ namespace Apa {
         print ("");
 
         while (true) {
+            // Translators: IMPORTANT! space symbol in the end
             print (_("Choose package to %s: (0 to exit, -1 to skip) ").printf (action_name), false);
             var input = stdin.read_line ().strip ();
 
