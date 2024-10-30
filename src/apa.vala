@@ -44,6 +44,11 @@ namespace Apa {
                     check_is_root (ca.command);
                     return yield kernel (ca.command_argv, ca.options, ca.arg_options);
 
+                case Get.AUTOREMOVE:
+                    check_pk_is_not_running ();
+                    check_is_root (ca.command);
+                    return yield autoremove (ca.options, ca.arg_options);
+
                 case Get.DO:
                     check_pk_is_not_running ();
                     check_is_root (ca.command);

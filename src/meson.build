@@ -3,6 +3,7 @@ vapi_sources = files(
 )
 
 apa_no_main_code_sources = files (
+  'apa/autoremove.vala',
   'apa/do.vala',
   'apa/info.vala',
   'apa/install.vala',

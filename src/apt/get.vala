@@ -26,6 +26,7 @@ public sealed class Apa.Get : Origin {
     public const string REINSTALL = "reinstall";
     public const string REMOVE = "remove";
     public const string SOURCE = "source";
+    public const string AUTOREMOVE = "autoremove";
 
     public const string[] COMMANDS = {
         UPDATE,
@@ -35,6 +36,7 @@ public sealed class Apa.Get : Origin {
         REINSTALL,
         REMOVE,
         SOURCE,
+        AUTOREMOVE
     };
 
     Get () {}
@@ -392,6 +394,40 @@ public sealed class Apa.Get : Origin {
 
         spawn_arr.add (SOURCE);
         spawn_arr.add_all (packages);
+
+        return yield spawn_command (spawn_arr, error);
+    }
+
+    public static async int autoremove (
+        Gee.ArrayList<string> options,
+        Gee.ArrayList<ArgOption?> arg_options,
+        Gee.ArrayList<string>? error = null,
+        bool ignore_unknown_options = false
+    ) throws CommandError {
+        return yield new Get ().internal_autoremove (
+            options,
+            arg_options,
+            error,
+            ignore_unknown_options
+        );
+    }
+
+    public async int internal_autoremove (
+        Gee.ArrayList<string> options,
+        Gee.ArrayList<ArgOption?> arg_options,
+        Gee.ArrayList<string>? error = null,
+        bool ignore_unknown_options = false
+    ) throws CommandError {
+        current_options.add_all (options);
+        current_arg_options.add_all (arg_options);
+
+        set_common_options ();
+
+        if (!ignore_unknown_options) {
+            post_set_check ();
+        }
+
+        spawn_arr.add (AUTOREMOVE);
 
         return yield spawn_command (spawn_arr, error);
     }
