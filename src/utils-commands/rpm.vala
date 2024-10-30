@@ -78,8 +78,10 @@ public sealed class Apa.Rpm : Origin {
 
         var status = yield spawn_command_full (spawn_arr, result, error);
 
-        for (int i = 0; i < result.size; i++) {
-            result[i] = result[i].strip ();
+        if (result != null) {
+            for (int i = 0; i < result.size; i++) {
+                result[i] = result[i].strip ();
+            }
         }
 
         return status;
