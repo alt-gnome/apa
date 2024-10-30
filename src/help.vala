@@ -91,7 +91,7 @@ namespace Apa.Help {
         print ("");
         print_option (
             "-h, --hide-progress",
-            _("Hide progress bar, for logging")
+            _("Hide progress bar for logging")
         );
         print_option (
             "-q, --quiet",
@@ -103,23 +103,23 @@ namespace Apa.Help {
         );
         print_option (
             "-y, --yes",
-            _("Always yes")
+            _("Always 'yes'")
         );
         print_option (
             "-f, --fix",
-            _("Try fix")
+            _("Try to fix")
         );
         print_option (
             "-m, --missing-ignore",
-            _("Ignore mussing packages")
+            _("Ignore missing packages")
         );
         print_option (
             "-V, --version-detailed",
-            _("Print detailed packages version")
+            _("Display detailed packages version")
         );
         print_option (
             "-c=?, --config=?",
-            _("Read this configuration file")
+            _("Read configuration file")
         );
         print_option (
             "-o=?, --option=?",
@@ -133,11 +133,11 @@ namespace Apa.Help {
         print ("");
         print_option (
             "-h, --hide-progress",
-            _("Hide progress bar, for logging")
+            _("Hide progress bar for logging")
         );
         print_option (
             "-i, --important-only",
-            _("Show only important deps for the unmet command")
+            _("Show only important dependencies for the unmet command")
         );
         print_option (
             "-s, --source-cache",
@@ -149,7 +149,7 @@ namespace Apa.Help {
         );
         print_option (
             "-c=?, --config=?",
-            _("Read this configuration file")
+            _("Read configuration file")
         );
         print_option (
             "-o=?, --option=?",
@@ -202,7 +202,7 @@ namespace Apa.Help {
     string get_version_desc () {
         return C_(
             "version command",
-            "Print APA version"
+            "Display APA version"
         );
     }
 
@@ -215,7 +215,7 @@ namespace Apa.Help {
 
     public void print_apa (bool with_desc = true) {
         if (with_desc) {
-            print (_("APA - ALT Packages Assistant. Your best friend in this cruel world of many package tools."));
+            print (_("APA — ALT Packages Assistant. Your best friend in this cruel world of many package tools."));
         }
         print_usage ("apa <command> ..");
         print (_("Commands:"));
@@ -244,7 +244,7 @@ namespace Apa.Help {
         );
         print_option (
             "-u, --upgraded-show",
-            _("Print upgraded packages")
+            _("Display upgraded packages")
         );
         print ("");
     }

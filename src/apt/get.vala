@@ -19,13 +19,13 @@ public sealed class Apa.Get : Origin {
 
     protected override string origin { get; default = "apt-get"; }
 
-    public const string UPDATE = "update";
-    public const string UPGRADE = "upgrade";
-    public const string DO = "do";
-    public const string INSTALL = "install";
+    public const string UPDATE    = "update";
+    public const string UPGRADE   = "upgrade";
+    public const string DO        = "do";
+    public const string INSTALL   = "install";
     public const string REINSTALL = "reinstall";
-    public const string REMOVE = "remove";
-    public const string SOURCE = "source";
+    public const string REMOVE    = "remove";
+    public const string SOURCE    = "source";
 
     public const string[] COMMANDS = {
         UPDATE,
@@ -171,7 +171,7 @@ public sealed class Apa.Get : Origin {
 
         foreach (string package in packages) {
             if (package[package.length - 1] != '-' && package[package.length - 1] != '+') {
-                throw new CommandError.NO_PACKAGES (_("Don't know what to do with %s").printf (package));
+                throw new CommandError.NO_PACKAGES (_("It's not known what to do with %s").printf (package));
             }
         }
 

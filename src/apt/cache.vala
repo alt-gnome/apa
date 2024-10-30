@@ -93,7 +93,7 @@
         bool ignore_unknown_options = false
     ) throws CommandError {
         if (regexs.size == 0) {
-            throw new CommandError.NO_PACKAGES (_("Nothing to search"));
+            throw new CommandError.NO_PACKAGES (_("No packages to search"));
         }
 
         return yield new Cache ().internal_search (

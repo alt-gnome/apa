@@ -24,7 +24,7 @@ namespace Apa {
     ) throws CommandError {
         foreach (var package_name in packages) {
             if (!package_name.has_suffix ("-") && !package_name.has_suffix ("+")) {
-                print_error (_("Unknown operation '%c' in %s").printf (
+                print_error (_("Unknown operation '%c' in '%s'").printf (
                     package_name[package_name.length - 1],
                     package_name
                 ));
@@ -79,7 +79,7 @@ namespace Apa {
                                 assert_not_reached ();
                         }
 
-                        print (_("Package %s not found, but packages with a similar name were found:").printf (package_error_source));
+                        print (_("Package '%s' not found, but packages with a similar name were found:").printf (package_error_source));
                         string? answer;
                         var result = give_choice (possible_package_names, _("remove"), out answer);
 
