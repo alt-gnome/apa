@@ -79,7 +79,7 @@ namespace Apa {
                                 assert_not_reached ();
                         }
 
-                        print (_("Package '%s' not found, but packages with a similar name were found:").printf (package_error_source));
+                        print (_("Package '%s' not found, but packages with a similar name were found:").printf (package_error_source_name));
                         string? answer;
                         var result = give_choice (possible_package_names, _("remove"), out answer);
 
@@ -106,7 +106,8 @@ namespace Apa {
                         break;
 
                     case OriginErrorType.PACKAGE_VIRTUAL_WITH_MULTIPLE_GOOD_PROIDERS:
-                        char package_error_source_operation = package_error_source[package_error_source.length - 1];
+                        string do_package = find_package_in_do_list (ref packages, package_error_source);
+                        char package_error_source_operation = do_package[do_package.length - 1];
 
                         print (error_message[0:error_message.length - 1] + ":");
 
@@ -131,7 +132,7 @@ namespace Apa {
 
                         switch (result) {
                             case ChoiceResult.SKIP:
-                                packages.remove (package_error_source);
+                                packages.remove (do_package);
                                 if (packages.size == 0) {
                                     print (_("There are no packages left to install"));
                                     return 0;
@@ -141,7 +142,7 @@ namespace Apa {
                             case ChoiceResult.CHOSEN:
                                 replace_strings_in_array_list (
                                     ref packages,
-                                    package_error_source,
+                                    do_package,
                                     answer.split (" ")[0] + package_error_source_operation.to_string ()
                                 );
                                 break;

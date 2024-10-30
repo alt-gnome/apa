@@ -228,6 +228,17 @@ namespace Apa {
         }
     }
 
+    public string find_package_in_do_list (ref Gee.ArrayList<string> do_list, string package) {
+        foreach (string do_package in do_list) {
+            if (do_package.length == package.length + 1 && do_package.has_prefix (package)) {
+                return do_package;
+            }
+        }
+
+        print_devel ("%s\n%s".printf (package, string.joinv (", ", do_list.to_array ())));
+        assert_not_reached ();
+    }
+
     public void replace_strings_in_array_list (ref Gee.ArrayList<string> array, string old_string, string new_string) {
         for (int i = 0; i < array.size; i++) {
             if (array[i] == old_string) {
