@@ -10,7 +10,7 @@
 
 ```shell
 su -
-apt-get install vala libgee-devel libpackagekit-glib-devel
+apt-get install meson vala libgee-devel libpackagekit-glib-devel
 meson setup _build -Dprefix=/usr
 ninja install -C _build
 ```
