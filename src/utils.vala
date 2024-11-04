@@ -192,7 +192,7 @@ namespace Apa {
         }
 
         print ("");
-        print (_("Choose package to install:"));
+        print (_("Choose package to %s:").printf (action_name));
 
         for (int i = 0; i < variants.length; i++) {
             if (variants[i] != null) {
@@ -209,7 +209,7 @@ namespace Apa {
 
         while (true) {
             // Translators: IMPORTANT! space symbol in the end
-            print (_("Choose package to %s: (0 to exit, -1 to skip) ").printf (action_name), false);
+            print (_("[0 - exit; -1 - skip] "), false);
             var input = stdin.read_line ().strip ();
 
             if (input == "") {
