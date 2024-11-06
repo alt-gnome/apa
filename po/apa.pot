@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: apa\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-06 14:02+0300\n"
+"POT-Creation-Date: 2024-11-06 15:34+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -288,20 +288,20 @@ msgstr ""
 msgid "No packages to show"
 msgstr ""
 
-#: src/utils.vala:44
+#: src/utils.vala:47
 msgid "<skip package>"
 msgstr ""
 
-#: src/utils.vala:195
+#: src/utils.vala:199
 #, c-format
 msgid "Choose package to %s:"
 msgstr ""
 
 #. Translators: IMPORTANT! space symbol in the end
-#: src/utils.vala:212
+#: src/utils.vala:216
 msgid "[0 - exit; -1 - skip] "
 msgstr ""
 
-#: src/utils.vala:263
-msgid "You can create issue here https://github.com/alt-gnome/apa/issues"
+#: src/utils.vala:267
+msgid "You should create issue:"
 msgstr ""
