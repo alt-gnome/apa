@@ -41,6 +41,9 @@ public enum Apa.ChoiceResult {
 }
 
 namespace Apa {
+
+    public string current_locale;
+
     public const string SKIP_PACKAGE_SENTENCE = _("<skip package>");
 
     public string get_version () {
@@ -145,6 +148,7 @@ namespace Apa {
     public bool locale_init () {
         foreach (string lang in Intl.get_language_names ()) {
             if (Intl.setlocale (LocaleCategory.ALL, lang) != null) {
+                current_locale = lang;
                 return true;
             }
         }
@@ -259,8 +263,28 @@ namespace Apa {
         return result;
     }
 
-    public void print_issue () {
-        print (_("You can create issue here https://github.com/alt-gnome/apa/issues"));
+    public void print_create_issue (string error_message, string command) {
+        print (_("You should create issue:"));
+        print ("https://github.com/alt-gnome/apa/issues/new?label=%s&title=%s&body=%s".printf (
+            "unknown-error",
+            Uri.escape_string ("Unknown error: %s".printf (error_message), null, true),
+            Uri.escape_string ("```%s```".printf (command), null, true)
+        ));
+    }
+
+    public string form_command (string command, string[] argv, string[] options, ArgOption?[] arg_options) {
+        var argo = new string[arg_options.length];
+        for (int i = 0; i < arg_options.length; i++) {
+            argo[i] = "%s=%s".printf (arg_options[i].name, arg_options[i].value);
+        }
+
+        return "\nLocale: %s\nCommand: %s\nArgs: %s\nOptions: %s\nArguments options: %s\n".printf (
+            current_locale,
+            command,
+            string.joinv (" ", options),
+            string.joinv (" ", argo),
+            string.joinv (" ", argv)
+        );
     }
 
     public bool pk_is_running () throws Error {

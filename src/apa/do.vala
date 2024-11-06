@@ -209,7 +209,12 @@ namespace Apa {
                     case OriginErrorType.NONE:
                     default:
                         print_error (_("Unknown error message: '%s'").printf (error_message));
-                        print_issue ();
+                        print_create_issue (error_message, form_command (
+                            Get.DO,
+                            packages.to_array (),
+                            options.to_array (),
+                            arg_options.to_array ()
+                        ));
                         return Constants.ExitCode.BASE_ERROR;
                 }
 
