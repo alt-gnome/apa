@@ -22,30 +22,35 @@ namespace Apa {
         bool ignore_unknown_options = false
     ) throws CommandError {
         var error = new Gee.ArrayList<string> ();
+        int status;
 
         if ("--with-kernel" in options || "-k" in options) {
-            if ((yield kernel (
+            status = yield kernel (
                 new Gee.ArrayList<string>.wrap ({ "update" }),
                 options,
                 arg_options,
                 true
-            )) != Constants.ExitCode.SUCCESS) {
-                throw new CommandError.CANT_UPDATE_KERNEL (_("Can't update kernel"));
+            );
+
+            if (status != Constants.ExitCode.SUCCESS) {
+                return status;
             }
 
             options.remove ("--with-kernel");
             options.remove ("-k");
 
         } else {
-            if ((yield update (options, arg_options, true)) != Constants.ExitCode.SUCCESS) {
-                throw new CommandError.CANT_UPDATE (_("Can't update"));
+            status = yield update (options, arg_options, true);
+            
+            if (status != Constants.ExitCode.SUCCESS) {
+                return status;
             }
         }
 
         while (true) {
             error.clear ();
 
-            int status = yield Get.upgrade (options, arg_options, error);
+            status = yield Get.upgrade (options, arg_options, error);
 
             if (status != Constants.ExitCode.SUCCESS && error.size > 0) {
                 string error_message = normalize_error (error);
@@ -56,10 +61,15 @@ namespace Apa {
                         print_error (_("APT is currently busy"));
                         return status;
 
+                    case OriginErrorType.UNABLE_TO_FETCH_SOME_ARCHIVES:
+                        print_error (_("Unable to fetch some archives. Check your connection to repository. Maybe run 'apa update' or try with '--fix-missing' option"));
+                        return status;
+
                     case OriginErrorType.NONE:
                     default:
                         print_error (_("Unknown error message: '%s'").printf (error_message));
                         print_create_issue (error_message, form_command (
+                            error_message,
                             Get.UPGRADE,
                             {},
                             options.to_array (),

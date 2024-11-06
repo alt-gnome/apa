@@ -36,10 +36,15 @@ namespace Apa {
                         print_error (_("APT is currently busy"));
                         return status;
 
+                    case OriginErrorType.SOME_INDEX_FILES_FAILED_TO_DOWNLOAD:
+                        print_error ("Failed to download index files. Check your connection to repository");
+                        return status;
+
                     case OriginErrorType.NONE:
                     default:
                         print_error (_("Unknown error message: '%s'").printf (error_message));
                         print_create_issue (error_message, form_command (
+                            error_message,
                             Get.UPDATE,
                             {},
                             options.to_array (),

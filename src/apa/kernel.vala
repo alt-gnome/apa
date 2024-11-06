@@ -23,14 +23,17 @@ namespace Apa {
         bool ignore_unknown_options = false
     ) throws CommandError {
         var error = new Gee.ArrayList<string> ();
+        int status;
 
-        if ((yield update (options, arg_options, true)) != Constants.ExitCode.SUCCESS) {
-            throw new CommandError.CANT_UPDATE (_("Can't update"));
+        status = yield update (options, arg_options, true);
+
+        if (status != Constants.ExitCode.SUCCESS) {
+            return status;
         }
 
         while (true) {
             error.clear ();
-            var status = yield Kernel.run (subcommands, options, arg_options, error, ignore_unknown_options);
+            status = yield Kernel.run (subcommands, options, arg_options, error, ignore_unknown_options);
 
             if (status != Constants.ExitCode.SUCCESS && error.size > 0) {
                 string error_message = normalize_error (error);
@@ -40,6 +43,7 @@ namespace Apa {
                     default:
                         print_error (_("Unknown error message: '%s'").printf (error_message));
                         print_create_issue (error_message, form_command (
+                            error_message,
                             Kernel.KERNEL,
                             subcommands.to_array (),
                             options.to_array (),

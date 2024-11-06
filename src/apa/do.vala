@@ -206,10 +206,15 @@ namespace Apa {
                         print_error (_("APT is currently busy"));
                         return status;
 
+                    case OriginErrorType.UNABLE_TO_FETCH_SOME_ARCHIVES:
+                        print_error (_("Unable to fetch some archives. Check your connection to repository. Maybe run 'apa update' or try with '--fix-missing' option"));
+                        return status;
+
                     case OriginErrorType.NONE:
                     default:
                         print_error (_("Unknown error message: '%s'").printf (error_message));
                         print_create_issue (error_message, form_command (
+                            error_message,
                             Get.DO,
                             packages.to_array (),
                             options.to_array (),

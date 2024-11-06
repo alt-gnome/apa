@@ -16,32 +16,37 @@
  */
 
 namespace Apa {
+
+    // Should be aligned with ErrorType enum
+    const string[] ORIGIN_ERRORS = {
+        "Couldn't find package %s",
+        "Package %s is a virtual package with multiple good providers.\n",
+        "Unable to lock the download directory",
+        "Package %s has no installation candidate",
+        "Unable to fetch some archives, maybe run apt-get update or try with --fix-missing?",
+        "Some index files failed to download. They have been ignored, or old ones used instead.",
+    };
+
     public enum OriginErrorType {
         COULDNT_FIND_PACKAGE,
         PACKAGE_VIRTUAL_WITH_MULTIPLE_GOOD_PROIDERS,
         UNABLE_TO_LOCK_DOWNLOAD_DIR,
         NO_INSTALLATION_CANDIDAT,
+        UNABLE_TO_FETCH_SOME_ARCHIVES,
+        SOME_INDEX_FILES_FAILED_TO_DOWNLOAD,
         NONE,
     }
 
     public OriginErrorType detect_error (string error_message, out string package = null) {
-        // Should be aligned with ErrorType enum
-        string[] origin_errors = {
-            "Couldn't find package %s",
-            "Package %s is a virtual package with multiple good providers.\n",
-            "Unable to lock the download directory",
-            "Package %s has no installation candidate"
-        };
-
         string pattern;
         Regex regex;
         package = null;
 
         try {
-            for (int i = 0; i < origin_errors.length; i++) {
+            for (int i = 0; i < ORIGIN_ERRORS.length; i++) {
                 pattern = dgettext (
                     "apt",
-                    origin_errors[i]
+                    ORIGIN_ERRORS[i]
                 ).strip ().replace ("%s", "(.*)");
 
                 regex = new Regex (
@@ -56,7 +61,7 @@ namespace Apa {
                     return (OriginErrorType) i;
 
                 } else {
-                    print_devel ("\nError message: '%s'\nTranslated patern: '%s'\n".printf (origin_errors[i], pattern));
+                    print_devel ("\nError message: '%s'\nTranslated patern: '%s'\n".printf (ORIGIN_ERRORS[i], pattern));
                 }
             }
 

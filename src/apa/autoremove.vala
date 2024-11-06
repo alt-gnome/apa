@@ -36,6 +36,7 @@ namespace Apa {
                     default:
                         print_error (_("Unknown error message: '%s'").printf (error_message));
                         print_create_issue (error_message, form_command (
+                            error_message,
                             Get.AUTOREMOVE,
                             {},
                             options.to_array (),

@@ -275,13 +275,14 @@ namespace Apa {
         ));
     }
 
-    public string form_command (string command, string[] argv, string[] options, ArgOption?[] arg_options) {
+    public string form_command (string error_message, string command, string[] argv, string[] options, ArgOption?[] arg_options) {
         var argo = new string[arg_options.length];
         for (int i = 0; i < arg_options.length; i++) {
             argo[i] = "%s=%s".printf (arg_options[i].name, arg_options[i].value);
         }
 
-        return "\nLocale: %s\nCommand: %s\nArgs: %s\nOptions: %s\nArguments options: %s\n".printf (
+        return "\nError message quoted:\n\"%s\"\nLocale: %s\nCommand: %s\nArgs: %s\nOptions: %s\nArguments options: %s\n".printf (
+            error_message,
             current_locale,
             command,
             string.joinv (" ", options),
