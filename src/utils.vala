@@ -264,11 +264,14 @@ namespace Apa {
     }
 
     public void print_create_issue (string error_message, string command) {
-        print (_("You should create issue:"));
-        print ("https://github.com/alt-gnome/apa/issues/new?label=%s&title=%s&body=%s".printf (
-            "unknown-error",
-            Uri.escape_string ("Unknown error: %s".printf (error_message), null, true),
-            Uri.escape_string ("```%s```".printf (command), null, true)
+        print (_("You should %s\033]8;;%s\033\\create issue↗️\033]8;;\033\\%s").printf (
+            Constants.Colors.OKBLUE,
+            "https://github.com/alt-gnome/apa/issues/new?label=%s&title=%s&body=%s".printf (
+                "unknown-error",
+                Uri.escape_string ("Unknown error: %s".printf (error_message), null, true),
+                Uri.escape_string ("```%s```".printf (command), null, true)
+            ),
+            Constants.Colors.ENDC
         ));
     }
 
