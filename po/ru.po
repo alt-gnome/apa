@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: apa\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-30 10:55+0300\n"
+"POT-Creation-Date: 2024-11-06 14:02+0300\n"
 "PO-Revision-Date: 2024-10-18 11:04+0300\n"
 "Last-Translator: Vladimir Vaskov <rirusha@altlinux.org>\n"
 "Language-Team: Russian <rirusha@altlinux.org>\n"
@@ -21,15 +21,22 @@ msgstr ""
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Gtranslator 47.0\n"
 
+#: src/apa/autoremove.vala:37 src/apa/do.vala:211 src/apa/info.vala:35
+#: src/apa/install.vala:174 src/apa/kernel.vala:41 src/apa/remove.vala:88
+#: src/apa/source.vala:38 src/apa/update.vala:41 src/apa/upgrade.vala:61
+#, c-format
+msgid "Unknown error message: '%s'"
+msgstr "Сообщение о неизвестной ошибке: '%s'"
+
 #: src/apa/do.vala:27
 #, c-format
 msgid "Unknown operation '%c' in '%s'"
 msgstr "Неизвестная операция '%c' в '%s'"
 
-#: src/apa/do.vala:82 src/apa/install.vala:63 src/apa/remove.vala:56
+#: src/apa/do.vala:82 src/apa/install.vala:63
 #, c-format
-msgid "Package '%s' not found, but packages with a similar name were found:"
-msgstr "Пакет '%s' не найден, но были найдены пакеты с похожим названием:"
+msgid "Package '%s' not found, but packages with a similar name were found"
+msgstr "Пакет '%s' не найден, но были найдены пакеты с похожим названием"
 
 #: src/apa/do.vala:84 src/apa/remove.vala:58
 msgid "remove"
@@ -39,25 +46,20 @@ msgstr "удалить"
 msgid "There are no packages left to do"
 msgstr ""
 
-#: src/apa/do.vala:130 src/apa/install.vala:65 src/apa/install.vala:106
+#: src/apa/do.vala:131 src/apa/do.vala:181 src/apa/install.vala:65
+#: src/apa/install.vala:105 src/apa/install.vala:152
 msgid "install"
 msgstr "установить"
 
-#: src/apa/do.vala:136 src/apa/install.vala:71 src/apa/install.vala:112
+#: src/apa/do.vala:137 src/apa/do.vala:187 src/apa/install.vala:71
+#: src/apa/install.vala:111 src/apa/install.vala:158
 msgid "There are no packages left to install"
 msgstr "Не осталось пакетов для установки"
 
-#: src/apa/do.vala:155 src/apa/install.vala:127 src/apa/remove.vala:83
+#: src/apa/do.vala:206 src/apa/install.vala:126 src/apa/remove.vala:83
 #: src/apa/update.vala:36 src/apa/upgrade.vala:56
 msgid "APT is currently busy"
 msgstr "APT в данный момент занят"
-
-#: src/apa/do.vala:160 src/apa/info.vala:35 src/apa/install.vala:132
-#: src/apa/kernel.vala:41 src/apa/remove.vala:88 src/apa/source.vala:38
-#: src/apa/update.vala:41 src/apa/upgrade.vala:61
-#, c-format
-msgid "Unknown error message: '%s'"
-msgstr "Сообщение о неизвестной ошибке: '%s'"
 
 #: src/apa/install.vala:28 src/apa/remove.vala:26
 msgid "For operation like '<package>+/-' use 'do' command instead"
@@ -82,12 +84,17 @@ msgid "I am your Moother"
 msgstr ""
 
 #: src/apa/moo.vala:69
-msgid "I use ALT btw..."
+msgid "I use ALT btw…"
 msgstr ""
 
 #: src/apa/moo.vala:70
 msgid "Have you mooed today?"
 msgstr ""
+
+#: src/apa/remove.vala:56
+#, c-format
+msgid "Package '%s' not found, but packages with a similar name were found:"
+msgstr "Пакет '%s' не найден, но были найдены пакеты с похожим названием:"
 
 #: src/apa/remove.vala:64
 msgid "There are no packages left to remove"
@@ -97,43 +104,43 @@ msgstr "Больше не осталось пакетов, которые нуж
 msgid "Can't update kernel"
 msgstr "Не удается обновить ядро"
 
-#: src/apa.vala:112 src/utils-commands/update-kernel.vala:64
+#: src/apa.vala:117 src/utils-commands/update-kernel.vala:64
 #, c-format
 msgid "Unknown command '%s'"
 msgstr "Неизвестная команда '%s'"
 
-#: src/apa.vala:128
+#: src/apa.vala:133
 #, c-format
 msgid "Need root previlegies for '%s' command"
 msgstr "Нужны привелегии суперпользователя для команды '%s'"
 
-#: src/apa.vala:141
+#: src/apa.vala:146
 msgid "PackageKit is running"
 msgstr "Запущен PackageKit"
 
-#: src/apt/cache.vala:100
+#: src/apt/cache.vala:96
 msgid "No packages to search"
 msgstr "Нет пакетов для поиска"
 
-#: src/apt/get.vala:169
+#: src/apt/get.vala:171
 #, fuzzy
 msgid "No packages to do"
 msgstr "Нет пакетов для оперирования"
 
-#: src/apt/get.vala:174
+#: src/apt/get.vala:176
 #, c-format
 msgid "It's not known what to do with %s"
 msgstr "Неизвестно, что делать с %s"
 
-#: src/apt/get.vala:240 src/apt/repo.vala:70
+#: src/apt/get.vala:243 src/apt/repo.vala:70
 msgid "No packages to install"
 msgstr "Нет пакетов для установки"
 
-#: src/apt/get.vala:301
+#: src/apt/get.vala:306
 msgid "No packages to remove"
 msgstr "Нет пакетов для удаления"
 
-#: src/apt/get.vala:354
+#: src/apt/get.vala:359
 msgid "No packages to download"
 msgstr "Нет пакетов для загрузки"
 
@@ -281,12 +288,12 @@ msgstr ""
 msgid "Unknown option '%s'"
 msgstr "Неизвестная опция '%s'"
 
-#: src/origin.vala:41
+#: src/origin.vala:42
 #, c-format
 msgid "Unknown option with value '%s'"
 msgstr "Неизвестный параметр со значением '%s'"
 
-#: src/utils-commands/rpm.vala:97
+#: src/utils-commands/rpm.vala:99
 msgid "No packages to show"
 msgstr "Никаких пакетов для отображения"
 
@@ -294,13 +301,22 @@ msgstr "Никаких пакетов для отображения"
 msgid "<skip package>"
 msgstr "<пропустить пакет>"
 
-#: src/utils.vala:208
-#, c-format
-msgid "Choose package to %s: (0 to exit, -1 to skip) "
-msgstr "Выберите, какой пакет %s: (0 для выхода, -1 для пропуска)"
+#: src/utils.vala:195
+#, fuzzy, c-format
+msgid "Choose package to %s:"
+msgstr "Выберите пакет для %s:"
 
-#: src/utils.vala:248
+#. Translators: IMPORTANT! space symbol in the end
+#: src/utils.vala:212
+msgid "[0 - exit; -1 - skip] "
+msgstr "[0 - выход; -1 - пропустить] "
+
+#: src/utils.vala:263
 msgid "You can create issue here https://github.com/alt-gnome/apa/issues"
 msgstr ""
 "Вы можете создать Задачу (Проблему) здесь https://github.com/alt-gnome/apa/"
 "issues"
+
+#, c-format
+#~ msgid "Choose package to %s: (0 to exit, -1 to skip) "
+#~ msgstr "Выберите, какой пакет %s: (0 для выхода, -1 для пропуска)"
