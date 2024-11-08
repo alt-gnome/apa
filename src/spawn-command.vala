@@ -158,4 +158,11 @@ namespace Apa {
     ) {
         return yield spawn_command_full (spawn_args, null, error);
     }
+
+    async int spawn_command_silence (
+        Gee.ArrayList<string> spawn_args,
+        Gee.ArrayList<string>? error
+    ) {
+        return yield spawn_command_full (spawn_args, new Gee.ArrayList<string> (), error);
+    }
 }

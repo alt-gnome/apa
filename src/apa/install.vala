@@ -24,7 +24,7 @@ namespace Apa {
         var error = new Gee.ArrayList<string> ();
 
         foreach (string package_name in packages) {
-            if (package_name.has_suffix ("-") || package_name.has_suffix ("+")) {
+            if (!(yield check_package_name_no_action (package_name))) {
                 print_error (_("For operation like '<package>+/-' use 'do' command instead"));
                 return Constants.ExitCode.BASE_ERROR;
             }
@@ -149,6 +149,11 @@ namespace Apa {
                         }
 
                         string? answer;
+                        if (choice_packages.size == 0) {
+                            print_error (error_message);
+                            return status;
+                        }
+
                         var result_choice = give_choice (choice_packages.to_array (), _("install"), out answer);
 
                         switch (result_choice) {

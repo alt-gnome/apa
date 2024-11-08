@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: apa\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-06 15:34+0300\n"
+"POT-Creation-Date: 2024-11-07 11:19+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,9 +17,9 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/apa/autoremove.vala:37 src/apa/do.vala:211 src/apa/info.vala:35
-#: src/apa/install.vala:174 src/apa/kernel.vala:41 src/apa/remove.vala:88
-#: src/apa/source.vala:38 src/apa/update.vala:41 src/apa/upgrade.vala:61
+#: src/apa/autoremove.vala:37 src/apa/do.vala:215 src/apa/info.vala:35
+#: src/apa/install.vala:178 src/apa/kernel.vala:44 src/apa/remove.vala:88
+#: src/apa/source.vala:38 src/apa/update.vala:45 src/apa/upgrade.vala:70
 #, c-format
 msgid "Unknown error message: '%s'"
 msgstr ""
@@ -53,8 +53,14 @@ msgid "There are no packages left to install"
 msgstr ""
 
 #: src/apa/do.vala:206 src/apa/install.vala:126 src/apa/remove.vala:83
-#: src/apa/update.vala:36 src/apa/upgrade.vala:56
+#: src/apa/update.vala:36 src/apa/upgrade.vala:61
 msgid "APT is currently busy"
+msgstr ""
+
+#: src/apa/do.vala:210 src/apa/install.vala:173 src/apa/upgrade.vala:65
+msgid ""
+"Unable to fetch some archives. Check your connection to repository. Maybe "
+"run 'apa update' or try with '--fix-missing' option"
 msgstr ""
 
 #: src/apa/install.vala:28 src/apa/remove.vala:26
@@ -64,10 +70,6 @@ msgstr ""
 #: src/apa/install.vala:59 src/apa/remove.vala:52
 #, c-format
 msgid "Package '%s' not found"
-msgstr ""
-
-#: src/apa/kernel.vala:28 src/apa/upgrade.vala:41
-msgid "Can't update"
 msgstr ""
 
 #: src/apa/moo.vala:67
@@ -93,10 +95,6 @@ msgstr ""
 
 #: src/apa/remove.vala:64
 msgid "There are no packages left to remove"
-msgstr ""
-
-#: src/apa/upgrade.vala:33
-msgid "Can't update kernel"
 msgstr ""
 
 #: src/apa.vala:117 src/utils-commands/update-kernel.vala:64
@@ -303,5 +301,10 @@ msgid "[0 - exit; -1 - skip] "
 msgstr ""
 
 #: src/utils.vala:267
-msgid "You should create issue:"
+#, c-format
+msgid "You should %s"
+msgstr ""
+
+#: src/utils.vala:275
+msgid "create issue↗️"
 msgstr ""

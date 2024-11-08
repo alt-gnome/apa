@@ -22,7 +22,7 @@ namespace Apa {
         owned Gee.ArrayList<ArgOption?> arg_options
     ) throws CommandError {
         foreach (string package_name in packages) {
-            if (package_name.has_suffix ("-") || package_name.has_suffix ("+")) {
+            if (!(yield check_package_name_no_action (package_name))) {
                 print_error (_("For operation like '<package>+/-' use 'do' command instead"));
                 return Constants.ExitCode.BASE_ERROR;
             }

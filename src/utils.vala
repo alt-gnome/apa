@@ -278,6 +278,16 @@ namespace Apa {
         ));
     }
 
+    public async bool check_package_name_no_action (string package_name) {
+        if (package_name.has_suffix ("-") || package_name.has_suffix ("+")) {
+            if ((yield spawn_command_silence (new Gee.ArrayList<string>.wrap ({"apt-cache", "show", package_name[0:package_name.length - 1]}), null)) == Constants.ExitCode.SUCCESS) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     public string form_command (string error_message, string command, string[] argv, string[] options, ArgOption?[] arg_options) {
         var argo = new string[arg_options.length];
         for (int i = 0; i < arg_options.length; i++) {
