@@ -3,3 +3,5 @@ _build
 
 # .vscode
 .vscode/settings.json
+
+subprojects/*/

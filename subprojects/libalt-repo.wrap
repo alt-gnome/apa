@@ -1,0 +1,4 @@
+[wrap-git]
+directory=libalt-repo
+url=https://github.com/alt-gnome/libalt-repo-vala.git
+revision=v1.2
