@@ -37,7 +37,6 @@ namespace Apa {
                 string? package_error_source;
                 switch (detect_error (error_message, out package_error_source)) {
                     case OriginErrorType.COULDNT_FIND_PACKAGE:
-                        var package_name_straight = package_error_source.replace ("-", "");
 
                         var installed_result = new Gee.ArrayList<string> ();
                         yield Rpm.list (
@@ -46,7 +45,7 @@ namespace Apa {
                             installed_result
                         );
 
-                        string[]? possible_package_names = fuzzy_search (package_name_straight, installed_result.to_array ());
+                        string[]? possible_package_names = fuzzy_search (package_error_source, installed_result.to_array ());
 
                         if (possible_package_names == null) {
                             print_error (_("Package '%s' not found").printf (package_error_source));

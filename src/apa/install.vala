@@ -40,11 +40,9 @@ namespace Apa {
 
                 switch (detect_error (error_message, out package_error_source)) {
                     case OriginErrorType.COULDNT_FIND_PACKAGE:
-                        var package_name_straight = package_error_source.replace ("-", "");
-
                         var search_result = new Gee.ArrayList<string> ();
                         yield Cache.search (
-                            new Gee.ArrayList<string>.wrap ({ string.joinv (".*", split_chars (package_name_straight)) }),
+                            new Gee.ArrayList<string>.wrap ({ string.joinv (".*", split_chars (package_error_source)) }),
                             new Gee.ArrayList<string>.wrap ({ "--names-only" }),
                             arg_options,
                             search_result,
@@ -53,7 +51,7 @@ namespace Apa {
                         );
                         do_short_array_list (ref search_result);
 
-                        string[]? possible_package_names = fuzzy_search (package_name_straight, search_result.to_array ());
+                        string[]? possible_package_names = fuzzy_search (package_error_source, search_result.to_array ());
 
                         if (possible_package_names == null) {
                             print_error (_("Package '%s' not found").printf (package_error_source));

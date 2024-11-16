@@ -47,12 +47,11 @@ namespace Apa {
 
                         string[]? possible_package_names;
 
-                        var package_name_straight = package_error_source_name.replace ("-", "");
                         switch (package_error_source_operation) {
                             case '+':
                                 var search_result = new Gee.ArrayList<string> ();
                                 yield Cache.search (
-                                    new Gee.ArrayList<string>.wrap ({ string.joinv (".*", split_chars (package_name_straight)) }),
+                                    new Gee.ArrayList<string>.wrap ({ string.joinv (".*", split_chars (package_error_source)) }),
                                     new Gee.ArrayList<string>.wrap ({ "--names-only" }),
                                     arg_options,
                                     search_result,
@@ -61,7 +60,7 @@ namespace Apa {
                                 );
                                 do_short_array_list (ref search_result);
 
-                                possible_package_names = fuzzy_search (package_name_straight, search_result.to_array ());
+                                possible_package_names = fuzzy_search (package_error_source, search_result.to_array ());
                                 break;
 
                             case '-':
