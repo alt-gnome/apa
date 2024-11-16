@@ -71,7 +71,7 @@ namespace Apa {
                                     installed_result
                                 );
 
-                                possible_package_names = fuzzy_search (package_name_straight, installed_result.to_array ());
+                                possible_package_names = fuzzy_search (package_error_source, installed_result.to_array ());
                                 break;
 
                             default:
