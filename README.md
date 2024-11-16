@@ -13,7 +13,7 @@ apt-get install meson vala libgee-devel libgee-gir-devel libjson-glib-devel libj
 
 ## Установка из исходников
 
-> [NOTE] Выполнять от имени обычного пользователя
+> [!NOTE] Выполнять от имени обычного пользователя
 
 ```shell
 meson setup _build -Dprefix=/usr
