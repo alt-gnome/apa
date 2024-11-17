@@ -29,10 +29,10 @@ apa_no_main_code_sources = files (
   'apa.vala',
   'constants.vala',
   'error-detection.vala',
+  'fuzzy_search.vala',
   'help.vala',
   'command-args.vala',
   'origin.vala',
-  'search.vala',
   'spawn-command.vala',
   'utils.vala',
 )
