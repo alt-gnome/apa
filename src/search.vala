@@ -80,7 +80,7 @@ namespace Apa {
             return null;
         }
 
-        string?[] results = { null, null, null };
+        string?[] results = new string?[9];
 
         for (int i = 0; i < results.length && i < pre_results.size; i++) {
             if (pre_results[i].distance < aquery.length / 2) {
