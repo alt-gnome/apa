@@ -8,7 +8,7 @@
 
 ```shell
 su -
-apt-get install meson vala libgee-devel libgee-gir-devel libjson-glib-devel libjson-glib-gir-devel libpackagekit-glib-devel gobject-introspection-devel
+apt-get install meson vala libgee-devel libgee0.8-gir-devel libjson-glib-devel libjson-glib-gir-devel libpackagekit-glib-devel gobject-introspection-devel
 ```
 
 ## Установка из исходников
