@@ -28,17 +28,6 @@ public sealed class Apa.Get : Origin {
     public const string SOURCE = "source";
     public const string AUTOREMOVE = "autoremove";
 
-    public const string[] COMMANDS = {
-        UPDATE,
-        UPGRADE,
-        DO,
-        INSTALL,
-        REINSTALL,
-        REMOVE,
-        SOURCE,
-        AUTOREMOVE
-    };
-
     Get () {}
 
     void set_common_options () {
@@ -88,12 +77,11 @@ public sealed class Apa.Get : Origin {
     }
 
     public static async int update (
-        Gee.ArrayList<string> options,
-        Gee.ArrayList<ArgOption?> arg_options,
+        owned CommandHandler command_handler,
         Gee.ArrayList<string>? error = null,
         bool ignore_unknown_options = false
     ) throws CommandError {
-        return yield new Get ().internal_update (options, arg_options, error, ignore_unknown_options);
+        return yield new Get ().internal_update (command_handler.options, command_handler.arg_options, error, ignore_unknown_options);
     }
 
     public async int internal_update (
@@ -117,12 +105,11 @@ public sealed class Apa.Get : Origin {
     }
 
     public static async int upgrade (
-        Gee.ArrayList<string> options,
-        Gee.ArrayList<ArgOption?> arg_options,
+        owned CommandHandler command_handler,
         Gee.ArrayList<string>? error = null,
         bool ignore_unknown_options = false
     ) throws CommandError {
-        return yield new Get ().internal_upgrade (options, arg_options, error, ignore_unknown_options);
+        return yield new Get ().internal_upgrade (command_handler.options, command_handler.arg_options, error, ignore_unknown_options);
     }
 
     public async int internal_upgrade (
@@ -161,26 +148,18 @@ public sealed class Apa.Get : Origin {
     }
 
     public static async int @do (
-        Gee.ArrayList<string> packages,
-        Gee.ArrayList<string> options,
-        Gee.ArrayList<ArgOption?> arg_options,
+        owned CommandHandler command_handler,
         Gee.ArrayList<string>? error = null,
         bool ignore_unknown_options = false
     ) throws CommandError {
-        if (packages.size == 0) {
+        if (command_handler.argv.size == 0) {
             throw new CommandError.NO_PACKAGES (_("No packages to do"));
         }
 
-        foreach (string package in packages) {
-            if (package[package.length - 1] != '-' && package[package.length - 1] != '+') {
-                throw new CommandError.NO_PACKAGES (_("It's not known what to do with %s").printf (package));
-            }
-        }
-
         return yield new Get ().internal_do (
-            packages,
-            options,
-            arg_options,
+            command_handler.argv,
+            command_handler.options,
+            command_handler.arg_options,
             error,
             ignore_unknown_options
         );
@@ -232,21 +211,19 @@ public sealed class Apa.Get : Origin {
     }
 
     public static async int install (
-        Gee.ArrayList<string> packages,
-        Gee.ArrayList<string> options,
-        Gee.ArrayList<ArgOption?> arg_options,
+        owned CommandHandler command_handler,
         Gee.ArrayList<string>? error = null,
         Gee.ArrayList<string>? result = null,
         bool ignore_unknown_options = false
     ) throws CommandError {
-        if (packages.size == 0) {
+        if (command_handler.argv.size == 0) {
             throw new CommandError.NO_PACKAGES (_("No packages to install"));
         }
 
         return yield new Get ().internal_install (
-            packages,
-            options,
-            arg_options,
+            command_handler.argv,
+            command_handler.options,
+            command_handler.arg_options,
             error,
             result,
             ignore_unknown_options
@@ -296,20 +273,18 @@ public sealed class Apa.Get : Origin {
     }
 
     public static async int remove (
-        Gee.ArrayList<string> packages,
-        Gee.ArrayList<string> options,
-        Gee.ArrayList<ArgOption?> arg_options,
+        owned CommandHandler command_handler,
         Gee.ArrayList<string>? error = null,
         bool ignore_unknown_options = false
     ) throws CommandError {
-        if (packages.size == 0) {
+        if (command_handler.argv.size == 0) {
             throw new CommandError.NO_PACKAGES (_("No packages to remove"));
         }
 
         return yield new Get ().internal_remove (
-            packages,
-            options,
-            arg_options,
+            command_handler.argv,
+            command_handler.options,
+            command_handler.arg_options,
             error,
             ignore_unknown_options
         );
@@ -349,20 +324,18 @@ public sealed class Apa.Get : Origin {
     }
 
     public static async int source (
-        Gee.ArrayList<string> packages,
-        Gee.ArrayList<string> options,
-        Gee.ArrayList<ArgOption?> arg_options,
+        owned CommandHandler command_handler,
         Gee.ArrayList<string>? error = null,
         bool ignore_unknown_options = false
     ) throws CommandError {
-        if (packages.size == 0) {
+        if (command_handler.argv.size == 0) {
             throw new CommandError.NO_PACKAGES (_("No packages to download"));
         }
 
         return yield new Get ().internal_source (
-            packages,
-            options,
-            arg_options,
+            command_handler.argv,
+            command_handler.options,
+            command_handler.arg_options,
             error,
             ignore_unknown_options
         );
@@ -402,14 +375,13 @@ public sealed class Apa.Get : Origin {
     }
 
     public static async int autoremove (
-        Gee.ArrayList<string> options,
-        Gee.ArrayList<ArgOption?> arg_options,
+        owned CommandHandler command_handler,
         Gee.ArrayList<string>? error = null,
         bool ignore_unknown_options = false
     ) throws CommandError {
         return yield new Get ().internal_autoremove (
-            options,
-            arg_options,
+            command_handler.options,
+            command_handler.arg_options,
             error,
             ignore_unknown_options
         );

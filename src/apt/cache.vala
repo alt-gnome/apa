@@ -21,11 +21,7 @@
 
     protected override string origin { get; default = "apt-cache"; }
 
-    internal const string SEARCH = "search";
-
-    const string[] COMMANDS = {
-        SEARCH
-    };
+    public const string SEARCH = "search";
 
     Cache () {}
 
@@ -68,16 +64,15 @@
     }
 
     public static async int list_all (
-        Gee.ArrayList<string> options,
-        Gee.ArrayList<ArgOption?> arg_options,
+        owned CommandHandler command_handler,
         Gee.ArrayList<string>? result = null,
         Gee.ArrayList<string>? error = null,
         bool ignore_unknown_options = false
     ) throws CommandError {
         return yield new Cache ().internal_search (
             new Gee.ArrayList<string>.wrap ({ "." }),
-            options,
-            arg_options,
+            command_handler.options,
+            command_handler.arg_options,
             result,
             error,
             ignore_unknown_options
@@ -85,21 +80,19 @@
     }
 
     public static async int search (
-        Gee.ArrayList<string> regexs,
-        Gee.ArrayList<string> options,
-        Gee.ArrayList<ArgOption?> arg_options,
+        owned CommandHandler command_handler,
         Gee.ArrayList<string>? result = null,
         Gee.ArrayList<string>? error = null,
         bool ignore_unknown_options = false
     ) throws CommandError {
-        if (regexs.size == 0) {
+        if (command_handler.argv.size == 0) {
             throw new CommandError.NO_PACKAGES (_("No packages to search"));
         }
 
         return yield new Cache ().internal_search (
-            regexs,
-            options,
-            arg_options,
+            command_handler.argv,
+            command_handler.options,
+            command_handler.arg_options,
             result,
             error,
             ignore_unknown_options

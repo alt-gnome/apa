@@ -16,12 +16,11 @@
  */
 
 namespace Apa {
-    internal async int remove (
-        owned Gee.ArrayList<string> packages,
-        owned Gee.ArrayList<string> options,
-        owned Gee.ArrayList<ArgOption?> arg_options
+    public async int remove (
+        owned CommandHandler command_handler,
+        bool ignore_unknown_options = false
     ) throws CommandError {
-        foreach (string package_name in packages) {
+        foreach (string package_name in command_handler.argv) {
             if (!(yield check_package_name_no_action (package_name))) {
                 print_error (_("For operation like '<package>+/-' use 'do' command instead"));
                 return Constants.ExitCode.BASE_ERROR;
@@ -30,7 +29,7 @@ namespace Apa {
 
         while (true) {
             var error = new Gee.ArrayList<string> ();
-            var status = yield Get.remove (packages, options, arg_options, error);
+            var status = yield Get.remove (command_handler, error, ignore_unknown_options);
 
             if (status != Constants.ExitCode.SUCCESS && error.size > 0) {
                 string error_message = normalize_error (error);
@@ -40,8 +39,11 @@ namespace Apa {
 
                         var installed_result = new Gee.ArrayList<string> ();
                         yield Rpm.list (
-                            new Gee.ArrayList<string>.wrap ({ "-s" }),
-                            new Gee.ArrayList<ArgOption?> (),
+                            new CommandHandler () {
+                                options = new Gee.ArrayList<string>.wrap ({ "-s" }),
+                                arg_options = new Gee.ArrayList<ArgOption?> (),
+                            },
+
                             installed_result
                         );
 
@@ -58,8 +60,8 @@ namespace Apa {
 
                         switch (result) {
                             case ChoiceResult.SKIP:
-                                packages.remove (package_error_source);
-                                if (packages.size == 0) {
+                                command_handler.argv.remove (package_error_source);
+                                if (command_handler.argv.size == 0) {
                                     print (_("There are no packages left to remove"));
                                     return 0;
                                 }
@@ -67,7 +69,7 @@ namespace Apa {
 
                             case ChoiceResult.CHOSEN:
                                 replace_strings_in_array_list (
-                                    ref packages,
+                                    command_handler.argv,
                                     package_error_source,
                                     answer.split (" ")[0]
                                 );
@@ -85,13 +87,7 @@ namespace Apa {
                     case OriginErrorType.NONE:
                     default:
                         print_error (_("Unknown error message: '%s'").printf (error_message));
-                        print_create_issue (error_message, form_command (
-                            error_message,
-                            Get.REMOVE,
-                            packages.to_array (),
-                            options.to_array (),
-                            arg_options.to_array ()
-                        ));
+                        print_create_issue (error_message, command_handler);
                         return Constants.ExitCode.BASE_ERROR;
                 }
 

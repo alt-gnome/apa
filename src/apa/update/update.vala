@@ -16,39 +16,33 @@
  */
 
 namespace Apa {
-    internal async int kernel (
-        owned Gee.ArrayList<string> subcommands,
-        owned Gee.ArrayList<string> options,
-        owned Gee.ArrayList<ArgOption?> arg_options,
+    public async int update (
+        owned CommandHandler command_handler,
         bool ignore_unknown_options = false
     ) throws CommandError {
         var error = new Gee.ArrayList<string> ();
-        int status;
-
-        status = yield update (options, arg_options, true);
-
-        if (status != Constants.ExitCode.SUCCESS) {
-            return status;
-        }
 
         while (true) {
             error.clear ();
-            status = yield Kernel.run (subcommands, options, arg_options, error, ignore_unknown_options);
+            var status = yield Get.update (command_handler, error, ignore_unknown_options);
 
             if (status != Constants.ExitCode.SUCCESS && error.size > 0) {
                 string error_message = normalize_error (error);
+                string? package;
 
-                switch (detect_error (error_message)) {
+                switch (detect_error (error_message, out package)) {
+                    case OriginErrorType.UNABLE_TO_LOCK_DOWNLOAD_DIR:
+                        print_error (_("APT is currently busy"));
+                        return status;
+
+                    case OriginErrorType.SOME_INDEX_FILES_FAILED_TO_DOWNLOAD:
+                        print_error ("Failed to download index files. Check your connection to repository");
+                        return status;
+
                     case OriginErrorType.NONE:
                     default:
                         print_error (_("Unknown error message: '%s'").printf (error_message));
-                        print_create_issue (error_message, form_command (
-                            error_message,
-                            Kernel.KERNEL,
-                            subcommands.to_array (),
-                            options.to_array (),
-                            arg_options.to_array ()
-                        ));
+                        print_create_issue (error_message, command_handler);
                         return Constants.ExitCode.BASE_ERROR;
                 }
 

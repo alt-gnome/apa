@@ -15,55 +15,29 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-public sealed class Apa.Kernel : Origin {
+public sealed class Apa.UpdateKernel : Origin {
 
     protected override string origin { get; default = "/sbin/update-kernel"; }
 
-    public const string KERNEL = "kernel";
+    public const string UPDATE = "update";
+    public const string LIST = "list";
 
-    public const string[] COMMANDS = {
-        KERNEL,
-    };
+    UpdateKernel () {}
 
-    const string UPDATE = "update";
-    const string LIST = "list";
-
-    Kernel () {}
-
-    public static async int run (
-        Gee.ArrayList<string> subcommands,
-        Gee.ArrayList<string> options,
-        Gee.ArrayList<ArgOption?> arg_options,
+    public static async int update (
+        owned CommandHandler command_handler,
         Gee.ArrayList<string>? error = null,
         bool ignore_unknown_options = false
     ) throws CommandError {
-        if (subcommands.size == 0) {
-            Help.print_kernel ();
-            return Constants.ExitCode.BASE_ERROR;
-        }
-
-        return yield new Kernel ().internal_run (subcommands[0], options, arg_options, error, ignore_unknown_options);
+        return yield new UpdateKernel ().internal_update (command_handler.options, command_handler.arg_options, error, ignore_unknown_options);
     }
 
-    public async int internal_run (
-        string subcommand,
+    public async int internal_update (
         Gee.ArrayList<string> options,
         Gee.ArrayList<ArgOption?> arg_options,
         Gee.ArrayList<string>? error = null,
         bool ignore_unknown_options = false
     ) throws CommandError {
-        switch (subcommand) {
-            case UPDATE:
-                break;
-
-            case LIST:
-                spawn_arr.add ("--list");
-                break;
-
-            default:
-                throw new CommandError.UNKNOWN_COMMAND (_("Unknown command '%s'").printf (subcommand));
-        }
-
         current_options.add_all (options);
         current_arg_options.add_all (arg_options);
 
@@ -94,6 +68,36 @@ public sealed class Apa.Kernel : Origin {
                 },
             }
         );
+
+        if (!ignore_unknown_options) {
+            post_set_check ();
+        }
+
+        return yield spawn_command (spawn_arr, error);
+    }
+
+    public static async int list (
+        owned CommandHandler command_handler,
+        Gee.ArrayList<string>? error = null,
+        bool ignore_unknown_options = false
+    ) throws CommandError {
+        return yield new UpdateKernel ().internal_list (command_handler.options, command_handler.arg_options, error, ignore_unknown_options);
+    }
+
+    public async int internal_list (
+        Gee.ArrayList<string> options,
+        Gee.ArrayList<ArgOption?> arg_options,
+        Gee.ArrayList<string>? error = null,
+        bool ignore_unknown_options = false
+    ) throws CommandError {
+        current_options.add_all (options);
+        current_arg_options.add_all (arg_options);
+
+        spawn_arr.add ("--list");
+
+        if (!ignore_unknown_options) {
+            post_set_check ();
+        }
 
         if (!ignore_unknown_options) {
             post_set_check ();

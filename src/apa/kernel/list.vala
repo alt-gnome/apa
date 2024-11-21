@@ -16,49 +16,21 @@
  */
 
 namespace Apa {
-    public async int upgrade (
+    public async int kernel_list (
         owned CommandHandler command_handler,
         bool ignore_unknown_options = false
     ) throws CommandError {
         var error = new Gee.ArrayList<string> ();
         int status;
 
-        if ("--with-kernel" in command_handler.options || "-k" in command_handler.options) {
-            status = yield kernel_upgrade (SubCommandHandler.convert_from_ch_with_sc (command_handler, KERNEL_UPGRADE_SUBCOMMAND), true);
-
-            if (status != Constants.ExitCode.SUCCESS) {
-                return status;
-            }
-
-            command_handler.options.remove ("--with-kernel");
-            command_handler.options.remove ("-k");
-
-        } else {
-            status = yield update (command_handler, true);
-
-            if (status != Constants.ExitCode.SUCCESS) {
-                return status;
-            }
-        }
-
         while (true) {
             error.clear ();
-
-            status = yield Get.upgrade (command_handler, error, ignore_unknown_options);
+            status = yield UpdateKernel.list (command_handler, error, ignore_unknown_options);
 
             if (status != Constants.ExitCode.SUCCESS && error.size > 0) {
                 string error_message = normalize_error (error);
-                string? package;
 
-                switch (detect_error (error_message, out package)) {
-                    case OriginErrorType.UNABLE_TO_LOCK_DOWNLOAD_DIR:
-                        print_error (_("APT is currently busy"));
-                        return status;
-
-                    case OriginErrorType.UNABLE_TO_FETCH_SOME_ARCHIVES:
-                        print_error (_("Unable to fetch some archives. Check your connection to repository. Maybe run 'apa update' or try with '--fix-missing' option"));
-                        return status;
-
+                switch (detect_error (error_message)) {
                     case OriginErrorType.NONE:
                     default:
                         print_error (_("Unknown error message: '%s'").printf (error_message));

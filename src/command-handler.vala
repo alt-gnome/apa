@@ -16,18 +16,48 @@
  */
 
 public struct Apa.ArgOption {
+
     public string name;
     public string value;
 }
 
-public struct Apa.CommandArgs {
+public class Apa.SubCommandHandler : CommandHandler {
 
-    public string? command;
-    public Gee.ArrayList<string> options;
-    public Gee.ArrayList<ArgOption?> arg_options;
-    public Gee.ArrayList<string> command_argv;
+    public string? subcommand { get; construct set; }
 
-    public static CommandArgs parse (string[] argv) {
+    public static SubCommandHandler convert_from_ch (owned CommandHandler command_handler) {
+        string? subcommand = null;
+
+        if (command_handler.argv.size != 0) {
+            subcommand = command_handler.argv[0];
+            command_handler.argv.remove_at (0);
+        }
+
+        return convert_from_ch_with_sc (command_handler, subcommand);
+    }
+
+    public static SubCommandHandler convert_from_ch_with_sc (owned CommandHandler command_handler, string subcommand) {
+        return new SubCommandHandler () {
+            command = command_handler.command,
+            subcommand = subcommand,
+            options = command_handler.options,
+            arg_options = command_handler.arg_options,
+            argv = command_handler.argv
+        };
+    }
+}
+
+public class Apa.CommandHandler : Object {
+
+    public string? command { get; set; }
+
+    public Gee.ArrayList<string> options { get; set; }
+
+    public Gee.ArrayList<ArgOption?> arg_options { get; set; }
+
+    public Gee.ArrayList<string> argv { get; set; }
+
+    public static CommandHandler parse (string[] argv) {
         string? command = null;
         var command_argv_array = new Gee.ArrayList<string> ();
         var options_array = new Gee.ArrayList<string> ();
@@ -56,11 +86,11 @@ public struct Apa.CommandArgs {
             }
         }
 
-        return {
-            command,
-            options_array,
-            arg_options_array,
-            command_argv_array
+        return new CommandHandler () {
+            command = command,
+            options = options_array,
+            arg_options = arg_options_array,
+            argv = command_argv_array
         };
     }
 }

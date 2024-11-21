@@ -16,15 +16,13 @@
  */
 
 namespace Apa {
-    internal async int @do (
-        owned Gee.ArrayList<string> packages,
-        owned Gee.ArrayList<string> options,
-        owned Gee.ArrayList<ArgOption?> arg_options,
+    public async int @do (
+        owned CommandHandler command_handler,
         bool ignore_unknown_options = false
     ) throws CommandError {
-        foreach (var package_name in packages) {
+        foreach (var package_name in command_handler.argv) {
             if (!package_name.has_suffix ("-") && !package_name.has_suffix ("+")) {
-                print_error (_("Unknown operation '%c' in '%s'").printf (
+                throw new CommandError.UNKNOWN_COMMAND (_("Unknown operation '%c' in '%s'").printf (
                     package_name[package_name.length - 1],
                     package_name
                 ));
@@ -32,9 +30,15 @@ namespace Apa {
             }
         }
 
+        foreach (string package in command_handler.argv) {
+            if (package[package.length - 1] != '-' && package[package.length - 1] != '+') {
+                throw new CommandError.NO_PACKAGES (_("Don't known what to do with %s").printf (package));
+            }
+        }
+
         while (true) {
             var error = new Gee.ArrayList<string> ();
-            var status = yield Get.do (packages, options, arg_options, error);
+            var status = yield Get.do (command_handler, error);
 
             if (status != Constants.ExitCode.SUCCESS && error.size > 0) {
                 string error_message = normalize_error (error);
@@ -51,9 +55,12 @@ namespace Apa {
                             case '+':
                                 var search_result = new Gee.ArrayList<string> ();
                                 yield Cache.search (
-                                    new Gee.ArrayList<string>.wrap ({ string.joinv (".*", split_chars (package_error_source)) }),
-                                    new Gee.ArrayList<string>.wrap ({ "--names-only" }),
-                                    arg_options,
+                                    new CommandHandler () {
+                                        argv = new Gee.ArrayList<string>.wrap ({ string.joinv (".*", split_chars (package_error_source)) }),
+                                        // Options not ->
+                                        options = new Gee.ArrayList<string>.wrap ({ "--names-only" }),
+                                        arg_options = command_handler.arg_options
+                                    },
                                     search_result,
                                     null,
                                     true
@@ -66,8 +73,11 @@ namespace Apa {
                             case '-':
                                 var installed_result = new Gee.ArrayList<string> ();
                                 yield Rpm.list (
-                                    new Gee.ArrayList<string>.wrap ({ "-s" }),
-                                    new Gee.ArrayList<ArgOption?> (),
+                                    new CommandHandler () {
+                                        options = new Gee.ArrayList<string>.wrap ({ "-s" }),
+                                        arg_options = new Gee.ArrayList<ArgOption?> (),
+                                    },
+
                                     installed_result
                                 );
 
@@ -84,8 +94,8 @@ namespace Apa {
 
                         switch (result) {
                             case ChoiceResult.SKIP:
-                                packages.remove (package_error_source);
-                                if (packages.size == 0) {
+                                command_handler.argv.remove (package_error_source);
+                                if (command_handler.argv.size == 0) {
                                     print (_("There are no packages left to do"));
                                     return 0;
                                 }
@@ -93,7 +103,7 @@ namespace Apa {
 
                             case ChoiceResult.CHOSEN:
                                 replace_strings_in_array_list (
-                                    ref packages,
+                                    command_handler.argv,
                                     package_error_source,
                                     answer.split (" ")[0] + package_error_source_operation.to_string ()
                                 );
@@ -105,7 +115,7 @@ namespace Apa {
                         break;
 
                     case OriginErrorType.PACKAGE_VIRTUAL_WITH_MULTIPLE_GOOD_PROIDERS:
-                        string do_package = find_package_in_do_list (ref packages, package_error_source);
+                        string do_package = find_package_in_do_list (command_handler.argv, package_error_source);
                         char package_error_source_operation = do_package[do_package.length - 1];
 
                         print (error_message[0:error_message.length - 1].replace (package_error_source, "'%s'".printf (package_error_source)));
@@ -131,8 +141,8 @@ namespace Apa {
 
                         switch (result) {
                             case ChoiceResult.SKIP:
-                                packages.remove (do_package);
-                                if (packages.size == 0) {
+                                command_handler.argv.remove (do_package);
+                                if (command_handler.argv.size == 0) {
                                     print (_("There are no packages left to install"));
                                     return 0;
                                 }
@@ -140,7 +150,7 @@ namespace Apa {
 
                             case ChoiceResult.CHOSEN:
                                 replace_strings_in_array_list (
-                                    ref packages,
+                                    command_handler.argv,
                                     do_package,
                                     answer.split (" ")[0] + package_error_source_operation.to_string ()
                                 );
@@ -152,13 +162,13 @@ namespace Apa {
                         break;
 
                     case OriginErrorType.NO_INSTALLATION_CANDIDAT:
-                        string do_package = find_package_in_do_list (ref packages, package_error_source);
+                        string do_package = find_package_in_do_list (command_handler.argv, package_error_source);
                         char package_error_source_operation = do_package[do_package.length - 1];
 
                         print (error_message.replace (package_error_source, "'%s'".printf (package_error_source)));
 
                         var result = new Gee.ArrayList<string> ();
-                        yield Get.install (packages, options, arg_options, error, result);
+                        yield Get.install (command_handler, error, result);
 
                         var choice_packages = new Gee.ArrayList<string> ();
                         foreach (var res in result) {
@@ -181,8 +191,8 @@ namespace Apa {
 
                         switch (result_choice) {
                             case ChoiceResult.SKIP:
-                                packages.remove (do_package);
-                                if (packages.size == 0) {
+                                command_handler.argv.remove (do_package);
+                                if (command_handler.argv.size == 0) {
                                     print (_("There are no packages left to install"));
                                     return 0;
                                 }
@@ -190,7 +200,7 @@ namespace Apa {
 
                             case ChoiceResult.CHOSEN:
                                 replace_strings_in_array_list (
-                                    ref packages,
+                                    command_handler.argv,
                                     do_package,
                                     answer.split (" ")[0] + package_error_source_operation.to_string ()
                                 );
@@ -212,13 +222,7 @@ namespace Apa {
                     case OriginErrorType.NONE:
                     default:
                         print_error (_("Unknown error message: '%s'").printf (error_message));
-                        print_create_issue (error_message, form_command (
-                            error_message,
-                            Get.DO,
-                            packages.to_array (),
-                            options.to_array (),
-                            arg_options.to_array ()
-                        ));
+                        print_create_issue (error_message, command_handler);
                         return Constants.ExitCode.BASE_ERROR;
                 }
 

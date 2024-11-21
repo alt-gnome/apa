@@ -17,6 +17,7 @@
 
 namespace Apa {
 
+    const string KERNEL_COMMAND = "kernel";
     const string LIST_COMMAND = "list";
     const string INFO_COMMAND = "info";
     const string MOO_COMMAND = "moo";
@@ -25,81 +26,79 @@ namespace Apa {
 
     public async int run (string[] argv) {
 
-        var ca = CommandArgs.parse (argv);
+        var command_handler = CommandHandler.parse (argv);
 
-        if ("-h" in ca.options || "--help" in ca.options) {
-            Help.print_help (ca.command);
+        if ("-h" in command_handler.options || "--help" in command_handler.options) {
+            Help.print_help (command_handler.command);
             return Constants.ExitCode.SUCCESS;
         }
 
-        if ("-v" in ca.options || "--version" in ca.options) {
+        if ("-v" in command_handler.options || "--version" in command_handler.options) {
             print (get_version ());
             return Constants.ExitCode.SUCCESS;
         }
 
         try {
-            switch (ca.command) {
-                case Kernel.KERNEL:
-                    check_pk_is_not_running ();
-                    check_is_root (ca.command);
-                    return yield kernel (ca.command_argv, ca.options, ca.arg_options);
+            switch (command_handler.command) {
+                case KERNEL_COMMAND:
+                    return yield kernel (SubCommandHandler.convert_from_ch (command_handler));
 
                 case Get.AUTOREMOVE:
                     check_pk_is_not_running ();
-                    check_is_root (ca.command);
-                    return yield autoremove (ca.options, ca.arg_options);
+                    check_is_root (command_handler.command);
+                    return yield autoremove (command_handler);
 
                 case Get.DO:
                     check_pk_is_not_running ();
-                    check_is_root (ca.command);
-                    return yield @do (ca.command_argv, ca.options, ca.arg_options);
+                    check_is_root (command_handler.command);
+                    return yield @do (command_handler);
 
                 case Get.UPDATE:
                     check_pk_is_not_running ();
-                    check_is_root (ca.command);
-                    return yield update (ca.options, ca.arg_options);
+                    check_is_root (command_handler.command);
+                    return yield update (command_handler);
 
                 case Get.UPGRADE:
                     check_pk_is_not_running ();
-                    check_is_root (ca.command);
-                    return yield upgrade (ca.options, ca.arg_options);
+                    check_is_root (command_handler.command);
+                    return yield upgrade (command_handler);
 
                 case Get.INSTALL:
                     check_pk_is_not_running ();
-                    check_is_root (ca.command);
-                    return yield install (ca.command_argv, ca.options, ca.arg_options);
+                    check_is_root (command_handler.command);
+                    return yield install (command_handler);
 
                 case Get.REINSTALL:
                     check_pk_is_not_running ();
-                    check_is_root (ca.command);
-                    return yield reinstall (ca.command_argv, ca.options, ca.arg_options);
+                    check_is_root (command_handler.command);
+                    return yield reinstall (command_handler);
 
                 case Get.REMOVE:
                     check_pk_is_not_running ();
-                    check_is_root (ca.command);
-                    return yield remove (ca.command_argv, ca.options, ca.arg_options);
+                    check_is_root (command_handler.command);
+                    return yield remove (command_handler);
 
                 case Get.SOURCE:
-                    return yield source (ca.command_argv, ca.options, ca.arg_options);
+                    return yield source (command_handler);
 
                 case Cache.SEARCH:
-                    return yield Cache.search (ca.command_argv, ca.options, ca.arg_options);
+                    return yield Cache.search (command_handler);
 
                 case Repo.REPO_LIST:
-                    return yield Repo.repo_list (ca.options, ca.arg_options);
+                    return yield Repo.repo_list (command_handler.options, command_handler.arg_options);
 
                 case Repo.TEST:
-                    check_is_root (ca.command);
-                    return yield Repo.test (ca.command_argv, ca.options, ca.arg_options);
+                    check_is_root (command_handler.command);
+                    return yield Repo.test (command_handler);
 
                 case LIST_COMMAND:
-                    return yield Rpm.list (ca.options, ca.arg_options);
+                    return yield Rpm.list (command_handler);
 
                 case INFO_COMMAND:
-                    return yield info (ca.command_argv, ca.options, ca.arg_options);
+                    return yield info (command_handler);
 
                 case MOO_COMMAND:
-                    return moo (ca.command_argv);
+                    return moo (command_handler);
 
                 case VERSION_COMMAND:
                     print (get_version ());
@@ -114,8 +113,7 @@ namespace Apa {
                     return Constants.ExitCode.BASE_ERROR;
 
                 default:
-                    print_error (_("Unknown command '%s'").printf (ca.command));
-                    Help.print_apa (false);
+                    print_error (_("Unknown command '%s'").printf (command_handler.command));
                     return Constants.ExitCode.BASE_ERROR;
             }
 

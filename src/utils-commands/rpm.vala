@@ -24,23 +24,17 @@ public sealed class Apa.Rpm : Origin {
     public const string LIST = "list";
     public const string INFO = "info";
 
-    public const string[] COMMANDS = {
-        LIST,
-        INFO,
-    };
-
     Rpm () {}
 
     public static async int list (
-        Gee.ArrayList<string> options,
-        Gee.ArrayList<ArgOption?> arg_options,
+        owned CommandHandler command_handler,
         Gee.ArrayList<string>? result = null,
         Gee.ArrayList<string>? error = null,
         bool ignore_unknown_options = false
     ) throws CommandError {
         return yield new Rpm ().internal_list (
-            options,
-            arg_options,
+            command_handler.options,
+            command_handler.arg_options,
             result,
             error,
             ignore_unknown_options
@@ -88,21 +82,19 @@ public sealed class Apa.Rpm : Origin {
     }
 
     public static async int info (
-        Gee.ArrayList<string> packages,
-        Gee.ArrayList<string> options,
-        Gee.ArrayList<ArgOption?> arg_options,
+        owned CommandHandler command_handler,
         Gee.ArrayList<string>? result = null,
         Gee.ArrayList<string>? error = null,
         bool ignore_unknown_options = false
     ) throws CommandError {
-        if (packages.size == 0) {
+        if (command_handler.argv.size == 0) {
             throw new CommandError.NO_PACKAGES (_("No packages to show"));
         }
 
         return yield new Rpm ().internal_info (
-            packages,
-            options,
-            arg_options,
+            command_handler.argv,
+            command_handler.options,
+            command_handler.arg_options,
             result,
             error,
             ignore_unknown_options

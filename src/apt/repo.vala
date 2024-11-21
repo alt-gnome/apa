@@ -22,11 +22,6 @@ public sealed class Apa.Repo : Origin {
     public const string REPO_LIST = "repo-list";
     public const string TEST = "test";
 
-    public const string[] COMMANDS = {
-        REPO_LIST,
-        TEST,
-    };
-
     Repo () {}
 
     void set_common_options () {
@@ -60,20 +55,18 @@ public sealed class Apa.Repo : Origin {
     }
 
     public static async int test (
-        Gee.ArrayList<string> tasks,
-        Gee.ArrayList<string> options,
-        Gee.ArrayList<ArgOption?> arg_options,
+        owned CommandHandler command_handler,
         Gee.ArrayList<string>? error = null,
         bool ignore_unknown_options = false
     ) throws CommandError {
-        if (tasks.size == 0) {
+        if (command_handler.argv.size == 0) {
             throw new CommandError.NO_PACKAGES (_("No packages to install"));
         }
 
         return yield new Repo ().internal_test (
-            tasks,
-            options,
-            arg_options,
+            command_handler.argv,
+            command_handler.options,
+            command_handler.arg_options,
             error,
             ignore_unknown_options
         );

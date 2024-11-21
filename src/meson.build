@@ -3,16 +3,20 @@ vapi_sources = files(
 )
 
 apa_no_main_code_sources = files (
+  'apa/kernel/kernel.vala',
+  'apa/kernel/list.vala',
+  'apa/kernel/upgrade.vala',
+
+  'apa/update/update.vala',
+
   'apa/autoremove.vala',
   'apa/do.vala',
   'apa/info.vala',
   'apa/install.vala',
-  'apa/kernel.vala',
   'apa/moo.vala',
   'apa/reinstall.vala',
   'apa/remove.vala',
   'apa/source.vala',
-  'apa/update.vala',
   'apa/upgrade.vala',
 
   'apt/cache.vala',
@@ -27,11 +31,11 @@ apa_no_main_code_sources = files (
   'utils-commands/update-kernel.vala',
 
   'apa.vala',
+  'command-handler.vala',
   'constants.vala',
   'error-detection.vala',
-  'fuzzy_search.vala',
+  'fuzzy-search.vala',
   'help.vala',
-  'command-args.vala',
   'origin.vala',
   'spawn-command.vala',
   'utils.vala',

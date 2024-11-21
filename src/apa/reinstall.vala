@@ -16,13 +16,12 @@
  */
 
 namespace Apa {
-    internal async int reinstall (
-        owned Gee.ArrayList<string> packages,
-        owned Gee.ArrayList<string> options,
-        owned Gee.ArrayList<ArgOption?> arg_options
+    public async int reinstall (
+        owned CommandHandler command_handler,
+        bool ignore_unknown_options = false
     ) throws CommandError {
-        options.add ("-f");
+        command_handler.options.add ("-f");
 
-        return yield install (packages, options, arg_options);
+        return yield install (command_handler, ignore_unknown_options);
     }
 }

@@ -16,17 +16,15 @@
  */
 
 namespace Apa {
-    internal async int source (
-        owned Gee.ArrayList<string> packages,
-        owned Gee.ArrayList<string> options,
-        owned Gee.ArrayList<ArgOption?> arg_options,
+    public async int source (
+        owned CommandHandler command_handler,
         bool ignore_unknown_options = false
     ) throws CommandError {
         var error = new Gee.ArrayList<string> ();
 
         while (true) {
             error.clear ();
-            var status = yield Get.source (packages, options, arg_options, error);
+            var status = yield Get.source (command_handler, error, ignore_unknown_options);
 
             if (status != Constants.ExitCode.SUCCESS && error.size > 0) {
                 string error_message = normalize_error (error);
@@ -36,13 +34,7 @@ namespace Apa {
                     case OriginErrorType.NONE:
                     default:
                         print_error (_("Unknown error message: '%s'").printf (error_message));
-                        print_create_issue (error_message, form_command (
-                            error_message,
-                            Get.SOURCE,
-                            packages.to_array (),
-                            options.to_array (),
-                            arg_options.to_array ()
-                        ));
+                        print_create_issue (error_message, command_handler);
                         return Constants.ExitCode.BASE_ERROR;
                 }
 

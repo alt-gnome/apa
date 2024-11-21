@@ -16,14 +16,13 @@
  */
 
 namespace Apa {
-    internal async int install (
-        owned Gee.ArrayList<string> packages,
-        owned Gee.ArrayList<string> options,
-        owned Gee.ArrayList<ArgOption?> arg_options
+    public async int install (
+        owned CommandHandler command_handler,
+        bool ignore_unknown_options = false
     ) throws CommandError {
         var error = new Gee.ArrayList<string> ();
 
-        foreach (string package_name in packages) {
+        foreach (string package_name in command_handler.argv) {
             if (!(yield check_package_name_no_action (package_name))) {
                 print_error (_("For operation like '<package>+/-' use 'do' command instead"));
                 return Constants.ExitCode.BASE_ERROR;
@@ -32,7 +31,7 @@ namespace Apa {
 
         while (true) {
             error.clear ();
-            var status = yield Get.install (packages, options, arg_options, error);
+            var status = yield Get.install (command_handler, error, null, ignore_unknown_options);
 
             if (status != Constants.ExitCode.SUCCESS && error.size > 0) {
                 string error_message = normalize_error (error);
@@ -42,9 +41,12 @@ namespace Apa {
                     case OriginErrorType.COULDNT_FIND_PACKAGE:
                         var search_result = new Gee.ArrayList<string> ();
                         yield Cache.search (
-                            new Gee.ArrayList<string>.wrap ({ string.joinv (".*", split_chars (package_error_source)) }),
-                            new Gee.ArrayList<string>.wrap ({ "--names-only" }),
-                            arg_options,
+                            new CommandHandler () {
+                                argv = new Gee.ArrayList<string>.wrap ({ string.joinv (".*", split_chars (package_error_source)) }),
+                                // Options not ->
+                                options = new Gee.ArrayList<string>.wrap ({ "--names-only" }),
+                                arg_options = command_handler.arg_options
+                            },
                             search_result,
                             null,
                             true
@@ -64,15 +66,15 @@ namespace Apa {
 
                         switch (result) {
                             case ChoiceResult.SKIP:
-                                packages.remove (package_error_source);
-                                if (packages.size == 0) {
+                                command_handler.argv.remove (package_error_source);
+                                if (command_handler.argv.size == 0) {
                                     print (_("There are no packages left to install"));
                                     return 0;
                                 }
                                 break;
 
                             case ChoiceResult.CHOSEN:
-                                replace_strings_in_array_list (ref packages, package_error_source, answer.split (" ")[0]);
+                                replace_strings_in_array_list (command_handler.argv, package_error_source, answer.split (" ")[0]);
                                 break;
 
                             case ChoiceResult.EXIT:
@@ -104,15 +106,15 @@ namespace Apa {
 
                         switch (result) {
                             case ChoiceResult.SKIP:
-                                packages.remove (package_error_source);
-                                if (packages.size == 0) {
+                                command_handler.argv.remove (package_error_source);
+                                if (command_handler.argv.size == 0) {
                                     print (_("There are no packages left to install"));
                                     return 0;
                                 }
                                 break;
 
                             case ChoiceResult.CHOSEN:
-                                replace_strings_in_array_list (ref packages, package_error_source, answer.split (" ")[0]);
+                                replace_strings_in_array_list (command_handler.argv, package_error_source, answer.split (" ")[0]);
                                 break;
 
                             case ChoiceResult.EXIT:
@@ -127,8 +129,9 @@ namespace Apa {
                     case OriginErrorType.NO_INSTALLATION_CANDIDAT:
                         print (error_message.replace (package_error_source, "'%s'".printf (package_error_source)));
 
+                        // FIXME: need move error part of message to cerr in apt
                         var result = new Gee.ArrayList<string> ();
-                        yield Get.install (packages, options, arg_options, error, result);
+                        yield Get.install (command_handler, error, result, ignore_unknown_options);
 
                         var choice_packages = new Gee.ArrayList<string> ();
                         foreach (var res in result) {
@@ -156,15 +159,15 @@ namespace Apa {
 
                         switch (result_choice) {
                             case ChoiceResult.SKIP:
-                                packages.remove (package_error_source);
-                                if (packages.size == 0) {
+                                command_handler.argv.remove (package_error_source);
+                                if (command_handler.argv.size == 0) {
                                     print (_("There are no packages left to install"));
                                     return 0;
                                 }
                                 break;
 
                             case ChoiceResult.CHOSEN:
-                                replace_strings_in_array_list (ref packages, package_error_source, answer.split (" ")[0]);
+                                replace_strings_in_array_list (command_handler.argv, package_error_source, answer.split (" ")[0]);
                                 break;
 
                             case ChoiceResult.EXIT:
@@ -179,13 +182,7 @@ namespace Apa {
                     case OriginErrorType.NONE:
                     default:
                         print_error (_("Unknown error message: '%s'").printf (error_message));
-                        print_create_issue (error_message, form_command (
-                            error_message,
-                            Get.INSTALL,
-                            packages.to_array (),
-                            options.to_array (),
-                            arg_options.to_array ()
-                        ));
+                        print_create_issue (error_message, command_handler);
                         return Constants.ExitCode.BASE_ERROR;
                 }
 

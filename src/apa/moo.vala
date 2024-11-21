@@ -16,11 +16,11 @@
  */
 
 namespace Apa {
-    internal int moo (
-        owned Gee.ArrayList<string> user_phrases
+    public int moo (
+        owned CommandHandler command_handler
     ) {
-        if (user_phrases.size > 0) {
-            print (get_moo (user_phrases[0]), false);
+        if (command_handler.argv.size > 0) {
+            print (get_moo (command_handler.argv[0]), false);
 
         } else {
             print (get_moo (), false);

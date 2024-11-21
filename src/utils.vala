@@ -164,7 +164,7 @@ namespace Apa {
         stdout.flush ();
     }
 
-    internal void print_err (string str) {
+    public void print_err (string str) {
         stderr.puts (str);
         stderr.putc ('\n');
         stderr.flush ();
@@ -236,7 +236,7 @@ namespace Apa {
         }
     }
 
-    public string find_package_in_do_list (ref Gee.ArrayList<string> do_list, string package) {
+    public string find_package_in_do_list (Gee.ArrayList<string> do_list, string package) {
         foreach (string do_package in do_list) {
             if (do_package.length == package.length + 1 && do_package.has_prefix (package)) {
                 return do_package;
@@ -247,7 +247,7 @@ namespace Apa {
         assert_not_reached ();
     }
 
-    public void replace_strings_in_array_list (ref Gee.ArrayList<string> array, string old_string, string new_string) {
+    public void replace_strings_in_array_list (Gee.ArrayList<string> array, string old_string, string new_string) {
         for (int i = 0; i < array.size; i++) {
             if (array[i] == old_string) {
                 array[i] = new_string;
@@ -263,14 +263,16 @@ namespace Apa {
         return result;
     }
 
-    public void print_create_issue (string error_message, string command) {
+    public void print_create_issue (string error_message, CommandHandler command_handler) {
+        string body = "```%s```".printf (form_command (error_message, command_handler));
+
         print (_("You should %s").printf (
             "%s\033]8;;%s\033\\%s\033]8;;\033\\%s".printf (
                 Constants.Colors.OKBLUE,
                 "https://github.com/alt-gnome/apa/issues/new?label=%s&title=%s&body=%s".printf (
                     "unknown-error",
                     Uri.escape_string ("Unknown error: %s".printf (error_message), null, true),
-                    Uri.escape_string ("```%s```".printf (command), null, true)
+                    Uri.escape_string (body, null, true)
                 ),
                 _("create issue↗️"),
                 Constants.Colors.ENDC
@@ -280,7 +282,7 @@ namespace Apa {
 
     public async bool check_package_name_no_action (string package_name) {
         if (package_name.has_suffix ("-") || package_name.has_suffix ("+")) {
-            if ((yield spawn_command_silence (new Gee.ArrayList<string>.wrap ({"apt-cache", "show", package_name[0:package_name.length - 1]}), null)) == Constants.ExitCode.SUCCESS) {
+            if ((yield spawn_command_silence (new Gee.ArrayList<string>.wrap ({"rpm", "-q", package_name[0:package_name.length - 1]}), null)) == Constants.ExitCode.SUCCESS) {
                 return false;
             }
         }
@@ -288,19 +290,25 @@ namespace Apa {
         return true;
     }
 
-    public string form_command (string error_message, string command, string[] argv, string[] options, ArgOption?[] arg_options) {
-        var argo = new string[arg_options.length];
-        for (int i = 0; i < arg_options.length; i++) {
-            argo[i] = "%s=%s".printf (arg_options[i].name, arg_options[i].value);
+    public string form_command (string error_message, CommandHandler command_handler) {
+        string command = command_handler.command;
+
+        if (command_handler is SubCommandHandler) {
+            command += " " + ((SubCommandHandler) command_handler).subcommand;
+        }
+
+        var argo = new string[command_handler.arg_options.size];
+        for (int i = 0; i < command_handler.arg_options.size; i++) {
+            argo[i] = "%s=%s".printf (command_handler.arg_options[i].name, command_handler.arg_options[i].value);
         }
 
         return "\nError message quoted:\n\"%s\"\nLocale: %s\nCommand: %s\nArgs: %s\nOptions: %s\nArguments options: %s\n".printf (
             error_message,
             current_locale,
             command,
-            string.joinv (" ", options),
+            string.joinv (" ", command_handler.options.to_array ()),
             string.joinv (" ", argo),
-            string.joinv (" ", argv)
+            string.joinv (" ", command_handler.argv.to_array ())
         );
     }
 
