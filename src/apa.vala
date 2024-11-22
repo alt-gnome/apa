@@ -21,6 +21,7 @@ namespace Apa {
     const string LIST_COMMAND = "list";
     const string INFO_COMMAND = "info";
     const string MOO_COMMAND = "moo";
+    const string TASK_COMMAND = "task";
     const string HELP_COMMAND = "help";
     const string VERSION_COMMAND = "version";
 
@@ -42,6 +43,9 @@ namespace Apa {
             switch (command_handler.command) {
                 case KERNEL_COMMAND:
                     return yield kernel (SubCommandHandler.convert_from_ch (command_handler));
+
+                case TASK_COMMAND:
+                    return yield task (SubCommandHandler.convert_from_ch (command_handler));
 
                 case Get.AUTOREMOVE:
                     check_pk_is_not_running ();
@@ -124,11 +128,26 @@ namespace Apa {
                     print_create_issue (e.message, argv);
                     return Constants.ExitCode.BASE_ERROR;
 
+                case CommandError.UNKNOWN_OPTION:
+                    print_error (_("Unknown option: '%s'").printf (e.message));
+                    break;
+
+                case CommandError.UNKNOWN_ARG_OPTION:
+                    print_error (_("Unknown option with value: '%s'").printf (e.message));
+                    break;
+
                 default:
                     print_error (e.message);
                     break;
             }
+            return Constants.ExitCode.BASE_ERROR;
 
+        } catch (ApiBase.CommonError e) {
+            print_error ("Something went wrong");
+            return Constants.ExitCode.BASE_ERROR;
+
+        } catch (ApiBase.BadStatusCodeError e) {
+            print_error (_("Bad status code: '%d: %s'").printf (e.code, e.message));
             return Constants.ExitCode.BASE_ERROR;
         }
     }

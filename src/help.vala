@@ -302,6 +302,10 @@ namespace Apa.Help {
         print (get_kernel_desc ());
     }
 
+    public void print_task () {
+        print ("");
+    }
+
     public void print_test () {
 
     }

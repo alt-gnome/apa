@@ -29,6 +29,7 @@ public errordomain Apa.CommandError {
     UNKNOWN_COMMAND,
     TO_MANY_ARGS,
     UNKNOWN_OPTION,
+    UNKNOWN_ARG_OPTION,
     NO_PACKAGES,
     CANT_UPDATE,
     CANT_UPDATE_KERNEL,
