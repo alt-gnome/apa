@@ -292,7 +292,7 @@ namespace Apa {
     }
 
     public string form_command (string error_message, string[] argv) {
-        return "\nError message quoted:\n\"%s\"\nLocale: %s\nCommand: %s\n".printf (
+        return "\nError message quoted:\n\t\"%s\"\nLocale:\n\t%s\nCommand:\n\tapa %s\n".printf (
             error_message,
             current_locale,
             string.joinv (" ", argv)
