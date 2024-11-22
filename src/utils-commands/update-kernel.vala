@@ -25,7 +25,7 @@ public sealed class Apa.UpdateKernel : Origin {
     UpdateKernel () {}
 
     public static async int update (
-        owned CommandHandler command_handler,
+        owned OptionsHandler command_handler,
         Gee.ArrayList<string>? error = null,
         bool ignore_unknown_options = false
     ) throws CommandError {
@@ -77,7 +77,7 @@ public sealed class Apa.UpdateKernel : Origin {
     }
 
     public static async int list (
-        owned CommandHandler command_handler,
+        owned OptionsHandler command_handler,
         Gee.ArrayList<string>? error = null,
         bool ignore_unknown_options = false
     ) throws CommandError {

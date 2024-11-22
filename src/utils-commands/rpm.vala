@@ -27,7 +27,7 @@ public sealed class Apa.Rpm : Origin {
     Rpm () {}
 
     public static async int list (
-        owned CommandHandler command_handler,
+        owned OptionsHandler command_handler,
         Gee.ArrayList<string>? result = null,
         Gee.ArrayList<string>? error = null,
         bool ignore_unknown_options = false
@@ -82,7 +82,7 @@ public sealed class Apa.Rpm : Origin {
     }
 
     public static async int info (
-        owned CommandHandler command_handler,
+        owned ArgvHandler command_handler,
         Gee.ArrayList<string>? result = null,
         Gee.ArrayList<string>? error = null,
         bool ignore_unknown_options = false

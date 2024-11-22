@@ -17,7 +17,7 @@
 
 namespace Apa {
     public async int reinstall (
-        owned CommandHandler command_handler,
+        owned ArgvHandler command_handler,
         bool ignore_unknown_options = false
     ) throws CommandError {
         command_handler.options.add ("-f");

@@ -17,7 +17,7 @@
 
 namespace Apa {
     public async int info (
-        owned CommandHandler command_handler,
+        owned ArgvHandler command_handler,
         bool ignore_unknown_options = false
     ) throws CommandError {
         while (true) {
@@ -31,9 +31,7 @@ namespace Apa {
                 switch (detect_error (error_message, out package)) {
                     case OriginErrorType.NONE:
                     default:
-                        print_error (_("Unknown error message: '%s'").printf (error_message));
-                        print_create_issue (error_message, command_handler);
-                        return Constants.ExitCode.BASE_ERROR;
+                        throw new CommandError.UNKNOWN_ERROR (error_message);
                 }
 
             } else {

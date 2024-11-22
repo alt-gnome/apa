@@ -17,7 +17,7 @@
 
 namespace Apa {
     public async int update (
-        owned CommandHandler command_handler,
+        owned OptionsHandler command_handler,
         bool ignore_unknown_options = false
     ) throws CommandError {
         var error = new Gee.ArrayList<string> ();
@@ -41,9 +41,7 @@ namespace Apa {
 
                     case OriginErrorType.NONE:
                     default:
-                        print_error (_("Unknown error message: '%s'").printf (error_message));
-                        print_create_issue (error_message, command_handler);
-                        return Constants.ExitCode.BASE_ERROR;
+                        throw new CommandError.UNKNOWN_ERROR (error_message);
                 }
 
             } else {

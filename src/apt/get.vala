@@ -77,7 +77,7 @@ public sealed class Apa.Get : Origin {
     }
 
     public static async int update (
-        owned CommandHandler command_handler,
+        owned OptionsHandler command_handler,
         Gee.ArrayList<string>? error = null,
         bool ignore_unknown_options = false
     ) throws CommandError {
@@ -105,7 +105,7 @@ public sealed class Apa.Get : Origin {
     }
 
     public static async int upgrade (
-        owned CommandHandler command_handler,
+        owned OptionsHandler command_handler,
         Gee.ArrayList<string>? error = null,
         bool ignore_unknown_options = false
     ) throws CommandError {
@@ -148,7 +148,7 @@ public sealed class Apa.Get : Origin {
     }
 
     public static async int @do (
-        owned CommandHandler command_handler,
+        owned ArgvHandler command_handler,
         Gee.ArrayList<string>? error = null,
         bool ignore_unknown_options = false
     ) throws CommandError {
@@ -211,7 +211,7 @@ public sealed class Apa.Get : Origin {
     }
 
     public static async int install (
-        owned CommandHandler command_handler,
+        owned ArgvHandler command_handler,
         Gee.ArrayList<string>? error = null,
         Gee.ArrayList<string>? result = null,
         bool ignore_unknown_options = false
@@ -273,7 +273,7 @@ public sealed class Apa.Get : Origin {
     }
 
     public static async int remove (
-        owned CommandHandler command_handler,
+        owned ArgvHandler command_handler,
         Gee.ArrayList<string>? error = null,
         bool ignore_unknown_options = false
     ) throws CommandError {
@@ -324,7 +324,7 @@ public sealed class Apa.Get : Origin {
     }
 
     public static async int source (
-        owned CommandHandler command_handler,
+        owned ArgvHandler command_handler,
         Gee.ArrayList<string>? error = null,
         bool ignore_unknown_options = false
     ) throws CommandError {
@@ -375,7 +375,7 @@ public sealed class Apa.Get : Origin {
     }
 
     public static async int autoremove (
-        owned CommandHandler command_handler,
+        owned OptionsHandler command_handler,
         Gee.ArrayList<string>? error = null,
         bool ignore_unknown_options = false
     ) throws CommandError {

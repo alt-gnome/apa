@@ -47,15 +47,9 @@ public class Apa.SubCommandHandler : CommandHandler {
     }
 }
 
-public class Apa.CommandHandler : Object {
+public class Apa.CommandHandler : ArgvHandler {
 
     public string? command { get; set; }
-
-    public Gee.ArrayList<string> options { get; set; }
-
-    public Gee.ArrayList<ArgOption?> arg_options { get; set; }
-
-    public Gee.ArrayList<string> argv { get; set; }
 
     public static CommandHandler parse (string[] argv) {
         string? command = null;
@@ -93,4 +87,16 @@ public class Apa.CommandHandler : Object {
             argv = command_argv_array
         };
     }
+}
+
+public class Apa.ArgvHandler : OptionsHandler {
+
+    public Gee.ArrayList<string> argv { get; set; }
+}
+
+public class Apa.OptionsHandler : Object {
+
+    public Gee.ArrayList<string> options { get; set; }
+
+    public Gee.ArrayList<ArgOption?> arg_options { get; set; }
 }

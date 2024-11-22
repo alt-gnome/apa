@@ -55,7 +55,7 @@ public sealed class Apa.Repo : Origin {
     }
 
     public static async int test (
-        owned CommandHandler command_handler,
+        owned ArgvHandler command_handler,
         Gee.ArrayList<string>? error = null,
         bool ignore_unknown_options = false
     ) throws CommandError {
@@ -95,14 +95,13 @@ public sealed class Apa.Repo : Origin {
     }
 
     public static async int repo_list (
-        Gee.ArrayList<string> options,
-        Gee.ArrayList<ArgOption?> arg_options,
+        owned OptionsHandler command_handler,
         Gee.ArrayList<string>? error = null,
         bool ignore_unknown_options = false
     ) throws CommandError {
         return yield new Repo ().internal_repo_list (
-            options,
-            arg_options,
+            command_handler.options,
+            command_handler.arg_options,
             error,
             ignore_unknown_options
         );

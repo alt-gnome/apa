@@ -85,7 +85,7 @@ namespace Apa {
                     return yield Cache.search (command_handler);
 
                 case Repo.REPO_LIST:
-                    return yield Repo.repo_list (command_handler.options, command_handler.arg_options);
+                    return yield Repo.repo_list (command_handler);
 
                 case Repo.TEST:
                     check_is_root (command_handler.command);
@@ -117,8 +117,18 @@ namespace Apa {
                     return Constants.ExitCode.BASE_ERROR;
             }
 
-        } catch (Error e) {
-            print_error (e.message);
+        } catch (CommandError e) {
+            switch (e.code) {
+                case CommandError.UNKNOWN_ERROR:
+                    print_error (_("Unknown error message: '%s'").printf (e.message));
+                    print_create_issue (e.message, argv);
+                    return Constants.ExitCode.BASE_ERROR;
+
+                default:
+                    print_error (e.message);
+                    break;
+            }
+
             return Constants.ExitCode.BASE_ERROR;
         }
     }

@@ -17,7 +17,7 @@
 
 namespace Apa {
     public int moo (
-        owned CommandHandler command_handler
+        owned ArgvHandler command_handler
     ) {
         if (command_handler.argv.size > 0) {
             print (get_moo (command_handler.argv[0]), false);

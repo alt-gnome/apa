@@ -17,14 +17,14 @@
 
 namespace Apa {
     public async int upgrade (
-        owned CommandHandler command_handler,
+        owned OptionsHandler command_handler,
         bool ignore_unknown_options = false
     ) throws CommandError {
         var error = new Gee.ArrayList<string> ();
         int status;
 
         if ("--with-kernel" in command_handler.options || "-k" in command_handler.options) {
-            status = yield kernel_upgrade (SubCommandHandler.convert_from_ch_with_sc (command_handler, KERNEL_UPGRADE_SUBCOMMAND), true);
+            status = yield kernel_upgrade (command_handler, true);
 
             if (status != Constants.ExitCode.SUCCESS) {
                 return status;
@@ -61,9 +61,7 @@ namespace Apa {
 
                     case OriginErrorType.NONE:
                     default:
-                        print_error (_("Unknown error message: '%s'").printf (error_message));
-                        print_create_issue (error_message, command_handler);
-                        return Constants.ExitCode.BASE_ERROR;
+                        throw new CommandError.UNKNOWN_ERROR (error_message);
                 }
 
             } else {

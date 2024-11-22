@@ -32,6 +32,7 @@ public errordomain Apa.CommandError {
     NO_PACKAGES,
     CANT_UPDATE,
     CANT_UPDATE_KERNEL,
+    UNKNOWN_ERROR,
 }
 
 public enum Apa.ChoiceResult {
@@ -263,8 +264,8 @@ namespace Apa {
         return result;
     }
 
-    public void print_create_issue (string error_message, CommandHandler command_handler) {
-        string body = "```%s```".printf (form_command (error_message, command_handler));
+    public void print_create_issue (string error_message, string[] argv) {
+        string body = "```%s```".printf (form_command (error_message, argv));
 
         print (_("You should %s").printf (
             "%s\033]8;;%s\033\\%s\033]8;;\033\\%s".printf (
@@ -290,25 +291,11 @@ namespace Apa {
         return true;
     }
 
-    public string form_command (string error_message, CommandHandler command_handler) {
-        string command = command_handler.command;
-
-        if (command_handler is SubCommandHandler) {
-            command += " " + ((SubCommandHandler) command_handler).subcommand;
-        }
-
-        var argo = new string[command_handler.arg_options.size];
-        for (int i = 0; i < command_handler.arg_options.size; i++) {
-            argo[i] = "%s=%s".printf (command_handler.arg_options[i].name, command_handler.arg_options[i].value);
-        }
-
-        return "\nError message quoted:\n\"%s\"\nLocale: %s\nCommand: %s\nArgs: %s\nOptions: %s\nArguments options: %s\n".printf (
+    public string form_command (string error_message, string[] argv) {
+        return "\nError message quoted:\n\"%s\"\nLocale: %s\nCommand: %s\n".printf (
             error_message,
             current_locale,
-            command,
-            string.joinv (" ", command_handler.options.to_array ()),
-            string.joinv (" ", argo),
-            string.joinv (" ", command_handler.argv.to_array ())
+            string.joinv (" ", argv)
         );
     }
 

@@ -64,7 +64,7 @@
     }
 
     public static async int list_all (
-        owned CommandHandler command_handler,
+        owned OptionsHandler command_handler,
         Gee.ArrayList<string>? result = null,
         Gee.ArrayList<string>? error = null,
         bool ignore_unknown_options = false
@@ -80,7 +80,7 @@
     }
 
     public static async int search (
-        owned CommandHandler command_handler,
+        owned ArgvHandler command_handler,
         Gee.ArrayList<string>? result = null,
         Gee.ArrayList<string>? error = null,
         bool ignore_unknown_options = false
