@@ -24,7 +24,7 @@ namespace Apa {
 
         foreach (string package_name in command_handler.argv) {
             if (!(yield check_package_name_no_action (package_name))) {
-                print_error (_("For operation like '<package>+/-' use 'do' command instead"));
+                print_error (_("For operation like `<package>+/-' use `do' command instead"));
                 return Constants.ExitCode.BASE_ERROR;
             }
         }
@@ -56,11 +56,11 @@ namespace Apa {
                         string[]? possible_package_names = fuzzy_search (package_error_source, search_result.to_array ());
 
                         if (possible_package_names == null) {
-                            print_error (_("Package '%s' not found").printf (package_error_source));
+                            print_error (_("Package `%s' not found").printf (package_error_source));
                             return status;
                         }
 
-                        print (_("Package '%s' not found, but packages with a similar name were found").printf (package_error_source));
+                        print (_("Package `%s' not found, but packages with a similar name were found").printf (package_error_source));
                         string? answer;
                         var result = give_choice (possible_package_names, _("install"), out answer);
 
@@ -83,7 +83,7 @@ namespace Apa {
                         break;
 
                     case OriginErrorType.PACKAGE_VIRTUAL_WITH_MULTIPLE_GOOD_PROIDERS:
-                        print (error_message[0:error_message.length - 1].replace (package_error_source, "'%s'".printf (package_error_source)));
+                        print (error_message[0:error_message.length - 1].replace (package_error_source, "`%s'".printf (package_error_source)));
 
                         var choice_packages = new Gee.ArrayList<string> ();
                         foreach (var err in error) {
@@ -127,7 +127,7 @@ namespace Apa {
                         return status;
 
                     case OriginErrorType.NO_INSTALLATION_CANDIDAT:
-                        print (error_message.replace (package_error_source, "'%s'".printf (package_error_source)));
+                        print (error_message.replace (package_error_source, "`%s'".printf (package_error_source)));
 
                         // FIXME: need move error part of message to cerr in apt
                         var result = new Gee.ArrayList<string> ();
@@ -176,7 +176,7 @@ namespace Apa {
                         break;
 
                     case OriginErrorType.UNABLE_TO_FETCH_SOME_ARCHIVES:
-                        print_error (_("Unable to fetch some archives. Check your connection to repository. Maybe run 'apa update' or try with '--fix-missing' option"));
+                        print_error (_("Unable to fetch some archives. Check your connection to repository. Maybe run `apa update' or try with `--fix-missing' option"));
                         return status;
 
                     case OriginErrorType.NONE:

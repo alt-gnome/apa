@@ -22,11 +22,10 @@ namespace Apa {
     ) throws CommandError {
         foreach (var package_name in command_handler.argv) {
             if (!package_name.has_suffix ("-") && !package_name.has_suffix ("+")) {
-                throw new CommandError.UNKNOWN_COMMAND (_("Unknown operation '%c' in '%s'").printf (
+                throw new CommandError.UNKNOWN_COMMAND (_("Unknown operation `%c' in `%s'").printf (
                     package_name[package_name.length - 1],
                     package_name
                 ));
-                return Constants.ExitCode.BASE_ERROR;
             }
         }
 
@@ -88,7 +87,7 @@ namespace Apa {
                                 assert_not_reached ();
                         }
 
-                        print (_("Package '%s' not found, but packages with a similar name were found").printf (package_error_source));
+                        print (_("Package `%s' not found, but packages with a similar name were found").printf (package_error_source));
                         string? answer;
                         var result = give_choice (possible_package_names, _("remove"), out answer);
 
@@ -118,7 +117,7 @@ namespace Apa {
                         string do_package = find_package_in_do_list (command_handler.argv, package_error_source);
                         char package_error_source_operation = do_package[do_package.length - 1];
 
-                        print (error_message[0:error_message.length - 1].replace (package_error_source, "'%s'".printf (package_error_source)));
+                        print (error_message[0:error_message.length - 1].replace (package_error_source, "`%s'".printf (package_error_source)));
 
                         var choice_packages = new Gee.ArrayList<string> ();
                         foreach (var err in error) {
@@ -165,7 +164,7 @@ namespace Apa {
                         string do_package = find_package_in_do_list (command_handler.argv, package_error_source);
                         char package_error_source_operation = do_package[do_package.length - 1];
 
-                        print (error_message.replace (package_error_source, "'%s'".printf (package_error_source)));
+                        print (error_message.replace (package_error_source, "`%s'".printf (package_error_source)));
 
                         var result = new Gee.ArrayList<string> ();
                         yield Get.install (command_handler, error, result);
@@ -216,7 +215,7 @@ namespace Apa {
                         return status;
 
                     case OriginErrorType.UNABLE_TO_FETCH_SOME_ARCHIVES:
-                        print_error (_("Unable to fetch some archives. Check your connection to repository. Maybe run 'apa update' or try with '--fix-missing' option"));
+                        print_error (_("Unable to fetch some archives. Check your connection to repository. Maybe run `apa update' or try with `--fix-missing' option"));
                         return status;
 
                     case OriginErrorType.NONE:

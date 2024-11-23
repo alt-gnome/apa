@@ -61,7 +61,7 @@ namespace Apa {
                     return (OriginErrorType) i;
 
                 } else {
-                    print_devel ("\nError message: '%s'\nTranslated patern: '%s'\n".printf (ORIGIN_ERRORS[i], pattern));
+                    print_devel ("\nError message: `%s'\nTranslated patern: `%s'\n".printf (ORIGIN_ERRORS[i], pattern));
                 }
             }
 

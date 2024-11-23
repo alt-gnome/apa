@@ -24,7 +24,7 @@ public static int main (string[] argv) {
     Intl.bind_textdomain_codeset ("apt", "UTF-8");
 
     if (!Apa.locale_init ()) {
-        warning ("Locale not supported by C library.\n\tUsing the fallback 'C' locale.");
+        warning ("Locale not supported by C library.\n\tUsing the fallback `C' locale.");
     }
 
     Environment.set_prgname (Config.NAME);

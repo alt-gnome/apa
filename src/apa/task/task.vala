@@ -32,7 +32,7 @@ namespace Apa {
                 return Constants.ExitCode.BASE_ERROR;
 
             default:
-                print_error (_("Unknown subcommand '%s'").printf (command_handler.subcommand));
+                print_error (_("Unknown subcommand `%s'").printf (command_handler.subcommand));
                 return Constants.ExitCode.BASE_ERROR;
         }
     }

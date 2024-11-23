@@ -22,7 +22,7 @@ namespace Apa {
     ) throws CommandError {
         foreach (string package_name in command_handler.argv) {
             if (!(yield check_package_name_no_action (package_name))) {
-                print_error (_("For operation like '<package>+/-' use 'do' command instead"));
+                print_error (_("For operation like `<package>+/-' use `do' command instead"));
                 return Constants.ExitCode.BASE_ERROR;
             }
         }
@@ -50,11 +50,11 @@ namespace Apa {
                         string[]? possible_package_names = fuzzy_search (package_error_source, installed_result.to_array ());
 
                         if (possible_package_names == null) {
-                            print_error (_("Package '%s' not found").printf (package_error_source));
+                            print_error (_("Package `%s' not found").printf (package_error_source));
                             return status;
                         }
 
-                        print (_("Package '%s' not found, but packages with a similar name were found:").printf (package_error_source));
+                        print (_("Package `%s' not found, but packages with a similar name were found:").printf (package_error_source));
                         string? answer;
                         var result = give_choice (possible_package_names, _("remove"), out answer);
 

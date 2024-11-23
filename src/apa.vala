@@ -117,23 +117,23 @@ namespace Apa {
                     return Constants.ExitCode.BASE_ERROR;
 
                 default:
-                    print_error (_("Unknown command '%s'").printf (command_handler.command));
+                    print_error (_("Unknown command `%s'").printf (command_handler.command));
                     return Constants.ExitCode.BASE_ERROR;
             }
 
         } catch (CommandError e) {
             switch (e.code) {
                 case CommandError.UNKNOWN_ERROR:
-                    print_error (_("Unknown error message: '%s'").printf (e.message));
+                    print_error (_("Unknown error message: `%s'").printf (e.message));
                     print_create_issue (e.message, argv);
                     return Constants.ExitCode.BASE_ERROR;
 
                 case CommandError.UNKNOWN_OPTION:
-                    print_error (_("Unknown option: '%s'").printf (e.message));
+                    print_error (_("Unknown option: `%s'").printf (e.message));
                     break;
 
                 case CommandError.UNKNOWN_ARG_OPTION:
-                    print_error (_("Unknown option with value: '%s'").printf (e.message));
+                    print_error (_("Unknown option with value: `%s'").printf (e.message));
                     break;
 
                 default:
@@ -147,7 +147,7 @@ namespace Apa {
             return Constants.ExitCode.BASE_ERROR;
 
         } catch (ApiBase.BadStatusCodeError e) {
-            print_error (_("Bad status code: '%d: %s'").printf (e.code, e.message));
+            print_error (_("Bad status code: `%d: %s'").printf (e.code, e.message));
             return Constants.ExitCode.BASE_ERROR;
         }
     }
@@ -157,7 +157,7 @@ namespace Apa {
             return;
         }
 
-        print_error (_("Need root previlegies for '%s' command").printf (command));
+        print_error (_("Need root previlegies for `%s' command").printf (command));
         Process.exit (Constants.ExitCode.BASE_ERROR);
     }
 

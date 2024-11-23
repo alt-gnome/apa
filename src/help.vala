@@ -67,7 +67,7 @@ namespace Apa.Help {
                 return;
 
             default:
-                print_error (_("No help for '%s'").printf (command));
+                print_error (_("No help for `%s'").printf (command));
                 print_apa ();
                 return;
         }
@@ -103,7 +103,7 @@ namespace Apa.Help {
         );
         print_option (
             "-y, --yes",
-            _("Always 'yes'")
+            _("Always `yes'")
         );
         print_option (
             "-f, --fix",
