@@ -34,6 +34,7 @@ public errordomain Apa.CommandError {
     CANT_UPDATE,
     CANT_UPDATE_KERNEL,
     UNKNOWN_ERROR,
+    INVALID_TASK_ID,
 }
 
 public enum Apa.ChoiceResult {
@@ -58,13 +59,9 @@ namespace Apa {
     public void set_options (
         ref Gee.ArrayList<string> spawn_arr,
         Gee.ArrayList<string> current_options,
-        Gee.ArrayList<ArgOption?> current_arg_options,
         OptionData[] possible_options
     ) {
         var added_options = new Gee.ArrayList<string> ();
-        var added_arg_options = new Gee.ArrayList<ArgOption?> ((el1, el2) => {
-            return el1.name == el2.name && el1.value == el2.value;
-        });
 
         foreach (var option in current_options) {
             foreach (var option_data in possible_options) {
@@ -77,8 +74,20 @@ namespace Apa {
             }
         }
 
+        current_options.remove_all (added_options);
+    }
+
+    public void set_arg_options (
+        ref Gee.ArrayList<string> spawn_arr,
+        Gee.ArrayList<ArgOption?> current_arg_options,
+        OptionData[] possible_arg_options
+    ) {
+        var added_arg_options = new Gee.ArrayList<ArgOption?> ((el1, el2) => {
+            return el1.name == el2.name && el1.value == el2.value;
+        });
+
         foreach (var option in current_arg_options) {
-            foreach (var option_data in possible_options) {
+            foreach (var option_data in possible_arg_options) {
                 if (option.name in option_data) {
                     added_arg_options.add (option);
 
@@ -89,7 +98,6 @@ namespace Apa {
             }
         }
 
-        current_options.remove_all (added_options);
         current_arg_options.remove_all (added_arg_options);
     }
 

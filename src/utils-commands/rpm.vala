@@ -57,7 +57,6 @@ public sealed class Apa.Rpm : Origin {
         set_options (
             ref spawn_arr,
             current_options,
-            current_arg_options,
             {
                 {
                     "-s", "--short",
@@ -118,7 +117,6 @@ public sealed class Apa.Rpm : Origin {
         set_options (
             ref spawn_arr,
             current_options,
-            current_arg_options,
             {
                 {
                     "-f", "--files",

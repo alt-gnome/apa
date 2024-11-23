@@ -33,16 +33,7 @@
         set_options (
             ref spawn_arr,
             current_options,
-            current_arg_options,
             {
-                {
-                    "-o", "--option",
-                    "-o"
-                },
-                {
-                    "-c", "--config",
-                    "-c"
-                },
                 {
                     "-p", "--package-cache",
                     "-p"
@@ -58,6 +49,21 @@
                 {
                     "-i", "--important-only",
                     "-i"
+                }
+            }
+        );
+
+        set_arg_options (
+            ref spawn_arr,
+            current_arg_options,
+            {
+                {
+                    "-o", "--option",
+                    "-o"
+                },
+                {
+                    "-c", "--config",
+                    "-c"
                 }
             }
         );

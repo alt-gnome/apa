@@ -39,7 +39,7 @@ public abstract class Apa.Origin : Object {
         }
 
         foreach (var current_arg_option in current_arg_options) {
-            throw new CommandError.UNKNOWN_ARG_OPTION (current_arg_option.name);
+            throw new CommandError.UNKNOWN_ARG_OPTION (@"$(current_arg_option.name)=$(current_arg_option.value)");
         }
     }
 }

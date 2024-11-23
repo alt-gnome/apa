@@ -20,6 +20,16 @@ namespace Apa {
         owned ArgvHandler command_handler,
         bool ignore_unknown_options = false
     ) throws CommandError, ApiBase.CommonError, ApiBase.BadStatusCodeError {
+        if (command_handler.argv.size < 1) {
+            throw new CommandError.NO_PACKAGES (_("Nothing to search"));
+        }
+
+        foreach (string arg in command_handler.argv) {
+            if (arg.length <= 2) {
+                throw new ApiBase.CommonError.ANSWER (_("The `%s' query is not suitable. The search query must be more than two characters long").printf (arg));
+            }
+        }
+
         var client = new AltRepo.Client ();
 
         bool? by_package = null;
@@ -52,12 +62,22 @@ namespace Apa {
             owner,
             branch,
             state.size == 0 ? (string[]?) null : state.to_array (),
-            20,
+            11,
             by_package
         );
 
-        foreach (var task in tasks_list.tasks) {
-            message (@"$(task.task_id) : $(task.task_owner)");
+        if (tasks_list.tasks.size > 10) {
+            print (_("Too many tasks, showing only the first 10"));
+        }
+
+        for (int i = 0; i < 10 && i < tasks_list.tasks.size; i++) {
+            var task = tasks_list.tasks[i];
+
+            print (_("Task %s:").printf (task.task_id.to_string ()));
+            print (_("  Repo: %s").printf (task.task_repo));
+            print (_("  Owner: %s").printf (task.task_owner));
+            print (_("  State: %s").printf (task.task_state));
+            print (_("  Has %d subtasks").printf (task.subtasks.size));
         }
 
         return 0;

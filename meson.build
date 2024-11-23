@@ -6,15 +6,17 @@ project(
   license: 'GPL-3.0-or-later',
 )
 
+MIN_GLIB_VERSION = '2.76'
+
 i18n = import('i18n')
 
-glib = dependency ('glib-2.0', version: '>= 2.76')
+glib = dependency ('glib-2.0', version: '>= ' + MIN_GLIB_VERSION)
 gobject = dependency ('gobject-2.0')
 gio = dependency ('gio-2.0')
 gee = dependency ('gee-0.8')
 pk = dependency('packagekit-glib2')
 libalt_repo_dep = dependency('libalt-repo-1', version: '== 1.19.13', fallback : ['libalt-repo', 'libalt_repo_dep'])
-libvazzy_dep = dependency('libvazzy-1', version: '>= 1.0', fallback : ['libvazzy', 'libvazzy_dep'])
+libvazzy_dep = dependency('libvazzy-1', version: '>= 1.1', fallback : ['libvazzy', 'libvazzy_dep'])
 
 apa_dependencies = [
   glib,
@@ -32,7 +34,7 @@ add_project_arguments(
 )
 
 add_project_arguments(
-  '--target-glib', '2.76',
+  '--target-glib', MIN_GLIB_VERSION,
   '--vapidir', meson.current_source_dir(),
   language: ['vala']
 )
@@ -45,8 +47,8 @@ find_program ('apt-repo', required: true)
 find_program('update-kernel', dirs: ['/sbin'], required: true)
 
 if get_option('is_devel')
-  find_program('git', required: true)
-  vcs_tag = run_command('git', 'rev-parse', '--short', 'HEAD', check: false).stdout().strip()
+  prog = find_program('git', required: true)
+  vcs_tag = run_command(prog.full_path(), 'rev-parse', '--short', 'HEAD', check: false).stdout().strip()
   version_suffix = '-dev.' + vcs_tag
 endif
 

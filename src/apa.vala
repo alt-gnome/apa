@@ -143,7 +143,16 @@ namespace Apa {
             return Constants.ExitCode.BASE_ERROR;
 
         } catch (ApiBase.CommonError e) {
-            print_error ("Something went wrong");
+            switch (e.code) {
+                case ApiBase.CommonError.ANSWER:
+                    print_error (e.message);
+                    break;
+
+                default:
+                    print_error ("Something went wrong");
+                    break;
+            }
+
             return Constants.ExitCode.BASE_ERROR;
 
         } catch (ApiBase.BadStatusCodeError e) {

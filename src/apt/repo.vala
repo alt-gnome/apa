@@ -32,7 +32,6 @@ public sealed class Apa.Repo : Origin {
         set_options (
             ref spawn_arr,
             current_options,
-            current_arg_options,
             {
                 {
                     "-s", "--simulate",
@@ -120,7 +119,6 @@ public sealed class Apa.Repo : Origin {
         set_options (
             ref spawn_arr,
             current_options,
-            current_arg_options,
             {
                 {
                     "-a", "--all",

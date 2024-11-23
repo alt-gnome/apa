@@ -44,16 +44,7 @@ public sealed class Apa.UpdateKernel : Origin {
         set_options (
             ref spawn_arr,
             current_options,
-            current_arg_options,
             {
-                {
-                    "-A", "--add-module",
-                    "-A"
-                },
-                {
-                    "-D", "--del-module",
-                    "-D"
-                },
                 {
                     "-F", "--force",
                     "-f"
@@ -66,6 +57,49 @@ public sealed class Apa.UpdateKernel : Origin {
                     "-s", "--simulate",
                     "-n"
                 },
+                {
+                    "-H", "--header",
+                    "-H"
+                },
+                {
+                    "-l", "--list",
+                    "-l"
+                },
+                {
+                    "-a", "--all",
+                    "-a"
+                },
+                {
+                    "-i", "--interactive",
+                    "-i"
+                },
+                {
+                    "-d", "--debuginfo",
+                    "-d"
+                }
+            }
+        );
+
+        set_arg_options (
+            ref spawn_arr,
+            current_arg_options,
+            {
+                {
+                    "-A", "--add-module",
+                    "-A"
+                },
+                {
+                    "-D", "--del-module",
+                    "-D"
+                },
+                {
+                    "-t", "--type",
+                    "-t"
+                },
+                {
+                    "-r", "--release",
+                    "-r"
+                }
             }
         );
 

@@ -18,6 +18,7 @@
 namespace Apa {
 
     const string TASK_SEARCH_SUBCOMMAND = "search";
+    const string TASK_SHOW_SUBCOMMAND = "show";
 
     public async int task (
         owned SubCommandHandler command_handler,
@@ -26,6 +27,9 @@ namespace Apa {
         switch (command_handler.subcommand) {
             case TASK_SEARCH_SUBCOMMAND:
                 return yield task_search (command_handler, ignore_unknown_options);
+
+            case TASK_SHOW_SUBCOMMAND:
+                return yield task_show (command_handler, ignore_unknown_options);
 
             case null:
                 Help.print_task ();

@@ -38,16 +38,7 @@ public sealed class Apa.Get : Origin {
         set_options (
             ref spawn_arr,
             current_options,
-            current_arg_options,
             {
-                {
-                    "-o", "--option",
-                    "-o"
-                },
-                {
-                    "-c", "--config",
-                    "-c"
-                },
                 {
                     "-h", "--hide-progress",
                     "-q"
@@ -71,6 +62,21 @@ public sealed class Apa.Get : Origin {
                 {
                     "-V", "--version-detailed",
                     "-V"
+                }
+            }
+        );
+
+        set_arg_options (
+            ref spawn_arr,
+            current_arg_options,
+            {
+                {
+                    "-o", "--option",
+                    "-o"
+                },
+                {
+                    "-c", "--config",
+                    "-c"
                 }
             }
         );
@@ -125,7 +131,6 @@ public sealed class Apa.Get : Origin {
         set_options (
             ref spawn_arr,
             current_options,
-            current_arg_options,
             {
                 {
                     "-d", "--download-only",
@@ -179,7 +184,6 @@ public sealed class Apa.Get : Origin {
         set_options (
             ref spawn_arr,
             current_options,
-            current_arg_options,
             {
                 {
                     "-d", "--download-only",
@@ -245,7 +249,6 @@ public sealed class Apa.Get : Origin {
         set_options (
             ref spawn_arr,
             current_options,
-            current_arg_options,
             {
                 {
                     "-d", "--download-only",
@@ -304,7 +307,6 @@ public sealed class Apa.Get : Origin {
         set_options (
             ref spawn_arr,
             current_options,
-            current_arg_options,
             {
                 {
                     "-D", "--with-dependecies",
@@ -355,7 +357,6 @@ public sealed class Apa.Get : Origin {
         set_options (
             ref spawn_arr,
             current_options,
-            current_arg_options,
             {
                 {
                     "-b", "--build",

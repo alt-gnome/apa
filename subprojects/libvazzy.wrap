@@ -1,4 +1,4 @@
 [wrap-git]
 directory=libvazzy
 url=https://github.com/Rirusha/libvazzy.git
-revision=v1.0
+revision=main
