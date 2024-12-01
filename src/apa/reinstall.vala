@@ -20,7 +20,7 @@ namespace Apa {
         owned ArgvHandler command_handler,
         bool ignore_unknown_options = false
     ) throws CommandError {
-        command_handler.options.add ("-f");
+        command_handler.options.add ("--reinstall");
 
         return yield install (command_handler, ignore_unknown_options);
     }
