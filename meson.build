@@ -4,6 +4,7 @@ project(
   version : '0.1.0',
   meson_version: '>= 1.0.0',
   license: 'GPL-3.0-or-later',
+  default_options: ['prefix=/usr']
 )
 
 MIN_GLIB_VERSION = '2.76'
