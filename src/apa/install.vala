@@ -68,8 +68,7 @@ namespace Apa {
                             case ChoiceResult.SKIP:
                                 command_handler.argv.remove (package_error_source);
                                 if (command_handler.argv.size == 0) {
-                                    print (_("There are no packages left to install"));
-                                    return 0;
+                                    throw new CommandError.NO_PACKAGES_LEFT (_("There are no packages left to install"));
                                 }
                                 break;
 
@@ -108,8 +107,7 @@ namespace Apa {
                             case ChoiceResult.SKIP:
                                 command_handler.argv.remove (package_error_source);
                                 if (command_handler.argv.size == 0) {
-                                    print (_("There are no packages left to install"));
-                                    return 0;
+                                    throw new CommandError.NO_PACKAGES_LEFT (_("There are no packages left to install"));
                                 }
                                 break;
 
@@ -161,8 +159,7 @@ namespace Apa {
                             case ChoiceResult.SKIP:
                                 command_handler.argv.remove (package_error_source);
                                 if (command_handler.argv.size == 0) {
-                                    print (_("There are no packages left to install"));
-                                    return 0;
+                                    throw new CommandError.NO_PACKAGES_LEFT (_("There are no packages left to install"));
                                 }
                                 break;
 

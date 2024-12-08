@@ -35,6 +35,7 @@ public errordomain Apa.CommandError {
     CANT_UPDATE_KERNEL,
     UNKNOWN_ERROR,
     INVALID_TASK_ID,
+    NO_PACKAGES_LEFT,
 }
 
 public enum Apa.ChoiceResult {
