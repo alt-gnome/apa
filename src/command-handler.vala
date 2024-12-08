@@ -58,7 +58,7 @@ public class Apa.CommandHandler : ArgvHandler {
         var arg_options_array = new Gee.ArrayList<ArgOption?> ();
 
         foreach (var arg in argv) {
-            if ("=" in arg) {
+            if ("=" in arg && arg.has_prefix ("--") && arg.has_prefix ("-")) {
                 var arg_option_div = arg.split ("=", 2);
                 arg_options_array.add ({ arg_option_div[0], arg_option_div[1] });
 
