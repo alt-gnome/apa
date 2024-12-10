@@ -17,23 +17,30 @@
 
 namespace Apa {
     public async int kernel_upgrade (
-        owned OptionsHandler command_handler,
-        bool ignore_unknown_options = false
-    ) throws CommandError {
+        owned ArgsHandler args_handler,
+        bool skip_unknown_options = false
+    ) throws CommandError, OptionsError {
         var error = new Gee.ArrayList<string> ();
         int status;
 
-        status = yield update (command_handler, true);
+        args_handler.init_options (
+            OptionData.concat (UpdateKernel.Data.COMMON_OPTIONS_DATA, UpdateKernel.Data.UPDATE_OPTIONS_DATA),
+            OptionData.concat (UpdateKernel.Data.COMMON_ARG_OPTIONS_DATA, UpdateKernel.Data.UPDATE_ARG_OPTIONS_DATA),
+            skip_unknown_options
+        );
 
-        if (status != Constants.ExitCode.SUCCESS) {
+        // TODO: Add config
+        status = yield update (args_handler.copy (), true);
+
+        if (status != ExitCode.SUCCESS) {
             return status;
         }
 
         while (true) {
             error.clear ();
-            status = yield UpdateKernel.update (command_handler, error, ignore_unknown_options);
+            status = yield UpdateKernel.update (args_handler, error, skip_unknown_options);
 
-            if (status != Constants.ExitCode.SUCCESS && error.size > 0) {
+            if (status != ExitCode.SUCCESS && error.size > 0) {
                 string error_message = normalize_error (error);
 
                 switch (detect_error (error_message)) {

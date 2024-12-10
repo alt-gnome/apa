@@ -15,26 +15,32 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
- namespace Apa {
-    public async int task_show (
-        owned ArgvHandler command_handler,
-        bool ignore_unknown_options = false
-    ) throws CommandError, ApiBase.CommonError, ApiBase.BadStatusCodeError {
-        if (command_handler.argv.size < 1) {
-            throw new CommandError.NO_PACKAGES (_("Nothing to search"));
+ namespace Apa.Task {
+    public async int show (
+        owned ArgsHandler args_handler,
+        bool skip_unknown_options = false
+    ) throws CommandError, ApiBase.CommonError, ApiBase.BadStatusCodeError, OptionsError {
+        args_handler.init_options (
+            OptionData.concat (Data.COMMON_OPTIONS_DATA, Data.SEARCH_OPTIONS_DATA),
+            OptionData.concat (Data.COMMON_ARG_OPTIONS_DATA, Data.SEARCH_ARG_OPTIONS_DATA),
+            skip_unknown_options
+        );
+
+        if (args_handler.args.size == 0) {
+            throw new CommandError.NO_PACKAGES (_("Nothing to show"));
         }
 
-        foreach (var option in command_handler.options) {
-            throw new CommandError.UNKNOWN_OPTION (option);
+        foreach (var option in args_handler.options) {
+            throw new OptionsError.UNKNOWN_OPTION (option);
         }
 
-        foreach (var arg_option in command_handler.arg_options) {
-            throw new CommandError.UNKNOWN_ARG_OPTION (arg_option.name);
+        foreach (var arg_option in args_handler.arg_options) {
+            throw new OptionsError.UNKNOWN_ARG_OPTION (arg_option.name);
         }
 
         var client = new AltRepo.Client ();
 
-        foreach (string arg in command_handler.argv) {
+        foreach (string arg in args_handler.args) {
             int task_id;
             if (int.try_parse (arg, out task_id)) {
                 var task_info = yield client.get_task_progress_task_info_id_async (task_id);
@@ -50,7 +56,7 @@
                 }
 
             } else {
-                throw new CommandError.INVALID_TASK_ID (_("Invalid task id `%s'").printf (command_handler.argv[0]));
+                throw new CommandError.INVALID_TASK_ID (_("Invalid task id `%s'").printf (arg));
             }
         }
 

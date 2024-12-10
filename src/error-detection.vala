@@ -25,6 +25,8 @@ namespace Apa {
         "Package %s has no installation candidate",
         "Unable to fetch some archives, maybe run apt-get update or try with --fix-missing?",
         "Some index files failed to download. They have been ignored, or old ones used instead.",
+        "Option some: Configuration item specification must have an =<val>.",
+        "Opening configuration file some - ifstream::ifstream (2 No such file or directory)",
     };
 
     public enum OriginErrorType {
@@ -34,6 +36,8 @@ namespace Apa {
         NO_INSTALLATION_CANDIDAT,
         UNABLE_TO_FETCH_SOME_ARCHIVES,
         SOME_INDEX_FILES_FAILED_TO_DOWNLOAD,
+        CONFIGURATION_ITEM_SPECIFICATION_MUST_HAVE_AN_VAL,
+        OPEN_CONFIGURATION_FILE_FAILED,
         NONE,
     }
 
@@ -50,7 +54,7 @@ namespace Apa {
                 ).strip ().replace ("%s", "(.*)");
 
                 regex = new Regex (
-                    pattern,
+                    Regex.escape_string (pattern),
                     RegexCompileFlags.OPTIMIZE,
                     RegexMatchFlags.NOTEMPTY
                 );
@@ -61,7 +65,7 @@ namespace Apa {
                     return (OriginErrorType) i;
 
                 } else {
-                    print_devel ("\nError message: `%s'\nTranslated patern: `%s'\n".printf (ORIGIN_ERRORS[i], pattern));
+                    print_devel ("\nError message:     `%s'\nTranslated patern: `%s'\n".printf (error_message, pattern));
                 }
             }
 

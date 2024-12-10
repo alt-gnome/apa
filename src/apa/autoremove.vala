@@ -17,16 +17,22 @@
 
 namespace Apa {
     public async int autoremove (
-        owned OptionsHandler command_handler,
-        bool ignore_unknown_options = false
-    ) throws CommandError {
+        owned ArgsHandler args_handler,
+        bool skip_unknown_options = false
+    ) throws CommandError, OptionsError {
         var error = new Gee.ArrayList<string> ();
+
+        args_handler.init_options (
+            OptionData.concat (Get.Data.COMMON_OPTIONS_DATA, Get.Data.AUTOREMOVE_OPTIONS_DATA),
+            OptionData.concat (Get.Data.COMMON_ARG_OPTIONS_DATA, Get.Data.AUTOREMOVE_ARG_OPTIONS_DATA),
+            skip_unknown_options
+        );
 
         while (true) {
             error.clear ();
-            var status = yield Get.autoremove (command_handler, error);
+            var status = yield Get.autoremove (args_handler, error);
 
-            if (status != Constants.ExitCode.SUCCESS && error.size > 0) {
+            if (status != ExitCode.SUCCESS && error.size > 0) {
                 string error_message = normalize_error (error);
                 string? package_error_source;
 

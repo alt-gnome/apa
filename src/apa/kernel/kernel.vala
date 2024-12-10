@@ -21,25 +21,29 @@ namespace Apa {
     const string KERNEL_LIST_SUBCOMMAND = "list";
 
     public async int kernel (
-        owned SubCommandHandler command_handler,
-        bool ignore_unknown_options = false
-    ) throws CommandError {
-        switch (command_handler.subcommand) {
+        owned string[] argv,
+        bool skip_unknown_options = false
+    ) throws CommandError, OptionsError {
+        string? subcommand = cut_of_command (ref argv);
+
+        var args_handler = new ArgsHandler (argv);
+
+        switch (subcommand) {
             case KERNEL_UPGRADE_SUBCOMMAND:
                 check_pk_is_not_running ();
-                check_is_root (command_handler.subcommand);
-                return yield kernel_upgrade (command_handler, ignore_unknown_options);
+                check_is_root (subcommand);
+                return yield kernel_upgrade (args_handler, skip_unknown_options);
 
             case KERNEL_LIST_SUBCOMMAND:
-                return yield kernel_list (command_handler, ignore_unknown_options);
+                return yield kernel_list (args_handler, skip_unknown_options);
 
             case null:
                 Help.print_kernel ();
-                return Constants.ExitCode.BASE_ERROR;
+                return ExitCode.BASE_ERROR;
 
             default:
-                print_error (_("Unknown subcommand `%s'").printf (command_handler.subcommand));
-                return Constants.ExitCode.BASE_ERROR;
+                print_error (_("Unknown subcommand `%s'").printf (subcommand));
+                return ExitCode.BASE_ERROR;
         }
     }
 }

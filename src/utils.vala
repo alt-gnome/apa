@@ -15,27 +15,86 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+public struct Apa.ArgOption {
+
+    public string name;
+    public string value;
+
+    public static ArgOption from_string (string str) {
+        int delim_index = -1;
+
+        for (int i = 0; i < str.length; i++) {
+            if (str[i] == '=') {
+                delim_index = i;
+                break;
+            }
+        }
+
+        if (delim_index == -1) {
+            return { name: str, value: "" };
+
+        } else {
+            return { name: str[0:delim_index], value: str[delim_index + 1:str.length] };
+        }
+    }
+
+    public static bool equal_func (ArgOption? a, ArgOption? b) {
+        return a?.name == b?.name && a?.value == b?.value;
+    }
+}
+
 public struct Apa.OptionData {
+
     public string short_option;
     public string long_option;
     public string target_option;
+    public DescriptionGetter description_getter;
 
-    public bool contains (string option) {
+    public bool contain (string option) {
         return option == short_option || option == long_option;
+    }
+
+    public static OptionData[] concat (OptionData[] arr1, OptionData[] arr2) {
+        OptionData[] new_arr = new OptionData[arr1.length + arr2.length];
+
+        for (int i = 0; i < arr1.length; i++) {
+            new_arr[i] = arr1[i];
+        }
+
+        for (int i = arr1.length; i < new_arr.length; i++) {
+            new_arr[i] = arr2[i - arr1.length];
+        }
+
+        return new_arr;
+    }
+
+    public static OptionData? find_option (OptionData[] options, string option) {
+        foreach (var opt in options) {
+            if (opt.short_option == option || opt.long_option == option) {
+                return opt;
+            }
+        }
+
+        return null;
     }
 }
 
 public errordomain Apa.CommandError {
+    COMMON,
     UNKNOWN_COMMAND,
     TO_MANY_ARGS,
-    UNKNOWN_OPTION,
-    UNKNOWN_ARG_OPTION,
     NO_PACKAGES,
     CANT_UPDATE,
     CANT_UPDATE_KERNEL,
     UNKNOWN_ERROR,
     INVALID_TASK_ID,
     NO_PACKAGES_LEFT,
+}
+
+public errordomain Apa.OptionsError {
+    UNKNOWN_OPTION,
+    UNKNOWN_ARG_OPTION,
+    NO_ARG_OPTION_VALUE,
 }
 
 public enum Apa.ChoiceResult {
@@ -46,60 +105,42 @@ public enum Apa.ChoiceResult {
 
 namespace Apa {
 
+    public delegate string DescriptionGetter ();
+
     public string current_locale;
 
     public const string SKIP_PACKAGE_SENTENCE = _("<skip package>");
+
+    public string? cut_of_command (ref string[] argv) {
+        if (argv.length == 0) {
+            return null;
+        }
+
+        if (argv[0].has_prefix ("-")) {
+            return null;
+        }
+
+        string command = argv[0];
+
+        if (argv.length == 1) {
+            argv = {};
+
+        } else {
+            for (int i = 0; i < argv.length - 1; i++) {
+                argv[i] = argv[i + 1];
+            }
+
+            argv.resize (argv.length - 1);
+        }
+
+        return command;
+    }
 
     public string get_version () {
         return "%s %s".printf (
             Config.NAME,
             Config.VERSION
         );
-    }
-
-    public void set_options (
-        ref Gee.ArrayList<string> spawn_arr,
-        Gee.ArrayList<string> current_options,
-        OptionData[] possible_options
-    ) {
-        var added_options = new Gee.ArrayList<string> ();
-
-        foreach (var option in current_options) {
-            foreach (var option_data in possible_options) {
-                if (option in option_data) {
-                    added_options.add (option);
-
-                    spawn_arr.add (option_data.target_option);
-                    break;
-                }
-            }
-        }
-
-        current_options.remove_all (added_options);
-    }
-
-    public void set_arg_options (
-        ref Gee.ArrayList<string> spawn_arr,
-        Gee.ArrayList<ArgOption?> current_arg_options,
-        OptionData[] possible_arg_options
-    ) {
-        var added_arg_options = new Gee.ArrayList<ArgOption?> ((el1, el2) => {
-            return el1.name == el2.name && el1.value == el2.value;
-        });
-
-        foreach (var option in current_arg_options) {
-            foreach (var option_data in possible_arg_options) {
-                if (option.name in option_data) {
-                    added_arg_options.add (option);
-
-                    spawn_arr.add (option_data.target_option);
-                    spawn_arr.add (option.value);
-                    break;
-                }
-            }
-        }
-
-        current_arg_options.remove_all (added_arg_options);
     }
 
     /*
@@ -184,18 +225,18 @@ namespace Apa {
     public void print_devel (string str) {
         if (Config.IS_DEVEL) {
             print ("\n%sDEBUG\n%s%s\n".printf (
-                Constants.Colors.CYAN,
+                Colors.CYAN,
                 str,
-                Constants.Colors.ENDC
+                Colors.ENDC
             ));
         }
     }
 
     public void print_error (string str) {
         print_err ("%sE: %s %s".printf (
-            Constants.Colors.FAIL,
+            Colors.FAIL,
             str,
-            Constants.Colors.ENDC
+            Colors.ENDC
         ));
     }
 
@@ -279,21 +320,21 @@ namespace Apa {
 
         print (_("You should %s").printf (
             "%s\033]8;;%s\033\\%s\033]8;;\033\\%s".printf (
-                Constants.Colors.OKBLUE,
+                Colors.OKBLUE,
                 "https://github.com/alt-gnome/apa/issues/new?label=%s&title=%s&body=%s".printf (
                     "unknown-error",
                     Uri.escape_string ("Unknown error: %s".printf (error_message), null, true),
                     Uri.escape_string (body, null, true)
                 ),
                 _("create issue↗️"),
-                Constants.Colors.ENDC
+                Colors.ENDC
             )
         ));
     }
 
     public async bool check_package_name_no_action (string package_name) {
         if (package_name.has_suffix ("-") || package_name.has_suffix ("+")) {
-            if ((yield spawn_command_silence (new Gee.ArrayList<string>.wrap ({"rpm", "-q", package_name[0:package_name.length - 1]}), null)) == Constants.ExitCode.SUCCESS) {
+            if ((yield spawn_command_silence (new Gee.ArrayList<string>.wrap ({"rpm", "-q", package_name[0:package_name.length - 1]}), null)) == ExitCode.SUCCESS) {
                 return false;
             }
         }

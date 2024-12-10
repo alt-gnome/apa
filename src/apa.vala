@@ -25,100 +25,108 @@ namespace Apa {
     const string HELP_COMMAND = "help";
     const string VERSION_COMMAND = "version";
 
-    public async int run (string[] argv) {
+    public async int run (owned string[] argv) {
 
-        var command_handler = CommandHandler.parse (argv);
+        string? command = cut_of_command (ref argv);
 
-        if ("-h" in command_handler.options || "--help" in command_handler.options) {
-            Help.print_help (command_handler.command);
-            return Constants.ExitCode.SUCCESS;
+        if (command == null && argv.length == 0) {
+            Help.print_apa ();
+            return ExitCode.SUCCESS;
+
+        } else if (command == null && argv.length > 0) {
+            if ("-h" in argv || "--help" in argv) {
+                Help.print_help (command);
+                return ExitCode.SUCCESS;
+            }
+
+            if ("-v" in argv || "--version" in argv) {
+                print (get_version ());
+                return ExitCode.SUCCESS;
+            }
         }
 
-        if ("-v" in command_handler.options || "--version" in command_handler.options) {
-            print (get_version ());
-            return Constants.ExitCode.SUCCESS;
-        }
+        var args_handler = new ArgsHandler (argv);
 
         try {
-            switch (command_handler.command) {
+            switch (command) {
                 case KERNEL_COMMAND:
-                    return yield kernel (SubCommandHandler.convert_from_ch (command_handler));
+                    return yield kernel (argv);
 
                 case TASK_COMMAND:
-                    return yield task (SubCommandHandler.convert_from_ch (command_handler));
+                    return yield task (argv);
 
                 case Get.AUTOREMOVE:
                     check_pk_is_not_running ();
-                    check_is_root (command_handler.command);
-                    return yield autoremove (command_handler);
+                    check_is_root (command);
+                    return yield autoremove (args_handler);
 
                 case Get.DO:
                     check_pk_is_not_running ();
-                    check_is_root (command_handler.command);
-                    return yield @do (command_handler);
+                    check_is_root (command);
+                    return yield @do (args_handler);
 
                 case Get.UPDATE:
                     check_pk_is_not_running ();
-                    check_is_root (command_handler.command);
-                    return yield update (command_handler);
+                    check_is_root (command);
+                    return yield update (args_handler);
 
                 case Get.UPGRADE:
                     check_pk_is_not_running ();
-                    check_is_root (command_handler.command);
-                    return yield upgrade (command_handler);
+                    check_is_root (command);
+                    return yield upgrade (args_handler);
 
                 case Get.INSTALL:
                     check_pk_is_not_running ();
-                    check_is_root (command_handler.command);
-                    return yield install (command_handler);
+                    check_is_root (command);
+                    return yield install (args_handler);
 
                 case Get.REINSTALL:
                     check_pk_is_not_running ();
-                    check_is_root (command_handler.command);
-                    return yield reinstall (command_handler);
+                    check_is_root (command);
+                    return yield reinstall (args_handler);
 
                 case Get.REMOVE:
                     check_pk_is_not_running ();
-                    check_is_root (command_handler.command);
-                    return yield remove (command_handler);
+                    check_is_root (command);
+                    return yield remove (args_handler);
 
                 case Get.SOURCE:
-                    return yield source (command_handler);
+                    return yield source (args_handler);
 
                 case Cache.SEARCH:
-                    return yield Cache.search (command_handler);
+                    return yield search (args_handler);
 
                 case Repo.REPO_LIST:
-                    return yield Repo.repo_list (command_handler);
+                    return yield Repo.repo_list (args_handler);
 
                 case Repo.TEST:
-                    check_is_root (command_handler.command);
-                    return yield Repo.test (command_handler);
+                    check_is_root (command);
+                    return yield Repo.test (args_handler);
 
                 case LIST_COMMAND:
-                    return yield Rpm.list (command_handler);
+                    return yield Rpm.list (args_handler);
 
                 case INFO_COMMAND:
-                    return yield info (command_handler);
+                    return yield info (args_handler);
 
                 case MOO_COMMAND:
-                    return moo (command_handler);
+                    return moo (args_handler);
 
                 case VERSION_COMMAND:
                     print (get_version ());
-                    return Constants.ExitCode.SUCCESS;
+                    return ExitCode.SUCCESS;
 
                 case HELP_COMMAND:
                     Help.print_apa ();
-                    return Constants.ExitCode.SUCCESS;
+                    return ExitCode.SUCCESS;
 
                 case null:
                     Help.print_apa ();
-                    return Constants.ExitCode.BASE_ERROR;
+                    return ExitCode.BASE_ERROR;
 
                 default:
-                    print_error (_("Unknown command `%s'").printf (command_handler.command));
-                    return Constants.ExitCode.BASE_ERROR;
+                    print_error (_("Unknown command `%s'").printf (command));
+                    return ExitCode.BASE_ERROR;
             }
 
         } catch (CommandError e) {
@@ -126,21 +134,14 @@ namespace Apa {
                 case CommandError.UNKNOWN_ERROR:
                     print_error (_("Unknown error message: `%s'").printf (e.message));
                     print_create_issue (e.message, argv);
-                    return Constants.ExitCode.BASE_ERROR;
-
-                case CommandError.UNKNOWN_OPTION:
-                    print_error (_("Unknown option: `%s'").printf (e.message));
-                    break;
-
-                case CommandError.UNKNOWN_ARG_OPTION:
-                    print_error (_("Unknown option with value: `%s'").printf (e.message));
-                    break;
+                    return ExitCode.BASE_ERROR;
 
                 default:
                     print_error (e.message);
                     break;
             }
-            return Constants.ExitCode.BASE_ERROR;
+
+            return ExitCode.BASE_ERROR;
 
         } catch (ApiBase.CommonError e) {
             switch (e.code) {
@@ -153,11 +154,41 @@ namespace Apa {
                     break;
             }
 
-            return Constants.ExitCode.BASE_ERROR;
+            return ExitCode.BASE_ERROR;
 
         } catch (ApiBase.BadStatusCodeError e) {
-            print_error (_("Bad status code: `%d: %s'").printf (e.code, e.message));
-            return Constants.ExitCode.BASE_ERROR;
+            switch (e.code) {
+                case ApiBase.BadStatusCodeError.NOT_FOUND:
+                    print (_("Nothing found"));
+                    return ExitCode.SUCCESS;
+
+                default:
+                    print_error (_("Bad status code: `%d: %s'").printf (e.code, e.message.strip ()));
+                    break;
+            }
+
+            return ExitCode.BASE_ERROR;
+
+        } catch (OptionsError e) {
+            switch (e.code) {
+                case OptionsError.NO_ARG_OPTION_VALUE:
+                    print_error (_("Option `%s' need value").printf (e.message));
+                    break;
+
+                case OptionsError.UNKNOWN_OPTION:
+                    print_error (_("Unknown option: `%s'").printf (e.message));
+                    break;
+
+                case OptionsError.UNKNOWN_ARG_OPTION:
+                    print_error (_("Unknown option with value: `%s'").printf (e.message));
+                    break;
+
+                default:
+                    print_error (e.message);
+                    break;
+            }
+
+            return ExitCode.BASE_ERROR;
         }
     }
 
@@ -167,7 +198,7 @@ namespace Apa {
         }
 
         print_error (_("Need root previlegies for `%s' command").printf (command));
-        Process.exit (Constants.ExitCode.BASE_ERROR);
+        Process.exit (ExitCode.BASE_ERROR);
     }
 
     public void check_pk_is_not_running () {
@@ -180,6 +211,6 @@ namespace Apa {
         }
 
         print_error (_("PackageKit is running"));
-        Process.exit (Constants.ExitCode.BASE_ERROR);
+        Process.exit (ExitCode.BASE_ERROR);
     }
 }

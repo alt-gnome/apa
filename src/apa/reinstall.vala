@@ -17,11 +17,11 @@
 
 namespace Apa {
     public async int reinstall (
-        owned ArgvHandler command_handler,
-        bool ignore_unknown_options = false
-    ) throws CommandError {
-        command_handler.options.add ("--reinstall");
+        owned ArgsHandler args_handler,
+        bool skip_unknown_options = false
+    ) throws CommandError, OptionsError {
+        args_handler.options.add ("--reinstall");
 
-        return yield install (command_handler, ignore_unknown_options);
+        return yield install (args_handler, skip_unknown_options);
     }
 }

@@ -11,8 +11,6 @@ apa_no_main_code_sources = files (
   'apa/task/show.vala',
   'apa/task/task.vala',
 
-  'apa/update/update.vala',
-
   'apa/autoremove.vala',
   'apa/do.vala',
   'apa/info.vala',
@@ -20,7 +18,9 @@ apa_no_main_code_sources = files (
   'apa/moo.vala',
   'apa/reinstall.vala',
   'apa/remove.vala',
+  'apa/search.vala',
   'apa/source.vala',
+  'apa/update.vala',
   'apa/upgrade.vala',
 
   'apt/cache.vala',
@@ -29,18 +29,25 @@ apa_no_main_code_sources = files (
 
   'flatpak/flatpak.vala',
 
+  'options-data/cache-data.vala',
+  'options-data/get-data.vala',
+  'options-data/repo-data.vala',
+  'options-data/rpm-data.vala',
+  'options-data/task-search-data.vala',
+  'options-data/update-kernel-data.vala',
+
   'snap/snap.vala',
 
   'utils-commands/rpm.vala',
   'utils-commands/update-kernel.vala',
 
   'apa.vala',
-  'command-handler.vala',
+  'args-handler.vala',
+  'command.vala',
   'constants.vala',
   'error-detection.vala',
   'fuzzy-search.vala',
   'help.vala',
-  'origin.vala',
   'spawn-command.vala',
   'utils.vala',
 )

@@ -17,14 +17,25 @@
 
 namespace Apa {
     public async int info (
-        owned ArgvHandler command_handler,
-        bool ignore_unknown_options = false
-    ) throws CommandError {
+        owned ArgsHandler args_handler,
+        bool skip_unknown_options = false
+    ) throws CommandError, OptionsError {
         while (true) {
             var error = new Gee.ArrayList<string> ();
-            var status = yield Rpm.info (command_handler, null, error, ignore_unknown_options);
 
-            if (status != Constants.ExitCode.SUCCESS && error.size > 0) {
+            args_handler.init_options (
+                OptionData.concat (Rpm.Data.COMMON_OPTIONS_DATA, Rpm.Data.INFO_OPTIONS_DATA),
+                OptionData.concat (Rpm.Data.COMMON_ARG_OPTIONS_DATA, Rpm.Data.INFO_ARG_OPTIONS_DATA),
+                skip_unknown_options
+            );
+
+            if (args_handler.args.size == 0) {
+                throw new CommandError.NO_PACKAGES (_("Nothing to show"));
+            }
+
+            var status = yield Rpm.info (args_handler, null, error, skip_unknown_options);
+
+            if (status != ExitCode.SUCCESS && error.size > 0) {
                 string error_message = normalize_error (error);
                 string? package;
 

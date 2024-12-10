@@ -23,26 +23,26 @@ namespace Apa {
      * If result is not `null`, then `stdout > result`
      */
     async int spawn_command_full (
-        Gee.ArrayList<string> spawn_args,
+        Gee.ArrayList<string> spawn_vector,
         Gee.ArrayList<string>? result = null,
         Gee.ArrayList<string>? error = null
     ) {
         print_devel ("Child%s process prepared:\n\t%s".printf (
             result != null ? " (silence)" : "",
-            string.joinv (" ", spawn_args.to_array ())
+            string.joinv (" ", spawn_vector.to_array ())
         ));
 
         Pid child_pid;
         int std_output;
         int std_error;
 
-        int status_code = Constants.ExitCode.SUCCESS;
+        int status_code = ExitCode.SUCCESS;
 
         try {
             if (result == null) {
                 Process.spawn_async_with_pipes_and_fds (
                     null,
-                    spawn_args.to_array ().copy (),
+                    spawn_vector.to_array ().copy (),
                     null,
                     SpawnFlags.DO_NOT_REAP_CHILD |
                     SpawnFlags.CHILD_INHERITS_STDIN |
@@ -62,7 +62,7 @@ namespace Apa {
             } else {
                 Process.spawn_async_with_pipes_and_fds (
                     null,
-                    spawn_args.to_array ().copy (),
+                    spawn_vector.to_array ().copy (),
                     null,
                     SpawnFlags.DO_NOT_REAP_CHILD |
                     SpawnFlags.CHILD_INHERITS_STDIN |
@@ -153,16 +153,16 @@ namespace Apa {
     }
 
     async int spawn_command (
-        Gee.ArrayList<string> spawn_args,
+        Gee.ArrayList<string> spawn_vector,
         Gee.ArrayList<string>? error
     ) {
-        return yield spawn_command_full (spawn_args, null, error);
+        return yield spawn_command_full (spawn_vector, null, error);
     }
 
     async int spawn_command_silence (
-        Gee.ArrayList<string> spawn_args,
+        Gee.ArrayList<string> spawn_vector,
         Gee.ArrayList<string>? error
     ) {
-        return yield spawn_command_full (spawn_args, new Gee.ArrayList<string> (), error);
+        return yield spawn_command_full (spawn_vector, new Gee.ArrayList<string> (), error);
     }
 }

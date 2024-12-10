@@ -15,16 +15,25 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-namespace Apa {
-    public async int task_search (
-        owned ArgvHandler command_handler,
-        bool ignore_unknown_options = false
-    ) throws CommandError, ApiBase.CommonError, ApiBase.BadStatusCodeError {
-        if (command_handler.argv.size < 1) {
+namespace Apa.Task {
+    public async int search (
+        owned ArgsHandler args_handler,
+        bool skip_unknown_options = false
+    ) throws CommandError, ApiBase.CommonError, ApiBase.BadStatusCodeError, OptionsError {
+        var all_possible_options = OptionData.concat (Data.COMMON_OPTIONS_DATA, Data.SEARCH_OPTIONS_DATA);
+        var all_possible_arg_options = OptionData.concat (Data.COMMON_ARG_OPTIONS_DATA, Data.SEARCH_ARG_OPTIONS_DATA);
+
+        args_handler.init_options (
+            all_possible_options,
+            all_possible_arg_options,
+            skip_unknown_options
+        );
+
+        if (args_handler.args.size == 0) {
             throw new CommandError.NO_PACKAGES (_("Nothing to search"));
         }
 
-        foreach (string arg in command_handler.argv) {
+        foreach (string arg in args_handler.args) {
             if (arg.length <= 2) {
                 throw new ApiBase.CommonError.ANSWER (_("The `%s' query is not suitable. The search query must be more than two characters long").printf (arg));
             }
@@ -37,28 +46,50 @@ namespace Apa {
         string? branch = null;
         var state = new Gee.ArrayList<string> ();
 
-        foreach (var option in command_handler.options) {
-            if (option == "--by-package" || option == "-p") {
-                by_package = true;
-            } else {
-                throw new CommandError.UNKNOWN_OPTION (option);
+        foreach (var option in args_handler.options) {
+            var option_data = OptionData.find_option (all_possible_options, option);
+
+            if (option_data == null) {
+                throw new OptionsError.UNKNOWN_OPTION (option);
+            }
+
+            switch (option_data.short_option) {
+                case Data.OPTION_BY_PACKAGE_SHORT:
+                    by_package = true;
+                    break;
+
+                default:
+                    throw new OptionsError.UNKNOWN_OPTION (option);
             }
         }
 
-        foreach (var arg_option in command_handler.arg_options) {
-            if (arg_option.name == "--owner" || arg_option.name == "-o") {
-                owner = arg_option.value;
-            } else if (arg_option.name == "--branch" || arg_option.name == "-b") {
-                branch = arg_option.value;
-            } else if (arg_option.name == "--state" || arg_option.name == "-s") {
-                state.add (arg_option.value);
-            } else {
-                throw new CommandError.UNKNOWN_ARG_OPTION (arg_option.name);
+        foreach (var arg_option in args_handler.arg_options) {
+            var option_data = OptionData.find_option (all_possible_arg_options, arg_option.name);
+
+            if (option_data == null) {
+                throw new OptionsError.UNKNOWN_ARG_OPTION (arg_option.name);
+            }
+
+            switch (option_data.short_option) {
+                case Data.OPTION_OWNER_SHORT:
+                    owner = arg_option.value;
+                    break;
+
+                case Data.OPTION_BRANCH_SHORT:
+                    branch = arg_option.value;
+                    break;
+
+                case Data.OPTION_STATE_SHORT:
+                    state.add (arg_option.value);
+                    break;
+
+                default:
+                    throw new OptionsError.UNKNOWN_ARG_OPTION (arg_option.name);
             }
         }
 
         var tasks_list = yield client.get_task_progress_find_tasks_async (
-            command_handler.argv.to_array (),
+            args_handler.args.to_array (),
             owner,
             branch,
             state.size == 0 ? (string[]?) null : state.to_array (),
@@ -78,6 +109,29 @@ namespace Apa {
             print (_("  Owner: %s").printf (task.task_owner));
             print (_("  State: %s").printf (task.task_state));
             print (_("  Has %d subtasks").printf (task.subtasks.size));
+            print (_("  Subtasks: "), false);
+
+            var subtasks_array = new Gee.ArrayList<string> ();
+            foreach (var subtask in task.subtasks) {
+                if (subtask.subtask_srpm_name != "") {
+                    subtasks_array.add ("%s-%s".printf (subtask.subtask_srpm_name, subtask.subtask_tag_name));
+
+                } else if (subtask.subtask_package != "") {
+                    subtasks_array.add ("%s-%s".printf (subtask.subtask_package, subtask.subtask_tag_name));
+
+                } else if (subtask.subtask_pkg_from != "") {
+                    subtasks_array.add ("%s-%s".printf (subtask.subtask_pkg_from, subtask.subtask_tag_name));
+
+                } else {
+                    subtasks_array.clear ();
+                    var task_info = yield client.get_task_progress_task_info_id_async (task.task_id);
+                    foreach (var sbtsk in task_info.subtasks) {
+                        subtasks_array.add ("%s-%s".printf (sbtsk.src_pkg_name, sbtsk.subtask_tag_name));
+                    }
+                    break;
+                }
+            }
+            print (string.joinv (", ", subtasks_array.to_array ()));
         }
 
         return 0;

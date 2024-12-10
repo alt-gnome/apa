@@ -17,26 +17,32 @@
 
 namespace Apa {
     public async int upgrade (
-        owned OptionsHandler command_handler,
-        bool ignore_unknown_options = false
-    ) throws CommandError {
+        owned ArgsHandler args_handler,
+        bool skip_unknown_options = false
+    ) throws CommandError, OptionsError {
         var error = new Gee.ArrayList<string> ();
         int status;
 
-        if ("--with-kernel" in command_handler.options || "-k" in command_handler.options) {
-            status = yield kernel_upgrade (command_handler, true);
+        args_handler.init_options (
+            OptionData.concat (Get.Data.COMMON_OPTIONS_DATA, Get.Data.UPGRADE_OPTIONS_DATA),
+            OptionData.concat (Get.Data.COMMON_ARG_OPTIONS_DATA, Get.Data.UPGRADE_ARG_OPTIONS_DATA),
+            skip_unknown_options
+        );
 
-            if (status != Constants.ExitCode.SUCCESS) {
+        if ("--with-kernel" in args_handler.options || "-k" in args_handler.options) {
+            status = yield kernel_upgrade (args_handler.copy (), true);
+
+            if (status != ExitCode.SUCCESS) {
                 return status;
             }
 
-            command_handler.options.remove ("--with-kernel");
-            command_handler.options.remove ("-k");
+            args_handler.options.remove ("--with-kernel");
+            args_handler.options.remove ("-k");
 
         } else {
-            status = yield update (command_handler, true);
+            status = yield update (args_handler.copy (), true);
 
-            if (status != Constants.ExitCode.SUCCESS) {
+            if (status != ExitCode.SUCCESS) {
                 return status;
             }
         }
@@ -44,9 +50,9 @@ namespace Apa {
         while (true) {
             error.clear ();
 
-            status = yield Get.upgrade (command_handler, error, ignore_unknown_options);
+            status = yield Get.upgrade (args_handler, error, skip_unknown_options);
 
-            if (status != Constants.ExitCode.SUCCESS && error.size > 0) {
+            if (status != ExitCode.SUCCESS && error.size > 0) {
                 string error_message = normalize_error (error);
                 string? package;
 

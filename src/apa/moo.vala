@@ -17,16 +17,16 @@
 
 namespace Apa {
     public int moo (
-        owned ArgvHandler command_handler
+        owned ArgsHandler args_handler
     ) {
-        if (command_handler.argv.size > 0) {
-            print (get_moo (command_handler.argv[0]), false);
+        if (args_handler.args.size > 0) {
+            print (get_moo (args_handler.args[0]), false);
 
         } else {
             print (get_moo (), false);
         }
 
-        return Constants.ExitCode.SUCCESS;
+        return ExitCode.SUCCESS;
     }
 
     string get_moo (string? phrase = null) {

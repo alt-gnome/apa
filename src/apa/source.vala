@@ -17,16 +17,26 @@
 
 namespace Apa {
     public async int source (
-        owned ArgvHandler command_handler,
-        bool ignore_unknown_options = false
-    ) throws CommandError {
+        owned ArgsHandler args_handler,
+        bool skip_unknown_options = false
+    ) throws CommandError, OptionsError {
         var error = new Gee.ArrayList<string> ();
+
+        args_handler.init_options (
+            OptionData.concat (Get.Data.COMMON_OPTIONS_DATA, Get.Data.SOURCE_OPTIONS_DATA),
+            OptionData.concat (Get.Data.COMMON_ARG_OPTIONS_DATA, Get.Data.SOURCE_ARG_OPTIONS_DATA),
+            skip_unknown_options
+        );
+
+        if (args_handler.args.size == 0) {
+            throw new CommandError.NO_PACKAGES (_("Nothing to install"));
+        }
 
         while (true) {
             error.clear ();
-            var status = yield Get.source (command_handler, error, ignore_unknown_options);
+            var status = yield Get.source (args_handler, error, skip_unknown_options);
 
-            if (status != Constants.ExitCode.SUCCESS && error.size > 0) {
+            if (status != ExitCode.SUCCESS && error.size > 0) {
                 string error_message = normalize_error (error);
                 string? package_error_source;
 

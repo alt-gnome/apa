@@ -21,23 +21,27 @@ namespace Apa {
     const string TASK_SHOW_SUBCOMMAND = "show";
 
     public async int task (
-        owned SubCommandHandler command_handler,
-        bool ignore_unknown_options = false
-    ) throws CommandError, ApiBase.CommonError, ApiBase.BadStatusCodeError {
-        switch (command_handler.subcommand) {
+        owned string[] argv,
+        bool skip_unknown_options = false
+    ) throws CommandError, ApiBase.CommonError, ApiBase.BadStatusCodeError, OptionsError {
+        string? subcommand = cut_of_command (ref argv);
+
+        var args_handler = new ArgsHandler (argv);
+
+        switch (subcommand) {
             case TASK_SEARCH_SUBCOMMAND:
-                return yield task_search (command_handler, ignore_unknown_options);
+                return yield Task.search (args_handler, skip_unknown_options);
 
             case TASK_SHOW_SUBCOMMAND:
-                return yield task_show (command_handler, ignore_unknown_options);
+                return yield Task.show (args_handler, skip_unknown_options);
 
             case null:
                 Help.print_task ();
-                return Constants.ExitCode.BASE_ERROR;
+                return ExitCode.BASE_ERROR;
 
             default:
-                print_error (_("Unknown subcommand `%s'").printf (command_handler.subcommand));
-                return Constants.ExitCode.BASE_ERROR;
+                print_error (_("Unknown subcommand `%s'").printf (subcommand));
+                return ExitCode.BASE_ERROR;
         }
     }
 }

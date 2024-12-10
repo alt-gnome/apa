@@ -17,17 +17,23 @@
 
 namespace Apa {
     public async int kernel_list (
-        owned OptionsHandler command_handler,
-        bool ignore_unknown_options = false
-    ) throws CommandError {
+        owned ArgsHandler args_handler,
+        bool skip_unknown_options = false
+    ) throws CommandError, OptionsError {
         var error = new Gee.ArrayList<string> ();
         int status;
 
+        args_handler.init_options (
+            OptionData.concat (UpdateKernel.Data.COMMON_OPTIONS_DATA, UpdateKernel.Data.LIST_OPTIONS_DATA),
+            OptionData.concat (UpdateKernel.Data.COMMON_ARG_OPTIONS_DATA, UpdateKernel.Data.LIST_ARG_OPTIONS_DATA),
+            skip_unknown_options
+        );
+
         while (true) {
             error.clear ();
-            status = yield UpdateKernel.list (command_handler, error, ignore_unknown_options);
+            status = yield UpdateKernel.list (args_handler, error, skip_unknown_options);
 
-            if (status != Constants.ExitCode.SUCCESS && error.size > 0) {
+            if (status != ExitCode.SUCCESS && error.size > 0) {
                 string error_message = normalize_error (error);
 
                 switch (detect_error (error_message)) {

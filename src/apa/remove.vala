@@ -17,21 +17,32 @@
 
 namespace Apa {
     public async int remove (
-        owned ArgvHandler command_handler,
-        bool ignore_unknown_options = false
-    ) throws CommandError {
-        foreach (string package_name in command_handler.argv) {
+        owned ArgsHandler args_handler,
+        bool skip_unknown_options = false
+    ) throws CommandError, OptionsError {
+        var error = new Gee.ArrayList<string> ();
+
+        args_handler.init_options (
+            OptionData.concat (Get.Data.COMMON_OPTIONS_DATA, Get.Data.REMOVE_OPTIONS_DATA),
+            OptionData.concat (Get.Data.COMMON_ARG_OPTIONS_DATA, Get.Data.REMOVE_ARG_OPTIONS_DATA),
+            skip_unknown_options
+        );
+
+        if (args_handler.args.size == 0) {
+            throw new CommandError.NO_PACKAGES (_("Nothing to remove"));
+        }
+
+        foreach (string package_name in args_handler.args) {
             if (!(yield check_package_name_no_action (package_name))) {
                 print_error (_("For operation like `<package>+/-' use `do' command instead"));
-                return Constants.ExitCode.BASE_ERROR;
+                return ExitCode.BASE_ERROR;
             }
         }
 
         while (true) {
-            var error = new Gee.ArrayList<string> ();
-            var status = yield Get.remove (command_handler, error, ignore_unknown_options);
+            var status = yield Get.remove (args_handler, error, skip_unknown_options);
 
-            if (status != Constants.ExitCode.SUCCESS && error.size > 0) {
+            if (status != ExitCode.SUCCESS && error.size > 0) {
                 string error_message = normalize_error (error);
                 string? package_error_source;
                 switch (detect_error (error_message, out package_error_source)) {
@@ -39,11 +50,7 @@ namespace Apa {
 
                         var installed_result = new Gee.ArrayList<string> ();
                         yield Rpm.list (
-                            new CommandHandler () {
-                                options = new Gee.ArrayList<string>.wrap ({ "-s" }),
-                                arg_options = new Gee.ArrayList<ArgOption?> (),
-                            },
-
+                            new ArgsHandler ({ "-s" }),
                             installed_result
                         );
 
@@ -60,15 +67,15 @@ namespace Apa {
 
                         switch (result) {
                             case ChoiceResult.SKIP:
-                                command_handler.argv.remove (package_error_source);
-                                if (command_handler.argv.size == 0) {
+                                args_handler.args.remove (package_error_source);
+                                if (args_handler.args.size == 0) {
                                     throw new CommandError.NO_PACKAGES_LEFT (_("There are no packages left to remove"));
                                 }
                                 break;
 
                             case ChoiceResult.CHOSEN:
                                 replace_strings_in_array_list (
-                                    command_handler.argv,
+                                    args_handler.args,
                                     package_error_source,
                                     answer.split (" ")[0]
                                 );
@@ -81,6 +88,14 @@ namespace Apa {
 
                     case OriginErrorType.UNABLE_TO_LOCK_DOWNLOAD_DIR:
                         print_error (_("APT is currently busy"));
+                        return status;
+
+                    case OriginErrorType.CONFIGURATION_ITEM_SPECIFICATION_MUST_HAVE_AN_VAL:
+                        print_error (_("Option `-o/--option' value is incorrect. It should look like OptionName=val"));
+                        return status;
+
+                    case OriginErrorType.OPEN_CONFIGURATION_FILE_FAILED:
+                        print_error (_("Option `-c/--config' value is incorrect"));
                         return status;
 
                     case OriginErrorType.NONE:

@@ -17,23 +17,33 @@
 
 namespace Apa {
     public async int install (
-        owned ArgvHandler command_handler,
-        bool ignore_unknown_options = false
-    ) throws CommandError {
+        owned ArgsHandler args_handler,
+        bool skip_unknown_options = false
+    ) throws CommandError, OptionsError {
         var error = new Gee.ArrayList<string> ();
 
-        foreach (string package_name in command_handler.argv) {
+        args_handler.init_options (
+            OptionData.concat (Get.Data.COMMON_OPTIONS_DATA, Get.Data.INSTALL_OPTIONS_DATA),
+            OptionData.concat (Get.Data.COMMON_ARG_OPTIONS_DATA, Get.Data.INSTALL_ARG_OPTIONS_DATA),
+            skip_unknown_options
+        );
+
+        if (args_handler.args.size == 0) {
+            throw new CommandError.NO_PACKAGES (_("Nothing to install"));
+        }
+
+        foreach (string package_name in args_handler.args) {
             if (!(yield check_package_name_no_action (package_name))) {
                 print_error (_("For operation like `<package>+/-' use `do' command instead"));
-                return Constants.ExitCode.BASE_ERROR;
+                return ExitCode.BASE_ERROR;
             }
         }
 
         while (true) {
             error.clear ();
-            var status = yield Get.install (command_handler, error, null, ignore_unknown_options);
+            var status = yield Get.install (args_handler, error, null);
 
-            if (status != Constants.ExitCode.SUCCESS && error.size > 0) {
+            if (status != ExitCode.SUCCESS && error.size > 0) {
                 string error_message = normalize_error (error);
                 string? package_error_source;
 
@@ -41,15 +51,12 @@ namespace Apa {
                     case OriginErrorType.COULDNT_FIND_PACKAGE:
                         var search_result = new Gee.ArrayList<string> ();
                         yield Cache.search (
-                            new CommandHandler () {
-                                argv = new Gee.ArrayList<string>.wrap ({ string.joinv (".*", split_chars (package_error_source)) }),
-                                // Options not ->
-                                options = new Gee.ArrayList<string>.wrap ({ "--names-only" }),
-                                arg_options = command_handler.arg_options
-                            },
-                            search_result,
-                            null,
-                            true
+                            new ArgsHandler.with_data (
+                                { "--names-only" },
+                                args_handler.arg_options.to_array (),
+                                { string.joinv (".*", split_chars (package_error_source)) }
+                            ),
+                            search_result
                         );
                         do_short_array_list (ref search_result);
 
@@ -66,14 +73,14 @@ namespace Apa {
 
                         switch (result) {
                             case ChoiceResult.SKIP:
-                                command_handler.argv.remove (package_error_source);
-                                if (command_handler.argv.size == 0) {
+                                args_handler.args.remove (package_error_source);
+                                if (args_handler.args.size == 0) {
                                     throw new CommandError.NO_PACKAGES_LEFT (_("There are no packages left to install"));
                                 }
                                 break;
 
                             case ChoiceResult.CHOSEN:
-                                replace_strings_in_array_list (command_handler.argv, package_error_source, answer.split (" ")[0]);
+                                replace_strings_in_array_list (args_handler.args, package_error_source, answer.split (" ")[0]);
                                 break;
 
                             case ChoiceResult.EXIT:
@@ -105,14 +112,14 @@ namespace Apa {
 
                         switch (result) {
                             case ChoiceResult.SKIP:
-                                command_handler.argv.remove (package_error_source);
-                                if (command_handler.argv.size == 0) {
+                                args_handler.args.remove (package_error_source);
+                                if (args_handler.args.size == 0) {
                                     throw new CommandError.NO_PACKAGES_LEFT (_("There are no packages left to install"));
                                 }
                                 break;
 
                             case ChoiceResult.CHOSEN:
-                                replace_strings_in_array_list (command_handler.argv, package_error_source, answer.split (" ")[0]);
+                                replace_strings_in_array_list (args_handler.args, package_error_source, answer.split (" ")[0]);
                                 break;
 
                             case ChoiceResult.EXIT:
@@ -129,7 +136,7 @@ namespace Apa {
 
                         // FIXME: need move error part of message to cerr in apt
                         var result = new Gee.ArrayList<string> ();
-                        yield Get.install (command_handler, error, result, ignore_unknown_options);
+                        yield Get.install (args_handler, error, result);
 
                         var choice_packages = new Gee.ArrayList<string> ();
                         foreach (var res in result) {
@@ -157,14 +164,14 @@ namespace Apa {
 
                         switch (result_choice) {
                             case ChoiceResult.SKIP:
-                                command_handler.argv.remove (package_error_source);
-                                if (command_handler.argv.size == 0) {
+                                args_handler.args.remove (package_error_source);
+                                if (args_handler.args.size == 0) {
                                     throw new CommandError.NO_PACKAGES_LEFT (_("There are no packages left to install"));
                                 }
                                 break;
 
                             case ChoiceResult.CHOSEN:
-                                replace_strings_in_array_list (command_handler.argv, package_error_source, answer.split (" ")[0]);
+                                replace_strings_in_array_list (args_handler.args, package_error_source, answer.split (" ")[0]);
                                 break;
 
                             case ChoiceResult.EXIT:
@@ -174,6 +181,14 @@ namespace Apa {
 
                     case OriginErrorType.UNABLE_TO_FETCH_SOME_ARCHIVES:
                         print_error (_("Unable to fetch some archives. Check your connection to repository. Maybe run `apa update' or try with `--fix-missing' option"));
+                        return status;
+
+                    case OriginErrorType.CONFIGURATION_ITEM_SPECIFICATION_MUST_HAVE_AN_VAL:
+                        print_error (_("Option `-o/--option' value is incorrect. It should look like OptionName=val"));
+                        return status;
+
+                    case OriginErrorType.OPEN_CONFIGURATION_FILE_FAILED:
+                        print_error (_("Option `-c/--config' value is incorrect"));
                         return status;
 
                     case OriginErrorType.NONE:

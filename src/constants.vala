@@ -17,22 +17,50 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-namespace Apa.Constants {
+namespace Apa.ExitCode {
 
-    namespace ExitCode {
-        public const int SUCCESS = 0;
-        public const int BASE_ERROR = 100;
+    public const int SUCCESS = 0;
+    public const int BASE_ERROR = 100;
+}
+
+namespace Apa.Colors {
+
+    public const string HEADER = "\033[95m";
+    public const string OKBLUE = "\033[94m";
+    public const string CYAN = "\033[96m";
+    public const string OKGREEN = "\033[92m";
+    public const string YELLOW = "\033[93m";
+    public const string FAIL = "\033[91m";
+    public const string ENDC = "\033[0m";
+    public const string BOLD = "\033[1m";
+    public const string UNDERLINE = "\033[4m";
+}
+
+namespace Apa.Descriptions {
+
+    public const string NO_DESCRIPTION = "NO DESCRIPTION";
+
+    public string option_package_cache () {
+        return NO_DESCRIPTION;
     }
 
-    namespace Colors {
-        public const string HEADER = "\033[95m";
-        public const string OKBLUE = "\033[94m";
-        public const string CYAN = "\033[96m";
-        public const string OKGREEN = "\033[92m";
-        public const string YELLOW = "\033[93m";
-        public const string FAIL = "\033[91m";
-        public const string ENDC = "\033[0m";
-        public const string BOLD = "\033[1m";
-        public const string UNDERLINE = "\033[4m";
+    public string option_source_cache () {
+        return NO_DESCRIPTION;
+    }
+
+    public string option_hide_progress () {
+        return NO_DESCRIPTION;
+    }
+
+    public string option_important_only () {
+        return NO_DESCRIPTION;
+    }
+
+    public string arg_option_option () {
+        return _("APT option");
+    }
+
+    public string arg_option_config () {
+        return _("Path to APT config file");
     }
 }

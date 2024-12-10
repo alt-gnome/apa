@@ -17,59 +17,32 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-public sealed class Apa.Rpm : Origin {
+namespace Apa.Rpm {
 
-    protected override string origin { get; default = "rpm"; }
+    const string ORIGIN = "rpm";
 
     public const string LIST = "list";
     public const string INFO = "info";
 
-    Rpm () {}
-
     public static async int list (
-        owned OptionsHandler command_handler,
+        ArgsHandler args_handler,
         Gee.ArrayList<string>? result = null,
         Gee.ArrayList<string>? error = null,
-        bool ignore_unknown_options = false
-    ) throws CommandError {
-        return yield new Rpm ().internal_list (
-            command_handler.options,
-            command_handler.arg_options,
-            result,
-            error,
-            ignore_unknown_options
-        );
-    }
+        bool skip_unknown_options = false
+    ) throws OptionsError {
+        var command = new Command (ORIGIN);
 
-    public async int internal_list (
-        Gee.ArrayList<string> options,
-        Gee.ArrayList<ArgOption?> arg_options,
-        Gee.ArrayList<string>? result = null,
-        Gee.ArrayList<string>? error = null,
-        bool ignore_unknown_options = false
-    ) throws CommandError {
-        current_options.add_all (options);
-        current_arg_options.add_all (arg_options);
+        command.spawn_vector.add ("-q");
+        command.spawn_vector.add ("-a");
 
-        spawn_arr.add ("-q");
-        spawn_arr.add ("-a");
-
-        set_options (
-            ref spawn_arr,
-            current_options,
-            {
-                {
-                    "-s", "--short",
-                    "--queryformat=%{NAME}\n"
-                }
-            }
+        command.fill_by_args_handler (
+            args_handler,
+            OptionData.concat (Rpm.Data.COMMON_OPTIONS_DATA, Rpm.Data.LIST_OPTIONS_DATA),
+            OptionData.concat (Rpm.Data.COMMON_ARG_OPTIONS_DATA, Rpm.Data.LIST_ARG_OPTIONS_DATA),
+            skip_unknown_options
         );
 
-        if (!ignore_unknown_options) {
-            post_set_check ();
-        }
-
-        var status = yield spawn_command_full (spawn_arr, result, error);
+        var status = yield spawn_command_full (command.spawn_vector, result, error);
 
         if (result != null) {
             for (int i = 0; i < result.size; i++) {
@@ -81,56 +54,23 @@ public sealed class Apa.Rpm : Origin {
     }
 
     public static async int info (
-        owned ArgvHandler command_handler,
+        ArgsHandler args_handler,
         Gee.ArrayList<string>? result = null,
         Gee.ArrayList<string>? error = null,
-        bool ignore_unknown_options = false
-    ) throws CommandError {
-        if (command_handler.argv.size == 0) {
-            throw new CommandError.NO_PACKAGES (_("No packages to show"));
-        }
+        bool skip_unknown_options = false
+    ) throws OptionsError {
+        var command = new Command (ORIGIN);
 
-        return yield new Rpm ().internal_info (
-            command_handler.argv,
-            command_handler.options,
-            command_handler.arg_options,
-            result,
-            error,
-            ignore_unknown_options
-        );
-    }
+        command.spawn_vector.add ("-q");
+        command.spawn_vector.add ("-i");
 
-    public async int internal_info (
-        Gee.ArrayList<string> packages,
-        Gee.ArrayList<string> options,
-        Gee.ArrayList<ArgOption?> arg_options,
-        Gee.ArrayList<string>? result = null,
-        Gee.ArrayList<string>? error = null,
-        bool ignore_unknown_options = false
-    ) throws CommandError {
-        current_options.add_all (options);
-        current_arg_options.add_all (arg_options);
-
-        spawn_arr.add ("-q");
-        spawn_arr.add ("-i");
-
-        set_options (
-            ref spawn_arr,
-            current_options,
-            {
-                {
-                    "-f", "--files",
-                    "-l"
-                }
-            }
+        command.fill_by_args_handler_with_args (
+            args_handler,
+            OptionData.concat (Rpm.Data.COMMON_OPTIONS_DATA, Rpm.Data.INFO_OPTIONS_DATA),
+            OptionData.concat (Rpm.Data.COMMON_ARG_OPTIONS_DATA, Rpm.Data.INFO_ARG_OPTIONS_DATA),
+            skip_unknown_options
         );
 
-        if (!ignore_unknown_options) {
-            post_set_check ();
-        }
-
-        spawn_arr.add_all (packages);
-
-        return yield spawn_command_full (spawn_arr, result, error);
+        return yield spawn_command_full (command.spawn_vector, result, error);
     }
 }

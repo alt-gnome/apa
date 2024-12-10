@@ -15,128 +15,46 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-public sealed class Apa.UpdateKernel : Origin {
+namespace Apa.UpdateKernel {
 
-    protected override string origin { get; default = "/sbin/update-kernel"; }
+    const string ORIGIN = "/sbin/update-kernel";
 
     public const string UPDATE = "update";
     public const string LIST = "list";
 
-    UpdateKernel () {}
-
     public static async int update (
-        owned OptionsHandler command_handler,
+        ArgsHandler args_handler,
         Gee.ArrayList<string>? error = null,
-        bool ignore_unknown_options = false
-    ) throws CommandError {
-        return yield new UpdateKernel ().internal_update (command_handler.options, command_handler.arg_options, error, ignore_unknown_options);
-    }
+        bool skip_unknown_options = false
+    ) throws OptionsError {
+        var command = new Command (ORIGIN, UPDATE);
 
-    public async int internal_update (
-        Gee.ArrayList<string> options,
-        Gee.ArrayList<ArgOption?> arg_options,
-        Gee.ArrayList<string>? error = null,
-        bool ignore_unknown_options = false
-    ) throws CommandError {
-        current_options.add_all (options);
-        current_arg_options.add_all (arg_options);
-
-        set_options (
-            ref spawn_arr,
-            current_options,
-            {
-                {
-                    "-F", "--force",
-                    "-f"
-                },
-                {
-                    "-d", "--download-only",
-                    "-d"
-                },
-                {
-                    "-s", "--simulate",
-                    "-n"
-                },
-                {
-                    "-H", "--header",
-                    "-H"
-                },
-                {
-                    "-l", "--list",
-                    "-l"
-                },
-                {
-                    "-a", "--all",
-                    "-a"
-                },
-                {
-                    "-i", "--interactive",
-                    "-i"
-                },
-                {
-                    "-d", "--debuginfo",
-                    "-d"
-                }
-            }
+        command.fill_by_args_handler (
+            args_handler,
+            OptionData.concat (UpdateKernel.Data.COMMON_OPTIONS_DATA, UpdateKernel.Data.UPDATE_OPTIONS_DATA),
+            OptionData.concat (UpdateKernel.Data.COMMON_ARG_OPTIONS_DATA, UpdateKernel.Data.UPDATE_ARG_OPTIONS_DATA),
+            skip_unknown_options
         );
 
-        set_arg_options (
-            ref spawn_arr,
-            current_arg_options,
-            {
-                {
-                    "-A", "--add-module",
-                    "-A"
-                },
-                {
-                    "-D", "--del-module",
-                    "-D"
-                },
-                {
-                    "-t", "--type",
-                    "-t"
-                },
-                {
-                    "-r", "--release",
-                    "-r"
-                }
-            }
-        );
-
-        if (!ignore_unknown_options) {
-            post_set_check ();
-        }
-
-        return yield spawn_command (spawn_arr, error);
+        return yield spawn_command (command.spawn_vector, error);
     }
 
     public static async int list (
-        owned OptionsHandler command_handler,
+        ArgsHandler args_handler,
         Gee.ArrayList<string>? error = null,
-        bool ignore_unknown_options = false
-    ) throws CommandError {
-        return yield new UpdateKernel ().internal_list (command_handler.options, command_handler.arg_options, error, ignore_unknown_options);
-    }
+        bool skip_unknown_options = false
+    ) throws OptionsError {
+        var command = new Command (ORIGIN, UPDATE);
 
-    public async int internal_list (
-        Gee.ArrayList<string> options,
-        Gee.ArrayList<ArgOption?> arg_options,
-        Gee.ArrayList<string>? error = null,
-        bool ignore_unknown_options = false
-    ) throws CommandError {
-        current_options.add_all (options);
-        current_arg_options.add_all (arg_options);
+        command.spawn_vector.add ("--list");
 
-        spawn_arr.add ("--list");
+        command.fill_by_args_handler (
+            args_handler,
+            OptionData.concat (UpdateKernel.Data.COMMON_OPTIONS_DATA, UpdateKernel.Data.UPDATE_OPTIONS_DATA),
+            OptionData.concat (UpdateKernel.Data.COMMON_ARG_OPTIONS_DATA, UpdateKernel.Data.UPDATE_ARG_OPTIONS_DATA),
+            skip_unknown_options
+        );
 
-        if (!ignore_unknown_options) {
-            post_set_check ();
-        }
-
-        if (!ignore_unknown_options) {
-            post_set_check ();
-        }
-
-        return yield spawn_command (spawn_arr, error);
+        return yield spawn_command (command.spawn_vector, error);
     }
 }
