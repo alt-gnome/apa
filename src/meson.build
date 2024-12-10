@@ -3,6 +3,12 @@ vapi_sources = files(
 )
 
 apa_no_main_code_sources = files (
+  'apa/config/config.vala',
+  'apa/config/get.vala',
+  'apa/config/list.vala',
+  'apa/config/reset.vala',
+  'apa/config/set.vala',
+
   'apa/kernel/kernel.vala',
   'apa/kernel/list.vala',
   'apa/kernel/upgrade.vala',
@@ -27,14 +33,16 @@ apa_no_main_code_sources = files (
   'apt/get.vala',
   'apt/repo.vala',
 
-  'flatpak/flatpak.vala',
+  'data/cache-data.vala',
+  'data/config-data.vala',
+  'data/descriptions.vala',
+  'data/get-data.vala',
+  'data/repo-data.vala',
+  'data/rpm-data.vala',
+  'data/task-data.vala',
+  'data/update-kernel-data.vala',
 
-  'options-data/cache-data.vala',
-  'options-data/get-data.vala',
-  'options-data/repo-data.vala',
-  'options-data/rpm-data.vala',
-  'options-data/task-search-data.vala',
-  'options-data/update-kernel-data.vala',
+  'flatpak/flatpak.vala',
 
   'snap/snap.vala',
 
@@ -44,6 +52,7 @@ apa_no_main_code_sources = files (
   'apa.vala',
   'args-handler.vala',
   'command.vala',
+  'config-manager.vala',
   'constants.vala',
   'error-detection.vala',
   'fuzzy-search.vala',

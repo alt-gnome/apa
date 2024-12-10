@@ -15,8 +15,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-namespace Apa {
-    public async int kernel_upgrade (
+namespace Apa.Kernel {
+    public async int upgrade (
         owned ArgsHandler args_handler,
         bool skip_unknown_options = false
     ) throws CommandError, OptionsError {
@@ -30,10 +30,12 @@ namespace Apa {
         );
 
         // TODO: Add config
-        status = yield update (args_handler.copy (), true);
+        if (ConfigManager.get_default ().auto_update) {
+            status = yield update (args_handler.copy (), true);
 
-        if (status != ExitCode.SUCCESS) {
-            return status;
+            if (status != ExitCode.SUCCESS) {
+                return status;
+            }
         }
 
         while (true) {

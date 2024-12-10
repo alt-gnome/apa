@@ -32,18 +32,17 @@ namespace Apa {
             case KERNEL_UPGRADE_SUBCOMMAND:
                 check_pk_is_not_running ();
                 check_is_root (subcommand);
-                return yield kernel_upgrade (args_handler, skip_unknown_options);
+                return yield Kernel.upgrade (args_handler, skip_unknown_options);
 
             case KERNEL_LIST_SUBCOMMAND:
-                return yield kernel_list (args_handler, skip_unknown_options);
+                return yield Kernel.list (args_handler, skip_unknown_options);
 
             case null:
                 Help.print_kernel ();
                 return ExitCode.BASE_ERROR;
 
             default:
-                print_error (_("Unknown subcommand `%s'").printf (subcommand));
-                return ExitCode.BASE_ERROR;
+                throw new CommandError.UNKNOWN_SUBCOMMAND (subcommand);
         }
     }
 }

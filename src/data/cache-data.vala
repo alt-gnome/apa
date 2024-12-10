@@ -39,7 +39,7 @@ namespace Apa.Cache.Data {
             "-i", "--important-only",
             "-i",
             Descriptions.option_important_only
-        }
+        },
     };
 
     public const OptionData[] COMMON_ARG_OPTIONS_DATA = {
@@ -52,10 +52,16 @@ namespace Apa.Cache.Data {
             "-c", "--config",
             "-c",
             Descriptions.arg_option_config
-        }
+        },
     };
 
-    public const OptionData[] SEARCH_OPTIONS_DATA = {};
+    public const OptionData[] SEARCH_OPTIONS_DATA = {
+        {
+            "-n", "--names-only",
+            "-n",
+            Descriptions.arg_option_names_only
+        },
+    };
 
     public const OptionData[] SEARCH_ARG_OPTIONS_DATA = {};
 }

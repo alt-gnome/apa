@@ -40,8 +40,7 @@ namespace Apa {
                 return ExitCode.BASE_ERROR;
 
             default:
-                print_error (_("Unknown subcommand `%s'").printf (subcommand));
-                return ExitCode.BASE_ERROR;
+                throw new CommandError.UNKNOWN_SUBCOMMAND (subcommand);
         }
     }
 }

@@ -34,7 +34,7 @@ namespace Apa {
 
         foreach (var package_name in args_handler.args) {
             if (!package_name.has_suffix ("-") && !package_name.has_suffix ("+")) {
-                throw new CommandError.UNKNOWN_COMMAND (_("Unknown operation `%c' in `%s'").printf (
+                throw new CommandError.COMMON (_("Unknown operation `%c' in `%s'").printf (
                     package_name[package_name.length - 1],
                     package_name
                 ));
@@ -56,6 +56,11 @@ namespace Apa {
 
                 switch (detect_error (error_message, out package_error_source)) {
                     case OriginErrorType.COULDNT_FIND_PACKAGE:
+                        if (!ConfigManager.get_default ().use_fuzzy_search) {
+                            print_error (_("Package `%s' not found").printf (package_error_source));
+                            return status;
+                        }
+
                         string package_error_source_name = package_error_source[0:package_error_source.length - 1];
                         char package_error_source_operation = package_error_source[package_error_source.length - 1];
 

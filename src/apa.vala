@@ -17,6 +17,7 @@
 
 namespace Apa {
 
+    const string CONFIG_COMMAND = "config";
     const string KERNEL_COMMAND = "kernel";
     const string LIST_COMMAND = "list";
     const string INFO_COMMAND = "info";
@@ -54,6 +55,9 @@ namespace Apa {
 
                 case TASK_COMMAND:
                     return yield task (argv);
+
+                case CONFIG_COMMAND:
+                    return yield config (argv);
 
                 case Get.AUTOREMOVE:
                     check_pk_is_not_running ();
@@ -134,6 +138,10 @@ namespace Apa {
                 case CommandError.UNKNOWN_ERROR:
                     print_error (_("Unknown error message: `%s'").printf (e.message));
                     print_create_issue (e.message, argv);
+                    return ExitCode.BASE_ERROR;
+
+                case CommandError.UNKNOWN_SUBCOMMAND:
+                    print_error (_("Unknown subcommand `%s'").printf (e.message));
                     return ExitCode.BASE_ERROR;
 
                 default:

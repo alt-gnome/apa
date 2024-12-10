@@ -30,7 +30,7 @@ namespace Apa {
         );
 
         if ("--with-kernel" in args_handler.options || "-k" in args_handler.options) {
-            status = yield kernel_upgrade (args_handler.copy (), true);
+            status = yield Kernel.upgrade (args_handler.copy (), true);
 
             if (status != ExitCode.SUCCESS) {
                 return status;

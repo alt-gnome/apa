@@ -18,16 +18,16 @@
 // ind-check=skip-file
 
 public static int main (string[] argv) {
-    Intl.bindtextdomain (Config.GETTEXT_PACKAGE, Config.GNOMELOCALEDIR);
-    Intl.bindtextdomain ("apt", Config.GNOMELOCALEDIR);
-    Intl.bind_textdomain_codeset (Config.GETTEXT_PACKAGE, "UTF-8");
+    Intl.bindtextdomain (ApaConfig.GETTEXT_PACKAGE, ApaConfig.GNOMELOCALEDIR);
+    Intl.bindtextdomain ("apt", ApaConfig.GNOMELOCALEDIR);
+    Intl.bind_textdomain_codeset (ApaConfig.GETTEXT_PACKAGE, "UTF-8");
     Intl.bind_textdomain_codeset ("apt", "UTF-8");
 
     if (!Apa.locale_init ()) {
         warning ("Locale not supported by C library.\n\tUsing the fallback `C' locale.");
     }
 
-    Environment.set_prgname (Config.NAME);
+    Environment.set_prgname (ApaConfig.NAME);
 
     var fargv = argv[1:argv.length];
 

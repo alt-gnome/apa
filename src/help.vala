@@ -306,6 +306,10 @@ namespace Apa.Help {
         print ("");
     }
 
+    public void print_config () {
+        print ("");
+    }
+
     public void print_test () {
 
     }

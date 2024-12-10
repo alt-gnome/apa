@@ -11,6 +11,8 @@ MIN_GLIB_VERSION = '2.76'
 
 i18n = import('i18n')
 
+apa_sysconf_dir = get_option('sysconfdir') / meson.project_name()
+
 glib = dependency ('glib-2.0', version: '>= ' + MIN_GLIB_VERSION)
 gobject = dependency ('gobject-2.0')
 gio = dependency ('gio-2.0')
@@ -59,12 +61,14 @@ conf.set10('IS_DEVEL', get_option('is_devel'))
 conf.set_quoted('VERSION', meson.project_version() + version_suffix)
 conf.set_quoted('G_LOG_DOMAIN', meson.project_name())
 conf.set_quoted('GETTEXT_PACKAGE', meson.project_name())
+conf.set_quoted('KEY_DEFAULTS_DIR', apa_sysconf_dir)
 conf.set_quoted('DATADIR', get_option('prefix') / get_option('datadir'))
 conf.set_quoted('GNOMELOCALEDIR', get_option('prefix') / get_option('localedir'))
 
 configure_file(output: 'config.h', configuration: conf)
 config_h_dir = include_directories('.')
 
-subdir ('po')
-subdir ('src')
-subdir ('test')
+subdir('data')
+subdir('po')
+subdir('src')
+subdir('test')

@@ -15,27 +15,19 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
- namespace Apa.Task {
+namespace Apa.Task {
     public async int show (
         owned ArgsHandler args_handler,
         bool skip_unknown_options = false
     ) throws CommandError, ApiBase.CommonError, ApiBase.BadStatusCodeError, OptionsError {
         args_handler.init_options (
-            OptionData.concat (Data.COMMON_OPTIONS_DATA, Data.SEARCH_OPTIONS_DATA),
-            OptionData.concat (Data.COMMON_ARG_OPTIONS_DATA, Data.SEARCH_ARG_OPTIONS_DATA),
+            OptionData.concat (Data.COMMON_OPTIONS_DATA, Data.SHOW_OPTIONS_DATA),
+            OptionData.concat (Data.COMMON_ARG_OPTIONS_DATA, Data.SHOW_ARG_OPTIONS_DATA),
             skip_unknown_options
         );
 
         if (args_handler.args.size == 0) {
             throw new CommandError.NO_PACKAGES (_("Nothing to show"));
-        }
-
-        foreach (var option in args_handler.options) {
-            throw new OptionsError.UNKNOWN_OPTION (option);
-        }
-
-        foreach (var arg_option in args_handler.arg_options) {
-            throw new OptionsError.UNKNOWN_ARG_OPTION (arg_option.name);
         }
 
         var client = new AltRepo.Client ();

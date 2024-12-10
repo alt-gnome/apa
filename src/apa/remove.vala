@@ -47,6 +47,10 @@ namespace Apa {
                 string? package_error_source;
                 switch (detect_error (error_message, out package_error_source)) {
                     case OriginErrorType.COULDNT_FIND_PACKAGE:
+                        if (!ConfigManager.get_default ().use_fuzzy_search) {
+                            print_error (_("Package `%s' not found").printf (package_error_source));
+                            return status;
+                        }
 
                         var installed_result = new Gee.ArrayList<string> ();
                         yield Rpm.list (

@@ -49,10 +49,6 @@ namespace Apa.Task {
         foreach (var option in args_handler.options) {
             var option_data = OptionData.find_option (all_possible_options, option);
 
-            if (option_data == null) {
-                throw new OptionsError.UNKNOWN_OPTION (option);
-            }
-
             switch (option_data.short_option) {
                 case Data.OPTION_BY_PACKAGE_SHORT:
                     by_package = true;

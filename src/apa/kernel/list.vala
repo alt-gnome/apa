@@ -15,8 +15,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-namespace Apa {
-    public async int kernel_list (
+namespace Apa.Kernel {
+    public async int list (
         owned ArgsHandler args_handler,
         bool skip_unknown_options = false
     ) throws CommandError, OptionsError {

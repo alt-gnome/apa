@@ -43,6 +43,12 @@ public struct Apa.ArgOption {
     }
 }
 
+public struct Apa.ConfigInfo {
+
+    public string name;
+    public DescriptionGetter description_getter;
+}
+
 public struct Apa.OptionData {
 
     public string short_option;
@@ -81,7 +87,7 @@ public struct Apa.OptionData {
 
 public errordomain Apa.CommandError {
     COMMON,
-    UNKNOWN_COMMAND,
+    UNKNOWN_SUBCOMMAND,
     TO_MANY_ARGS,
     NO_PACKAGES,
     CANT_UPDATE,
@@ -109,7 +115,27 @@ namespace Apa {
 
     public string current_locale;
 
-    public const string SKIP_PACKAGE_SENTENCE = _("<skip package>");
+    public string? get_config_description (string key) {
+        foreach (var info in Config.Data.POSSIBLE_CONFIG_KEYS) {
+            if (info.name == key) {
+                return info.description_getter ();
+            }
+        }
+
+        return null;
+    }
+
+    public Type detect_type (string str) {
+        if (bool.try_parse (str, null)) {
+            return Type.BOOLEAN;
+
+        } else if (int.try_parse (str, null)) {
+            return Type.INT;
+
+        } else {
+            return Type.STRING;
+        }
+    }
 
     public string? cut_of_command (ref string[] argv) {
         if (argv.length == 0) {
@@ -138,8 +164,8 @@ namespace Apa {
 
     public string get_version () {
         return "%s %s".printf (
-            Config.NAME,
-            Config.VERSION
+            ApaConfig.NAME,
+            ApaConfig.VERSION
         );
     }
 
@@ -223,7 +249,7 @@ namespace Apa {
     }
 
     public void print_devel (string str) {
-        if (Config.IS_DEVEL) {
+        if (ApaConfig.IS_DEVEL) {
             print ("\n%sDEBUG\n%s%s\n".printf (
                 Colors.CYAN,
                 str,

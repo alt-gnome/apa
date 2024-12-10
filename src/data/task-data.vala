@@ -54,4 +54,8 @@ namespace Apa.Task.Data {
             null
         },
     };
+
+    public const OptionData[] SHOW_OPTIONS_DATA = {};
+
+    public const OptionData[] SHOW_ARG_OPTIONS_DATA = {};
 }

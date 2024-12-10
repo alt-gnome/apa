@@ -50,11 +50,11 @@ namespace Apa {
             for (int i = 0; i < ORIGIN_ERRORS.length; i++) {
                 pattern = dgettext (
                     "apt",
-                    ORIGIN_ERRORS[i]
+                    ORIGIN_ERRORS[i].replace ("(", ".").replace (")", ".")
                 ).strip ().replace ("%s", "(.*)");
 
                 regex = new Regex (
-                    Regex.escape_string (pattern),
+                    pattern,
                     RegexCompileFlags.OPTIMIZE,
                     RegexMatchFlags.NOTEMPTY
                 );
