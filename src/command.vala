@@ -54,6 +54,10 @@ public sealed class Apa.Command : Object {
                 }
 
             } else {
+                if (option_data.target_option == null) {
+                    continue;
+                }
+
                 spawn_vector.add (option_data.target_option);
             }
         }
@@ -70,6 +74,10 @@ public sealed class Apa.Command : Object {
                     spawn_vector.add (option_data.target_option + "=" + arg_option.value);
 
                 } else {
+                    if (option_data.target_option == null) {
+                        continue;
+                    }
+
                     spawn_vector.add (option_data.target_option);
                     spawn_vector.add (arg_option.value);
                 }

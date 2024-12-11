@@ -61,6 +61,9 @@ namespace Apa.Get.Data {
 
     public const OptionData[] UPDATE_ARG_OPTIONS_DATA = {};
 
+    public const string OPTION_WITH_KERNEL_SHORT = "-k";
+    public const string OPTION_WITH_KERNEL_LONG = "--with-kernel";
+
     public const OptionData[] UPGRADE_OPTIONS_DATA = {
         {
             "-d", "--download-only",
@@ -69,7 +72,11 @@ namespace Apa.Get.Data {
         {
             "-u", "--upgraded-show",
             "-u"
-        }
+        },
+        {
+            OPTION_WITH_KERNEL_SHORT, OPTION_WITH_KERNEL_LONG,
+            null
+        },
     };
 
     public const OptionData[] UPGRADE_ARG_OPTIONS_DATA = {};

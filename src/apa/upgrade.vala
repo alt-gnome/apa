@@ -29,15 +29,15 @@ namespace Apa {
             skip_unknown_options
         );
 
-        if ("--with-kernel" in args_handler.options || "-k" in args_handler.options) {
+        if (Get.Data.OPTION_WITH_KERNEL_LONG in args_handler.options || Get.Data.OPTION_WITH_KERNEL_SHORT in args_handler.options) {
             status = yield Kernel.upgrade (args_handler.copy (), true);
 
             if (status != ExitCode.SUCCESS) {
                 return status;
             }
 
-            args_handler.options.remove ("--with-kernel");
-            args_handler.options.remove ("-k");
+            args_handler.options.remove (Get.Data.OPTION_WITH_KERNEL_LONG);
+            args_handler.options.remove (Get.Data.OPTION_WITH_KERNEL_SHORT);
 
         } else {
             status = yield update (args_handler.copy (), true);
