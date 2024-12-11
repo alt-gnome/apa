@@ -56,11 +56,6 @@ namespace Apa {
 
                 switch (detect_error (error_message, out package_error_source)) {
                     case OriginErrorType.COULDNT_FIND_PACKAGE:
-                        if (!ConfigManager.get_default ().use_fuzzy_search) {
-                            print_error (_("Package `%s' not found").printf (package_error_source));
-                            return status;
-                        }
-
                         string package_error_source_name = package_error_source[0:package_error_source.length - 1];
                         char package_error_source_operation = package_error_source[package_error_source.length - 1];
 
@@ -68,20 +63,40 @@ namespace Apa {
 
                         switch (package_error_source_operation) {
                             case '+':
-                                var search_result = new Gee.ArrayList<string> ();
-                                yield Cache.search (
-                                    new ArgsHandler.with_data (
-                                        { "--names-only" },
-                                        args_handler.arg_options.to_array (),
-                                        { string.joinv (".*", split_chars (package_error_source)) }
-                                    ),
-                                    search_result,
-                                    null,
-                                    true
-                                );
-                                do_short_array_list (ref search_result);
+                                if (ConfigManager.get_default ().use_fuzzy_search) {
+                                    var search_result = new Gee.ArrayList<string> ();
+                                    yield Cache.search (
+                                        new ArgsHandler.with_data (
+                                            { "--names-only" },
+                                            args_handler.arg_options.to_array (),
+                                            { string.joinv (".*", split_chars (package_error_source)) }
+                                        ),
+                                        search_result
+                                    );
+                                    do_short_array_list (ref search_result);
 
-                                possible_package_names = fuzzy_search (package_error_source, search_result.to_array ());
+                                    possible_package_names = fuzzy_search (package_error_source, search_result.to_array ());
+
+                                } else {
+                                    var search_result = new Gee.ArrayList<string> ();
+                                    yield Cache.search (
+                                        new ArgsHandler.with_data (
+                                            { "--names-only" },
+                                            args_handler.arg_options.to_array (),
+                                            { package_error_source }
+                                        ),
+                                        search_result
+                                    );
+                                    do_short_array_list (ref search_result);
+
+                                    possible_package_names = search_result.to_array ();
+
+                                    if (possible_package_names.length == 0) {
+                                        possible_package_names = null;
+                                    } else if (possible_package_names.length > 9) {
+                                        possible_package_names.resize (9);
+                                    }
+                                }
                                 break;
 
                             case '-':
