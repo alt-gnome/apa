@@ -292,10 +292,17 @@ namespace Apa {
         while (true) {
             // Translators: IMPORTANT! space symbol in the end
             print (_("[0 - exit; -1 - skip] "), false);
-            var input = stdin.read_line ().strip ();
+            string? input = stdin.read_line ();
 
-            if (input == "") {
+            if (input == null) {
+                input = "0";
+                print ("");
+
+            } else if (input.strip () == "") {
                 input = "1";
+
+            } else {
+                input = input.strip ();
             }
 
             int input_int;
