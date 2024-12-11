@@ -8,7 +8,7 @@
 
 ```shell
 su -
-apt-get install meson vala libgee0.8-devel libgee0.8-gir-devel libjson-glib-devel libjson-glib-gir-devel libpackagekit-glib-devel gobject-introspection-devel gettext-tools
+apt-get install meson vala libgee0.8-devel libgee0.8-gir-devel libjson-glib-devel libjson-glib-gir-devel libpackagekit-glib-devel gobject-introspection-devel gettext-tools cmake
 ```
 
 ## Установка из исходников
@@ -17,7 +17,7 @@ apt-get install meson vala libgee0.8-devel libgee0.8-gir-devel libjson-glib-deve
 > Выполнять от имени обычного пользователя
 
 ```shell
-meson setup _build -Dprefix=/usr
+meson setup _build
 ninja install -C _build
 ```
 
