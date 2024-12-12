@@ -26,6 +26,7 @@ namespace Apa {
     const string HELP_COMMAND = "help";
     const string VERSION_COMMAND = "version";
     const string SEARCH_FILE_COMMAND = "search-file";
+    const string REPO_COMMAND = "repo";
 
     public async int run (owned string[] argv) {
 
@@ -60,49 +61,49 @@ namespace Apa {
                 case CONFIG_COMMAND:
                     return yield config (argv);
 
-                case Get.AUTOREMOVE:
+                case REPO_COMMAND:
+                    return yield repo (argv);
+
+                case AptGet.AUTOREMOVE:
                     check_pk_is_not_running ();
                     check_is_root (command);
                     return yield autoremove (args_handler);
 
-                case Get.DO:
+                case AptGet.DO:
                     check_pk_is_not_running ();
                     check_is_root (command);
                     return yield @do (args_handler);
 
-                case Get.UPDATE:
+                case AptGet.UPDATE:
                     check_pk_is_not_running ();
                     check_is_root (command);
                     return yield update (args_handler);
 
-                case Get.UPGRADE:
+                case AptGet.UPGRADE:
                     check_pk_is_not_running ();
                     check_is_root (command);
                     return yield upgrade (args_handler);
 
-                case Get.INSTALL:
+                case AptGet.INSTALL:
                     check_pk_is_not_running ();
                     check_is_root (command);
                     return yield install (args_handler);
 
-                case Get.REINSTALL:
+                case AptGet.REINSTALL:
                     check_pk_is_not_running ();
                     check_is_root (command);
                     return yield reinstall (args_handler);
 
-                case Get.REMOVE:
+                case AptGet.REMOVE:
                     check_pk_is_not_running ();
                     check_is_root (command);
                     return yield remove (args_handler);
 
-                case Get.SOURCE:
+                case AptGet.SOURCE:
                     return yield source (args_handler);
 
-                case Cache.SEARCH:
+                case AptCache.SEARCH:
                     return yield search (args_handler);
-
-                case Repo.REPO_LIST:
-                    return yield Repo.repo_list (args_handler);
 
                 case LIST_COMMAND:
                     return yield Rpm.list (args_handler);

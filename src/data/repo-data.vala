@@ -17,31 +17,40 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-namespace Apa.Repo.Data {
+namespace Apa.AptRepo.Data {
 
     public const OptionData[] COMMON_OPTIONS_DATA = {
         {
             "-s", "--simulate",
             "--dry-run"
         },
+    };
+
+    public const OptionData[] COMMON_ARG_OPTIONS_DATA = {
         {
             "-h", "--hsh-apt-config",
             "--hsh-apt-config"
         },
     };
 
-    public const OptionData[] COMMON_ARG_OPTIONS_DATA = {};
-
     public const OptionData[] TEST_OPTIONS_DATA = {};
 
     public const OptionData[] TEST_ARG_OPTIONS_DATA = {};
 
-    public const OptionData[] REPO_LIST_OPTIONS_DATA = {
+    public const OptionData[] LIST_OPTIONS_DATA = {
         {
             "-a", "--all",
             "-a"
         }
     };
 
-    public const OptionData[] REPO_LIST_ARG_OPTIONS_DATA = {};
+    public const OptionData[] LIST_ARG_OPTIONS_DATA = {};
+
+    public const OptionData[] ADD_OPTIONS_DATA = {};
+
+    public const OptionData[] ADD_ARG_OPTIONS_DATA = {};
+
+    public const OptionData[] RM_OPTIONS_DATA = {};
+
+    public const OptionData[] RM_ARG_OPTIONS_DATA = {};
 }

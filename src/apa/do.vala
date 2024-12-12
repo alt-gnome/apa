@@ -23,8 +23,8 @@ namespace Apa {
         var error = new Gee.ArrayList<string> ();
 
         args_handler.init_options (
-            OptionData.concat (Get.Data.COMMON_OPTIONS_DATA, Get.Data.DO_OPTIONS_DATA),
-            OptionData.concat (Get.Data.COMMON_ARG_OPTIONS_DATA, Get.Data.DO_ARG_OPTIONS_DATA),
+            OptionData.concat (AptGet.Data.COMMON_OPTIONS_DATA, AptGet.Data.DO_OPTIONS_DATA),
+            OptionData.concat (AptGet.Data.COMMON_ARG_OPTIONS_DATA, AptGet.Data.DO_ARG_OPTIONS_DATA),
             skip_unknown_options
         );
 
@@ -48,7 +48,7 @@ namespace Apa {
         }
 
         while (true) {
-            var status = yield Get.do (args_handler, error);
+            var status = yield AptGet.do (args_handler, error);
 
             if (status != ExitCode.SUCCESS && error.size > 0) {
                 string error_message = normalize_error (error);
@@ -65,7 +65,7 @@ namespace Apa {
                             case '+':
                                 if (ConfigManager.get_default ().use_fuzzy_search) {
                                     var search_result = new Gee.ArrayList<string> ();
-                                    yield Cache.search (
+                                    yield AptCache.search (
                                         new ArgsHandler.with_data (
                                             { "--names-only" },
                                             args_handler.arg_options.to_array (),
@@ -79,7 +79,7 @@ namespace Apa {
 
                                 } else {
                                     var search_result = new Gee.ArrayList<string> ();
-                                    yield Cache.search (
+                                    yield AptCache.search (
                                         new ArgsHandler.with_data (
                                             { "--names-only" },
                                             args_handler.arg_options.to_array (),
@@ -191,7 +191,7 @@ namespace Apa {
                         print (error_message.replace (package_error_source, "`%s'".printf (package_error_source)));
 
                         var result = new Gee.ArrayList<string> ();
-                        yield Get.install (args_handler, error, result);
+                        yield AptGet.install (args_handler, error, result);
 
                         var choice_packages = new Gee.ArrayList<string> ();
                         foreach (var res in result) {

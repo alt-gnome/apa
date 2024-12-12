@@ -24,20 +24,20 @@ namespace Apa {
         int status;
 
         args_handler.init_options (
-            OptionData.concat (Get.Data.COMMON_OPTIONS_DATA, Get.Data.UPGRADE_OPTIONS_DATA),
-            OptionData.concat (Get.Data.COMMON_ARG_OPTIONS_DATA, Get.Data.UPGRADE_ARG_OPTIONS_DATA),
+            OptionData.concat (AptGet.Data.COMMON_OPTIONS_DATA, AptGet.Data.UPGRADE_OPTIONS_DATA),
+            OptionData.concat (AptGet.Data.COMMON_ARG_OPTIONS_DATA, AptGet.Data.UPGRADE_ARG_OPTIONS_DATA),
             skip_unknown_options
         );
 
-        if (Get.Data.OPTION_WITH_KERNEL_LONG in args_handler.options || Get.Data.OPTION_WITH_KERNEL_SHORT in args_handler.options) {
+        if (AptGet.Data.OPTION_WITH_KERNEL_LONG in args_handler.options || AptGet.Data.OPTION_WITH_KERNEL_SHORT in args_handler.options) {
             status = yield Kernel.upgrade (args_handler.copy (), true);
 
             if (status != ExitCode.SUCCESS) {
                 return status;
             }
 
-            args_handler.options.remove (Get.Data.OPTION_WITH_KERNEL_LONG);
-            args_handler.options.remove (Get.Data.OPTION_WITH_KERNEL_SHORT);
+            args_handler.options.remove (AptGet.Data.OPTION_WITH_KERNEL_LONG);
+            args_handler.options.remove (AptGet.Data.OPTION_WITH_KERNEL_SHORT);
 
         } else {
             status = yield update (args_handler.copy (), true);
@@ -50,7 +50,7 @@ namespace Apa {
         while (true) {
             error.clear ();
 
-            status = yield Get.upgrade (args_handler, error, skip_unknown_options);
+            status = yield AptGet.upgrade (args_handler, error, skip_unknown_options);
 
             if (status != ExitCode.SUCCESS && error.size > 0) {
                 string error_message = normalize_error (error);

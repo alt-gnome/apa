@@ -17,21 +17,21 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-namespace Apa.Task {
-    public async int install (
+namespace Apa.Repo {
+    public async int add (
         owned ArgsHandler args_handler,
         bool skip_unknown_options = false
     ) throws CommandError, OptionsError {
         var error = new Gee.ArrayList<string> ();
 
         args_handler.init_options (
-            OptionData.concat (AptRepo.Data.COMMON_OPTIONS_DATA, AptRepo.Data.TEST_OPTIONS_DATA),
-            OptionData.concat (AptRepo.Data.COMMON_ARG_OPTIONS_DATA, AptRepo.Data.TEST_ARG_OPTIONS_DATA),
+            OptionData.concat (AptRepo.Data.COMMON_OPTIONS_DATA, AptRepo.Data.ADD_OPTIONS_DATA),
+            OptionData.concat (AptRepo.Data.COMMON_ARG_OPTIONS_DATA, AptRepo.Data.ADD_ARG_OPTIONS_DATA),
             skip_unknown_options
         );
 
         if (args_handler.args.size == 0) {
-            throw new CommandError.NO_PACKAGES (_("Nothing to install"));
+            throw new CommandError.COMMON (_("Nothing to add"));
         }
 
         if (args_handler.args.size > 1) {
@@ -40,16 +40,15 @@ namespace Apa.Task {
 
         while (true) {
             error.clear ();
-            var status = yield AptRepo.test (args_handler, error, skip_unknown_options);
+            var status = yield AptRepo.add (args_handler, error, skip_unknown_options);
 
             if (status != ExitCode.SUCCESS && error.size > 0) {
                 string error_message = normalize_error (error);
                 string? package;
 
                 switch (detect_error (error_message, out package)) {
-                    case OriginErrorType.UNABLE_TO_LOCK_DOWNLOAD_DIR:
-                        print_error (_("APT is currently busy"));
-                        return status;
+                    case OriginErrorType.APT_REPO_UNKNOWN_SOURCE:
+                        throw new CommandError.COMMON (_("Unknown source"));
 
                     case OriginErrorType.NONE:
                     default:

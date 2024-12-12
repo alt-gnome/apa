@@ -17,7 +17,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-namespace Apa.Cache {
+namespace Apa.AptCache {
 
     const string ORIGIN = "apt-cache";
 
@@ -49,8 +49,8 @@ namespace Apa.Cache {
 
         command.fill_by_args_handler_with_args (
             args_handler,
-            OptionData.concat (Cache.Data.COMMON_OPTIONS_DATA, Cache.Data.SEARCH_OPTIONS_DATA),
-            OptionData.concat (Cache.Data.COMMON_ARG_OPTIONS_DATA, Cache.Data.SEARCH_ARG_OPTIONS_DATA),
+            OptionData.concat (AptCache.Data.COMMON_OPTIONS_DATA, AptCache.Data.SEARCH_OPTIONS_DATA),
+            OptionData.concat (AptCache.Data.COMMON_ARG_OPTIONS_DATA, AptCache.Data.SEARCH_ARG_OPTIONS_DATA),
             skip_unknown_options
         );
 

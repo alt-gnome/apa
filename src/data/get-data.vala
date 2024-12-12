@@ -17,7 +17,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-namespace Apa.Get.Data {
+namespace Apa.AptGet.Data {
 
     public const OptionData[] COMMON_OPTIONS_DATA = {
         {

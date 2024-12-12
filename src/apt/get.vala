@@ -15,7 +15,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-namespace Apa.Get {
+namespace Apa.AptGet {
 
     const string ORIGIN = "apt-get";
 
@@ -37,8 +37,8 @@ namespace Apa.Get {
 
         command.fill_by_args_handler (
             args_handler,
-            OptionData.concat (Get.Data.COMMON_OPTIONS_DATA, Get.Data.UPDATE_OPTIONS_DATA),
-            OptionData.concat (Get.Data.COMMON_ARG_OPTIONS_DATA, Get.Data.UPDATE_ARG_OPTIONS_DATA),
+            OptionData.concat (AptGet.Data.COMMON_OPTIONS_DATA, AptGet.Data.UPDATE_OPTIONS_DATA),
+            OptionData.concat (AptGet.Data.COMMON_ARG_OPTIONS_DATA, AptGet.Data.UPDATE_ARG_OPTIONS_DATA),
             skip_unknown_options
         );
 
@@ -54,8 +54,8 @@ namespace Apa.Get {
 
         command.fill_by_args_handler (
             args_handler,
-            OptionData.concat (Get.Data.COMMON_OPTIONS_DATA, Get.Data.UPGRADE_OPTIONS_DATA),
-            OptionData.concat (Get.Data.COMMON_ARG_OPTIONS_DATA, Get.Data.UPGRADE_ARG_OPTIONS_DATA),
+            OptionData.concat (AptGet.Data.COMMON_OPTIONS_DATA, AptGet.Data.UPGRADE_OPTIONS_DATA),
+            OptionData.concat (AptGet.Data.COMMON_ARG_OPTIONS_DATA, AptGet.Data.UPGRADE_ARG_OPTIONS_DATA),
             skip_unknown_options
         );
 
@@ -71,8 +71,8 @@ namespace Apa.Get {
 
         command.fill_by_args_handler_with_args (
             args_handler,
-            OptionData.concat (Get.Data.COMMON_OPTIONS_DATA, Get.Data.DO_OPTIONS_DATA),
-            OptionData.concat (Get.Data.COMMON_ARG_OPTIONS_DATA, Get.Data.DO_ARG_OPTIONS_DATA),
+            OptionData.concat (AptGet.Data.COMMON_OPTIONS_DATA, AptGet.Data.DO_OPTIONS_DATA),
+            OptionData.concat (AptGet.Data.COMMON_ARG_OPTIONS_DATA, AptGet.Data.DO_ARG_OPTIONS_DATA),
             skip_unknown_options
         );
 
@@ -89,8 +89,8 @@ namespace Apa.Get {
 
         command.fill_by_args_handler_with_args (
             args_handler,
-            OptionData.concat (Get.Data.COMMON_OPTIONS_DATA, Get.Data.INSTALL_OPTIONS_DATA),
-            OptionData.concat (Get.Data.COMMON_ARG_OPTIONS_DATA, Get.Data.INSTALL_ARG_OPTIONS_DATA),
+            OptionData.concat (AptGet.Data.COMMON_OPTIONS_DATA, AptGet.Data.INSTALL_OPTIONS_DATA),
+            OptionData.concat (AptGet.Data.COMMON_ARG_OPTIONS_DATA, AptGet.Data.INSTALL_ARG_OPTIONS_DATA),
             skip_unknown_options
         );
 
@@ -106,8 +106,8 @@ namespace Apa.Get {
 
         command.fill_by_args_handler_with_args (
             args_handler,
-            OptionData.concat (Get.Data.COMMON_OPTIONS_DATA, Get.Data.REMOVE_OPTIONS_DATA),
-            OptionData.concat (Get.Data.COMMON_ARG_OPTIONS_DATA, Get.Data.REMOVE_ARG_OPTIONS_DATA),
+            OptionData.concat (AptGet.Data.COMMON_OPTIONS_DATA, AptGet.Data.REMOVE_OPTIONS_DATA),
+            OptionData.concat (AptGet.Data.COMMON_ARG_OPTIONS_DATA, AptGet.Data.REMOVE_ARG_OPTIONS_DATA),
             skip_unknown_options
         );
 
@@ -123,8 +123,8 @@ namespace Apa.Get {
 
         command.fill_by_args_handler_with_args (
             args_handler,
-            OptionData.concat (Get.Data.COMMON_OPTIONS_DATA, Get.Data.SOURCE_OPTIONS_DATA),
-            OptionData.concat (Get.Data.COMMON_ARG_OPTIONS_DATA, Get.Data.SOURCE_ARG_OPTIONS_DATA),
+            OptionData.concat (AptGet.Data.COMMON_OPTIONS_DATA, AptGet.Data.SOURCE_OPTIONS_DATA),
+            OptionData.concat (AptGet.Data.COMMON_ARG_OPTIONS_DATA, AptGet.Data.SOURCE_ARG_OPTIONS_DATA),
             skip_unknown_options
         );
 
@@ -140,8 +140,8 @@ namespace Apa.Get {
 
         command.fill_by_args_handler (
             args_handler,
-            OptionData.concat (Get.Data.COMMON_OPTIONS_DATA, Get.Data.AUTOREMOVE_OPTIONS_DATA),
-            OptionData.concat (Get.Data.COMMON_ARG_OPTIONS_DATA, Get.Data.AUTOREMOVE_ARG_OPTIONS_DATA),
+            OptionData.concat (AptGet.Data.COMMON_OPTIONS_DATA, AptGet.Data.AUTOREMOVE_OPTIONS_DATA),
+            OptionData.concat (AptGet.Data.COMMON_ARG_OPTIONS_DATA, AptGet.Data.AUTOREMOVE_ARG_OPTIONS_DATA),
             skip_unknown_options
         );
 

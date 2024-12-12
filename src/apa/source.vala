@@ -23,8 +23,8 @@ namespace Apa {
         var error = new Gee.ArrayList<string> ();
 
         args_handler.init_options (
-            OptionData.concat (Get.Data.COMMON_OPTIONS_DATA, Get.Data.SOURCE_OPTIONS_DATA),
-            OptionData.concat (Get.Data.COMMON_ARG_OPTIONS_DATA, Get.Data.SOURCE_ARG_OPTIONS_DATA),
+            OptionData.concat (AptGet.Data.COMMON_OPTIONS_DATA, AptGet.Data.SOURCE_OPTIONS_DATA),
+            OptionData.concat (AptGet.Data.COMMON_ARG_OPTIONS_DATA, AptGet.Data.SOURCE_ARG_OPTIONS_DATA),
             skip_unknown_options
         );
 
@@ -34,7 +34,7 @@ namespace Apa {
 
         while (true) {
             error.clear ();
-            var status = yield Get.source (args_handler, error, skip_unknown_options);
+            var status = yield AptGet.source (args_handler, error, skip_unknown_options);
 
             if (status != ExitCode.SUCCESS && error.size > 0) {
                 string error_message = normalize_error (error);

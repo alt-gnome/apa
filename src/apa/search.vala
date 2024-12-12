@@ -25,8 +25,8 @@ namespace Apa {
         var error = new Gee.ArrayList<string> ();
 
         args_handler.init_options (
-            OptionData.concat (Cache.Data.COMMON_OPTIONS_DATA, Cache.Data.SEARCH_OPTIONS_DATA),
-            OptionData.concat (Cache.Data.COMMON_ARG_OPTIONS_DATA, Cache.Data.SEARCH_ARG_OPTIONS_DATA),
+            OptionData.concat (AptCache.Data.COMMON_OPTIONS_DATA, AptCache.Data.SEARCH_OPTIONS_DATA),
+            OptionData.concat (AptCache.Data.COMMON_ARG_OPTIONS_DATA, AptCache.Data.SEARCH_ARG_OPTIONS_DATA),
             skip_unknown_options
         );
 
@@ -36,7 +36,7 @@ namespace Apa {
 
         while (true) {
             error.clear ();
-            var status = yield Cache.search (args_handler, null, error);
+            var status = yield AptCache.search (args_handler, null, error);
 
             if (status != ExitCode.SUCCESS && error.size > 0) {
                 string error_message = normalize_error (error);

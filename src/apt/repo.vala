@@ -15,12 +15,14 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-namespace Apa.Repo {
+namespace Apa.AptRepo {
 
     const string ORIGIN = "apt-repo";
 
-    public const string REPO_LIST = "repo-list";
+    public const string LIST = "list";
     public const string TEST = "test";
+    public const string ADD = "add";
+    public const string RM = "rm";
 
     public static async int test (
         ArgsHandler args_handler,
@@ -31,25 +33,59 @@ namespace Apa.Repo {
 
         command.fill_by_args_handler_with_args (
             args_handler,
-            OptionData.concat (Get.Data.COMMON_OPTIONS_DATA, Repo.Data.TEST_OPTIONS_DATA),
-            OptionData.concat (Get.Data.COMMON_ARG_OPTIONS_DATA, Repo.Data.TEST_ARG_OPTIONS_DATA),
+            OptionData.concat (AptGet.Data.COMMON_OPTIONS_DATA, AptRepo.Data.TEST_OPTIONS_DATA),
+            OptionData.concat (AptGet.Data.COMMON_ARG_OPTIONS_DATA, AptRepo.Data.TEST_ARG_OPTIONS_DATA),
             skip_unknown_options
         );
 
         return yield spawn_command (command.spawn_vector, error);
     }
 
-    public static async int repo_list (
+    public static async int list (
         ArgsHandler args_handler,
         Gee.ArrayList<string>? error = null,
         bool skip_unknown_options = false
     ) throws OptionsError {
-        var command = new Command (ORIGIN, "list");
+        var command = new Command (ORIGIN, LIST);
 
-        command.fill_by_args_handler (
+        command.fill_by_args_handler_with_args (
             args_handler,
-            OptionData.concat (Get.Data.COMMON_OPTIONS_DATA, Repo.Data.REPO_LIST_OPTIONS_DATA),
-            OptionData.concat (Get.Data.COMMON_ARG_OPTIONS_DATA, Repo.Data.REPO_LIST_ARG_OPTIONS_DATA),
+            OptionData.concat (AptGet.Data.COMMON_OPTIONS_DATA, AptRepo.Data.LIST_OPTIONS_DATA),
+            OptionData.concat (AptGet.Data.COMMON_ARG_OPTIONS_DATA, AptRepo.Data.LIST_ARG_OPTIONS_DATA),
+            skip_unknown_options
+        );
+
+        return yield spawn_command (command.spawn_vector, error);
+    }
+
+    public static async int add (
+        ArgsHandler args_handler,
+        Gee.ArrayList<string>? error = null,
+        bool skip_unknown_options = false
+    ) throws OptionsError {
+        var command = new Command (ORIGIN, ADD);
+
+        command.fill_by_args_handler_with_args (
+            args_handler,
+            OptionData.concat (AptGet.Data.COMMON_OPTIONS_DATA, AptRepo.Data.ADD_OPTIONS_DATA),
+            OptionData.concat (AptGet.Data.COMMON_ARG_OPTIONS_DATA, AptRepo.Data.ADD_ARG_OPTIONS_DATA),
+            skip_unknown_options
+        );
+
+        return yield spawn_command (command.spawn_vector, error);
+    }
+
+    public static async int rm (
+        ArgsHandler args_handler,
+        Gee.ArrayList<string>? error = null,
+        bool skip_unknown_options = false
+    ) throws OptionsError {
+        var command = new Command (ORIGIN, RM);
+
+        command.fill_by_args_handler_with_args (
+            args_handler,
+            OptionData.concat (AptGet.Data.COMMON_OPTIONS_DATA, AptRepo.Data.RM_OPTIONS_DATA),
+            OptionData.concat (AptGet.Data.COMMON_ARG_OPTIONS_DATA, AptRepo.Data.RM_ARG_OPTIONS_DATA),
             skip_unknown_options
         );
 

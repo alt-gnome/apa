@@ -21,27 +21,27 @@ namespace Apa.Help {
 
     void print_help (string? command) {
         switch (command) {
-            case Get.UPDATE:
+            case AptGet.UPDATE:
                 print_update ();
                 return;
 
-            case Get.UPGRADE:
+            case AptGet.UPGRADE:
                 print_upgrade ();
                 return;
 
-            case Get.INSTALL:
+            case AptGet.INSTALL:
                 print_install ();
                 return;
 
-            case Get.REMOVE:
+            case AptGet.REMOVE:
                 print_remove ();
                 return;
 
-            case Get.SOURCE:
+            case AptGet.SOURCE:
                 print_source ();
                 return;
 
-            case Cache.SEARCH:
+            case AptCache.SEARCH:
                 assert_not_reached ();
 
             case Apa.LIST_COMMAND:
@@ -220,7 +220,7 @@ namespace Apa.Help {
         print_usage ("apa <command> ..");
         print (_("Commands:"));
         print ("");
-        print_option (Get.INSTALL, get_install_desc ());
+        print_option (AptGet.INSTALL, get_install_desc ());
         print ("");
     }
 
@@ -311,6 +311,10 @@ namespace Apa.Help {
     }
 
     public void print_test () {
+
+    }
+
+    public void print_repo () {
 
     }
 

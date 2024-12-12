@@ -18,39 +18,37 @@
  */
 
 namespace Apa.Task {
-    public async int install (
+    public async int list (
         owned ArgsHandler args_handler,
         bool skip_unknown_options = false
     ) throws CommandError, OptionsError {
         var error = new Gee.ArrayList<string> ();
 
         args_handler.init_options (
-            OptionData.concat (AptRepo.Data.COMMON_OPTIONS_DATA, AptRepo.Data.TEST_OPTIONS_DATA),
-            OptionData.concat (AptRepo.Data.COMMON_ARG_OPTIONS_DATA, AptRepo.Data.TEST_ARG_OPTIONS_DATA),
+            OptionData.concat (AptRepo.Data.COMMON_OPTIONS_DATA, AptRepo.Data.LIST_OPTIONS_DATA),
+            OptionData.concat (AptRepo.Data.COMMON_ARG_OPTIONS_DATA, AptRepo.Data.LIST_ARG_OPTIONS_DATA),
             skip_unknown_options
         );
 
         if (args_handler.args.size == 0) {
-            throw new CommandError.NO_PACKAGES (_("Nothing to install"));
+            throw new CommandError.NO_PACKAGES (_("Nothing to list"));
         }
 
         if (args_handler.args.size > 1) {
             throw new CommandError.COMMON (_("Too many arguments"));
         }
 
+        args_handler.args.insert (0, "task");
+
         while (true) {
             error.clear ();
-            var status = yield AptRepo.test (args_handler, error, skip_unknown_options);
+            var status = yield AptRepo.list (args_handler, error, skip_unknown_options);
 
             if (status != ExitCode.SUCCESS && error.size > 0) {
                 string error_message = normalize_error (error);
                 string? package;
 
                 switch (detect_error (error_message, out package)) {
-                    case OriginErrorType.UNABLE_TO_LOCK_DOWNLOAD_DIR:
-                        print_error (_("APT is currently busy"));
-                        return status;
-
                     case OriginErrorType.NONE:
                     default:
                         throw new CommandError.UNKNOWN_ERROR (error_message);
