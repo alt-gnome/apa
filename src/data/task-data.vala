@@ -19,10 +19,6 @@
 
 namespace Apa.Task.Data {
 
-    public const OptionData[] COMMON_OPTIONS_DATA = {};
-
-    public const OptionData[] COMMON_ARG_OPTIONS_DATA = {};
-
     public const string OPTION_BY_PACKAGE_SHORT = "-p";
     public const string OPTION_BY_PACKAGE_LONG = "--by-package";
 

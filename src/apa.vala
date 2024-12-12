@@ -104,10 +104,6 @@ namespace Apa {
                 case Repo.REPO_LIST:
                     return yield Repo.repo_list (args_handler);
 
-                case Repo.TEST:
-                    check_is_root (command);
-                    return yield Repo.test (args_handler);
-
                 case LIST_COMMAND:
                     return yield Rpm.list (args_handler);
 

@@ -13,6 +13,7 @@ apa_no_main_code_sources = files (
   'apa/kernel/list.vala',
   'apa/kernel/upgrade.vala',
 
+  'apa/task/install.vala',
   'apa/task/search.vala',
   'apa/task/show.vala',
   'apa/task/task.vala',

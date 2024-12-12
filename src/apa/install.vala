@@ -37,6 +37,21 @@ namespace Apa {
                 print_error (_("For operation like `<package>+/-' use `do' command instead"));
                 return ExitCode.BASE_ERROR;
             }
+
+            if (Regex.match_simple ("^#{0,1}\\d*$", package_name, RegexCompileFlags.OPTIMIZE, RegexMatchFlags.NOTEMPTY)) {
+                var task = package_name.replace ("#", "");
+
+                print (_("Found task `%s' in packages. Skipping other").printf (package_name.replace ("#", "")));
+
+                return yield Task.install (
+                    new ArgsHandler.with_data (
+                        args_handler.options.to_array (),
+                        args_handler.arg_options.to_array (),
+                        { task }
+                    ),
+                    true
+                );
+            }
         }
 
         while (true) {

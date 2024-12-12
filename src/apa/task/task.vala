@@ -19,6 +19,7 @@ namespace Apa {
 
     const string TASK_SEARCH_SUBCOMMAND = "search";
     const string TASK_SHOW_SUBCOMMAND = "show";
+    const string TASK_INSTALL_SUBCOMMAND = "install";
 
     public async int task (
         owned string[] argv,
@@ -34,6 +35,9 @@ namespace Apa {
 
             case TASK_SHOW_SUBCOMMAND:
                 return yield Task.show (args_handler, skip_unknown_options);
+
+            case TASK_INSTALL_SUBCOMMAND:
+                return yield Task.install (args_handler, skip_unknown_options);
 
             case null:
                 Help.print_task ();

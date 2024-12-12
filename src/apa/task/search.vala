@@ -20,8 +20,8 @@ namespace Apa.Task {
         owned ArgsHandler args_handler,
         bool skip_unknown_options = false
     ) throws CommandError, ApiBase.CommonError, ApiBase.BadStatusCodeError, OptionsError {
-        var all_possible_options = OptionData.concat (Data.COMMON_OPTIONS_DATA, Data.SEARCH_OPTIONS_DATA);
-        var all_possible_arg_options = OptionData.concat (Data.COMMON_ARG_OPTIONS_DATA, Data.SEARCH_ARG_OPTIONS_DATA);
+        var all_possible_options = Data.SEARCH_OPTIONS_DATA;
+        var all_possible_arg_options = Data.SEARCH_ARG_OPTIONS_DATA;
 
         args_handler.init_options (
             all_possible_options,

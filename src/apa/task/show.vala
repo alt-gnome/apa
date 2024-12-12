@@ -21,8 +21,8 @@ namespace Apa.Task {
         bool skip_unknown_options = false
     ) throws CommandError, ApiBase.CommonError, ApiBase.BadStatusCodeError, OptionsError {
         args_handler.init_options (
-            OptionData.concat (Data.COMMON_OPTIONS_DATA, Data.SHOW_OPTIONS_DATA),
-            OptionData.concat (Data.COMMON_ARG_OPTIONS_DATA, Data.SHOW_ARG_OPTIONS_DATA),
+            Data.SHOW_OPTIONS_DATA,
+            Data.SHOW_ARG_OPTIONS_DATA,
             skip_unknown_options
         );
 
