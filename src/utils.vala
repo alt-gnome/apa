@@ -403,7 +403,7 @@ namespace Apa {
         var new_str = str.dup ();
 
         foreach (var what_mark in what_marks) {
-            new_str = new_str.replace (what_mark, cyan_text (what_mark));
+            new_str = new_str.replace (what_mark, bold_text (green_text (what_mark)));
         }
 
         return new_str;
@@ -415,6 +415,14 @@ namespace Apa {
 
     public string cyan_text (string str) {
         return "%s%s%s".printf (Colors.CYAN, str, Colors.ENDC);
+    }
+
+    public string green_text (string str) {
+        return "%s%s%s".printf (Colors.OKGREEN, str, Colors.ENDC);
+    }
+
+    public string bold_text (string str) {
+        return "%s%s%s".printf (Colors.BOLD, str, Colors.ENDC);
     }
 
     public bool file_exists (string filepath) {
@@ -429,16 +437,16 @@ namespace Apa {
             throw new SearchFileRepoPatternError.NOT_AT_LEAST ("3");
         }
 
-        foreach (char c in (char[]) arg) {
-            if (!(Regex.match_simple ("^\\w$", c.to_string (), RegexCompileFlags.OPTIMIZE, RegexMatchFlags.NOTEMPTY))) {
+        foreach (char c in (char[]) arg.data) {
+            if ((Regex.match_simple ("\\w", c.to_string (), RegexCompileFlags.OPTIMIZE, RegexMatchFlags.NOTEMPTY))) {
                 continue;
             }
 
-            if (!(c.to_string () in "\\.+- $#%:=@{}")) {
+            if ((c.to_string () in "\\.+- $#%:=@{}")) {
                 continue;
             }
 
-            if (!c.isalpha ()) {
+            if (c.isalpha ()) {
                 continue;
             }
 

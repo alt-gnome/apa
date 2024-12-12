@@ -171,8 +171,8 @@ namespace Apa {
         } catch (ApiBase.BadStatusCodeError e) {
             switch (e.code) {
                 case ApiBase.BadStatusCodeError.NOT_FOUND:
-                    print (_("Nothing found"));
-                    return ExitCode.SUCCESS;
+                    print_error (_("Nothing found"));
+                    return ExitCode.BASE_ERROR;
 
                 default:
                     print_error (_("Bad status code: `%d: %s'").printf (e.code, e.message.strip ()));

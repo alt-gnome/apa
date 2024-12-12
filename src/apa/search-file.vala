@@ -83,14 +83,24 @@ namespace Apa {
                 }
             }
 
-            return yield Rpm.serch_file (
+            var search_error = new Gee.ArrayList<string> ();
+
+            var status = yield Rpm.serch_file (
                 new ArgsHandler.with_data (
                     {},
                     {},
                     args_handler.args.to_array ()
-                )
+                ),
+                null,
+                search_error
             );
 
+            if (search_error.size != 0) {
+                string error_message = search_error[0].strip ();
+                throw new CommandError.COMMON ("%c%s".printf (error_message[0].toupper (), error_message[1:error_message.length]));
+            }
+
+            return status;
         }
 
         var client = new AltRepo.Client ();
@@ -119,14 +129,27 @@ namespace Apa {
             founded_files.add_all_iterator (result.files.map<string> (file => { return file.file_name; }));
         }
 
+        var search_files = new Gee.ArrayList<string> ();
+
+        // ALT Repo API issue fix. It can't invalidate pathes with spaces
+        // https://bugzilla.altlinux.org/show_bug.cgi?id=52411
+        foreach (var founded_file in founded_files) {
+            if (!founded_file.contains (" ")) {
+                search_files.add (founded_file);
+            }
+        }
+
+        if (search_files.size == 0) {
+            throw new ApiBase.BadStatusCodeError.NOT_FOUND ("");
+        }
+
         var result = yield client.post_package_packages_by_file_names_async (new AltRepo.PackagesByFileNamesJson () {
             branch = branch,
             arch = arch,
-            files = founded_files
+            files = search_files
         });
 
         var packages = result.packages;
-        var not_found = result.not_found;
 
         if (is_short) {
             foreach (var package in packages) {
