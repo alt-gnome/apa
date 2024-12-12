@@ -18,15 +18,14 @@ gobject_dep = dependency ('gobject-2.0')
 gio_dep = dependency ('gio-2.0')
 gee_dep = dependency ('gee-0.8')
 pk_dep = dependency('packagekit-glib2')
-libalt_repo_dep = dependency('libalt-repo-1', version: '>= 1.19.15', fallback : ['libalt-repo', 'lib_dep'])
-libvazzy_dep = dependency('libvazzy-1', version: '>= 1.1', fallback : ['libvazzy', 'lib_dep'])
+libalt_repo_dep = dependency('libalt-repo-1', version: '>= 1.19.16', fallback : ['libalt-repo', 'lib_dep'])
+libvazzy_dep = dependency('libvazzy-1', version: '>= 1.4', fallback : ['libvazzy', 'lib_dep'])
 
 apa_dependencies = [
   glib_dep,
   gobject_dep,
   gio_dep,
   gee_dep,
-  json_dep,
   pk_dep,
   libalt_repo_dep,
   libvazzy_dep,
