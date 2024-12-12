@@ -217,8 +217,8 @@ namespace Apa.Help {
         print (Descriptions.apa ());
         print ("");
         foreach (var entiry in VISIBLE_COMMANDS) {
-            print (cyan_text (entiry.name));
-            print ("  " + entiry.description_getter ());
+            print ("  " + cyan_text (entiry.name));
+            print ("    " + entiry.description_getter ());
 
             if (entiry.need_root_rights) {
                 print (_("Need root privileges."));
