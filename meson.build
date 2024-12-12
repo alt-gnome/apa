@@ -13,20 +13,21 @@ i18n = import('i18n')
 
 apa_sysconf_dir = get_option('sysconfdir') / meson.project_name()
 
-glib = dependency ('glib-2.0', version: '>= ' + MIN_GLIB_VERSION)
-gobject = dependency ('gobject-2.0')
-gio = dependency ('gio-2.0')
-gee = dependency ('gee-0.8')
-pk = dependency('packagekit-glib2')
+glib_dep = dependency ('glib-2.0', version: '>= ' + MIN_GLIB_VERSION)
+gobject_dep = dependency ('gobject-2.0')
+gio_dep = dependency ('gio-2.0')
+gee_dep = dependency ('gee-0.8')
+pk_dep = dependency('packagekit-glib2')
 libalt_repo_dep = dependency('libalt-repo-1', version: '>= 1.19.15', fallback : ['libalt-repo', 'lib_dep'])
 libvazzy_dep = dependency('libvazzy-1', version: '>= 1.1', fallback : ['libvazzy', 'lib_dep'])
 
 apa_dependencies = [
-  glib,
-  gobject,
-  gio,
-  gee,
-  pk,
+  glib_dep,
+  gobject_dep,
+  gio_dep,
+  gee_dep,
+  json_dep,
+  pk_dep,
   libalt_repo_dep,
   libvazzy_dep,
 ]
