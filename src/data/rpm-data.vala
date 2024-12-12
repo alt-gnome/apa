@@ -40,4 +40,8 @@ namespace Apa.Rpm.Data {
     };
 
     public const OptionData[] INFO_ARG_OPTIONS_DATA = {};
+
+    public const OptionData[] SEARCH_FILE_OPTIONS_DATA = {};
+
+    public const OptionData[] SEARCH_FILE_ARG_OPTIONS_DATA = {};
 }

@@ -85,6 +85,11 @@ public struct Apa.OptionData {
     }
 }
 
+public errordomain Apa.SearchFileRepoPatternError {
+    NOT_AT_LEAST,
+    WRONG_SYMBOL,
+}
+
 public errordomain Apa.CommandError {
     COMMON,
     UNKNOWN_SUBCOMMAND,
@@ -194,30 +199,15 @@ namespace Apa {
     }
 
     public bool is_root () {
-        string output;
-        string error;
+        var uid_str = simple_exec ({ "id", "-u" });
 
-        try {
-            Process.spawn_sync (
-                null,
-                { "id", "-u" },
-                null,
-                SpawnFlags.SEARCH_PATH,
-                null,
-                out output,
-                out error,
-                null
-            );
-
-        } catch (SpawnError e) {
-            GLib.error (e.message);
+        if (uid_str == null) {
+            return false;
         }
 
-        output = output.strip ();
-
-        int output_int;
-        if (int.try_parse (output, out output_int)) {
-            return output_int == 0;
+        int uid;
+        if (int.try_parse (uid_str, out uid)) {
+            return uid == 0;
         }
 
         return false;
@@ -250,20 +240,12 @@ namespace Apa {
 
     public void print_devel (string str) {
         if (ApaConfig.IS_DEVEL) {
-            print ("\n%sDEBUG\n%s%s\n".printf (
-                Colors.CYAN,
-                str,
-                Colors.ENDC
-            ));
+            print (cyan_text ("\nDEBUG\n%s\n".printf (str)));
         }
     }
 
     public void print_error (string str) {
-        print_err ("%sE: %s %s".printf (
-            Colors.FAIL,
-            str,
-            Colors.ENDC
-        ));
+        print_err (red_text ("E: %s".printf (str)));
     }
 
     public ChoiceResult give_choice (string[] variants, string action_name, out string? result = null) {
@@ -386,5 +368,81 @@ namespace Apa {
     public bool pk_is_running () throws Error {
         var ch = new Pk.Control ();
         return ch.get_transaction_list ().length > 0;
+    }
+
+    public string get_arch () {
+        return simple_exec ({ "arch" }) ?? "";
+    }
+
+    public string? simple_exec (string[] cmd) {
+        string stdout;
+        string stderr;
+
+        try {
+            Process.spawn_sync (
+                null,
+                cmd.copy (),
+                null,
+                SpawnFlags.SEARCH_PATH,
+                null,
+                out stdout,
+                out stderr,
+                null
+            );
+
+        } catch (SpawnError e) {
+            GLib.error (e.message);
+        }
+
+        print_devel ("Simple exec: `%s' -> `%s'".printf (string.joinv (" ", cmd), stdout));
+
+        return stdout != null ? stdout.strip () : null;
+    }
+
+    public string mark_text (string str, string[] what_marks) {
+        var new_str = str.dup ();
+
+        foreach (var what_mark in what_marks) {
+            new_str = new_str.replace (what_mark, cyan_text (what_mark));
+        }
+
+        return new_str;
+    }
+
+    public string red_text (string str) {
+        return "%s%s%s".printf (Colors.FAIL, str, Colors.ENDC);
+    }
+
+    public string cyan_text (string str) {
+        return "%s%s%s".printf (Colors.CYAN, str, Colors.ENDC);
+    }
+
+    public bool file_exists (string filepath) {
+        return File.new_for_path (filepath).query_exists ();
+    }
+
+    /**
+     * Repo regex pattern: `^[\w\/\.\+\- $#%:=@{}]{3,}$`
+     */
+    public void check_search_file_repo_arg (string arg) throws SearchFileRepoPatternError {
+        if (arg.length < 3) {
+            throw new SearchFileRepoPatternError.NOT_AT_LEAST ("3");
+        }
+
+        foreach (char c in (char[]) arg) {
+            if (!(Regex.match_simple ("^\\w$", c.to_string (), RegexCompileFlags.OPTIMIZE, RegexMatchFlags.NOTEMPTY))) {
+                continue;
+            }
+
+            if (!(c.to_string () in "\\.+- $#%:=@{}")) {
+                continue;
+            }
+
+            if (!c.isalpha ()) {
+                continue;
+            }
+
+            throw new SearchFileRepoPatternError.WRONG_SYMBOL (c.to_string ());
+        }
     }
 }

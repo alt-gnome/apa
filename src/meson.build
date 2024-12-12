@@ -24,6 +24,7 @@ apa_no_main_code_sources = files (
   'apa/moo.vala',
   'apa/reinstall.vala',
   'apa/remove.vala',
+  'apa/search-file.vala',
   'apa/search.vala',
   'apa/source.vala',
   'apa/update.vala',
@@ -39,6 +40,7 @@ apa_no_main_code_sources = files (
   'data/get-data.vala',
   'data/repo-data.vala',
   'data/rpm-data.vala',
+  'data/search-file-data.vala',
   'data/task-data.vala',
   'data/update-kernel-data.vala',
 

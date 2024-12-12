@@ -55,16 +55,12 @@ namespace Apa.Task {
                     break;
 
                 default:
-                    throw new OptionsError.UNKNOWN_OPTION (option);
+                    assert_not_reached ();
             }
         }
 
         foreach (var arg_option in args_handler.arg_options) {
             var option_data = OptionData.find_option (all_possible_arg_options, arg_option.name);
-
-            if (option_data == null) {
-                throw new OptionsError.UNKNOWN_ARG_OPTION (arg_option.name);
-            }
 
             switch (option_data.short_option) {
                 case Data.OPTION_OWNER_SHORT:
@@ -80,7 +76,7 @@ namespace Apa.Task {
                     break;
 
                 default:
-                    throw new OptionsError.UNKNOWN_ARG_OPTION (arg_option.name);
+                    assert_not_reached ();
             }
         }
 

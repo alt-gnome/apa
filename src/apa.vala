@@ -25,6 +25,7 @@ namespace Apa {
     const string TASK_COMMAND = "task";
     const string HELP_COMMAND = "help";
     const string VERSION_COMMAND = "version";
+    const string SEARCH_FILE_COMMAND = "search-file";
 
     public async int run (owned string[] argv) {
 
@@ -112,6 +113,9 @@ namespace Apa {
 
                 case INFO_COMMAND:
                     return yield info (args_handler);
+
+                case SEARCH_FILE_COMMAND:
+                    return yield search_file (args_handler);
 
                 case MOO_COMMAND:
                     return moo (args_handler);

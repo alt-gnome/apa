@@ -73,4 +73,25 @@ namespace Apa.Rpm {
 
         return yield spawn_command_full (command.spawn_vector, result, error);
     }
+
+    public static async int serch_file (
+        ArgsHandler args_handler,
+        Gee.ArrayList<string>? result = null,
+        Gee.ArrayList<string>? error = null,
+        bool skip_unknown_options = false
+    ) throws OptionsError {
+        var command = new Command (ORIGIN);
+
+        command.spawn_vector.add ("-q");
+        command.spawn_vector.add ("-f");
+
+        command.fill_by_args_handler_with_args (
+            args_handler,
+            OptionData.concat (Rpm.Data.COMMON_OPTIONS_DATA, Rpm.Data.INFO_OPTIONS_DATA),
+            OptionData.concat (Rpm.Data.COMMON_ARG_OPTIONS_DATA, Rpm.Data.INFO_ARG_OPTIONS_DATA),
+            skip_unknown_options
+        );
+
+        return yield spawn_command_full (command.spawn_vector, result, error);
+    }
 }
