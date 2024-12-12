@@ -50,7 +50,7 @@ namespace Apa.Config.Data {
     public const string AUTO_UPDATE = "auto-update";
     public const string USE_FUZZY_SEARCH = "use-fuzzy-search";
 
-    public const ConfigInfo[] POSSIBLE_CONFIG_KEYS = {
+    public const DescriptionEntity[] POSSIBLE_CONFIG_KEYS = {
         { AUTO_UPDATE, Descriptions.config_auto_update },
         { USE_FUZZY_SEARCH, Descriptions.config_use_fuzzy_search },
     };

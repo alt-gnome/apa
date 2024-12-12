@@ -27,6 +27,27 @@ namespace Apa {
     const string VERSION_COMMAND = "version";
     const string SEARCH_FILE_COMMAND = "search-file";
     const string REPO_COMMAND = "repo";
+    const string REINSTALL_COMMAND = "reinstall";
+
+    const CommandDescriptionEntity[] VISIBLE_COMMANDS = {
+        { AptGet.INSTALL, Commands.Descriptions.install, true },
+        { REINSTALL_COMMAND, Commands.Descriptions.reinstall, true },
+        { AptGet.REMOVE, Commands.Descriptions.remove, true },
+        { AptGet.DO, Commands.Descriptions.do, true },
+        { AptGet.UPDATE, Commands.Descriptions.update, true },
+        { AptGet.UPGRADE, Commands.Descriptions.upgrade, true },
+        { AptCache.SEARCH, Commands.Descriptions.search, false },
+        { KERNEL_COMMAND, Commands.Descriptions.kernel, false },
+        { CONFIG_COMMAND, Commands.Descriptions.config, false },
+        { TASK_COMMAND, Commands.Descriptions.task, false },
+        { AptGet.AUTOREMOVE, Commands.Descriptions.autoremove, true },
+        //  { AptGet.SOURCE, Commands.Descriptions.source, true },
+        { LIST_COMMAND, Commands.Descriptions.list, false },
+        { INFO_COMMAND, Commands.Descriptions.info, false },
+        { SEARCH_FILE_COMMAND, Commands.Descriptions.search_file, false },
+        { HELP_COMMAND, Commands.Descriptions.help, false },
+        { VERSION_COMMAND, Commands.Descriptions.version, false },
+    };
 
     public async int run (owned string[] argv) {
 
@@ -89,7 +110,7 @@ namespace Apa {
                     check_is_root (command);
                     return yield install (args_handler);
 
-                case AptGet.REINSTALL:
+                case REINSTALL_COMMAND:
                     check_pk_is_not_running ();
                     check_is_root (command);
                     return yield reinstall (args_handler);

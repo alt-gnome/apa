@@ -91,10 +91,6 @@ namespace Apa.AptGet.Data {
             "-D"
         },
         {
-            "-F", "--force",
-            "--reinstall"
-        },
-        {
             "-r", "--reinstall",
             "--reinstall"
         }
@@ -106,10 +102,6 @@ namespace Apa.AptGet.Data {
         {
             "-d", "--download-only",
             "-d"
-        },
-        {
-            "-F", "--force",
-            "--reinstall"
         },
         {
             "-r", "--reinstall",

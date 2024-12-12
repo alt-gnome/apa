@@ -43,10 +43,17 @@ public struct Apa.ArgOption {
     }
 }
 
-public struct Apa.ConfigInfo {
+public struct Apa.DescriptionEntity {
 
     public string name;
     public DescriptionGetter description_getter;
+}
+
+public struct Apa.CommandDescriptionEntity {
+
+    public string name;
+    public DescriptionGetter description_getter;
+    public bool need_root_rights;
 }
 
 public struct Apa.OptionData {

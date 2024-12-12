@@ -214,14 +214,18 @@ namespace Apa.Help {
     }
 
     public void print_apa (bool with_desc = true) {
-        if (with_desc) {
-            print (_("APA — ALT Packages Assistant. Your best friend in this cruel world of many package tools."));
+        print (Descriptions.apa ());
+        print ("");
+        foreach (var entiry in VISIBLE_COMMANDS) {
+            print (cyan_text (entiry.name));
+            print ("  " + entiry.description_getter ());
+
+            if (entiry.need_root_rights) {
+                print (_("Need root privileges."));
+            }
+
+            print ("");
         }
-        print_usage ("apa <command> ..");
-        print (_("Commands:"));
-        print ("");
-        print_option (AptGet.INSTALL, get_install_desc ());
-        print ("");
     }
 
     public void print_update () {

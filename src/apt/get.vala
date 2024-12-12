@@ -19,14 +19,13 @@ namespace Apa.AptGet {
 
     const string ORIGIN = "apt-get";
 
-    public const string UPDATE = "update";
-    public const string UPGRADE = "upgrade";
-    public const string DO = "do";
-    public const string INSTALL = "install";
-    public const string REINSTALL = "reinstall";
-    public const string REMOVE = "remove";
-    public const string SOURCE = "source";
-    public const string AUTOREMOVE = "autoremove";
+    const string UPDATE = "update";
+    const string UPGRADE = "upgrade";
+    const string DO = "do";
+    const string INSTALL = "install";
+    const string REMOVE = "remove";
+    const string SOURCE = "source";
+    const string AUTOREMOVE = "autoremove";
 
     public static async int update (
         ArgsHandler args_handler,

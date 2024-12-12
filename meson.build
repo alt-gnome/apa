@@ -33,6 +33,7 @@ apa_dependencies = [
 
 add_project_arguments(
   '-include', 'config.h',
+  '-Wno-int-conversion',
   language: ['c']
 )
 

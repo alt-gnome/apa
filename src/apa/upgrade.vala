@@ -39,7 +39,7 @@ namespace Apa {
             args_handler.options.remove (AptGet.Data.OPTION_WITH_KERNEL_LONG);
             args_handler.options.remove (AptGet.Data.OPTION_WITH_KERNEL_SHORT);
 
-        } else {
+        } else if (ConfigManager.get_default ().auto_update) {
             status = yield update (args_handler.copy (), true);
 
             if (status != ExitCode.SUCCESS) {

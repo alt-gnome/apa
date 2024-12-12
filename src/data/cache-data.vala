@@ -59,7 +59,12 @@ namespace Apa.AptCache.Data {
         {
             "-n", "--names-only",
             "-n",
-            Descriptions.arg_option_names_only
+            Descriptions.option_names_only
+        },
+        {
+            "-f", "--full",
+            "-f",
+            Descriptions.option_names_only
         },
     };
 
