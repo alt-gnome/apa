@@ -33,7 +33,7 @@ namespace Apa.Commands.Descriptions {
     }
 
     public string reinstall () {
-        return _("Reinstall the package. Same as 'apa install --reinstall <..>'.");
+        return _("Command to reinstall packages. Same as 'apa install --reinstall <..>'.");
     }
 
     public string remove () {
