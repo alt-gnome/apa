@@ -183,6 +183,10 @@ namespace Apa {
                     print_error (e.message);
                     break;
 
+                case ApiBase.CommonError.SOUP:
+                    print_error ("Cant send request. Probably internet connection problems");
+                    break;
+
                 default:
                     print_error ("Something went wrong");
                     break;
