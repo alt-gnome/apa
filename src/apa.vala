@@ -166,6 +166,10 @@ namespace Apa {
                     print_error (_("Unknown subcommand `%s'").printf (e.message));
                     return ExitCode.BASE_ERROR;
 
+                case CommandError.TOO_MANY_ARGS:
+                    print_error (_("Too many arguments"));
+                    return ExitCode.BASE_ERROR;
+
                 case CommandError.TASK_IS_UNKNOWN:
                     print_error (_("Task `%s' is unknown or still building").printf (e.message));
                     return ExitCode.BASE_ERROR;

@@ -31,7 +31,7 @@ namespace Apa.Repo {
         );
 
         if (args_handler.args.size > 0) {
-            throw new CommandError.COMMON (_("Too many arguments"));
+            throw new CommandError.TOO_MANY_ARGS (null);
         }
 
         while (true) {

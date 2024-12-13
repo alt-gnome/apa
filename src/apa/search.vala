@@ -31,7 +31,7 @@ namespace Apa {
         );
 
         if (args_handler.args.size == 0) {
-            throw new CommandError.NO_PACKAGES (_("Nothing to search"));
+            throw new CommandError.COMMON (_("Nothing to search"));
         }
 
         while (true) {

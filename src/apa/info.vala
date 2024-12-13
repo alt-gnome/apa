@@ -30,7 +30,7 @@ namespace Apa {
             );
 
             if (args_handler.args.size == 0) {
-                throw new CommandError.NO_PACKAGES (_("Nothing to show"));
+                throw new CommandError.COMMON (_("Nothing to show"));
             }
 
             var status = yield Rpm.info (args_handler, null, error, skip_unknown_options);

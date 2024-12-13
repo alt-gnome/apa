@@ -29,7 +29,7 @@ namespace Apa {
         );
 
         if (args_handler.args.size == 0) {
-            throw new CommandError.NO_PACKAGES (_("Nothing to install"));
+            throw new CommandError.COMMON (_("Nothing to install"));
         }
 
         while (true) {

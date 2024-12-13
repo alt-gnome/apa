@@ -37,7 +37,7 @@ namespace Apa.Config {
         }
 
         if (args_handler.args.size > 2) {
-            throw new CommandError.COMMON (_("Too many arguments"));
+            throw new CommandError.TOO_MANY_ARGS (null);
         }
 
         var value = ConfigManager.get_default ().get_value (args_handler.args[0]);

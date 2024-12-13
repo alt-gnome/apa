@@ -29,7 +29,7 @@ namespace Apa {
         );
 
         if (args_handler.args.size == 0) {
-            throw new CommandError.NO_PACKAGES (_("Nothing to remove"));
+            throw new CommandError.COMMON (_("Nothing to remove"));
         }
 
         foreach (string package_name in args_handler.args) {
@@ -67,7 +67,7 @@ namespace Apa {
 
                         print (_("Package `%s' not found, but packages with a similar name were found:").printf (package_error_source));
                         string? answer;
-                        var result = give_choice (possible_package_names, _("remove"), out answer);
+                        var result = give_choice (possible_package_names, _("to remove"), out answer);
 
                         switch (result) {
                             case ChoiceResult.SKIP:

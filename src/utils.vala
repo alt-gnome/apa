@@ -100,10 +100,7 @@ public errordomain Apa.SearchFileRepoPatternError {
 public errordomain Apa.CommandError {
     COMMON,
     UNKNOWN_SUBCOMMAND,
-    TO_MANY_ARGS,
-    NO_PACKAGES,
-    CANT_UPDATE,
-    CANT_UPDATE_KERNEL,
+    TOO_MANY_ARGS,
     UNKNOWN_ERROR,
     INVALID_TASK_ID,
     NO_PACKAGES_LEFT,
@@ -260,11 +257,12 @@ namespace Apa {
         result = null;
 
         if (variants.length == 0) {
-            return ChoiceResult.CHOSEN;
+            return ChoiceResult.EXIT;
         }
 
         print ("");
-        print (_("Choose package to %s:").printf (action_name));
+        // Translators: %s is 'to install', 'to remove' etc
+        print (_("Choose package %s:").printf (action_name));
 
         for (int i = 0; i < variants.length; i++) {
             if (variants[i] != null) {

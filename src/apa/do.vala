@@ -29,7 +29,7 @@ namespace Apa {
         );
 
         if (args_handler.args.size == 0) {
-            throw new CommandError.NO_PACKAGES (_("Nothing to do"));
+            throw new CommandError.COMMON (_("Nothing to do"));
         }
 
         foreach (var package_name in args_handler.args) {
@@ -43,7 +43,7 @@ namespace Apa {
 
         foreach (string package in args_handler.args) {
             if (package[package.length - 1] != '-' && package[package.length - 1] != '+') {
-                throw new CommandError.NO_PACKAGES (_("Don't known what to do with %s").printf (package));
+                throw new CommandError.COMMON (_("Don't known what to do with %s").printf (package));
             }
         }
 
@@ -115,7 +115,7 @@ namespace Apa {
 
                         print (_("Package `%s' not found, but packages with a similar name were found").printf (package_error_source));
                         string? answer;
-                        var result = give_choice (possible_package_names, _("remove"), out answer);
+                        var result = give_choice (possible_package_names, _("to remove"), out answer);
 
                         switch (result) {
                             case ChoiceResult.SKIP:
@@ -161,13 +161,13 @@ namespace Apa {
                         }
 
                         string? answer;
-                        var result = give_choice (choice_packages.to_array (), _("install"), out answer);
+                        var result = give_choice (choice_packages.to_array (), _("to install"), out answer);
 
                         switch (result) {
                             case ChoiceResult.SKIP:
                                 args_handler.args.remove (do_package);
                                 if (args_handler.args.size == 0) {
-                                    throw new CommandError.NO_PACKAGES_LEFT (_("There are no packages left to install"));
+                                    throw new CommandError.NO_PACKAGES_LEFT (_("There are no packages left to do"));
                                 }
                                 break;
 
@@ -210,13 +210,13 @@ namespace Apa {
                         }
 
                         string? answer;
-                        var result_choice = give_choice (choice_packages.to_array (), _("install"), out answer);
+                        var result_choice = give_choice (choice_packages.to_array (), _("to install"), out answer);
 
                         switch (result_choice) {
                             case ChoiceResult.SKIP:
                                 args_handler.args.remove (do_package);
                                 if (args_handler.args.size == 0) {
-                                    throw new CommandError.NO_PACKAGES_LEFT (_("There are no packages left to install"));
+                                    throw new CommandError.NO_PACKAGES_LEFT (_("There are no packages left to do"));
                                 }
                                 break;
 

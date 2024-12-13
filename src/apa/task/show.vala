@@ -27,7 +27,7 @@ namespace Apa.Task {
         );
 
         if (args_handler.args.size == 0) {
-            throw new CommandError.NO_PACKAGES (_("Nothing to show"));
+            throw new CommandError.COMMON (_("Nothing to show"));
         }
 
         var client = new AltRepo.Client ();

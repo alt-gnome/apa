@@ -31,11 +31,11 @@ namespace Apa.Task {
         );
 
         if (args_handler.args.size == 0) {
-            throw new CommandError.NO_PACKAGES (_("Nothing to install"));
+            throw new CommandError.COMMON (_("Nothing to install"));
         }
 
         if (args_handler.args.size > 1) {
-            throw new CommandError.COMMON (_("Too many arguments"));
+            throw new CommandError.TOO_MANY_ARGS (null);
         }
 
         while (true) {

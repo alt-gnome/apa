@@ -29,7 +29,7 @@ namespace Apa {
         );
 
         if (args_handler.args.size == 0) {
-            throw new CommandError.NO_PACKAGES (_("Nothing to install"));
+            throw new CommandError.COMMON (_("Nothing to install"));
         }
 
         foreach (string package_name in args_handler.args) {
@@ -108,7 +108,7 @@ namespace Apa {
 
                         print (_("Package `%s' not found, but packages with a similar name were found").printf (package_error_source));
                         string? answer;
-                        var result = give_choice (possible_package_names, _("install"), out answer);
+                        var result = give_choice (possible_package_names, _("to install"), out answer);
 
                         switch (result) {
                             case ChoiceResult.SKIP:
@@ -147,7 +147,7 @@ namespace Apa {
                         }
 
                         string? answer;
-                        var result = give_choice (choice_packages.to_array (), _("install"), out answer);
+                        var result = give_choice (choice_packages.to_array (), _("to install"), out answer);
 
                         switch (result) {
                             case ChoiceResult.SKIP:
@@ -199,7 +199,7 @@ namespace Apa {
                             return status;
                         }
 
-                        var result_choice = give_choice (choice_packages.to_array (), _("install"), out answer);
+                        var result_choice = give_choice (choice_packages.to_array (), _("to install"), out answer);
 
                         switch (result_choice) {
                             case ChoiceResult.SKIP:
