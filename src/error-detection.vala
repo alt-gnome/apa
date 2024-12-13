@@ -17,7 +17,7 @@
 
 namespace Apa {
 
-    // Should be aligned with ErrorType enum
+    // Should be aligned with OriginErrorType enum
     const string[] ORIGIN_ERRORS = {
         "Couldn't find package %s",
         "Package %s is a virtual package with multiple good providers.\n",
