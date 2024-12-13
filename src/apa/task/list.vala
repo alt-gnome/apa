@@ -46,9 +46,12 @@ namespace Apa.Task {
 
             if (status != ExitCode.SUCCESS && error.size > 0) {
                 string error_message = normalize_error (error);
-                string? package;
+                string? list;
 
-                switch (detect_error (error_message, out package)) {
+                switch (detect_error (error_message, out list)) {
+                    case OriginErrorType.TASK_IS_UNKNOWN_OR_STILL_BUILDING:
+                        throw new CommandError.TASK_IS_UNKNOWN (list);
+
                     case OriginErrorType.NONE:
                     default:
                         throw new CommandError.UNKNOWN_ERROR (error_message);

@@ -27,7 +27,8 @@ namespace Apa {
         "Some index files failed to download. They have been ignored, or old ones used instead.",
         "Option some: Configuration item specification must have an =<val>.",
         "Opening configuration file some - ifstream::ifstream (2 No such file or directory)",
-        "Unknown source. See `man apt-repo` for details. at /bin/apt-repo line 352."
+        "Unknown source. See `man apt-repo` for details. at /bin/apt-repo line 352.",
+        "Task %s is unknown or still building at /bin/apt-repo line 260.",
     };
 
     public enum OriginErrorType {
@@ -40,6 +41,7 @@ namespace Apa {
         CONFIGURATION_ITEM_SPECIFICATION_MUST_HAVE_AN_VAL,
         OPEN_CONFIGURATION_FILE_FAILED,
         APT_REPO_UNKNOWN_SOURCE,
+        TASK_IS_UNKNOWN_OR_STILL_BUILDING,
         NONE,
     }
 

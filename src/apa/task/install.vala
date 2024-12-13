@@ -44,12 +44,15 @@ namespace Apa.Task {
 
             if (status != ExitCode.SUCCESS && error.size > 0) {
                 string error_message = normalize_error (error);
-                string? package;
+                string? task;
 
-                switch (detect_error (error_message, out package)) {
+                switch (detect_error (error_message, out task)) {
                     case OriginErrorType.UNABLE_TO_LOCK_DOWNLOAD_DIR:
                         print_error (_("APT is currently busy"));
                         return status;
+
+                    case OriginErrorType.TASK_IS_UNKNOWN_OR_STILL_BUILDING:
+                        throw new CommandError.TASK_IS_UNKNOWN (task);
 
                     case OriginErrorType.NONE:
                     default:

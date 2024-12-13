@@ -226,6 +226,9 @@ namespace Apa {
                         print_error (_("Option `-o/--option' value is incorrect. It should look like OptionName=val"));
                         return status;
 
+                    case OriginErrorType.TASK_IS_UNKNOWN_OR_STILL_BUILDING:
+                        throw new CommandError.TASK_IS_UNKNOWN (package_error_source);
+
                     case OriginErrorType.OPEN_CONFIGURATION_FILE_FAILED:
                         print_error (_("Option `-c/--config' value is incorrect"));
                         return status;

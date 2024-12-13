@@ -107,6 +107,7 @@ public errordomain Apa.CommandError {
     UNKNOWN_ERROR,
     INVALID_TASK_ID,
     NO_PACKAGES_LEFT,
+    TASK_IS_UNKNOWN,
 }
 
 public errordomain Apa.OptionsError {
