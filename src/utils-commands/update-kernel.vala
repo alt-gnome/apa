@@ -27,7 +27,7 @@ namespace Apa.UpdateKernel {
         Gee.ArrayList<string>? error = null,
         bool skip_unknown_options = false
     ) throws OptionsError {
-        var command = new Command (ORIGIN, UPDATE);
+        var command = new Command (ORIGIN, null);
 
         command.fill_by_args_handler (
             args_handler,
