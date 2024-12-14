@@ -77,7 +77,7 @@ namespace Apa.Commands.Descriptions {
     }
 
     public inline string config_list () {
-        return _("List all possible key values.");
+        return _("List all possible keys values.");
     }
 
     public inline string config_get () {
