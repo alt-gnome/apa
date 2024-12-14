@@ -147,10 +147,12 @@ namespace Apa {
 
         if (is_short) {
             foreach (var package in packages) {
-                print ("%s: %s".printf (
-                    package.name,
-                    string.joinv (" ", package.files.to_array ())
-                ));
+                foreach (var file in package.files) {
+                    print ("%s: %s".printf (
+                        package.name,
+                        file
+                    ));
+                }
             }
 
         } else {
