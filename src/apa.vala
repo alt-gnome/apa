@@ -48,6 +48,7 @@ namespace Apa {
                 }
             } else {
                 Help.print_command_help (command, subcommand);
+                return ExitCode.SUCCESS;
             }
 
         } else if (entity.subcommands != null && subcommand_entity == null) {
