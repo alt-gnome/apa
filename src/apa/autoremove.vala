@@ -22,12 +22,6 @@ namespace Apa {
     ) throws CommandError, OptionsError {
         var error = new Gee.ArrayList<string> ();
 
-        args_handler.init_options (
-            OptionData.concat (AptGet.Data.COMMON_OPTIONS_DATA, AptGet.Data.AUTOREMOVE_OPTIONS_DATA),
-            OptionData.concat (AptGet.Data.COMMON_ARG_OPTIONS_DATA, AptGet.Data.AUTOREMOVE_ARG_OPTIONS_DATA),
-            skip_unknown_options
-        );
-
         while (true) {
             error.clear ();
             var status = yield AptGet.autoremove (args_handler, error);

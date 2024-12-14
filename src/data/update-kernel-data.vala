@@ -19,70 +19,96 @@
 
  namespace Apa.UpdateKernel.Data {
 
-    public const OptionData[] COMMON_OPTIONS_DATA = {};
+    OptionEntity?[] common_options () {
+        return {};
+    }
 
-    public const OptionData[] COMMON_ARG_OPTIONS_DATA = {};
+    OptionEntity?[] common_arg_options () {
+        return {};
+    }
 
-    public const OptionData[] UPDATE_OPTIONS_DATA = {
-        {
-            "-F", "--force",
-            "-f"
-        },
-        {
-            "-d", "--download-only",
-            "-d"
-        },
-        {
-            "-s", "--simulate",
-            "-n"
-        },
-        {
-            "-H", "--header",
-            "-H"
-        },
-        {
-            "-l", "--list",
-            "-l"
-        },
-        {
-            "-a", "--all",
-            "-a"
-        },
-        {
-            "-i", "--interactive",
-            "-i"
-        },
-        {
-            "-d", "--debuginfo",
-            "-d"
-        }
-    };
+    public OptionEntity?[] update_options () {
+        return OptionEntity.concat (
+            common_options (),
+            {
+                {
+                    "-y", "--yes",
+                    "-f",
+                    Descriptions.option_force ()
+                },
+                {
+                    "-d", "--download-only",
+                    "-d",
+                    Descriptions.option_download_only ()
+                },
+                {
+                    "-s", "--simulate",
+                    "-n",
+                    Descriptions.option_simulate ()
+                },
+                {
+                    "-H", "--header",
+                    "-H",
+                    Descriptions.option_header ()
+                },
+                {
+                    "-a", "--all",
+                    "-a",
+                    Descriptions.option_all ()
+                },
+                {
+                    "-i", "--interactive",
+                    "-i",
+                    Descriptions.option_interactive ()
+                },
+                {
+                    "-d", "--debuginfo",
+                    "--debuginfo",
+                    Descriptions.option_debuginfo ()
+                }
+            }
+        );
+    }
 
-    public const OptionData[] UPDATE_ARG_OPTIONS_DATA = {
-        {
-            "-A", "--add-module",
-            "-A"
-        },
-        {
-            "-D", "--del-module",
-            "-D"
-        },
-        {
-            "-t", "--type",
-            "-t"
-        },
-        {
-            "-r", "--release",
-            "-r"
-        }
-    };
+    public OptionEntity?[] update_arg_options () {
+        return OptionEntity.concat (
+            common_arg_options (),
+            {
+                {
+                    "-A", "--add-module",
+                    "-A",
+                    Descriptions.arg_option_add_module ()
+                },
+                {
+                    "-D", "--del-module",
+                    "-D",
+                    Descriptions.arg_option_del_module ()
+                },
+                {
+                    "-t", "--type",
+                    "-t",
+                    Descriptions.arg_option_type ()
+                },
+                {
+                    "-r", "--release",
+                    "-r",
+                    Descriptions.arg_option_release ()
+                }
+            }
+        );
+    }
 
-    public const OptionData[] LIST_OPTIONS_DATA = {
-        {
-            "-a", "--all",
-            "-a"
-        }
-    };
+    public OptionEntity?[] list_options () {
+        return OptionEntity.concat (
+            common_options (),
+            {}
+        );
+    }
 
-    public const OptionData[] LIST_ARG_OPTIONS_DATA = {};
+    public OptionEntity?[] list_arg_options () {
+        return OptionEntity.concat (
+            common_arg_options (),
+            {}
+        );
+    }
 }

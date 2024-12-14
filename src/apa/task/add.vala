@@ -15,34 +15,24 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-namespace Apa {
-    public async int source (
+namespace Apa.Task {
+
+    public async int add (
         owned ArgsHandler args_handler,
         bool skip_unknown_options = false
     ) throws CommandError, OptionsError {
-        var error = new Gee.ArrayList<string> ();
 
         if (args_handler.args.size == 0) {
-            throw new CommandError.COMMON (_("Nothing to install"));
+            throw new CommandError.COMMON (_("Nothing to add"));
         }
 
-        while (true) {
-            error.clear ();
-            var status = yield AptGet.source (args_handler, error, skip_unknown_options);
-
-            if (status != ExitCode.SUCCESS && error.size > 0) {
-                string error_message = normalize_error (error);
-                string? package_error_source;
-
-                switch (detect_error (error_message, out package_error_source)) {
-                    case OriginErrorType.NONE:
-                    default:
-                        throw new CommandError.UNKNOWN_ERROR (error_message);
-                }
-
-            } else {
-                return status;
-            }
+        if (args_handler.args.size > 1) {
+            throw new CommandError.TOO_MANY_ARGS ("");
         }
+
+        return yield Repo.add (
+            args_handler.copy (),
+            skip_unknown_options
+        );
     }
 }

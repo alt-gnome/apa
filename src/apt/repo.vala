@@ -33,8 +33,8 @@ namespace Apa.AptRepo {
 
         command.fill_by_args_handler_with_args (
             args_handler,
-            OptionData.concat (AptGet.Data.COMMON_OPTIONS_DATA, AptRepo.Data.TEST_OPTIONS_DATA),
-            OptionData.concat (AptGet.Data.COMMON_ARG_OPTIONS_DATA, AptRepo.Data.TEST_ARG_OPTIONS_DATA),
+            AptRepo.Data.test_options (),
+            AptRepo.Data.test_arg_options (),
             skip_unknown_options
         );
 
@@ -50,8 +50,8 @@ namespace Apa.AptRepo {
 
         command.fill_by_args_handler_with_args (
             args_handler,
-            OptionData.concat (AptGet.Data.COMMON_OPTIONS_DATA, AptRepo.Data.LIST_OPTIONS_DATA),
-            OptionData.concat (AptGet.Data.COMMON_ARG_OPTIONS_DATA, AptRepo.Data.LIST_ARG_OPTIONS_DATA),
+            AptRepo.Data.list_options (),
+            AptRepo.Data.list_arg_options (),
             skip_unknown_options
         );
 
@@ -67,8 +67,8 @@ namespace Apa.AptRepo {
 
         command.fill_by_args_handler_with_args (
             args_handler,
-            OptionData.concat (AptGet.Data.COMMON_OPTIONS_DATA, AptRepo.Data.ADD_OPTIONS_DATA),
-            OptionData.concat (AptGet.Data.COMMON_ARG_OPTIONS_DATA, AptRepo.Data.ADD_ARG_OPTIONS_DATA),
+            AptRepo.Data.add_options (),
+            AptRepo.Data.add_arg_options (),
             skip_unknown_options
         );
 
@@ -84,8 +84,8 @@ namespace Apa.AptRepo {
 
         command.fill_by_args_handler_with_args (
             args_handler,
-            OptionData.concat (AptGet.Data.COMMON_OPTIONS_DATA, AptRepo.Data.RM_OPTIONS_DATA),
-            OptionData.concat (AptGet.Data.COMMON_ARG_OPTIONS_DATA, AptRepo.Data.RM_ARG_OPTIONS_DATA),
+            AptRepo.Data.rm_options (),
+            AptRepo.Data.rm_arg_options (),
             skip_unknown_options
         );
 

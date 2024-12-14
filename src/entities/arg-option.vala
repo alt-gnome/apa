@@ -17,15 +17,30 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-namespace Apa.Config {
-    public async int list (
-        owned ArgsHandler args_handler,
-        bool skip_unknown_options = false
-    ) throws OptionsError {
-        foreach (var possible_key in Data.possible_config_keys ()) {
-            print ("%s\t- %s".printf (possible_key.name, possible_key.description));
+public struct Apa.ArgOption {
+
+    public string name;
+    public string value;
+
+    public static ArgOption from_string (string str) {
+        int delim_index = -1;
+
+        for (int i = 0; i < str.length; i++) {
+            if (str[i] == '=') {
+                delim_index = i;
+                break;
+            }
         }
 
-        return 0;
+        if (delim_index == -1) {
+            return { name: str, value: "" };
+
+        } else {
+            return { name: str[0:delim_index], value: str[delim_index + 1:str.length] };
+        }
+    }
+
+    public static bool equal_func (ArgOption? a, ArgOption? b) {
+        return a?.name == b?.name && a?.value == b?.value;
     }
 }

@@ -16,18 +16,14 @@
  */
 
 namespace Apa {
-    public async int info (
+    public async int list (
         owned ArgsHandler args_handler,
         bool skip_unknown_options = false
     ) throws CommandError, OptionsError {
         while (true) {
             var error = new Gee.ArrayList<string> ();
 
-            if (args_handler.args.size == 0) {
-                throw new CommandError.COMMON (_("Nothing to show"));
-            }
-
-            var status = yield Rpm.info (args_handler, null, error, skip_unknown_options);
+            var status = yield Rpm.list (args_handler, null, error, skip_unknown_options);
 
             if (status != ExitCode.SUCCESS && error.size > 0) {
                 string error_message = normalize_error (error);

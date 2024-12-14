@@ -3,31 +3,31 @@ vapi_sources = files(
 )
 
 apa_no_main_code_sources = files (
-  'apa/config/config.vala',
   'apa/config/get.vala',
   'apa/config/list.vala',
   'apa/config/reset.vala',
   'apa/config/set.vala',
 
-  'apa/kernel/kernel.vala',
   'apa/kernel/list.vala',
   'apa/kernel/upgrade.vala',
 
+  'apa/repo/add-aides.vala',
   'apa/repo/add.vala',
   'apa/repo/list.vala',
+  'apa/repo/remove-aides.vala',
   'apa/repo/remove.vala',
-  'apa/repo/repo.vala',
 
+  'apa/task/add.vala',
   'apa/task/install.vala',
   'apa/task/list.vala',
   'apa/task/search.vala',
   'apa/task/show.vala',
-  'apa/task/task.vala',
 
   'apa/autoremove.vala',
   'apa/do.vala',
   'apa/info.vala',
   'apa/install.vala',
+  'apa/list.vala',
   'apa/moo.vala',
   'apa/reinstall.vala',
   'apa/remove.vala',
@@ -42,6 +42,7 @@ apa_no_main_code_sources = files (
   'apt/repo.vala',
 
   'data/cache-data.vala',
+  'data/commands-data.vala',
   'data/config-data.vala',
   'data/descriptions.vala',
   'data/get-data.vala',
@@ -50,6 +51,11 @@ apa_no_main_code_sources = files (
   'data/search-file-data.vala',
   'data/task-data.vala',
   'data/update-kernel-data.vala',
+
+  'entities/arg-option.vala',
+  'entities/command-entity.vala',
+  'entities/config-entity.vala',
+  'entities/option-entity.vala',
 
   'flatpak/flatpak.vala',
 

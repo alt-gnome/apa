@@ -22,12 +22,15 @@ namespace Apa.Task.Data {
     public const string OPTION_BY_PACKAGE_SHORT = "-p";
     public const string OPTION_BY_PACKAGE_LONG = "--by-package";
 
-    public const OptionData[] SEARCH_OPTIONS_DATA = {
-        {
-            OPTION_BY_PACKAGE_SHORT, OPTION_BY_PACKAGE_LONG,
-            null
-        },
-    };
+    public OptionEntity?[] search_options () {
+        return {
+            {
+                OPTION_BY_PACKAGE_SHORT, OPTION_BY_PACKAGE_LONG,
+                null,
+                Descriptions.option_by_package ()
+            },
+        };
+    }
 
     public const string OPTION_OWNER_SHORT = "-o";
     public const string OPTION_OWNER_LONG = "--owner";
@@ -36,22 +39,31 @@ namespace Apa.Task.Data {
     public const string OPTION_STATE_SHORT = "-s";
     public const string OPTION_STATE_LONG = "--state";
 
-    public const OptionData[] SEARCH_ARG_OPTIONS_DATA = {
-        {
-            OPTION_OWNER_SHORT, OPTION_OWNER_LONG,
-            null
-        },
-        {
-            OPTION_BRANCH_SHORT, OPTION_BRANCH_LONG,
-            null
-        },
-        {
-            OPTION_STATE_SHORT, OPTION_STATE_LONG,
-            null
-        },
-    };
+    public OptionEntity?[] search_arg_options () {
+        return {
+            {
+                OPTION_OWNER_SHORT, OPTION_OWNER_LONG,
+                null,
+                Descriptions.arg_option_owner ()
+            },
+            {
+                OPTION_BRANCH_SHORT, OPTION_BRANCH_LONG,
+                null,
+                Descriptions.arg_option_branch ()
+            },
+            {
+                OPTION_STATE_SHORT, OPTION_STATE_LONG,
+                null,
+                Descriptions.arg_option_state ()
+            },
+        };
+    }
 
-    public const OptionData[] SHOW_OPTIONS_DATA = {};
+    public OptionEntity?[] show_options () {
+        return {};
+    }
 
-    public const OptionData[] SHOW_ARG_OPTIONS_DATA = {};
+    public OptionEntity?[] show_arg_options () {
+        return {};
+    }
 }

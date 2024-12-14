@@ -19,54 +19,68 @@
 
 namespace Apa.AptCache.Data {
 
-    public const OptionData[] COMMON_OPTIONS_DATA = {
-        {
-            "-p", "--package-cache",
-            "-p",
-            Descriptions.option_package_cache
-        },
-        {
-            "-s", "--source-cache",
-            "-s",
-            Descriptions.option_source_cache
-        },
-        {
-            "-h", "--hide-progress",
-            "-q",
-            Descriptions.option_hide_progress
-        },
-        {
-            "-i", "--important-only",
-            "-i",
-            Descriptions.option_important_only
-        },
-    };
+    OptionEntity?[] common_options () {
+        return {
+            {
+                "-p", "--package-cache",
+                "-p",
+                Descriptions.option_package_cache ()
+            },
+            {
+                "-s", "--source-cache",
+                "-s",
+                Descriptions.option_source_cache ()
+            },
+            {
+                "-h", "--hide-progress",
+                "-q",
+                Descriptions.option_hide_progress ()
+            },
+            {
+                "-i", "--important-only",
+                "-i",
+                Descriptions.option_important_only ()
+            },
+        };
+    }
 
-    public const OptionData[] COMMON_ARG_OPTIONS_DATA = {
-        {
-            "-o", "--option",
-            "--option",
-            Descriptions.arg_option_option
-        },
-        {
-            "-c", "--config",
-            "-c",
-            Descriptions.arg_option_config
-        },
-    };
+    OptionEntity?[] common_arg_options () {
+        return {
+            {
+                "-o", "--option",
+                "-o",
+                Descriptions.arg_option_option ()
+            },
+            {
+                "-c", "--config-file",
+                "-c",
+                Descriptions.arg_option_config_file ()
+            },
+        };
+    }
 
-    public const OptionData[] SEARCH_OPTIONS_DATA = {
-        {
-            "-n", "--names-only",
-            "-n",
-            Descriptions.option_names_only
-        },
-        {
-            "-f", "--full",
-            "-f",
-            Descriptions.option_names_only
-        },
-    };
+    public OptionEntity?[] search_options () {
+        return OptionEntity.concat (
+            common_options (),
+            {
+                {
+                    "-n", "--names-only",
+                    "-n",
+                    Descriptions.option_names_only ()
+                },
+                {
+                    "-f", "--full",
+                    "-f",
+                    Descriptions.option_names_only ()
+                },
+            }
+        );
+    }
 
-    public const OptionData[] SEARCH_ARG_OPTIONS_DATA = {};
+    public OptionEntity?[] search_arg_options () {
+        return OptionEntity.concat (
+            common_arg_options (),
+            {}
+        );
+    }
 }

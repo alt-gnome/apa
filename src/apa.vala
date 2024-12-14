@@ -17,107 +17,167 @@
 
 namespace Apa {
 
-    const string CONFIG_COMMAND = "config";
-    const string KERNEL_COMMAND = "kernel";
-    const string LIST_COMMAND = "list";
-    const string INFO_COMMAND = "info";
-    const string MOO_COMMAND = "moo";
-    const string TASK_COMMAND = "task";
-    const string HELP_COMMAND = "help";
-    const string VERSION_COMMAND = "version";
-    const string SEARCH_FILE_COMMAND = "search-file";
-    const string REPO_COMMAND = "repo";
-    const string REINSTALL_COMMAND = "reinstall";
-
-    const CommandDescriptionEntity[] VISIBLE_COMMANDS = {
-        { AptGet.INSTALL, Commands.Descriptions.install, true },
-        { REINSTALL_COMMAND, Commands.Descriptions.reinstall, true },
-        { AptGet.REMOVE, Commands.Descriptions.remove, true },
-        { AptGet.DO, Commands.Descriptions.do, true },
-        { AptGet.UPDATE, Commands.Descriptions.update, true },
-        { AptGet.UPGRADE, Commands.Descriptions.upgrade, true },
-        { AptCache.SEARCH, Commands.Descriptions.search, false },
-        { KERNEL_COMMAND, Commands.Descriptions.kernel, false },
-        { CONFIG_COMMAND, Commands.Descriptions.config, false },
-        { TASK_COMMAND, Commands.Descriptions.task, false },
-        { AptGet.AUTOREMOVE, Commands.Descriptions.autoremove, true },
-        //  { AptGet.SOURCE, Commands.Descriptions.source, true },
-        { LIST_COMMAND, Commands.Descriptions.list, false },
-        { INFO_COMMAND, Commands.Descriptions.info, false },
-        { SEARCH_FILE_COMMAND, Commands.Descriptions.search_file, false },
-        { HELP_COMMAND, Commands.Descriptions.help, false },
-        { VERSION_COMMAND, Commands.Descriptions.version, false },
-    };
-
     public async int run (owned string[] argv) {
 
         string? command = cut_of_command (ref argv);
+        string? subcommand = null;
 
-        if (command == null && argv.length == 0) {
+        if (command == null) {
             Help.print_apa ();
             return ExitCode.SUCCESS;
-
-        } else if (command == null && argv.length > 0) {
-            if ("-h" in argv || "--help" in argv) {
-                Help.print_help (command);
-                return ExitCode.SUCCESS;
-            }
-
-            if ("-v" in argv || "--version" in argv) {
-                print (get_version ());
-                return ExitCode.SUCCESS;
-            }
         }
 
-        var args_handler = new ArgsHandler (argv);
+        var entity = CommandEntity.find (Commands.Data.all_commands (), command);
+
+        if (entity == null) {
+            //  print (command);
+            print_error (_("Unknown command `%s'").printf (command));
+            return ExitCode.BASE_ERROR;
+        }
+
+        CommandEntity? subcommand_entity = null;
+        if (entity.subcommands != null) {
+            subcommand = cut_of_command (ref argv);
+
+            subcommand_entity = CommandEntity.find (entity.subcommands.to_array (), subcommand);
+
+            if (subcommand_entity == null) {
+                print_error (_("Unknown subcommand `%s' of `%s' command").printf (subcommand, command));
+                return ExitCode.BASE_ERROR;
+            }
+
+        } else if (entity.subcommands != null && subcommand_entity == null) {
+            print_error (_("No subcommand. Try `apa %s --help'").printf (command));
+            return ExitCode.BASE_ERROR;
+        }
+
+        if ("-h" in argv || "--help" in argv) {
+            Help.print_command_help (command, subcommand);
+            return ExitCode.SUCCESS;
+        }
+
+        if ("-v" in argv || "--version" in argv) {
+            print_version ();
+            return ExitCode.SUCCESS;
+        }
+
+        if (command == null) {
+            if (argv.length == 0) {
+                Help.print_apa ();
+                return ExitCode.SUCCESS;
+
+            } else {
+                print_error (_("No command. Try `apa help'"));
+                return ExitCode.BASE_ERROR;
+            }
+
+        }
+
+        CommandEntity current_entity = subcommand_entity ?? entity;
+
+        if (current_entity.need_root) {
+            check_is_root (command);
+        }
+        if (current_entity.need_no_packagekit) {
+            check_pk_is_not_running ();
+        }
 
         try {
+            var args_handler = new ArgsHandler (argv);
+            args_handler.init_options (
+                current_entity.options.to_array (),
+                current_entity.arg_options.to_array ()
+            );
+
             switch (command) {
-                case KERNEL_COMMAND:
-                    return yield kernel (argv);
+                case Commands.Data.KERNEL_COMMAND:
+                    switch (subcommand) {
+                        case Commands.Data.KERNEL_UPGRADE_SUBCOMMAND:
+                            return yield Kernel.upgrade (args_handler);
 
-                case TASK_COMMAND:
-                    return yield task (argv);
+                        case Commands.Data.KERNEL_LIST_SUBCOMMAND:
+                            return yield Kernel.list (args_handler);
 
-                case CONFIG_COMMAND:
-                    return yield config (argv);
+                        default:
+                            assert_not_reached ();
+                    }
 
-                case REPO_COMMAND:
-                    return yield repo (argv);
+                case Commands.Data.TASK_COMMAND:
+                    switch (subcommand) {
+                        case Commands.Data.TASK_SEARCH_SUBCOMMAND:
+                            return yield Task.search (args_handler);
+
+                        case Commands.Data.TASK_SHOW_SUBCOMMAND:
+                            return yield Task.show (args_handler);
+
+                        case Commands.Data.TASK_INSTALL_SUBCOMMAND:
+                            return yield Task.install (args_handler);
+
+                        case Commands.Data.TASK_LIST_SUBCOMMAND:
+                            return yield Task.list (args_handler);
+
+                        default:
+                            assert_not_reached ();
+                    }
+
+                case Commands.Data.CONFIG_COMMAND:
+                    switch (subcommand) {
+                        case Commands.Data.CONFIG_RESET_SUBCOMMAND:
+                            return yield Config.reset (args_handler);
+
+                        case Commands.Data.CONFIG_LIST_SUBCOMMAND:
+                            return yield Config.list (args_handler);
+
+                        case Commands.Data.CONFIG_GET_SUBCOMMAND:
+                            return yield Config.get (args_handler);
+
+                        case Commands.Data.CONFIG_SET_SUBCOMMAND:
+                            return yield Config.set (args_handler);
+
+                        default:
+                            assert_not_reached ();
+                    }
+
+                case Commands.Data.REPO_COMMAND:
+                    switch (subcommand) {
+                        case Commands.Data.REPO_LIST_SUBCOMMAND:
+                            return yield Repo.list (args_handler);
+
+                        case Commands.Data.REPO_ADD_SUBCOMMAND:
+                            return yield Repo.add (args_handler);
+
+                        case Commands.Data.ADD_AIDES_SUBCOMMAND:
+                            return yield Repo.add_aides (args_handler);
+
+                        case Commands.Data.REMOVE_AIDES_SUBCOMMAND:
+                            return yield Repo.remove_aides (args_handler);
+
+                        case Commands.Data.REPO_REMOVE_SUBCOMMAND:
+                            return yield Repo.remove (args_handler);
+
+                        default:
+                            assert_not_reached ();
+                    }
 
                 case AptGet.AUTOREMOVE:
-                    check_pk_is_not_running ();
-                    check_is_root (command);
                     return yield autoremove (args_handler);
 
                 case AptGet.DO:
-                    check_pk_is_not_running ();
-                    check_is_root (command);
                     return yield @do (args_handler);
 
                 case AptGet.UPDATE:
-                    check_pk_is_not_running ();
-                    check_is_root (command);
                     return yield update (args_handler);
 
                 case AptGet.UPGRADE:
-                    check_pk_is_not_running ();
-                    check_is_root (command);
                     return yield upgrade (args_handler);
 
                 case AptGet.INSTALL:
-                    check_pk_is_not_running ();
-                    check_is_root (command);
                     return yield install (args_handler);
 
-                case REINSTALL_COMMAND:
-                    check_pk_is_not_running ();
-                    check_is_root (command);
+                case Commands.Data.REINSTALL_COMMAND:
                     return yield reinstall (args_handler);
 
                 case AptGet.REMOVE:
-                    check_pk_is_not_running ();
-                    check_is_root (command);
                     return yield remove (args_handler);
 
                 case AptGet.SOURCE:
@@ -126,33 +186,28 @@ namespace Apa {
                 case AptCache.SEARCH:
                     return yield search (args_handler);
 
-                case LIST_COMMAND:
-                    return yield Rpm.list (args_handler);
+                case Commands.Data.LIST_COMMAND:
+                    return yield list (args_handler);
 
-                case INFO_COMMAND:
+                case Commands.Data.INFO_COMMAND:
                     return yield info (args_handler);
 
-                case SEARCH_FILE_COMMAND:
+                case Commands.Data.SEARCH_FILE_COMMAND:
                     return yield search_file (args_handler);
 
-                case MOO_COMMAND:
+                case Commands.Data.MOO_COMMAND:
                     return moo (args_handler);
 
-                case VERSION_COMMAND:
-                    print (get_version ());
+                case Commands.Data.VERSION_COMMAND:
+                    print_version ();
                     return ExitCode.SUCCESS;
 
-                case HELP_COMMAND:
+                case Commands.Data.HELP_COMMAND:
                     Help.print_apa ();
                     return ExitCode.SUCCESS;
-
-                case null:
-                    Help.print_apa ();
-                    return ExitCode.BASE_ERROR;
 
                 default:
-                    print_error (_("Unknown command `%s'").printf (command));
-                    return ExitCode.BASE_ERROR;
+                    assert_not_reached ();
             }
 
         } catch (CommandError e) {

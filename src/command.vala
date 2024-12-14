@@ -42,12 +42,12 @@ public sealed class Apa.Command : Object {
      */
     public void fill_by_args_handler (
         ArgsHandler args_handler,
-        OptionData[] possible_options_data,
-        OptionData[] possible_arg_options_data,
+        OptionEntity?[] possible_options_data,
+        OptionEntity?[] possible_arg_options_data,
         bool skip_unknown_options = false
     ) throws OptionsError {
         foreach (var option in args_handler.options) {
-            var option_data = OptionData.find_option (possible_options_data, option);
+            var option_data = OptionEntity.find_option (possible_options_data, option);
             if (option_data == null) {
                 if (!skip_unknown_options) {
                     throw new OptionsError.UNKNOWN_OPTION (option);
@@ -63,7 +63,7 @@ public sealed class Apa.Command : Object {
         }
 
         foreach (ArgOption arg_option in args_handler.arg_options) {
-            var option_data = OptionData.find_option (possible_arg_options_data, arg_option.name);
+            var option_data = OptionEntity.find_option (possible_arg_options_data, arg_option.name);
             if (option_data == null) {
                 if (!skip_unknown_options) {
                     throw new OptionsError.UNKNOWN_ARG_OPTION (arg_option.name);
@@ -91,8 +91,8 @@ public sealed class Apa.Command : Object {
      */
     public void fill_by_args_handler_with_args (
         ArgsHandler args_handler,
-        OptionData[] possible_options_data,
-        OptionData[] possible_arg_options_data,
+        OptionEntity?[] possible_options_data,
+        OptionEntity?[] possible_arg_options_data,
         bool skip_unknown_options = false
     ) throws OptionsError {
         assert (args_handler.args.size != 0);

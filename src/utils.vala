@@ -15,83 +15,6 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-public struct Apa.ArgOption {
-
-    public string name;
-    public string value;
-
-    public static ArgOption from_string (string str) {
-        int delim_index = -1;
-
-        for (int i = 0; i < str.length; i++) {
-            if (str[i] == '=') {
-                delim_index = i;
-                break;
-            }
-        }
-
-        if (delim_index == -1) {
-            return { name: str, value: "" };
-
-        } else {
-            return { name: str[0:delim_index], value: str[delim_index + 1:str.length] };
-        }
-    }
-
-    public static bool equal_func (ArgOption? a, ArgOption? b) {
-        return a?.name == b?.name && a?.value == b?.value;
-    }
-}
-
-public struct Apa.DescriptionEntity {
-
-    public string name;
-    public DescriptionGetter description_getter;
-}
-
-public struct Apa.CommandDescriptionEntity {
-
-    public string name;
-    public DescriptionGetter description_getter;
-    public bool need_root_rights;
-}
-
-public struct Apa.OptionData {
-
-    public string short_option;
-    public string long_option;
-    public string target_option;
-    public DescriptionGetter description_getter;
-
-    public bool contain (string option) {
-        return option == short_option || option == long_option;
-    }
-
-    public static OptionData[] concat (OptionData[] arr1, OptionData[] arr2) {
-        OptionData[] new_arr = new OptionData[arr1.length + arr2.length];
-
-        for (int i = 0; i < arr1.length; i++) {
-            new_arr[i] = arr1[i];
-        }
-
-        for (int i = arr1.length; i < new_arr.length; i++) {
-            new_arr[i] = arr2[i - arr1.length];
-        }
-
-        return new_arr;
-    }
-
-    public static OptionData? find_option (OptionData[] options, string option) {
-        foreach (var opt in options) {
-            if (opt.short_option == option || opt.long_option == option) {
-                return opt;
-            }
-        }
-
-        return null;
-    }
-}
-
 public errordomain Apa.SearchFileRepoPatternError {
     NOT_AT_LEAST,
     WRONG_SYMBOL,
@@ -121,14 +44,16 @@ public enum Apa.ChoiceResult {
 
 namespace Apa {
 
-    public delegate string DescriptionGetter ();
+    public async int bebra (owned ArgsHandler args_handler) throws CommandError, ApiBase.CommonError, ApiBase.BadStatusCodeError, OptionsError {
+        return 050;
+    }
 
     public string current_locale;
 
     public string? get_config_description (string key) {
-        foreach (var info in Config.Data.POSSIBLE_CONFIG_KEYS) {
+        foreach (var info in Config.Data.possible_config_keys ()) {
             if (info.name == key) {
-                return info.description_getter ();
+                return info.description;
             }
         }
 
@@ -148,15 +73,11 @@ namespace Apa {
     }
 
     public string? cut_of_command (ref string[] argv) {
-        if (argv.length == 0) {
+        string? command = peek_command (ref argv);
+
+        if (command == null) {
             return null;
         }
-
-        if (argv[0].has_prefix ("-")) {
-            return null;
-        }
-
-        string command = argv[0];
 
         if (argv.length == 1) {
             argv = {};
@@ -172,11 +93,23 @@ namespace Apa {
         return command;
     }
 
-    public string get_version () {
-        return "%s %s".printf (
+    public string? peek_command (ref string[] argv) {
+        if (argv.length == 0) {
+            return null;
+        }
+
+        if (argv[0].has_prefix ("-")) {
+            return null;
+        }
+
+        return argv[0];
+    }
+
+    public void print_version () {
+        print ("%s %s".printf (
             ApaConfig.NAME,
             ApaConfig.VERSION
-        );
+        ));
     }
 
     /*

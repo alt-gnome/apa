@@ -37,8 +37,8 @@ namespace Apa.Rpm {
 
         command.fill_by_args_handler (
             args_handler,
-            OptionData.concat (Rpm.Data.COMMON_OPTIONS_DATA, Rpm.Data.LIST_OPTIONS_DATA),
-            OptionData.concat (Rpm.Data.COMMON_ARG_OPTIONS_DATA, Rpm.Data.LIST_ARG_OPTIONS_DATA),
+            Rpm.Data.list_options (),
+            Rpm.Data.list_arg_options (),
             skip_unknown_options
         );
 
@@ -66,8 +66,8 @@ namespace Apa.Rpm {
 
         command.fill_by_args_handler_with_args (
             args_handler,
-            OptionData.concat (Rpm.Data.COMMON_OPTIONS_DATA, Rpm.Data.INFO_OPTIONS_DATA),
-            OptionData.concat (Rpm.Data.COMMON_ARG_OPTIONS_DATA, Rpm.Data.INFO_ARG_OPTIONS_DATA),
+            Rpm.Data.info_options (),
+            Rpm.Data.info_arg_options (),
             skip_unknown_options
         );
 
@@ -87,8 +87,8 @@ namespace Apa.Rpm {
 
         command.fill_by_args_handler_with_args (
             args_handler,
-            OptionData.concat (Rpm.Data.COMMON_OPTIONS_DATA, Rpm.Data.INFO_OPTIONS_DATA),
-            OptionData.concat (Rpm.Data.COMMON_ARG_OPTIONS_DATA, Rpm.Data.INFO_ARG_OPTIONS_DATA),
+            Rpm.Data.common_options (),
+            Rpm.Data.common_arg_options (),
             skip_unknown_options
         );
 

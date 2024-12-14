@@ -23,12 +23,6 @@ namespace Apa {
         var error = new Gee.ArrayList<string> ();
         int status;
 
-        args_handler.init_options (
-            OptionData.concat (AptGet.Data.COMMON_OPTIONS_DATA, AptGet.Data.UPGRADE_OPTIONS_DATA),
-            OptionData.concat (AptGet.Data.COMMON_ARG_OPTIONS_DATA, AptGet.Data.UPGRADE_ARG_OPTIONS_DATA),
-            skip_unknown_options
-        );
-
         if (AptGet.Data.OPTION_WITH_KERNEL_LONG in args_handler.options || AptGet.Data.OPTION_WITH_KERNEL_SHORT in args_handler.options) {
             status = yield Kernel.upgrade (args_handler.copy (), true);
 

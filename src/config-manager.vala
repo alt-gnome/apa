@@ -145,7 +145,7 @@ public sealed class Apa.ConfigManager : Object {
     }
 
     public void reset_all () {
-        foreach (var info in Config.Data.POSSIBLE_CONFIG_KEYS) {
+        foreach (var info in Config.Data.possible_config_keys ()) {
             reset (info.name);
         }
     }

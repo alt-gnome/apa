@@ -85,15 +85,14 @@ public sealed class Apa.ArgsHandler : Object {
     }
 
     public void init_options (
-        OptionData[] possible_options_data,
-        OptionData[] possible_arg_options_data,
-        bool skip_unknown_options = false
+        OptionEntity?[] possible_options_data,
+        OptionEntity?[] possible_arg_options_data
     ) throws OptionsError {
         for (int i = 0; i < argv.length; i++) {
             var arg = argv[i];
 
             if (arg.has_prefix ("--")) {
-                var found_option = OptionData.find_option (possible_options_data, arg);
+                var found_option = OptionEntity.find_option (possible_options_data, arg);
                 if (found_option != null) {
                     options.add (arg);
                     continue;
@@ -101,7 +100,7 @@ public sealed class Apa.ArgsHandler : Object {
 
                 var potential_arg_option = ArgOption.from_string (arg);
 
-                found_option = OptionData.find_option (possible_arg_options_data, potential_arg_option.name);
+                found_option = OptionEntity.find_option (possible_arg_options_data, potential_arg_option.name);
                 if (found_option != null) {
                     if (potential_arg_option.value == "") {
                         throw new OptionsError.NO_ARG_OPTION_VALUE (_("Option `%s' need value").printf (potential_arg_option.name));
@@ -111,18 +110,16 @@ public sealed class Apa.ArgsHandler : Object {
                     continue;
                 }
 
-                if (!skip_unknown_options) {
-                    throw new OptionsError.UNKNOWN_OPTION (arg);
-                }
+                throw new OptionsError.UNKNOWN_OPTION (arg);
 
             } else if (arg.has_prefix ("-")) {
-                var found_option = OptionData.find_option (possible_options_data, arg);
+                var found_option = OptionEntity.find_option (possible_options_data, arg);
                 if (found_option != null) {
                     options.add (arg);
                     continue;
                 }
 
-                found_option = OptionData.find_option (possible_arg_options_data, arg);
+                found_option = OptionEntity.find_option (possible_arg_options_data, arg);
                 if (found_option != null) {
                     if (argv.length == i + 1) {
                         throw new OptionsError.NO_ARG_OPTION_VALUE (arg);
@@ -136,9 +133,7 @@ public sealed class Apa.ArgsHandler : Object {
                     continue;
                 }
 
-                if (!skip_unknown_options) {
-                    throw new OptionsError.UNKNOWN_OPTION (arg);
-                }
+                throw new OptionsError.UNKNOWN_OPTION (arg);
 
             } else {
                 args.add (arg);

@@ -22,16 +22,10 @@ namespace Apa.Config {
         owned ArgsHandler args_handler,
         bool skip_unknown_options = false
     ) throws CommandError, OptionsError {
-        var all_possible_options = OptionData.concat (Data.COMMON_OPTIONS_DATA, Data.RESET_OPTIONS_DATA);
-
-        args_handler.init_options (
-            all_possible_options,
-            OptionData.concat (Data.COMMON_ARG_OPTIONS_DATA, Data.RESET_ARG_OPTIONS_DATA),
-            skip_unknown_options
-        );
+        var all_possible_options = Data.reset_options ();
 
         foreach (var option in args_handler.options) {
-            var option_data = OptionData.find_option (all_possible_options, option);
+            var option_data = OptionEntity.find_option (all_possible_options, option);
 
             switch (option_data.short_option) {
                 case Data.OPTION_ALL_SHORT:

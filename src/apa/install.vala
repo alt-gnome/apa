@@ -22,12 +22,6 @@ namespace Apa {
     ) throws CommandError, OptionsError {
         var error = new Gee.ArrayList<string> ();
 
-        args_handler.init_options (
-            OptionData.concat (AptGet.Data.COMMON_OPTIONS_DATA, AptGet.Data.INSTALL_OPTIONS_DATA),
-            OptionData.concat (AptGet.Data.COMMON_ARG_OPTIONS_DATA, AptGet.Data.INSTALL_ARG_OPTIONS_DATA),
-            skip_unknown_options
-        );
-
         if (args_handler.args.size == 0) {
             throw new CommandError.COMMON (_("Nothing to install"));
         }

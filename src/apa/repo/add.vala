@@ -24,23 +24,25 @@ namespace Apa.Repo {
     ) throws CommandError, OptionsError {
         var error = new Gee.ArrayList<string> ();
 
-        args_handler.init_options (
-            OptionData.concat (AptRepo.Data.COMMON_OPTIONS_DATA, AptRepo.Data.ADD_OPTIONS_DATA),
-            OptionData.concat (AptRepo.Data.COMMON_ARG_OPTIONS_DATA, AptRepo.Data.ADD_ARG_OPTIONS_DATA),
-            skip_unknown_options
-        );
-
         if (args_handler.args.size == 0) {
             throw new CommandError.COMMON (_("Nothing to add"));
         }
 
-        if (args_handler.args.size > 1) {
-            throw new CommandError.TOO_MANY_ARGS (null);
+        if (args_handler.args.size > 4) {
+            throw new CommandError.TOO_MANY_ARGS ("");
         }
 
         while (true) {
             error.clear ();
-            var status = yield AptRepo.add (args_handler, error, skip_unknown_options);
+            var status = yield AptRepo.add (
+                new ArgsHandler.with_data (
+                    args_handler.options.to_array (),
+                    args_handler.arg_options.to_array (),
+                    { "\"" + string.joinv (" ", args_handler.args.to_array ()) + "\"" }
+                ),
+                error,
+                skip_unknown_options
+            );
 
             if (status != ExitCode.SUCCESS && error.size > 0) {
                 string error_message = normalize_error (error);

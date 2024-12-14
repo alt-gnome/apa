@@ -24,14 +24,8 @@ namespace Apa {
         owned ArgsHandler args_handler,
         bool skip_unknown_options = false
     ) throws CommandError, ApiBase.CommonError, ApiBase.BadStatusCodeError, OptionsError {
-        var all_possible_options = SearchFile.Data.COMMON_OPTIONS_DATA;
-        var all_possible_arg_options = SearchFile.Data.COMMON_ARG_OPTIONS_DATA;
-
-        args_handler.init_options (
-            all_possible_options,
-            all_possible_arg_options,
-            skip_unknown_options
-        );
+        var all_possible_options = SearchFile.Data.common_options ();
+        var all_possible_arg_options = SearchFile.Data.common_arg_options ();
 
         bool is_local = false;
         bool is_short = false;
@@ -39,7 +33,7 @@ namespace Apa {
         string arch = get_arch ();
 
         foreach (var option in args_handler.options) {
-            var option_data = OptionData.find_option (all_possible_options, option);
+            var option_data = OptionEntity.find_option (all_possible_options, option);
 
             switch (option_data.short_option) {
                 case SearchFile.Data.OPTION_LOCAL_SHORT:
@@ -56,7 +50,7 @@ namespace Apa {
         }
 
         foreach (var arg_option in args_handler.arg_options) {
-            var option_data = OptionData.find_option (all_possible_arg_options, arg_option.name);
+            var option_data = OptionEntity.find_option (all_possible_arg_options, arg_option.name);
 
             switch (option_data.short_option) {
                 case SearchFile.Data.OPTION_BRANCH_SHORT:

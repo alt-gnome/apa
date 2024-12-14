@@ -20,14 +20,8 @@ namespace Apa.Task {
         owned ArgsHandler args_handler,
         bool skip_unknown_options = false
     ) throws CommandError, ApiBase.CommonError, ApiBase.BadStatusCodeError, OptionsError {
-        var all_possible_options = Data.SEARCH_OPTIONS_DATA;
-        var all_possible_arg_options = Data.SEARCH_ARG_OPTIONS_DATA;
-
-        args_handler.init_options (
-            all_possible_options,
-            all_possible_arg_options,
-            skip_unknown_options
-        );
+        var all_possible_options = Data.search_options ();
+        var all_possible_arg_options = Data.search_arg_options ();
 
         if (args_handler.args.size == 0) {
             throw new CommandError.COMMON (_("Nothing to search"));
@@ -47,7 +41,7 @@ namespace Apa.Task {
         var state = new Gee.ArrayList<string> ();
 
         foreach (var option in args_handler.options) {
-            var option_data = OptionData.find_option (all_possible_options, option);
+            var option_data = OptionEntity.find_option (all_possible_options, option);
 
             switch (option_data.short_option) {
                 case Data.OPTION_BY_PACKAGE_SHORT:
@@ -60,7 +54,7 @@ namespace Apa.Task {
         }
 
         foreach (var arg_option in args_handler.arg_options) {
-            var option_data = OptionData.find_option (all_possible_arg_options, arg_option.name);
+            var option_data = OptionEntity.find_option (all_possible_arg_options, arg_option.name);
 
             switch (option_data.short_option) {
                 case Data.OPTION_OWNER_SHORT:

@@ -19,29 +19,65 @@
 
 namespace Apa.Rpm.Data {
 
-    public const OptionData[] COMMON_OPTIONS_DATA = {};
+    OptionEntity?[] common_options () {
+        return {};
+    }
 
-    public const OptionData[] COMMON_ARG_OPTIONS_DATA = {};
+    OptionEntity?[] common_arg_options () {
+        return {};
+    }
 
-    public const OptionData[] LIST_OPTIONS_DATA = {
-        {
-            "-s", "--short",
-            "--queryformat=%{NAME}\n"
-        }
-    };
+    public OptionEntity?[] list_options () {
+        return OptionEntity.concat (
+            common_options (),
+            {
+                {
+                    "-s", "--short",
+                    "--queryformat=%{NAME}\n",
+                    Descriptions.option_short ()
+                }
+            }
+        );
+    }
 
-    public const OptionData[] LIST_ARG_OPTIONS_DATA = {};
+    public OptionEntity?[] list_arg_options () {
+        return OptionEntity.concat (
+            common_arg_options (),
+            {}
+        );
+    }
 
-    public const OptionData[] INFO_OPTIONS_DATA = {
-        {
-            "-f", "--files",
-            "-l"
-        }
-    };
+    public OptionEntity?[] info_options () {
+        return OptionEntity.concat (
+            common_options (),
+            {
+                {
+                    "-f", "--files",
+                    "-l",
+                    Descriptions.option_files ()
+                }
+            }
+        );
+    }
 
-    public const OptionData[] INFO_ARG_OPTIONS_DATA = {};
+    public OptionEntity?[] info_arg_options () {
+        return OptionEntity.concat (
+            common_arg_options (),
+            {}
+        );
+    }
 
-    public const OptionData[] SEARCH_FILE_OPTIONS_DATA = {};
+    public OptionEntity?[] search_options () {
+        return OptionEntity.concat (
+            common_options (),
+            {}
+        );
+    }
 
-    public const OptionData[] SEARCH_FILE_ARG_OPTIONS_DATA = {};
+    public OptionEntity?[] search_arg_options () {
+        return OptionEntity.concat (
+            common_arg_options (),
+            {}
+        );
+    }
 }

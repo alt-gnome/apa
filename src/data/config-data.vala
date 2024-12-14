@@ -19,39 +19,88 @@
 
 namespace Apa.Config.Data {
 
-    public const OptionData[] COMMON_OPTIONS_DATA = {};
+    OptionEntity?[] common_options () {
+        return {};
+    }
 
-    public const OptionData[] COMMON_ARG_OPTIONS_DATA = {};
+    OptionEntity?[] common_arg_options () {
+        return {};
+    }
 
-    public const OptionData[] LIST_OPTIONS_DATA = {};
+    public OptionEntity?[] list_options () {
+        return OptionEntity.concat (
+            common_options (),
+            {}
+        );
+    }
 
-    public const OptionData[] LIST_ARG_OPTIONS_DATA = {};
+    public OptionEntity?[] list_arg_options () {
+        return OptionEntity.concat (
+            common_arg_options (),
+            {}
+        );
+    }
 
-    public const OptionData[] SET_OPTIONS_DATA = {};
+    public OptionEntity?[] set_options () {
+        return OptionEntity.concat (
+            common_options (),
+            {}
+        );
+    }
 
-    public const OptionData[] SET_ARG_OPTIONS_DATA = {};
+    public OptionEntity?[] set_arg_options () {
+        return OptionEntity.concat (
+            common_arg_options (),
+            {}
+        );
+    }
 
-    public const OptionData[] GET_OPTIONS_DATA = {};
+    public OptionEntity?[] get_options () {
+        return OptionEntity.concat (
+            common_options (),
+            {}
+        );
+    }
 
-    public const OptionData[] GET_ARG_OPTIONS_DATA = {};
+    public OptionEntity?[] get_arg_options () {
+        return OptionEntity.concat (
+            common_arg_options (),
+            {}
+        );
+    }
 
     public const string OPTION_ALL_SHORT = "-a";
     public const string OPTION_ALL_PACKAGE_LONG = "--all";
 
-    public const OptionData[] RESET_OPTIONS_DATA = {
-        {
-            OPTION_ALL_SHORT, OPTION_ALL_PACKAGE_LONG,
-            null
-        },
-    };
+    public OptionEntity?[] reset_options () {
+        return OptionEntity.concat (
+            common_options (),
+            {
+                {
+                    OPTION_ALL_SHORT, OPTION_ALL_PACKAGE_LONG,
+                    null,
+                    Descriptions.option_all ()
+                },
+            }
+        );
+    }
 
-    public const OptionData[] RESET_ARG_OPTIONS_DATA = {};
+    public OptionEntity?[] reset_arg_options () {
+        return OptionEntity.concat (
+            common_arg_options (),
+            {}
+        );
+    }
 
     public const string AUTO_UPDATE = "auto-update";
     public const string USE_FUZZY_SEARCH = "use-fuzzy-search";
+    public const string AUTO_UPGRADE_KERNEL = "auto-upgrade-kernel";
 
-    public const DescriptionEntity[] POSSIBLE_CONFIG_KEYS = {
-        { AUTO_UPDATE, Descriptions.config_auto_update },
-        { USE_FUZZY_SEARCH, Descriptions.config_use_fuzzy_search },
-    };
+    public ConfigEntity[] possible_config_keys () {
+        return {
+            { AUTO_UPDATE, Descriptions.config_auto_update (), "(true|false)" },
+            { USE_FUZZY_SEARCH, Descriptions.config_use_fuzzy_search (), "(true|false)" },
+            { AUTO_UPGRADE_KERNEL, Descriptions.config_auto_upgrade_kernel (), "(true|false)" },
+        };
+    }
 }

@@ -17,323 +17,104 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+using Apa.Commands.Data;
+
 namespace Apa.Help {
 
-    void print_help (string? command) {
-        switch (command) {
-            case AptGet.UPDATE:
-                print_update ();
-                return;
+    const string BASE_INDENT = "  ";
 
-            case AptGet.UPGRADE:
-                print_upgrade ();
-                return;
-
-            case AptGet.INSTALL:
-                print_install ();
-                return;
-
-            case AptGet.REMOVE:
-                print_remove ();
-                return;
-
-            case AptGet.SOURCE:
-                print_source ();
-                return;
-
-            case AptCache.SEARCH:
-                assert_not_reached ();
-
-            case Apa.LIST_COMMAND:
-                assert_not_reached ();
-
-            case Apa.INFO_COMMAND:
-                assert_not_reached ();
-
-            case Apa.MOO_COMMAND:
-                print_moo ();
-                return;
-
-            case Apa.VERSION_COMMAND:
-                print_version ();
-                return;
-
-            case Apa.HELP_COMMAND:
-                print_apa ();
-                return;
-
-            case null:
-                print_apa ();
-                return;
-
-            default:
-                print_error (_("No help for `%s'").printf (command));
-                print_apa ();
-                return;
+    void print_command_help (string? command, string? subcommand) {
+        if (command == null) {
+            print_apa ();
+            return;
         }
-    }
 
-    void print_usage (string usage) {
-        print ("");
-        print (_("Usage:"));
-        print ("\t" + usage);
-    }
+        var entity = CommandEntity.find (all_commands (), command);
+        if (entity == null) {
+            print_error (_("No help for `%s'").printf (command));
+            return;
+        }
 
-    void print_option (string option, string desc) {
-        print ("\t" + option);
-        print ("\t\t" + desc);
-        print ("");
-    }
+        if (subcommand != null) {
+            if (entity.subcommands != null) {
+                var sub_entity = CommandEntity.find (entity.subcommands.to_array (), subcommand);
+                print_subcommand (sub_entity.description, sub_entity.options.to_array (), sub_entity.arg_options.to_array ());
 
-    void print_common_get_options () {
-        print ("");
-        print (_("Common options:"));
-        print ("");
-        print_option (
-            "-h, --hide-progress",
-            _("Hide progress bar for logging")
-        );
-        print_option (
-            "-q, --quiet",
-            _("Hide any command output")
-        );
-        print_option (
-            "-s, --simulate",
-            _("Simulate command execution")
-        );
-        print_option (
-            "-y, --yes",
-            _("Always `yes'")
-        );
-        print_option (
-            "-f, --fix",
-            _("Try to fix")
-        );
-        print_option (
-            "-m, --missing-ignore",
-            _("Ignore missing packages")
-        );
-        print_option (
-            "-V, --version-detailed",
-            _("Display detailed packages version")
-        );
-        print_option (
-            "-c=?, --config=?",
-            _("Read configuration file")
-        );
-        print_option (
-            "-o=?, --option=?",
-            _("Set an arbitary configuration option, eg -o=dir::cache=/tmp")
-        );
-    }
-
-    void print_common_cache_options () {
-        print ("");
-        print (_("Common options:"));
-        print ("");
-        print_option (
-            "-h, --hide-progress",
-            _("Hide progress bar for logging")
-        );
-        print_option (
-            "-i, --important-only",
-            _("Show only important dependencies for the unmet command")
-        );
-        print_option (
-            "-s, --source-cache",
-            _("The source cache")
-        );
-        print_option (
-            "-p, --package-cache",
-            _("The package cache")
-        );
-        print_option (
-            "-c=?, --config=?",
-            _("Read configuration file")
-        );
-        print_option (
-            "-o=?, --option=?",
-            _("Set an arbitary configuration option, eg -o=dir::cache=/tmp")
-        );
-    }
-
-    string get_update_desc () {
-        return C_(
-            "update command",
-            "Command for update"
-        );
-    }
-
-    string get_upgrade_desc () {
-        return C_(
-            "upgrade command",
-            "Command for upgrade"
-        );
-    }
-
-    string get_install_desc () {
-        return C_(
-            "instal command",
-            "Command for install"
-        );
-    }
-
-    string get_remove_desc () {
-        return C_(
-            "remove command",
-            "Command for remove"
-        );
-    }
-
-    string get_source_desc () {
-        return C_(
-            "source command",
-            "Command for source"
-        );
-    }
-
-    string get_search_desc () {
-        return C_(
-            "search command",
-            "Command for search"
-        );
-    }
-
-    string get_version_desc () {
-        return C_(
-            "version command",
-            "Display APA version"
-        );
-    }
-
-    string get_kernel_desc () {
-        return C_(
-            "kernel command",
-            "Command for kernel"
-        );
-    }
-
-    public void print_apa (bool with_desc = true) {
-        print (Descriptions.apa ());
-        print ("");
-        foreach (var entiry in VISIBLE_COMMANDS) {
-            print ("  " + cyan_text (entiry.name));
-            print ("    " + entiry.description_getter ());
-
-            if (entiry.need_root_rights) {
-                print (_("Need root privileges."));
+            } else {
+                print_error (_("No help for `%s %s'").printf (command, subcommand));
             }
 
-            print ("");
+        } else {
+            if (entity.subcommands != null) {
+                print_command (entity.description, entity.subcommands.to_array ());
+
+            } else {
+                print_subcommand (entity.description, entity.options.to_array (), entity.arg_options.to_array ());
+            }
         }
     }
 
-    public void print_update () {
-        print (get_update_desc ());
-        print_usage ("apa update [OPTIONS[=VALUE]]");
-        print_common_get_options ();
-        print ("");
+    string indx (uint x) {
+        var builder = new StringBuilder ();
+        for (uint i = 0; i < x; i++) {
+            builder.append (BASE_INDENT);
+        }
+        return builder.free_and_steal ();
     }
 
-    public void print_upgrade () {
-        print (get_upgrade_desc ());
-        print_usage ("apa upgrade [OPTIONS[=VALUE]]");
-        print_common_get_options ();
-        print ("");
-        print (_("Command options:"));
-        print ("");
-        print_option (
-            "-d, --download-only",
-            _("Only download packages, without installing")
+    public void print_apa () {
+        print_command (
+            Descriptions.apa (),
+            all_commands ()
         );
-        print_option (
-            "-u, --upgraded-show",
-            _("Display upgraded packages")
-        );
-        print ("");
     }
 
-    public void print_install () {
-        print (get_install_desc ());
-        print_usage ("apa install [OPTIONS[=VALUE]] <package1> <package2> ..");
-        print_common_get_options ();
+    void print_command (
+        string description,
+        CommandEntity[] commands_data
+    ) {
+        print (description);
+
         print ("");
-        print (_("Command options:"));
-        print ("");
-        print_option (
-            "-d, --download-only",
-            _("Only download packages, without installing")
-        );
-        print ("");
+        print (_("Available commands:"));
+        foreach (var entry in commands_data) {
+            print ("%s%s - %s".printf (
+                indx (1),
+                bold_text (entry.name),
+                entry.description
+            ));
+        }
     }
 
-    public void print_remove () {
-        print (get_remove_desc ());
-        print_usage ("apa remove [OPTIONS[=VALUE]] <package1> <package2> ..");
-        print_common_get_options ();
-        print ("");
-        print (_("Command options:"));
-        print ("");
-        print_option (
-            "-D, --with-dependecies",
-            _("Remove with dependencies")
-        );
-        print ("");
-    }
+    void print_subcommand (
+        string description,
+        OptionEntity?[] options_data,
+        OptionEntity?[] arg_options_data,
+        string[] usage = {}
+    ) {
+        print (description);
 
-    public void print_source () {
-        print (get_source_desc ());
-        print_usage ("apa source [OPTIONS[=VALUE]] <package1> <package2> ..");
-        print_common_get_options ();
         print ("");
-        print (_("Command options:"));
-        print ("");
-        print_option (
-            "-b, --build",
-            _("Build packages")
-        );
-        print ("");
-    }
+        foreach (var option_data in options_data) {
+            print ("%s%s, %s".printf (
+                indx (1),
+                option_data.short_option,
+                option_data.long_option
+            ));
 
-    public void print_search () {
-        print (get_search_desc ());
-        print_usage ("apa search [OPTIONS[=VALUE]] <regex1> <regex2> ..");
-        print_common_cache_options ();
-        print ("");
-    }
+            print (indx (2) + option_data.description);
+            print ("");
+        }
 
-    public void print_kernel () {
-        print (get_kernel_desc ());
-    }
+        foreach (var option_data in arg_options_data) {
+            print ("%s%s ?, %s=?".printf (
+                indx (1),
+                option_data.short_option,
+                option_data.long_option
+            ));
 
-    public void print_task () {
-        print ("");
-    }
-
-    public void print_config () {
-        print ("");
-    }
-
-    public void print_test () {
-
-    }
-
-    public void print_repo () {
-
-    }
-
-    public void print_moo () {
-        print (C_("cow", "Mooage:"));
-        print ("\tapa moo [PHRASE]");
-        print ("");
-    }
-
-    public void print_version () {
-        print (get_version_desc ());
-        print_usage ("apa version");
-        print ("");
-        print ("Equal to:");
-        print ("\tapa --version");
-        print ("");
+            print (indx (2) + option_data.description);
+            print ("");
+        }
     }
 }

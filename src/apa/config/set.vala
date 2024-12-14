@@ -22,31 +22,41 @@ namespace Apa.Config {
         owned ArgsHandler args_handler,
         bool skip_unknown_options = false
     ) throws CommandError, OptionsError {
-        args_handler.init_options (
-            OptionData.concat (Data.COMMON_OPTIONS_DATA, Data.SET_OPTIONS_DATA),
-            OptionData.concat (Data.COMMON_ARG_OPTIONS_DATA, Data.SET_ARG_OPTIONS_DATA),
-            skip_unknown_options
-        );
-
         if (args_handler.args.size == 0) {
             throw new CommandError.COMMON (_("Nothing to set, need key and value"));
         }
 
-        if (args_handler.args.size == 1) {
-            throw new CommandError.COMMON (_("There is no value to set"));
+        foreach (var pair in args_handler.args) {
+            var parts = pair.split ("=");
+            if (parts.length != 2) {
+                throw new CommandError.COMMON (_("Invalid key-value pair, need key and value"));
+
+            } else if (parts[1].length == 0) {
+                throw new CommandError.COMMON (_("Invalid value, value cannot be empty"));
+            }
+
+            var key = parts[0];
+            var value = parts[1];
+
+            var config_entity = ConfigEntity.find (Data.possible_config_keys (), key);
+
+            if (!ConfigManager.get_default ().has_key (key) || config_entity == null) {
+                throw new CommandError.COMMON (_("Unknown key, run to `apa config list' to list all posible keys"));
+            }
+
+            if (!Regex.match_simple (config_entity.possible_values_pattern, value.down (), RegexCompileFlags.OPTIMIZE, RegexMatchFlags.NOTEMPTY)) {
+                throw new CommandError.COMMON (_("Invalid value. Try `apa config list' to see possible values"));
+            }
         }
 
-        if (args_handler.args.size > 2) {
-            throw new CommandError.TOO_MANY_ARGS (null);
+        foreach (var pair in args_handler.args) {
+            var parts = pair.split ("=");
+
+            var key = parts[0];
+            var value = parts[1];
+
+            ConfigManager.get_default ().set_value (key, value);
         }
-
-        var value = ConfigManager.get_default ().get_value (args_handler.args[0]);
-
-        if (value == null) {
-            throw new CommandError.COMMON (_("Unknown key, run to `apa config list' to list all posible keys"));
-        }
-
-        ConfigManager.get_default ().set_value (args_handler.args[0], args_handler.args[1]);
 
         return 0;
     }

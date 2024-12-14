@@ -49,8 +49,8 @@ namespace Apa.AptCache {
 
         command.fill_by_args_handler_with_args (
             args_handler,
-            OptionData.concat (AptCache.Data.COMMON_OPTIONS_DATA, AptCache.Data.SEARCH_OPTIONS_DATA),
-            OptionData.concat (AptCache.Data.COMMON_ARG_OPTIONS_DATA, AptCache.Data.SEARCH_ARG_OPTIONS_DATA),
+            AptCache.Data.search_options (),
+            AptCache.Data.search_arg_options (),
             skip_unknown_options
         );
 

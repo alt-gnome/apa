@@ -23,13 +23,6 @@ namespace Apa.Kernel {
         var error = new Gee.ArrayList<string> ();
         int status;
 
-        args_handler.init_options (
-            OptionData.concat (UpdateKernel.Data.COMMON_OPTIONS_DATA, UpdateKernel.Data.UPDATE_OPTIONS_DATA),
-            OptionData.concat (UpdateKernel.Data.COMMON_ARG_OPTIONS_DATA, UpdateKernel.Data.UPDATE_ARG_OPTIONS_DATA),
-            skip_unknown_options
-        );
-
-        // TODO: Add config
         if (ConfigManager.get_default ().auto_update) {
             status = yield update (args_handler.copy (), true);
 

@@ -31,8 +31,8 @@ namespace Apa.UpdateKernel {
 
         command.fill_by_args_handler (
             args_handler,
-            OptionData.concat (UpdateKernel.Data.COMMON_OPTIONS_DATA, UpdateKernel.Data.UPDATE_OPTIONS_DATA),
-            OptionData.concat (UpdateKernel.Data.COMMON_ARG_OPTIONS_DATA, UpdateKernel.Data.UPDATE_ARG_OPTIONS_DATA),
+            UpdateKernel.Data.update_options (),
+            UpdateKernel.Data.update_arg_options (),
             skip_unknown_options
         );
 
@@ -44,14 +44,14 @@ namespace Apa.UpdateKernel {
         Gee.ArrayList<string>? error = null,
         bool skip_unknown_options = false
     ) throws OptionsError {
-        var command = new Command (ORIGIN, UPDATE);
+        var command = new Command (ORIGIN, null);
 
         command.spawn_vector.add ("--list");
 
         command.fill_by_args_handler (
             args_handler,
-            OptionData.concat (UpdateKernel.Data.COMMON_OPTIONS_DATA, UpdateKernel.Data.UPDATE_OPTIONS_DATA),
-            OptionData.concat (UpdateKernel.Data.COMMON_ARG_OPTIONS_DATA, UpdateKernel.Data.UPDATE_ARG_OPTIONS_DATA),
+            UpdateKernel.Data.list_options (),
+            UpdateKernel.Data.list_arg_options (),
             skip_unknown_options
         );
 

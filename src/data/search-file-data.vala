@@ -24,30 +24,38 @@ namespace Apa.SearchFile.Data {
     public const string OPTION_SHORT_SHORT = "-s";
     public const string OPTION_SHORT_LONG = "--short";
 
-    public const OptionData[] COMMON_OPTIONS_DATA = {
-        {
-            OPTION_LOCAL_SHORT, OPTION_LOCAL_LONG,
-            null
-        },
-        {
-            OPTION_SHORT_SHORT, OPTION_SHORT_LONG,
-            null
-        },
-    };
+    public OptionEntity?[] common_options () {
+        return {
+            {
+                OPTION_LOCAL_SHORT, OPTION_LOCAL_LONG,
+                null,
+                Descriptions.option_local ()
+            },
+            {
+                OPTION_SHORT_SHORT, OPTION_SHORT_LONG,
+                null,
+                Descriptions.option_short ()
+            },
+        };
+    }
 
     public const string OPTION_BRANCH_SHORT = "-b";
     public const string OPTION_BRANCH_LONG = "--branch";
     public const string OPTION_ARCH_SHORT = "-a";
     public const string OPTION_ARCH_LONG = "--arch";
 
-    public const OptionData[] COMMON_ARG_OPTIONS_DATA = {
-        {
-            OPTION_BRANCH_SHORT, OPTION_BRANCH_LONG,
-            null
-        },
-        {
-            OPTION_BRANCH_SHORT, OPTION_BRANCH_LONG,
-            null
-        },
-    };
+    public OptionEntity?[] common_arg_options () {
+        return {
+            {
+                OPTION_BRANCH_SHORT, OPTION_BRANCH_LONG,
+                null,
+                Descriptions.arg_option_branch ()
+            },
+            {
+                OPTION_BRANCH_SHORT, OPTION_BRANCH_LONG,
+                null,
+                Descriptions.arg_option_arch ()
+            },
+        };
+    }
 }

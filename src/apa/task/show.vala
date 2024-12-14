@@ -20,11 +20,6 @@ namespace Apa.Task {
         owned ArgsHandler args_handler,
         bool skip_unknown_options = false
     ) throws CommandError, ApiBase.CommonError, ApiBase.BadStatusCodeError, OptionsError {
-        args_handler.init_options (
-            Data.SHOW_OPTIONS_DATA,
-            Data.SHOW_ARG_OPTIONS_DATA,
-            skip_unknown_options
-        );
 
         if (args_handler.args.size == 0) {
             throw new CommandError.COMMON (_("Nothing to show"));

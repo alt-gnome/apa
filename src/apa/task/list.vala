@@ -24,18 +24,12 @@ namespace Apa.Task {
     ) throws CommandError, OptionsError {
         var error = new Gee.ArrayList<string> ();
 
-        args_handler.init_options (
-            OptionData.concat (AptRepo.Data.COMMON_OPTIONS_DATA, AptRepo.Data.LIST_OPTIONS_DATA),
-            OptionData.concat (AptRepo.Data.COMMON_ARG_OPTIONS_DATA, AptRepo.Data.LIST_ARG_OPTIONS_DATA),
-            skip_unknown_options
-        );
-
         if (args_handler.args.size == 0) {
             throw new CommandError.COMMON (_("Nothing to list"));
         }
 
         if (args_handler.args.size > 1) {
-            throw new CommandError.TOO_MANY_ARGS (null);
+            throw new CommandError.TOO_MANY_ARGS ("");
         }
 
         args_handler.args.insert (0, "task");

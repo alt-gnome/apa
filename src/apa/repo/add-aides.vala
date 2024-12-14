@@ -15,30 +15,22 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-namespace Apa.Kernel {
-    public async int list (
+namespace Apa.Repo {
+
+    const string AIDES_REPO_URL = "rpm http://ftp.aides.space repo/Sisyphus/x86_64 aides";
+
+    public async int add_aides (
         owned ArgsHandler args_handler,
         bool skip_unknown_options = false
     ) throws CommandError, OptionsError {
-        var error = new Gee.ArrayList<string> ();
-        int status;
 
-        while (true) {
-            error.clear ();
-            status = yield UpdateKernel.list (args_handler, error, skip_unknown_options);
-
-            if (status != ExitCode.SUCCESS && error.size > 0) {
-                string error_message = normalize_error (error);
-
-                switch (detect_error (error_message)) {
-                    case OriginErrorType.NONE:
-                    default:
-                        throw new CommandError.UNKNOWN_ERROR (error_message);
-                }
-
-            } else {
-                return status;
-            }
-        }
+        return yield Repo.add (
+            new ArgsHandler.with_data (
+                args_handler.options.to_array (),
+                args_handler.arg_options.to_array (),
+                { AIDES_REPO_URL }
+            ),
+            skip_unknown_options
+        );
     }
 }

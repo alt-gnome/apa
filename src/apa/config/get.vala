@@ -22,18 +22,12 @@ namespace Apa.Config {
         owned ArgsHandler args_handler,
         bool skip_unknown_options = false
     ) throws CommandError, OptionsError {
-        args_handler.init_options (
-            OptionData.concat (Data.COMMON_OPTIONS_DATA, Data.GET_OPTIONS_DATA),
-            OptionData.concat (Data.COMMON_ARG_OPTIONS_DATA, Data.GET_ARG_OPTIONS_DATA),
-            skip_unknown_options
-        );
-
         if (args_handler.args.size == 0) {
             throw new CommandError.COMMON (_("Nothing to get"));
         }
 
         if (args_handler.args.size > 1) {
-            throw new CommandError.TOO_MANY_ARGS (null);
+            throw new CommandError.TOO_MANY_ARGS ("");
         }
 
         var value = ConfigManager.get_default ().get_value (args_handler.args[0]);

@@ -19,117 +19,209 @@
 
 namespace Apa.AptGet.Data {
 
-    public const OptionData[] COMMON_OPTIONS_DATA = {
-        {
-            "-h", "--hide-progress",
-            "-q"
-        },
-        {
-            "-q", "--quiet",
-            "-qq"
-        },
-        {
-            "-s", "--simulate",
-            "-s"
-        },
-        {
-            "-y", "--yes",
-            "-y"
-        },
-        {
-            "-f", "--fix",
-            "-f"
-        },
-        {
-            "-V", "--version-detailed",
-            "-V"
-        },
-    };
+    OptionEntity?[] common_options () {
+        return {
+            {
+                "-h", "--hide-progress",
+                "-q",
+                Descriptions.option_hide_progress ()
+            },
+            {
+                "-q", "--quiet",
+                "-qq",
+                Descriptions.option_quiet ()
+            },
+            {
+                "-s", "--simulate",
+                "-s",
+                Descriptions.option_simulate ()
+            },
+            {
+                "-y", "--yes",
+                "-y",
+                Descriptions.option_yes ()
+            },
+            {
+                "-f", "--fix",
+                "-f",
+                Descriptions.option_fix ()
+            },
+            {
+                "-V", "--version-detailed",
+                "-V",
+                Descriptions.option_version_detailed ()
+            },
+        };
+    }
 
-    public const OptionData[] COMMON_ARG_OPTIONS_DATA = {
-        {
-            "-o", "--option",
-            "--option"
-        },
-        {
-            "-c", "--config",
-            "--config"
-        },
-    };
+    OptionEntity?[] common_arg_options () {
+        return {
+            {
+                "-o", "--option",
+                "-o",
+                Descriptions.arg_option_option ()
+            },
+            {
+                "-c", "--config-file",
+                "-c",
+                Descriptions.arg_option_config_file ()
+            },
+        };
+    }
 
-    public const OptionData[] UPDATE_OPTIONS_DATA = {};
+    public OptionEntity?[] update_options () {
+        return OptionEntity.concat (
+            common_options (),
+            {}
+        );
+    }
 
-    public const OptionData[] UPDATE_ARG_OPTIONS_DATA = {};
+    public OptionEntity?[] update_arg_options () {
+        return OptionEntity.concat (
+            common_arg_options (),
+            {}
+        );
+    }
 
     public const string OPTION_WITH_KERNEL_SHORT = "-k";
     public const string OPTION_WITH_KERNEL_LONG = "--with-kernel";
 
-    public const OptionData[] UPGRADE_OPTIONS_DATA = {
-        {
-            "-d", "--download-only",
-            "-d"
-        },
-        {
-            "-u", "--upgraded-show",
-            "-u"
-        },
-        {
-            OPTION_WITH_KERNEL_SHORT, OPTION_WITH_KERNEL_LONG,
-            null
-        },
-    };
+    public OptionEntity?[] upgrade_options () {
+        return OptionEntity.concat (
+            common_options (),
+            {
+                {
+                    "-d", "--download-only",
+                    "-d",
+                    Descriptions.option_download_only ()
+                },
+                {
+                    "-u", "--upgraded-show",
+                    "-u",
+                    Descriptions.option_upgraded_show ()
+                },
+                {
+                    OPTION_WITH_KERNEL_SHORT, OPTION_WITH_KERNEL_LONG,
+                    null,
+                    Descriptions.option_with_kernel ()
+                },
+            }
+        );
+    }
 
-    public const OptionData[] UPGRADE_ARG_OPTIONS_DATA = {};
+    public OptionEntity?[] upgrade_arg_options () {
+        return OptionEntity.concat (
+            common_arg_options (),
+            {}
+        );
+    }
 
-    public const OptionData[] DO_OPTIONS_DATA = {
-        {
-            "-d", "--download-only",
-            "-d"
-        },
-        {
-            "-D", "--with-dependecies",
-            "-D"
-        },
-        {
-            "-r", "--reinstall",
-            "--reinstall"
-        }
-    };
+    public OptionEntity?[] do_options () {
+        return OptionEntity.concat (
+            common_options (),
+            {
+                {
+                    "-d", "--download-only",
+                    "-d",
+                    Descriptions.option_download_only ()
+                },
+                {
+                    "-D", "--with-dependecies",
+                    "-D",
+                    Descriptions.option_with_dependencies ()
+                },
+                {
+                    "-r", "--reinstall",
+                    "--reinstall",
+                    Descriptions.option_reinstall ()
+                }
+            }
+        );
+    }
 
-    public const OptionData[] DO_ARG_OPTIONS_DATA = {};
+    public OptionEntity?[] do_arg_options () {
+        return OptionEntity.concat (
+            common_arg_options (),
+            {}
+        );
+    }
 
-    public const OptionData[] INSTALL_OPTIONS_DATA = {
-        {
-            "-d", "--download-only",
-            "-d"
-        },
-        {
-            "-r", "--reinstall",
-            "--reinstall"
-        }
-    };
+    public OptionEntity?[] install_options () {
+        return OptionEntity.concat (
+            common_options (),
+            {
+                {
+                    "-d", "--download-only",
+                    "-d",
+                    Descriptions.option_download_only ()
+                },
+                {
+                    "-r", "--reinstall",
+                    "--reinstall",
+                    Descriptions.option_reinstall ()
+                }
+            }
+        );
+    }
 
-    public const OptionData[] INSTALL_ARG_OPTIONS_DATA = {};
+    public OptionEntity?[] install_arg_options () {
+        return OptionEntity.concat (
+            common_arg_options (),
+            {}
+        );
+    }
 
-    public const OptionData[] REMOVE_OPTIONS_DATA = {
-        {
-            "-D", "--with-dependecies",
-            "-D"
-        }
-    };
+    public OptionEntity?[] remove_options () {
+        return OptionEntity.concat (
+            common_options (),
+            {
+                {
+                    "-D", "--with-dependecies",
+                    "-D",
+                    Descriptions.option_with_dependencies ()
+                }
+            }
+        );
+    }
 
-    public const OptionData[] REMOVE_ARG_OPTIONS_DATA = {};
+    public OptionEntity?[] remove_arg_options () {
+        return OptionEntity.concat (
+            common_arg_options (),
+            {}
+        );
+    }
 
-    public const OptionData[] SOURCE_OPTIONS_DATA = {
-        {
-            "-b", "--build",
-            "-b"
-        }
-    };
+    public OptionEntity?[] source_options () {
+        return OptionEntity.concat (
+            common_options (),
+            {
+                {
+                    "-b", "--build",
+                    "-b",
+                    Descriptions.option_build ()
+                }
+            }
+        );
+    }
 
-    public const OptionData[] SOURCE_ARG_OPTIONS_DATA = {};
+    public OptionEntity?[] source_arg_options () {
+        return OptionEntity.concat (
+            common_arg_options (),
+            {}
+        );
+    }
 
-    public const OptionData[] AUTOREMOVE_OPTIONS_DATA = {};
+    public OptionEntity?[] autoremove_options () {
+        return OptionEntity.concat (
+            common_options (),
+            {}
+        );
+    }
 
-    public const OptionData[] AUTOREMOVE_ARG_OPTIONS_DATA = {};
+    public OptionEntity?[] autoremove_arg_options () {
+        return OptionEntity.concat (
+            common_arg_options (),
+            {}
+        );
+    }
 }

@@ -17,15 +17,23 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-namespace Apa.Config {
-    public async int list (
-        owned ArgsHandler args_handler,
-        bool skip_unknown_options = false
-    ) throws OptionsError {
-        foreach (var possible_key in Data.possible_config_keys ()) {
-            print ("%s\t- %s".printf (possible_key.name, possible_key.description));
+public struct Apa.ConfigEntity {
+
+    public string name;
+    public string description;
+    public string possible_values_pattern;
+
+    public static ConfigEntity? find (ConfigEntity[] config_entities, string name) {
+        foreach (var config_entity in config_entities) {
+            if (config_entity.name == name) {
+                return config_entity;
+            }
         }
 
-        return 0;
+        return null;
+    }
+
+    public static bool equal (ConfigEntity? a, ConfigEntity? b) {
+        return a?.name == b?.name;
     }
 }

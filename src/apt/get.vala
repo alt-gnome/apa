@@ -19,13 +19,13 @@ namespace Apa.AptGet {
 
     const string ORIGIN = "apt-get";
 
-    const string UPDATE = "update";
-    const string UPGRADE = "upgrade";
-    const string DO = "do";
-    const string INSTALL = "install";
-    const string REMOVE = "remove";
-    const string SOURCE = "source";
-    const string AUTOREMOVE = "autoremove";
+    public const string UPDATE = "update";
+    public const string UPGRADE = "upgrade";
+    public const string DO = "do";
+    public const string INSTALL = "install";
+    public const string REMOVE = "remove";
+    public const string SOURCE = "source";
+    public const string AUTOREMOVE = "autoremove";
 
     public static async int update (
         ArgsHandler args_handler,
@@ -36,8 +36,8 @@ namespace Apa.AptGet {
 
         command.fill_by_args_handler (
             args_handler,
-            OptionData.concat (AptGet.Data.COMMON_OPTIONS_DATA, AptGet.Data.UPDATE_OPTIONS_DATA),
-            OptionData.concat (AptGet.Data.COMMON_ARG_OPTIONS_DATA, AptGet.Data.UPDATE_ARG_OPTIONS_DATA),
+            AptGet.Data.update_options (),
+            AptGet.Data.update_arg_options (),
             skip_unknown_options
         );
 
@@ -53,8 +53,8 @@ namespace Apa.AptGet {
 
         command.fill_by_args_handler (
             args_handler,
-            OptionData.concat (AptGet.Data.COMMON_OPTIONS_DATA, AptGet.Data.UPGRADE_OPTIONS_DATA),
-            OptionData.concat (AptGet.Data.COMMON_ARG_OPTIONS_DATA, AptGet.Data.UPGRADE_ARG_OPTIONS_DATA),
+            AptGet.Data.upgrade_options (),
+            AptGet.Data.upgrade_arg_options (),
             skip_unknown_options
         );
 
@@ -70,8 +70,8 @@ namespace Apa.AptGet {
 
         command.fill_by_args_handler_with_args (
             args_handler,
-            OptionData.concat (AptGet.Data.COMMON_OPTIONS_DATA, AptGet.Data.DO_OPTIONS_DATA),
-            OptionData.concat (AptGet.Data.COMMON_ARG_OPTIONS_DATA, AptGet.Data.DO_ARG_OPTIONS_DATA),
+            AptGet.Data.do_options (),
+            AptGet.Data.do_arg_options (),
             skip_unknown_options
         );
 
@@ -88,8 +88,8 @@ namespace Apa.AptGet {
 
         command.fill_by_args_handler_with_args (
             args_handler,
-            OptionData.concat (AptGet.Data.COMMON_OPTIONS_DATA, AptGet.Data.INSTALL_OPTIONS_DATA),
-            OptionData.concat (AptGet.Data.COMMON_ARG_OPTIONS_DATA, AptGet.Data.INSTALL_ARG_OPTIONS_DATA),
+            AptGet.Data.install_options (),
+            AptGet.Data.install_arg_options (),
             skip_unknown_options
         );
 
@@ -105,8 +105,8 @@ namespace Apa.AptGet {
 
         command.fill_by_args_handler_with_args (
             args_handler,
-            OptionData.concat (AptGet.Data.COMMON_OPTIONS_DATA, AptGet.Data.REMOVE_OPTIONS_DATA),
-            OptionData.concat (AptGet.Data.COMMON_ARG_OPTIONS_DATA, AptGet.Data.REMOVE_ARG_OPTIONS_DATA),
+            AptGet.Data.remove_options (),
+            AptGet.Data.remove_arg_options (),
             skip_unknown_options
         );
 
@@ -122,8 +122,8 @@ namespace Apa.AptGet {
 
         command.fill_by_args_handler_with_args (
             args_handler,
-            OptionData.concat (AptGet.Data.COMMON_OPTIONS_DATA, AptGet.Data.SOURCE_OPTIONS_DATA),
-            OptionData.concat (AptGet.Data.COMMON_ARG_OPTIONS_DATA, AptGet.Data.SOURCE_ARG_OPTIONS_DATA),
+            AptGet.Data.source_options (),
+            AptGet.Data.source_arg_options (),
             skip_unknown_options
         );
 
@@ -139,8 +139,8 @@ namespace Apa.AptGet {
 
         command.fill_by_args_handler (
             args_handler,
-            OptionData.concat (AptGet.Data.COMMON_OPTIONS_DATA, AptGet.Data.AUTOREMOVE_OPTIONS_DATA),
-            OptionData.concat (AptGet.Data.COMMON_ARG_OPTIONS_DATA, AptGet.Data.AUTOREMOVE_ARG_OPTIONS_DATA),
+            AptGet.Data.autoremove_options (),
+            AptGet.Data.autoremove_arg_options (),
             skip_unknown_options
         );
 

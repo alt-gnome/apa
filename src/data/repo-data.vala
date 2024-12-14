@@ -19,38 +19,85 @@
 
 namespace Apa.AptRepo.Data {
 
-    public const OptionData[] COMMON_OPTIONS_DATA = {
-        {
-            "-s", "--simulate",
-            "--dry-run"
-        },
-    };
+    OptionEntity?[] common_options () {
+        return {
+            {
+                "-s", "--simulate",
+                "--dry-run",
+                Descriptions.option_simulate ()
+            },
+        };
+    }
 
-    public const OptionData[] COMMON_ARG_OPTIONS_DATA = {
-        {
-            "-h", "--hsh-apt-config",
-            "--hsh-apt-config"
-        },
-    };
+    OptionEntity?[] common_arg_options () {
+        return {
+            {
+                "-h", "--hsh-apt-config",
+                "--hsh-apt-config",
+                Descriptions.option_hsh_apt_config ()
+            },
+        };
+    }
 
-    public const OptionData[] TEST_OPTIONS_DATA = {};
+    public OptionEntity?[] test_options () {
+        return OptionEntity.concat (
+            common_options (),
+            {}
+        );
+    }
 
-    public const OptionData[] TEST_ARG_OPTIONS_DATA = {};
+    public OptionEntity?[] test_arg_options () {
+        return OptionEntity.concat (
+            common_arg_options (),
+            {}
+        );
+    }
 
-    public const OptionData[] LIST_OPTIONS_DATA = {
-        {
-            "-a", "--all",
-            "-a"
-        }
-    };
+    public OptionEntity?[] list_options () {
+        return OptionEntity.concat (
+            common_options (),
+            {
+                {
+                    "-a", "--all",
+                    "-a",
+                    Descriptions.option_all ()
+                }
+            }
+        );
+    }
 
-    public const OptionData[] LIST_ARG_OPTIONS_DATA = {};
+    public OptionEntity?[] list_arg_options () {
+        return OptionEntity.concat (
+            common_arg_options (),
+            {}
+        );
+    }
 
-    public const OptionData[] ADD_OPTIONS_DATA = {};
+    public OptionEntity?[] add_options () {
+        return OptionEntity.concat (
+            common_options (),
+            {}
+        );
+    }
 
-    public const OptionData[] ADD_ARG_OPTIONS_DATA = {};
+    public OptionEntity?[] add_arg_options () {
+        return OptionEntity.concat (
+            common_arg_options (),
+            {}
+        );
+    }
 
-    public const OptionData[] RM_OPTIONS_DATA = {};
+    public OptionEntity?[] rm_options () {
+        return OptionEntity.concat (
+            common_options (),
+            {}
+        );
+    }
 
-    public const OptionData[] RM_ARG_OPTIONS_DATA = {};
+    public OptionEntity?[] rm_arg_options () {
+        return OptionEntity.concat (
+            common_arg_options (),
+            {}
+        );
+    }
 }

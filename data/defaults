@@ -1,3 +1,4 @@
 [settings]
 auto-update=true
 use-fuzzy-search=true
+auto-upgrade-kernel=false
