@@ -24,13 +24,15 @@ namespace Apa.Config {
     ) throws CommandError, OptionsError {
         var all_possible_options = Data.reset_options ();
 
+        bool all = false;
+
         foreach (var option in args_handler.options) {
             var option_data = OptionEntity.find_option (all_possible_options, option);
 
             switch (option_data.short_option) {
                 case Data.OPTION_ALL_SHORT:
-                    ConfigManager.get_default ().reset_all ();
-                    return 0;
+                    all = true;
+                    break;
 
                 default:
                     throw new OptionsError.UNKNOWN_OPTION (option);
@@ -47,7 +49,12 @@ namespace Apa.Config {
             throw new CommandError.COMMON (_("Unknown key, run to `apa config list' to list all posible keys"));
         }
 
-        ConfigManager.get_default ().reset (args_handler.args[0]);
+        if (all) {
+            ConfigManager.get_default ().reset_all ();
+
+        } else {
+            ConfigManager.get_default ().reset (args_handler.args[0]);
+        }
 
         return 0;
     }
