@@ -39,11 +39,15 @@ namespace Apa {
         if (entity.subcommands != null) {
             subcommand = cut_of_command (ref argv);
 
-            subcommand_entity = CommandEntity.find (entity.subcommands.to_array (), subcommand);
+            if (subcommand != null) {
+                subcommand_entity = CommandEntity.find (entity.subcommands.to_array (), subcommand);
 
-            if (subcommand_entity == null) {
-                print_error (_("Unknown subcommand `%s' of `%s' command").printf (subcommand, command));
-                return ExitCode.BASE_ERROR;
+                if (subcommand_entity == null) {
+                    print_error (_("Unknown subcommand `%s' of `%s' command").printf (subcommand, command));
+                    return ExitCode.BASE_ERROR;
+                }
+            } else {
+                Help.print_command_help (command, subcommand);
             }
 
         } else if (entity.subcommands != null && subcommand_entity == null) {
