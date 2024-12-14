@@ -68,7 +68,7 @@ namespace Apa {
         CommandEntity current_entity = subcommand_entity ?? entity;
 
         if (current_entity.need_root) {
-            check_is_root (command);
+            check_is_root (current_entity.name);
         }
         if (current_entity.need_no_packagekit) {
             check_pk_is_not_running ();
