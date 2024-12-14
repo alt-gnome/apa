@@ -65,18 +65,6 @@ namespace Apa {
             return ExitCode.SUCCESS;
         }
 
-        if (command == null) {
-            if (argv.length == 0) {
-                Help.print_apa ();
-                return ExitCode.SUCCESS;
-
-            } else {
-                print_error (_("No command. Try `apa help'"));
-                return ExitCode.BASE_ERROR;
-            }
-
-        }
-
         CommandEntity current_entity = subcommand_entity ?? entity;
 
         if (current_entity.need_root) {
