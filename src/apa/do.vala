@@ -232,24 +232,22 @@ namespace Apa {
                         break;
 
                     case OriginErrorType.UNABLE_TO_LOCK_DOWNLOAD_DIR:
-                        print_error (_("APT is currently busy"));
-                        return status;
+                        throw new CommandError.COMMON (_("APT is currently busy"));
 
                     case OriginErrorType.UNABLE_TO_FETCH_SOME_ARCHIVES:
-                        print_error (_("Unable to fetch some archives. Check your connection to repository. Run `apa update' or try use `--fix-missing' option"));
-                        return status;
+                        throw new CommandError.COMMON (_("Unable to fetch some archives. Check your connection to repository. Run `apa update' or try use `--fix-missing' option"));
 
                     case OriginErrorType.CONFIGURATION_ITEM_SPECIFICATION_MUST_HAVE_AN_VAL:
-                        print_error (_("Option `-o/--option' value is incorrect. It should look like `OptionName=val'"));
-                        return status;
+                        throw new CommandError.COMMON (_("Option `-o/--option' value is incorrect. It should look like `OptionName=val'"));
 
                     case OriginErrorType.OPEN_CONFIGURATION_FILE_FAILED:
-                        print_error (_("Option `-c/--config' value is incorrect"));
-                        return status;
+                        throw new CommandError.COMMON (_("Option `-c/--config' value is incorrect"));
 
                     case OriginErrorType.VERSION_NOT_FOUND:
-                        print_error (error_message);
-                        return status;
+                        throw new CommandError.COMMON (error_message[0:error_message.length - 1]);
+
+                    case OriginErrorType.BROKEN_PACKAGES:
+                        throw new CommandError.COMMON (_("Broken packages. Running `apa update' can help you"));
 
                     case OriginErrorType.NONE:
                     default:

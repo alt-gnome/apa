@@ -30,7 +30,8 @@ namespace Apa {
         "Unknown source. See `man apt-repo` for details. at /bin/apt-repo line 352.",
         "Task %s is unknown or still building at /bin/apt-repo line 260.",
         "Nothing to add: bad source format. See `man apt-repo` for details.",
-        "Version %s'%s' for '%s' was not found"
+        "Version %s'%s' for '%s' was not found",
+        "Broken packages",
     };
 
     public enum OriginErrorType {
@@ -46,6 +47,7 @@ namespace Apa {
         TASK_IS_UNKNOWN_OR_STILL_BUILDING,
         NOTHING_TO_ADD_BAD_SOURCE_FORMAT,
         VERSION_NOT_FOUND,
+        BROKEN_PACKAGES,
         NONE,
     }
 
