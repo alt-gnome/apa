@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: apa\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-14 07:23+0300\n"
+"POT-Creation-Date: 2024-12-15 22:47+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,112 +17,88 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/apa/config/get.vala:26
-msgid "Nothing to get"
-msgstr ""
-
-#: src/apa/config/get.vala:36 src/apa/config/reset.vala:47
-#: src/apa/config/set.vala:44
-msgid "Unknown key, run to `apa config list' to list all posible keys"
-msgstr ""
-
-#: src/apa/config/reset.vala:41
-msgid "Nothing to reset"
-msgstr ""
-
-#: src/apa/config/set.vala:26
-msgid "Nothing to set, need key and value"
-msgstr ""
-
-#: src/apa/config/set.vala:32
+#: src/apa/config/config-set.vala:30
 msgid "Invalid key-value pair, need key and value"
 msgstr ""
 
-#: src/apa/config/set.vala:35
+#: src/apa/config/config-set.vala:33
 msgid "Invalid value, value cannot be empty"
 msgstr ""
 
-#: src/apa/config/set.vala:48
+#: src/apa/config/config-set.vala:42
+msgid "Unknown key, run `apa config list' to list all possible keys"
+msgstr ""
+
+#: src/apa/config/config-set.vala:46
 msgid "Invalid value. Try `apa config list' to see possible values"
 msgstr ""
 
-#: src/apa/do.vala:26
-msgid "Nothing to do"
-msgstr ""
-
-#: src/apa/do.vala:31
+#: src/apa/do.vala:29
 #, c-format
 msgid "Unknown operation `%c' in `%s'"
 msgstr ""
 
-#: src/apa/do.vala:40
+#: src/apa/do.vala:38
 #, c-format
 msgid "Don't known what to do with %s"
 msgstr ""
 
-#: src/apa/do.vala:110 src/apa/install.vala:103
+#: src/apa/do.vala:108 src/apa/install.vala:101 src/apa/remove.vala:60
 #, c-format
 msgid "Package `%s' not found, but packages with a similar name were found"
 msgstr ""
 
-#: src/apa/do.vala:112 src/apa/remove.vala:64
+#: src/apa/do.vala:110 src/apa/remove.vala:62
 msgid "to remove"
 msgstr ""
 
-#: src/apa/do.vala:118 src/apa/do.vala:164 src/apa/do.vala:213
+#: src/apa/do.vala:116 src/apa/do.vala:162 src/apa/do.vala:211
 msgid "There are no packages left to do"
 msgstr ""
 
-#: src/apa/do.vala:158 src/apa/do.vala:207 src/apa/install.vala:105
-#: src/apa/install.vala:144 src/apa/install.vala:196
+#: src/apa/do.vala:156 src/apa/do.vala:205 src/apa/install.vala:103
+#: src/apa/install.vala:142 src/apa/install.vala:194
 msgid "to install"
 msgstr ""
 
-#: src/apa/do.vala:231 src/apa/install.vala:164 src/apa/remove.vala:88
-#: src/apa/task/install.vala:41 src/apa/update.vala:35 src/apa/upgrade.vala:55
+#: src/apa/do.vala:229 src/apa/install.vala:162 src/apa/remove.vala:86
+#: src/apa/task/task-install.vala:39 src/apa/update.vala:35
+#: src/apa/upgrade.vala:55
 msgid "APT is currently busy"
 msgstr ""
 
-#: src/apa/do.vala:235 src/apa/install.vala:216 src/apa/upgrade.vala:59
+#: src/apa/do.vala:233 src/apa/install.vala:214 src/apa/upgrade.vala:59
 msgid ""
-"Unable to fetch some archives. Check your connection to repository. Maybe "
-"run `apa update' or try with `--fix-missing' option"
+"Unable to fetch some archives. Check your connection to repository. Run `apa "
+"update' or try use `--fix-missing' option"
 msgstr ""
 
-#: src/apa/do.vala:239 src/apa/install.vala:220 src/apa/remove.vala:92
-#: src/apa/search.vala:41
+#: src/apa/do.vala:237 src/apa/install.vala:218 src/apa/remove.vala:90
+#: src/apa/search.vala:39
 msgid ""
-"Option `-o/--option' value is incorrect. It should look like OptionName=val"
+"Option `-o/--option' value is incorrect. It should look like `OptionName=val'"
 msgstr ""
 
-#: src/apa/do.vala:243 src/apa/install.vala:227 src/apa/remove.vala:96
-#: src/apa/search.vala:45
+#: src/apa/do.vala:241 src/apa/install.vala:225 src/apa/remove.vala:94
+#: src/apa/search.vala:43
 msgid "Option `-c/--config' value is incorrect"
 msgstr ""
 
-#: src/apa/info.vala:27 src/apa/task/show.vala:25
-msgid "Nothing to show"
-msgstr ""
-
-#: src/apa/install.vala:26 src/apa/source.vala:26 src/apa/task/install.vala:28
-msgid "Nothing to install"
-msgstr ""
-
-#: src/apa/install.vala:31 src/apa/remove.vala:31
+#: src/apa/install.vala:29 src/apa/remove.vala:29
 msgid "For operation like `<package>+/-' use `do' command instead"
 msgstr ""
 
-#: src/apa/install.vala:38
+#: src/apa/install.vala:36
 #, c-format
 msgid "Found task `%s' in packages. Skipping other"
 msgstr ""
 
-#: src/apa/install.vala:99 src/apa/remove.vala:45 src/apa/remove.vala:58
+#: src/apa/install.vala:97 src/apa/remove.vala:43 src/apa/remove.vala:56
 #, c-format
 msgid "Package `%s' not found"
 msgstr ""
 
-#: src/apa/install.vala:111 src/apa/install.vala:150 src/apa/install.vala:202
+#: src/apa/install.vala:109 src/apa/install.vala:148 src/apa/install.vala:200
 msgid "There are no packages left to install"
 msgstr ""
 
@@ -142,102 +118,80 @@ msgstr ""
 msgid "Have you mooed today?"
 msgstr ""
 
-#: src/apa/remove.vala:26 src/apa/repo/remove.vala:28
-msgid "Nothing to remove"
-msgstr ""
-
-#: src/apa/remove.vala:62
-#, c-format
-msgid "Package `%s' not found, but packages with a similar name were found:"
-msgstr ""
-
-#: src/apa/remove.vala:70
+#: src/apa/remove.vala:68
 msgid "There are no packages left to remove"
 msgstr ""
 
-#: src/apa/repo/add.vala:28 src/apa/task/add.vala:26
-msgid "Nothing to add"
-msgstr ""
-
-#: src/apa/repo/add.vala:53
+#: src/apa/repo/repo-add.vala:42
 msgid "Unknown source"
 msgstr ""
 
-#: src/apa/search-file.vala:70 src/apa/search.vala:28
-#: src/apa/task/search.vala:27
-msgid "Nothing to search"
-msgstr ""
-
-#: src/apa/search-file.vala:76
+#: src/apa/search-file.vala:74
 #, c-format
 msgid "No such file or directory: `%s'"
 msgstr ""
 
-#: src/apa/search-file.vala:110
+#: src/apa/search-file.vala:108
 #, c-format
 msgid "The query must be at least %s symbols"
 msgstr ""
 
-#: src/apa/search-file.vala:113
+#: src/apa/search-file.vala:111
 #, c-format
 msgid "The query cannot contain a `%s'"
 msgstr ""
 
-#: src/apa/task/list.vala:28
-msgid "Nothing to list"
-msgstr ""
-
-#: src/apa/task/search.vala:32
+#: src/apa/task/task-search.vala:30
 #, c-format
 msgid ""
 "The `%s' query is not suitable. The search query must be more than two "
 "characters long"
 msgstr ""
 
-#: src/apa/task/search.vala:87
+#: src/apa/task/task-search.vala:85
 msgid "Too many tasks, showing only the first 10"
 msgstr ""
 
-#: src/apa/task/search.vala:93 src/apa/task/show.vala:35
+#: src/apa/task/task-search.vala:91 src/apa/task/task-show.vala:33
 #, c-format
 msgid "Task %s:"
 msgstr ""
 
-#: src/apa/task/search.vala:94 src/apa/task/show.vala:36
+#: src/apa/task/task-search.vala:92 src/apa/task/task-show.vala:34
 #, c-format
 msgid "  Repo: %s"
 msgstr ""
 
-#: src/apa/task/search.vala:95 src/apa/task/show.vala:37
+#: src/apa/task/task-search.vala:93 src/apa/task/task-show.vala:35
 #, c-format
 msgid "  Owner: %s"
 msgstr ""
 
-#: src/apa/task/search.vala:96 src/apa/task/show.vala:38
+#: src/apa/task/task-search.vala:94 src/apa/task/task-show.vala:36
 #, c-format
 msgid "  State: %s"
 msgstr ""
 
-#: src/apa/task/search.vala:97
+#: src/apa/task/task-search.vala:95
 #, c-format
 msgid "  Has %d subtasks"
 msgstr ""
 
-#: src/apa/task/search.vala:98
+#: src/apa/task/task-search.vala:96
 msgid "  Subtasks: "
 msgstr ""
 
-#: src/apa/task/show.vala:41
+#: src/apa/task/task-show.vala:39
 #, c-format
 msgid "  Subtask: %s"
 msgstr ""
 
-#: src/apa/task/show.vala:42
+#: src/apa/task/task-show.vala:40
 #, c-format
 msgid "    Package name: %s"
 msgstr ""
 
-#: src/apa/task/show.vala:46
+#: src/apa/task/task-show.vala:44
 #, c-format
 msgid "Invalid task id `%s'"
 msgstr ""
@@ -248,92 +202,88 @@ msgstr ""
 msgid "Unknown command `%s'"
 msgstr ""
 
-#: src/apa.vala:45
+#: src/apa.vala:46
 #, c-format
 msgid "Unknown subcommand `%s' of `%s' command"
 msgstr ""
 
-#: src/apa.vala:50
+#: src/apa.vala:55
 #, c-format
 msgid "No subcommand. Try `apa %s --help'"
 msgstr ""
 
-#: src/apa.vala:70
-msgid "No command. Try `apa help'"
-msgstr ""
-
-#: src/apa.vala:216
+#: src/apa.vala:209
 #, c-format
 msgid "Unknown error message: `%s'"
 msgstr ""
 
-#: src/apa.vala:221
+#: src/apa.vala:214
 #, c-format
 msgid "Unknown subcommand `%s'"
 msgstr ""
 
-#: src/apa.vala:225
-msgid "Too many arguments"
+#: src/apa.vala:218
+msgid "There are too many arguments"
 msgstr ""
 
-#: src/apa.vala:229
+#: src/apa.vala:222
+msgid "There are too few arguments"
+msgstr ""
+
+#: src/apa.vala:226
 #, c-format
 msgid "Task `%s' is unknown or still building"
 msgstr ""
 
-#: src/apa.vala:259
+#: src/apa.vala:256
 msgid "Nothing found"
 msgstr ""
 
-#: src/apa.vala:263
+#: src/apa.vala:260
 #, c-format
 msgid "Bad status code: `%d: %s'"
 msgstr ""
 
-#: src/apa.vala:272 src/args-handler.vala:106
+#: src/apa.vala:269 src/args-handler.vala:106
 #, c-format
 msgid "Option `%s' need value"
 msgstr ""
 
-#: src/apa.vala:276
+#: src/apa.vala:273
 #, c-format
 msgid "Unknown option: `%s'"
 msgstr ""
 
-#: src/apa.vala:280
+#: src/apa.vala:277
 #, c-format
 msgid "Unknown option with value: `%s'"
 msgstr ""
 
-#: src/apa.vala:297
+#: src/apa.vala:294
 #, c-format
 msgid "Need root previlegies for `%s' command"
 msgstr ""
 
-#: src/apa.vala:310
+#: src/apa.vala:307
 msgid "PackageKit is running"
 msgstr ""
 
-#: src/config-manager.vala:117
-#, c-format
-msgid "Couldn't open configuration file: %s"
+#: src/config-manager.vala:125
+msgid "Couldn't open configuration file."
 msgstr ""
 
-#: src/config-manager.vala:122
-#, c-format
-msgid ""
-"Error in config: `%s'.\n"
-"Recreating…"
+#: src/config-manager.vala:130
+msgid "Error in config. Recreating…"
 msgstr ""
 
-#: src/config-manager.vala:159 src/config-manager.vala:173
+#: src/config-manager.vala:145 src/config-manager.vala:164
+#: src/config-manager.vala:175 src/config-manager.vala:195
 #, c-format
 msgid "Key `%s' doesn't exists"
 msgstr ""
 
-#: src/config-manager.vala:245
-#, c-format
-msgid "Wrong config type. Expected %s"
+#: src/config-manager.vala:205
+msgid "Wrong type."
 msgstr ""
 
 #: src/data/descriptions.vala:25
@@ -352,11 +302,11 @@ msgid ""
 msgstr ""
 
 #: src/data/descriptions.vala:36
-msgid "Command to reinstall packages. Same as 'apa install --reinstall <..>'."
+msgid "Command to reinstall packages. Same as `apa install --reinstall <..>'."
 msgstr ""
 
 #: src/data/descriptions.vala:40
-msgid "Command to remove packages using a regex expression."
+msgid "Command to remove packages using a regex."
 msgstr ""
 
 #: src/data/descriptions.vala:44
@@ -368,32 +318,33 @@ msgstr ""
 #: src/data/descriptions.vala:48
 msgid ""
 "Need for resynchronize the package index files from their sources. The "
-"indexes of available packages are fetched from the location(s) specified in /"
-"etc/apt/sources.list."
+"indexes of available packages are fetched from the location(s) specified in "
+"`/etc/apt/sources.list'."
 msgstr ""
 
 #: src/data/descriptions.vala:52
 msgid ""
-"Upgrade is used to install the newest versions of all packages currently "
-"installed on the system from the sources enumerated in /etc/apt/sources."
-"list. Packages currently installed with new versions available are retrieved "
-"and upgraded; under no circumstances are currently installed packages "
-"removed, or packages not already installed retrieved and installed. New "
-"versions of currently installed packages that cannot be upgraded without "
+"The `upgrade' command is used to install the newest versions of all packages "
+"currently installed on the system from the sources enumerated in `/etc/apt/"
+"sources.list'. Packages currently installed with new versions available are "
+"retrieved and upgraded; under no circumstances are currently installed "
+"packages removed, or packages not already installed retrieved and installed. "
+"New versions of currently installed packages that cannot be upgraded without "
 "changing the install status of another package will be left at their current "
 "version. An update must be performed first so that apa knows that new "
 "versions of packages are available. Performs automatic updates based on "
-"`auto-update' of the apa config."
+"`auto-update' of the APA config."
 msgstr ""
 
 #: src/data/descriptions.vala:56
 msgid ""
-"Search performs a full text search on all available package lists for the "
-"regex pattern given. It searches the package names and the descriptions for "
-"an occurrence of the regular expression and prints out the package name and "
-"the short description. If --full is given then output identical to show is "
-"produced for each matched package, and if --names-only is given then the "
-"long description is not searched, only the package name is."
+"The `search' command performs a full text search on all available package "
+"lists for the regex pattern given. It searches the package names and the "
+"descriptions for an occurrence of the regular expression and prints out the "
+"package name and the short description. If `--full' is given then output "
+"identical to show is produced for each matched package, and if `--names-"
+"only' is given then the long description is not searched, only the package "
+"name is."
 msgstr ""
 
 #: src/data/descriptions.vala:60
@@ -409,16 +360,17 @@ msgid "Print list of available kernels."
 msgstr ""
 
 #: src/data/descriptions.vala:72
-msgid "A subcommand for working with the apa config."
+msgid "A subcommand for working with the APA config."
 msgstr ""
 
 #: src/data/descriptions.vala:76
 msgid ""
-"Reset config value by it key. You can reset entire config with --all option."
+"Reset config value by it key. You can reset entire config with `--all' "
+"option."
 msgstr ""
 
 #: src/data/descriptions.vala:80
-msgid "List all possible key values."
+msgid "List all possible keys values."
 msgstr ""
 
 #: src/data/descriptions.vala:84
@@ -426,7 +378,7 @@ msgid "Get config value by it key."
 msgstr ""
 
 #: src/data/descriptions.vala:88
-msgid "Set config value."
+msgid "Set config value by pairs ob `key=value'."
 msgstr ""
 
 #: src/data/descriptions.vala:92
@@ -497,7 +449,7 @@ msgstr ""
 #: src/data/descriptions.vala:156
 msgid ""
 "Perform a file search among the packages in the repository. It supports "
-"searching among installed packages using the --local option."
+"searching among installed packages using the `--local' option."
 msgstr ""
 
 #: src/data/descriptions.vala:160
@@ -505,7 +457,7 @@ msgid "Show this help text. Same as `apa --help'."
 msgstr ""
 
 #: src/data/descriptions.vala:164
-msgid "Print apa version. Same as `apa --version'."
+msgid "Print APA version. Same as `apa --version'."
 msgstr ""
 
 #: src/data/descriptions.vala:171
@@ -518,7 +470,7 @@ msgstr ""
 msgid ""
 "The file to store the source cache. The source is used only by gencaches and "
 "it stores a parsed version of the package information from remote sources. "
-"When building the package cache the source cache is used to advoid reparsing "
+"When building the package cache the source cache is used to avoid reparsing "
 "all of the package files."
 msgstr ""
 
@@ -556,17 +508,15 @@ msgid "Reset entire config to defaults values."
 msgstr ""
 
 #: src/data/descriptions.vala:206
-msgid "Run `apa update' automatically before some commands. Type: bool."
+msgid "Run `apa update' automatically before some commands."
 msgstr ""
 
 #: src/data/descriptions.vala:210
-msgid ""
-"Use fuzzy search in case of unsuccessful search via `apa search'. Type: bool."
+msgid "Use fuzzy search in case of unsuccessful install via `apa install'."
 msgstr ""
 
 #: src/data/descriptions.vala:214
-msgid ""
-"Automatically upgrade the kernel when executing an `apa upgrade'. Type: bool."
+msgid "Automatically upgrade the kernel when executing an `apa upgrade'."
 msgstr ""
 
 #: src/data/descriptions.vala:225
@@ -578,7 +528,7 @@ msgid "No-act. Perform ordering simulation."
 msgstr ""
 
 #: src/data/descriptions.vala:233
-msgid "Assume Yes to all queries and do not prompt."
+msgid "Assume `Yes' to all queries and do not prompt."
 msgstr ""
 
 #: src/data/descriptions.vala:237
@@ -645,14 +595,14 @@ msgstr ""
 
 #: src/data/descriptions.vala:314
 msgid ""
-"Which branch of the repository to use for the search. It is ignored if the --"
-"local option is set. By default: 'sisyphus'."
+"Which branch of the repository to use for the search. It is ignored if the "
+"`--local' option is set. By default: `sisyphus'."
 msgstr ""
 
 #: src/data/descriptions.vala:318
 msgid ""
-"In packages for which architecture to look for. It is ignored if the --local "
-"option is set. Used current arch by default."
+"In packages for which architecture to look for. It is ignored if the `--"
+"local' option is set. Used current arch by default."
 msgstr ""
 
 #: src/data/descriptions.vala:325
@@ -684,7 +634,7 @@ msgid "Interactive modules selection."
 msgstr ""
 
 #: src/data/descriptions.vala:368
-msgid "Add debuginfo package to install."
+msgid "Add `-debuginfo' package to install."
 msgstr ""
 
 #: src/data/descriptions.vala:372
@@ -698,7 +648,7 @@ msgstr ""
 #: src/data/descriptions.vala:380
 msgid ""
 "Select desired kernel flavour (def, rt, etc) by default it's the same as the "
-"booted kernel, special name 'latest' selects the newest flavour."
+"booted kernel, special name `latest' selects the newest flavour."
 msgstr ""
 
 #: src/data/descriptions.vala:384
@@ -723,21 +673,21 @@ msgid "Available commands:"
 msgstr ""
 
 #. Translators: %s is 'to install', 'to remove' etc
-#: src/utils.vala:198
+#: src/utils.vala:187
 #, c-format
 msgid "Choose package %s:"
 msgstr ""
 
 #. Translators: IMPORTANT! space symbol in the end
-#: src/utils.vala:215
+#: src/utils.vala:204
 msgid "[0 - exit; -1 - skip] "
 msgstr ""
 
-#: src/utils.vala:275
+#: src/utils.vala:264
 #, c-format
 msgid "You should %s"
 msgstr ""
 
-#: src/utils.vala:283
+#: src/utils.vala:272
 msgid "create issue↗️"
 msgstr ""

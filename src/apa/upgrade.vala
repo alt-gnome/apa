@@ -56,7 +56,7 @@ namespace Apa {
                         return status;
 
                     case OriginErrorType.UNABLE_TO_FETCH_SOME_ARCHIVES:
-                        print_error (_("Unable to fetch some archives. Check your connection to repository. Maybe run `apa update' or try with `--fix-missing' option"));
+                        print_error (_("Unable to fetch some archives. Check your connection to repository. Run `apa update' or try use `--fix-missing' option"));
                         return status;
 
                     case OriginErrorType.NONE:

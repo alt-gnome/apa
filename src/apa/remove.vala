@@ -57,7 +57,7 @@ namespace Apa {
                             return status;
                         }
 
-                        print (_("Package `%s' not found, but packages with a similar name were found:").printf (package_error_source));
+                        print (_("Package `%s' not found, but packages with a similar name were found").printf (package_error_source));
                         string? answer;
                         var result = give_choice (possible_package_names, _("to remove"), out answer);
 
@@ -87,7 +87,7 @@ namespace Apa {
                         return status;
 
                     case OriginErrorType.CONFIGURATION_ITEM_SPECIFICATION_MUST_HAVE_AN_VAL:
-                        print_error (_("Option `-o/--option' value is incorrect. It should look like OptionName=val"));
+                        print_error (_("Option `-o/--option' value is incorrect. It should look like `OptionName=val'"));
                         return status;
 
                     case OriginErrorType.OPEN_CONFIGURATION_FILE_FAILED:
