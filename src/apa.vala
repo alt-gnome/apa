@@ -19,6 +19,11 @@ namespace Apa {
 
     public async int run (owned string[] argv) {
 
+        if ("-v" in argv || "--version" in argv) {
+            print_version ();
+            return ExitCode.SUCCESS;
+        }
+
         string? command = cut_of_command (ref argv);
         string? subcommand = null;
 
@@ -58,11 +63,6 @@ namespace Apa {
 
         if ("-h" in argv || "--help" in argv) {
             Help.print_command_help (command, subcommand);
-            return ExitCode.SUCCESS;
-        }
-
-        if ("-v" in argv || "--version" in argv) {
-            print_version ();
             return ExitCode.SUCCESS;
         }
 
