@@ -51,6 +51,16 @@ namespace Apa.AptGet.Data {
                 "-V",
                 Descriptions.option_version_detailed ()
             },
+            {
+                "-n", "--no-download",
+                "--no-download",
+                Descriptions.option_no_download ()
+            },
+            {
+                "-i", "--ignore-missing",
+                "--ignore-missing",
+                Descriptions.option_ignore_missing ()
+            }
         };
     }
 
