@@ -23,7 +23,7 @@ namespace Apa {
         var error = new Gee.ArrayList<string> ();
         int status;
 
-        if (AptGet.Data.OPTION_WITH_KERNEL_LONG in args_handler.options || AptGet.Data.OPTION_WITH_KERNEL_SHORT in args_handler.options) {
+        if (AptGet.Data.OPTION_WITH_KERNEL_LONG in args_handler.options || AptGet.Data.OPTION_WITH_KERNEL_SHORT in args_handler.options || ConfigManager.get_default ().auto_upgrade_kernel) {
             status = yield Kernel.upgrade (args_handler.copy (), true);
 
             if (status != ExitCode.SUCCESS) {

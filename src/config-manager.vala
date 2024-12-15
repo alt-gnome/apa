@@ -42,6 +42,15 @@ public sealed class Apa.ConfigManager : Object {
         }
     }
 
+    public bool auto_upgrade_kernel {
+        get {
+            return get_boolean (Config.Data.AUTO_UPGRADE_KERNEL);
+        }
+        set {
+            set_boolean (Config.Data.AUTO_UPGRADE_KERNEL, value);
+        }
+    }
+
     File? _editable_config_file = File.new_build_filename (ApaConfig.KEY_DEFAULTS_DIR, "apa.conf");
     File? editable_config_file {
         get {
