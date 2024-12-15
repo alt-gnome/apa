@@ -28,6 +28,10 @@ namespace Apa.Descriptions {
 
 namespace Apa.Commands.Descriptions {
 
+    public inline string moo () {
+        return _("Moo powers of APA.");
+    }
+
     public inline string install () {
         return _("Command to install packages. The following arguments can be passed: a regex pattern of the package name; a file belonging to the package; a task number. Attention: only one task number can be passed, and when it is detected, all other arguments will be ignored. The `apa task' command is recommended for working with tasks.");
     }

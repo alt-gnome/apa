@@ -77,11 +77,15 @@ namespace Apa.Help {
 
         print ("");
         print (_("Available commands:"));
-        foreach (var entry in commands_data) {
+        foreach (var entity in commands_data) {
+            if (entity.name in HIDED_COMMANDS) {
+                continue;
+            }
+
             print ("%s%s - %s".printf (
                 indx (1),
-                bold_text (entry.name),
-                entry.description
+                bold_text (entity.name),
+                entity.description
             ));
         }
     }

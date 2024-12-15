@@ -51,8 +51,20 @@ namespace Apa.Commands.Data {
     public const string CONFIG_GET_SUBCOMMAND = "get";
     public const string CONFIG_SET_SUBCOMMAND = "set";
 
+    public const string[] HIDED_COMMANDS = {
+        MOO_COMMAND,
+        AptGet.SOURCE,
+    };
+
     public CommandEntity[] all_commands () {
         return {
+            new CommandEntity (
+                MOO_COMMAND,
+                Descriptions.moo (),
+                {},
+                {},
+                false, false
+            ),
             new CommandEntity (
                 AptGet.INSTALL,
                 Descriptions.install (),
