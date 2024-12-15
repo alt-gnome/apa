@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: apa\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-15 22:47+0300\n"
+"POT-Creation-Date: 2024-12-15 21:26+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -197,17 +197,17 @@ msgid "Invalid task id `%s'"
 msgstr ""
 
 #. print (command);
-#: src/apa.vala:34
+#: src/apa.vala:39
 #, c-format
 msgid "Unknown command `%s'"
 msgstr ""
 
-#: src/apa.vala:46
+#: src/apa.vala:51
 #, c-format
 msgid "Unknown subcommand `%s' of `%s' command"
 msgstr ""
 
-#: src/apa.vala:55
+#: src/apa.vala:60
 #, c-format
 msgid "No subcommand. Try `apa %s --help'"
 msgstr ""
@@ -293,6 +293,10 @@ msgid ""
 msgstr ""
 
 #: src/data/descriptions.vala:32
+msgid "Moo powers of APA."
+msgstr ""
+
+#: src/data/descriptions.vala:36
 msgid ""
 "Command to install packages. The following arguments can be passed: a regex "
 "pattern of the package name; a file belonging to the package; a task number. "
@@ -301,28 +305,28 @@ msgid ""
 "working with tasks."
 msgstr ""
 
-#: src/data/descriptions.vala:36
+#: src/data/descriptions.vala:40
 msgid "Command to reinstall packages. Same as `apa install --reinstall <..>'."
 msgstr ""
 
-#: src/data/descriptions.vala:40
+#: src/data/descriptions.vala:44
 msgid "Command to remove packages using a regex."
 msgstr ""
 
-#: src/data/descriptions.vala:44
+#: src/data/descriptions.vala:48
 msgid ""
 "Command that combines the installation and removal of packages. The postfix `"
 "+' is used for installation, and for deletion `-'."
 msgstr ""
 
-#: src/data/descriptions.vala:48
+#: src/data/descriptions.vala:52
 msgid ""
 "Need for resynchronize the package index files from their sources. The "
 "indexes of available packages are fetched from the location(s) specified in "
 "`/etc/apt/sources.list'."
 msgstr ""
 
-#: src/data/descriptions.vala:52
+#: src/data/descriptions.vala:56
 msgid ""
 "The `upgrade' command is used to install the newest versions of all packages "
 "currently installed on the system from the sources enumerated in `/etc/apt/"
@@ -336,7 +340,7 @@ msgid ""
 "`auto-update' of the APA config."
 msgstr ""
 
-#: src/data/descriptions.vala:56
+#: src/data/descriptions.vala:60
 msgid ""
 "The `search' command performs a full text search on all available package "
 "lists for the regex pattern given. It searches the package names and the "
@@ -347,126 +351,126 @@ msgid ""
 "name is."
 msgstr ""
 
-#: src/data/descriptions.vala:60
+#: src/data/descriptions.vala:64
 msgid "A subcommand for working with the kernel."
 msgstr ""
 
-#: src/data/descriptions.vala:64
+#: src/data/descriptions.vala:68
 msgid "Upgrade kernel."
 msgstr ""
 
-#: src/data/descriptions.vala:68
+#: src/data/descriptions.vala:72
 msgid "Print list of available kernels."
 msgstr ""
 
-#: src/data/descriptions.vala:72
+#: src/data/descriptions.vala:76
 msgid "A subcommand for working with the APA config."
 msgstr ""
 
-#: src/data/descriptions.vala:76
+#: src/data/descriptions.vala:80
 msgid ""
 "Reset config value by it key. You can reset entire config with `--all' "
 "option."
 msgstr ""
 
-#: src/data/descriptions.vala:80
+#: src/data/descriptions.vala:84
 msgid "List all possible keys values."
 msgstr ""
 
-#: src/data/descriptions.vala:84
+#: src/data/descriptions.vala:88
 msgid "Get config value by it key."
 msgstr ""
 
-#: src/data/descriptions.vala:88
+#: src/data/descriptions.vala:92
 msgid "Set config value by pairs ob `key=value'."
 msgstr ""
 
-#: src/data/descriptions.vala:92
+#: src/data/descriptions.vala:96
 msgid "A subcommand for working with tasks."
 msgstr ""
 
-#: src/data/descriptions.vala:96
+#: src/data/descriptions.vala:100
 msgid "Add task as repository."
 msgstr ""
 
-#: src/data/descriptions.vala:100
+#: src/data/descriptions.vala:104
 msgid "Search task by owner, branch, package name, etc."
 msgstr ""
 
-#: src/data/descriptions.vala:104
+#: src/data/descriptions.vala:108
 msgid "Show task information with state and all subtasks."
 msgstr ""
 
-#: src/data/descriptions.vala:108
+#: src/data/descriptions.vala:112
 msgid ""
 "Install task by task number. You can pass tasks packages names next to task "
 "number."
 msgstr ""
 
-#: src/data/descriptions.vala:112
+#: src/data/descriptions.vala:116
 msgid "List task packages."
 msgstr ""
 
-#: src/data/descriptions.vala:116
+#: src/data/descriptions.vala:120
 msgid "A subcommand for working with repositories."
 msgstr ""
 
-#: src/data/descriptions.vala:120
+#: src/data/descriptions.vala:124
 msgid "Show enabled sources in system."
 msgstr ""
 
-#: src/data/descriptions.vala:124
+#: src/data/descriptions.vala:128
 msgid "Add source to sources list. Sources format described at apt-repo(8)."
 msgstr ""
 
-#: src/data/descriptions.vala:128
+#: src/data/descriptions.vala:132
 msgid "Add Aides Repo to sources list."
 msgstr ""
 
-#: src/data/descriptions.vala:132
+#: src/data/descriptions.vala:136
 msgid "Remove Aides Repo from sources list."
 msgstr ""
 
-#: src/data/descriptions.vala:136
+#: src/data/descriptions.vala:140
 msgid "Remove source from sources list."
 msgstr ""
 
-#: src/data/descriptions.vala:140
+#: src/data/descriptions.vala:144
 msgid ""
 "Remove packages that were automatically installed to satisfy dependencies "
 "for other packages and are now no longer needed. Warning: Use this command "
 "carefully."
 msgstr ""
 
-#: src/data/descriptions.vala:148
+#: src/data/descriptions.vala:152
 msgid "Display a list of installed packages."
 msgstr ""
 
-#: src/data/descriptions.vala:152
+#: src/data/descriptions.vala:156
 msgid "Show information about package."
 msgstr ""
 
-#: src/data/descriptions.vala:156
+#: src/data/descriptions.vala:160
 msgid ""
 "Perform a file search among the packages in the repository. It supports "
 "searching among installed packages using the `--local' option."
 msgstr ""
 
-#: src/data/descriptions.vala:160
+#: src/data/descriptions.vala:164
 msgid "Show this help text. Same as `apa --help'."
 msgstr ""
 
-#: src/data/descriptions.vala:164
+#: src/data/descriptions.vala:168
 msgid "Print APA version. Same as `apa --version'."
 msgstr ""
 
-#: src/data/descriptions.vala:171
+#: src/data/descriptions.vala:175
 msgid ""
 "The file to store the package cache. The package cache is the primary cache "
 "used by all operations."
 msgstr ""
 
-#: src/data/descriptions.vala:175
+#: src/data/descriptions.vala:179
 msgid ""
 "The file to store the source cache. The source is used only by gencaches and "
 "it stores a parsed version of the package information from remote sources. "
@@ -474,27 +478,27 @@ msgid ""
 "all of the package files."
 msgstr ""
 
-#: src/data/descriptions.vala:179
+#: src/data/descriptions.vala:183
 msgid "Do not show the progress bar. Suitable for logs."
 msgstr ""
 
-#: src/data/descriptions.vala:183
+#: src/data/descriptions.vala:187
 msgid ""
 "Print only important dependencies; for use with unmet. Causes only Depends "
 "and Pre-Depends relations to be printed."
 msgstr ""
 
-#: src/data/descriptions.vala:187
+#: src/data/descriptions.vala:191
 msgid "Only search on the package names, not the long descriptions."
 msgstr ""
 
-#: src/data/descriptions.vala:191
+#: src/data/descriptions.vala:195
 msgid ""
 "Set a APT Configuration Option; This will set an arbitrary configuration "
 "option. The syntax is `-o Foo::Bar=bar' or `--option=Foo::Bar=bar'."
 msgstr ""
 
-#: src/data/descriptions.vala:195
+#: src/data/descriptions.vala:199
 msgid ""
 "Path to APT Configuration File; Specify a configuration file to use. The "
 "program will read the default configuration file and then this configuration "
@@ -503,155 +507,176 @@ msgid ""
 "environment variable. See apt.conf(5) for syntax information."
 msgstr ""
 
-#: src/data/descriptions.vala:202
+#: src/data/descriptions.vala:206
 msgid "Reset entire config to defaults values."
 msgstr ""
 
-#: src/data/descriptions.vala:206
+#: src/data/descriptions.vala:210
 msgid "Run `apa update' automatically before some commands."
 msgstr ""
 
-#: src/data/descriptions.vala:210
+#: src/data/descriptions.vala:214
 msgid "Use fuzzy search in case of unsuccessful install via `apa install'."
 msgstr ""
 
-#: src/data/descriptions.vala:214
+#: src/data/descriptions.vala:218
 msgid "Automatically upgrade the kernel when executing an `apa upgrade'."
 msgstr ""
 
-#: src/data/descriptions.vala:225
+#: src/data/descriptions.vala:229
 msgid "Don't print any to stdout."
 msgstr ""
 
-#: src/data/descriptions.vala:229
+#: src/data/descriptions.vala:233
 msgid "No-act. Perform ordering simulation."
 msgstr ""
 
-#: src/data/descriptions.vala:233
+#: src/data/descriptions.vala:237
 msgid "Assume `Yes' to all queries and do not prompt."
 msgstr ""
 
-#: src/data/descriptions.vala:237
+#: src/data/descriptions.vala:241
 msgid "Attempt to continue if the integrity check fails."
 msgstr ""
 
-#: src/data/descriptions.vala:241
+#: src/data/descriptions.vala:245
 msgid "Show verbose version numbers."
 msgstr ""
 
+#: src/data/descriptions.vala:249
+msgid ""
+"Disables  downloading  of packages. This is best used with --ignore-missing "
+"to force APT to use only the .debs it has already downloaded."
+msgstr ""
+
 #: src/data/descriptions.vala:253
-msgid "Download only - do NOT install or unpack archives."
-msgstr ""
-
-#: src/data/descriptions.vala:257
-msgid "Show a list of upgraded packages as well."
-msgstr ""
-
-#: src/data/descriptions.vala:261
-msgid "Also upgrade kernel."
+msgid ""
+"Ignore  missing  packages;  If  packages  cannot be retrieved or fail the "
+"integrity check after retrieval (corrupted package files), hold back those "
+"packages and handle  the  result."
 msgstr ""
 
 #: src/data/descriptions.vala:265
-msgid "When removing packages, remove dependencies as possible."
+msgid "Download only - do NOT install or unpack archives."
 msgstr ""
 
 #: src/data/descriptions.vala:269
-msgid "Reinstall packages."
+msgid "Show a list of upgraded packages as well."
 msgstr ""
 
 #: src/data/descriptions.vala:273
+msgid "Also upgrade kernel."
+msgstr ""
+
+#: src/data/descriptions.vala:277
+msgid "When removing packages, remove dependencies as possible."
+msgstr ""
+
+#: src/data/descriptions.vala:281
+msgid "Reinstall packages."
+msgstr ""
+
+#: src/data/descriptions.vala:285
 msgid "Build the source package after fetching it."
 msgstr ""
 
-#: src/data/descriptions.vala:280
+#: src/data/descriptions.vala:292
 msgid "No-act. Changes only shown, is not performed."
 msgstr ""
 
-#: src/data/descriptions.vala:284
+#: src/data/descriptions.vala:296
 msgid ""
 "Need for the special case when you want to use hasher(7) together with a "
 "local APT configuration."
 msgstr ""
 
-#: src/data/descriptions.vala:288
+#: src/data/descriptions.vala:300
 msgid "List all repositories."
 msgstr ""
 
-#: src/data/descriptions.vala:295
+#: src/data/descriptions.vala:307
 msgid "Print only packages names."
 msgstr ""
 
-#: src/data/descriptions.vala:299
+#: src/data/descriptions.vala:311
+msgid "Sort the output in alphabetical order."
+msgstr ""
+
+#: src/data/descriptions.vala:315
+msgid "Show packages sorted by installation date."
+msgstr ""
+
+#: src/data/descriptions.vala:319
 msgid "Print package files."
 msgstr ""
 
-#: src/data/descriptions.vala:306
+#: src/data/descriptions.vala:326
 msgid "Search among the installed packages."
 msgstr ""
 
-#: src/data/descriptions.vala:310
+#: src/data/descriptions.vala:330
 msgid "To make the print more classic. Also removes the color selection."
 msgstr ""
 
-#: src/data/descriptions.vala:314
+#: src/data/descriptions.vala:334
 msgid ""
 "Which branch of the repository to use for the search. It is ignored if the "
 "`--local' option is set. By default: `sisyphus'."
 msgstr ""
 
-#: src/data/descriptions.vala:318
+#: src/data/descriptions.vala:338
 msgid ""
 "In packages for which architecture to look for. It is ignored if the `--"
 "local' option is set. Used current arch by default."
 msgstr ""
 
-#: src/data/descriptions.vala:325
+#: src/data/descriptions.vala:345
 msgid "Find tasks by source package name."
 msgstr ""
 
-#: src/data/descriptions.vala:329
+#: src/data/descriptions.vala:349
 msgid "Task owner."
 msgstr ""
 
-#: src/data/descriptions.vala:333
+#: src/data/descriptions.vala:353
 msgid "Branch name."
 msgstr ""
 
-#: src/data/descriptions.vala:337
+#: src/data/descriptions.vala:357
 msgid "Task state."
 msgstr ""
 
-#: src/data/descriptions.vala:356
+#: src/data/descriptions.vala:376
 msgid "Add kernel headers to install."
 msgstr ""
 
-#: src/data/descriptions.vala:360
+#: src/data/descriptions.vala:380
 msgid "Select all available kernel modules to install."
 msgstr ""
 
-#: src/data/descriptions.vala:364
+#: src/data/descriptions.vala:384
 msgid "Interactive modules selection."
 msgstr ""
 
-#: src/data/descriptions.vala:368
+#: src/data/descriptions.vala:388
 msgid "Add `-debuginfo' package to install."
 msgstr ""
 
-#: src/data/descriptions.vala:372
+#: src/data/descriptions.vala:392
 msgid "Include (add) external module (by a short name)."
 msgstr ""
 
-#: src/data/descriptions.vala:376
+#: src/data/descriptions.vala:396
 msgid "Exclude (del) external module from install."
 msgstr ""
 
-#: src/data/descriptions.vala:380
+#: src/data/descriptions.vala:400
 msgid ""
 "Select desired kernel flavour (def, rt, etc) by default it's the same as the "
 "booted kernel, special name `latest' selects the newest flavour."
 msgstr ""
 
-#: src/data/descriptions.vala:384
+#: src/data/descriptions.vala:404
 msgid ""
 "Desired kernel release for the current or specified flavour (allowed formats "
 "by example: old format: alt1, 5.7.19-alt1; classic kernel release: 5.7.19-"

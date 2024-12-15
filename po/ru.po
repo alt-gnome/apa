@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: apa\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-15 22:47+0300\n"
+"POT-Creation-Date: 2024-12-15 21:26+0300\n"
 "PO-Revision-Date: 2024-12-15 22:46+0300\n"
 "Last-Translator: David Sultaniiazov <x1z53@alt-gnome.ru>\n"
 "Language-Team: Russian\n"
@@ -211,17 +211,17 @@ msgid "Invalid task id `%s'"
 msgstr "Неверный идентификатор задания `%s'"
 
 #. print (command);
-#: src/apa.vala:34
+#: src/apa.vala:39
 #, c-format
 msgid "Unknown command `%s'"
 msgstr "Неизвестная команда `%s'"
 
-#: src/apa.vala:46
+#: src/apa.vala:51
 #, c-format
 msgid "Unknown subcommand `%s' of `%s' command"
 msgstr "Неизвестная подкоманда `%s' команды `%s'"
 
-#: src/apa.vala:55
+#: src/apa.vala:60
 #, c-format
 msgid "No subcommand. Try `apa %s --help'"
 msgstr "Нет подкоманды. Попробуйте `apa %s --help`"
@@ -309,6 +309,10 @@ msgstr ""
 "инструментов для упаковки."
 
 #: src/data/descriptions.vala:32
+msgid "Moo powers of APA."
+msgstr ""
+
+#: src/data/descriptions.vala:36
 msgid ""
 "Command to install packages. The following arguments can be passed: a regex "
 "pattern of the package name; a file belonging to the package; a task number. "
@@ -322,17 +326,17 @@ msgstr ""
 "если он найдет, другие аргументы будут проигнорированы. Для работы с "
 "заданиями рекомендуется команда `apa task'."
 
-#: src/data/descriptions.vala:36
+#: src/data/descriptions.vala:40
 msgid "Command to reinstall packages. Same as `apa install --reinstall <..>'."
 msgstr ""
 "Команда для переустановки пакетов. То же, что и `apa install --reinstall <.."
 ">'."
 
-#: src/data/descriptions.vala:40
+#: src/data/descriptions.vala:44
 msgid "Command to remove packages using a regex."
 msgstr "Команда для удаления пакетов с использованием регулярных выражений."
 
-#: src/data/descriptions.vala:44
+#: src/data/descriptions.vala:48
 msgid ""
 "Command that combines the installation and removal of packages. The postfix `"
 "+' is used for installation, and for deletion `-'."
@@ -340,7 +344,7 @@ msgstr ""
 "Команда, совмещающая установку и удаление пакетов. Постфикс `+' используется "
 "для установки, `-' — для удаления"
 
-#: src/data/descriptions.vala:48
+#: src/data/descriptions.vala:52
 msgid ""
 "Need for resynchronize the package index files from their sources. The "
 "indexes of available packages are fetched from the location(s) specified in "
@@ -350,7 +354,7 @@ msgstr ""
 "источниковв. Индексы доступных пакетов собираются из источника(ов), "
 "занесённых в `/etc/apt/sources.list'."
 
-#: src/data/descriptions.vala:52
+#: src/data/descriptions.vala:56
 msgid ""
 "The `upgrade' command is used to install the newest versions of all packages "
 "currently installed on the system from the sources enumerated in `/etc/apt/"
@@ -375,7 +379,7 @@ msgstr ""
 "пакетов. Выполняет автоматические обновления на основе `auto-update' "
 "конфигурации APA."
 
-#: src/data/descriptions.vala:56
+#: src/data/descriptions.vala:60
 msgid ""
 "The `search' command performs a full text search on all available package "
 "lists for the regex pattern given. It searches the package names and the "
@@ -393,23 +397,23 @@ msgstr ""
 "показанному, а если задано значение `--names-only', то поиск по длинному "
 "описанию не выполняется, выполняется только поиск по названию пакета."
 
-#: src/data/descriptions.vala:60
+#: src/data/descriptions.vala:64
 msgid "A subcommand for working with the kernel."
 msgstr "Подкоманда для работы с ядром."
 
-#: src/data/descriptions.vala:64
+#: src/data/descriptions.vala:68
 msgid "Upgrade kernel."
 msgstr "Обновление ядра."
 
-#: src/data/descriptions.vala:68
+#: src/data/descriptions.vala:72
 msgid "Print list of available kernels."
 msgstr "Показать список доступных ядер."
 
-#: src/data/descriptions.vala:72
+#: src/data/descriptions.vala:76
 msgid "A subcommand for working with the APA config."
 msgstr "Подкоманда для работы с конфигурацией APA."
 
-#: src/data/descriptions.vala:76
+#: src/data/descriptions.vala:80
 msgid ""
 "Reset config value by it key. You can reset entire config with `--all' "
 "option."
@@ -417,35 +421,35 @@ msgstr ""
 "Сбросить значение конфигурации по ключу. Для полного сброса конфигурации "
 "используйте опцию `--all'."
 
-#: src/data/descriptions.vala:80
+#: src/data/descriptions.vala:84
 msgid "List all possible keys values."
 msgstr "Список доступных ключей."
 
-#: src/data/descriptions.vala:84
+#: src/data/descriptions.vala:88
 msgid "Get config value by it key."
 msgstr "Получить конфигурационное значение по ключу."
 
-#: src/data/descriptions.vala:88
+#: src/data/descriptions.vala:92
 msgid "Set config value by pairs ob `key=value'."
 msgstr "Установить конфигурационное значение из пар `ключ=значение'."
 
-#: src/data/descriptions.vala:92
+#: src/data/descriptions.vala:96
 msgid "A subcommand for working with tasks."
 msgstr "Подкоманда для работы с заданиями."
 
-#: src/data/descriptions.vala:96
+#: src/data/descriptions.vala:100
 msgid "Add task as repository."
 msgstr "Добавить задание как репозиторий."
 
-#: src/data/descriptions.vala:100
+#: src/data/descriptions.vala:104
 msgid "Search task by owner, branch, package name, etc."
 msgstr "Поиск задания по владельцу, ветке, имени пакета и другому."
 
-#: src/data/descriptions.vala:104
+#: src/data/descriptions.vala:108
 msgid "Show task information with state and all subtasks."
 msgstr "Показать информацию о заданию с состоянием всех подзаданий."
 
-#: src/data/descriptions.vala:108
+#: src/data/descriptions.vala:112
 msgid ""
 "Install task by task number. You can pass tasks packages names next to task "
 "number."
@@ -453,37 +457,37 @@ msgstr ""
 "Устанавливайте задания по номеру. Вы можете указать названия пакетов вместе "
 "с номером."
 
-#: src/data/descriptions.vala:112
+#: src/data/descriptions.vala:116
 msgid "List task packages."
 msgstr "Список пакетов в задании"
 
-#: src/data/descriptions.vala:116
+#: src/data/descriptions.vala:120
 msgid "A subcommand for working with repositories."
 msgstr "Подкоманда для работы с репозиториями"
 
-#: src/data/descriptions.vala:120
+#: src/data/descriptions.vala:124
 msgid "Show enabled sources in system."
 msgstr "Показать включённые в системе источники."
 
-#: src/data/descriptions.vala:124
+#: src/data/descriptions.vala:128
 msgid "Add source to sources list. Sources format described at apt-repo(8)."
 msgstr ""
 "Добавить источник в список источников. Формат источников описан в apt-"
 "repo(8)."
 
-#: src/data/descriptions.vala:128
+#: src/data/descriptions.vala:132
 msgid "Add Aides Repo to sources list."
 msgstr "Добавить репозиторий Аид в список источников"
 
-#: src/data/descriptions.vala:132
+#: src/data/descriptions.vala:136
 msgid "Remove Aides Repo from sources list."
 msgstr "Удалить репозиторий Аид из списка источников"
 
-#: src/data/descriptions.vala:136
+#: src/data/descriptions.vala:140
 msgid "Remove source from sources list."
 msgstr "Удалить источник из списка источников"
 
-#: src/data/descriptions.vala:140
+#: src/data/descriptions.vala:144
 msgid ""
 "Remove packages that were automatically installed to satisfy dependencies "
 "for other packages and are now no longer needed. Warning: Use this command "
@@ -493,15 +497,15 @@ msgstr ""
 "зависимостей других пакетов и которые теперь больше не нужны. Внимание: "
 "используйте эту команду осторожно."
 
-#: src/data/descriptions.vala:148
+#: src/data/descriptions.vala:152
 msgid "Display a list of installed packages."
 msgstr "Показать список установленных пакетов"
 
-#: src/data/descriptions.vala:152
+#: src/data/descriptions.vala:156
 msgid "Show information about package."
 msgstr "Показать информацию о пакете"
 
-#: src/data/descriptions.vala:156
+#: src/data/descriptions.vala:160
 msgid ""
 "Perform a file search among the packages in the repository. It supports "
 "searching among installed packages using the `--local' option."
@@ -509,15 +513,15 @@ msgstr ""
 "Поиск файлов среди пакетов в репозитории. Поддерживается поиск среди "
 "установленных пакетов с использованием опции\t\t\t\t `--local'."
 
-#: src/data/descriptions.vala:160
+#: src/data/descriptions.vala:164
 msgid "Show this help text. Same as `apa --help'."
 msgstr "Отобразить текст данной справки. То же, что и `apa --help'."
 
-#: src/data/descriptions.vala:164
+#: src/data/descriptions.vala:168
 msgid "Print APA version. Same as `apa --version'."
 msgstr "Отобразить версию APA. То же, что и `apa --version'."
 
-#: src/data/descriptions.vala:171
+#: src/data/descriptions.vala:175
 msgid ""
 "The file to store the package cache. The package cache is the primary cache "
 "used by all operations."
@@ -525,7 +529,7 @@ msgstr ""
 "Файл для хранения кэша пакетов. Кэш пакетов является основным кэшем, "
 "используемым во всех операциях."
 
-#: src/data/descriptions.vala:175
+#: src/data/descriptions.vala:179
 msgid ""
 "The file to store the source cache. The source is used only by gencaches and "
 "it stores a parsed version of the package information from remote sources. "
@@ -537,11 +541,11 @@ msgstr ""
 "При создании кэша пакетов используется исходный кэш, чтобы избежать "
 "повторной обработки всех файлов пакета."
 
-#: src/data/descriptions.vala:179
+#: src/data/descriptions.vala:183
 msgid "Do not show the progress bar. Suitable for logs."
 msgstr "Не отображать индикатор выполнения. Подходит для журналов."
 
-#: src/data/descriptions.vala:183
+#: src/data/descriptions.vala:187
 msgid ""
 "Print only important dependencies; for use with unmet. Causes only Depends "
 "and Pre-Depends relations to be printed."
@@ -549,11 +553,11 @@ msgstr ""
 "Показать только важные зависимости; для использования с unmet. Выводит "
 "только зависимые и предзависимые отношения."
 
-#: src/data/descriptions.vala:187
+#: src/data/descriptions.vala:191
 msgid "Only search on the package names, not the long descriptions."
 msgstr "Поиск только по названиям пакетов, а не по длинным описаниям."
 
-#: src/data/descriptions.vala:191
+#: src/data/descriptions.vala:195
 msgid ""
 "Set a APT Configuration Option; This will set an arbitrary configuration "
 "option. The syntax is `-o Foo::Bar=bar' or `--option=Foo::Bar=bar'."
@@ -562,7 +566,7 @@ msgstr ""
 "параметр конфигурации. Синтаксис: `-o Foo::Bar=bar' или `--option=Foo::"
 "Bar=bar'."
 
-#: src/data/descriptions.vala:195
+#: src/data/descriptions.vala:199
 msgid ""
 "Path to APT Configuration File; Specify a configuration file to use. The "
 "program will read the default configuration file and then this configuration "
@@ -576,72 +580,85 @@ msgstr ""
 "необходимо задать параметры конфигурации, укажите файл с переменной среды "
 "APT_CONFIG. Смотрите apt.conf(5) для получения информации о синтаксисе."
 
-#: src/data/descriptions.vala:202
+#: src/data/descriptions.vala:206
 msgid "Reset entire config to defaults values."
 msgstr "Сбросить всю конфигурацию до значений по умолчанию."
 
-#: src/data/descriptions.vala:206
+#: src/data/descriptions.vala:210
 msgid "Run `apa update' automatically before some commands."
 msgstr "Запуск `apa update' автоматически перед некоторыми командами."
 
-#: src/data/descriptions.vala:210
+#: src/data/descriptions.vala:214
 msgid "Use fuzzy search in case of unsuccessful install via `apa install'."
 msgstr ""
 "Использовать нечёткий поиск в случае неудачной установки через `apa install'."
 
-#: src/data/descriptions.vala:214
+#: src/data/descriptions.vala:218
 msgid "Automatically upgrade the kernel when executing an `apa upgrade'."
 msgstr "Автоматически обновлять ядро, когда запускается `apa upgrade'."
 
-#: src/data/descriptions.vala:225
+#: src/data/descriptions.vala:229
 msgid "Don't print any to stdout."
 msgstr "Ничего не выводить в стандартный вывод."
 
-#: src/data/descriptions.vala:229
+#: src/data/descriptions.vala:233
 msgid "No-act. Perform ordering simulation."
 msgstr "Ничего не делать. Сымитировать действия."
 
-#: src/data/descriptions.vala:233
+#: src/data/descriptions.vala:237
 msgid "Assume `Yes' to all queries and do not prompt."
 msgstr "Ответить `Да' на все запросы и не спрашивать."
 
-#: src/data/descriptions.vala:237
+#: src/data/descriptions.vala:241
 msgid "Attempt to continue if the integrity check fails."
 msgstr "Попытаться продолжить, если проверка целостности завершится неудачей."
 
-#: src/data/descriptions.vala:241
+#: src/data/descriptions.vala:245
 msgid "Show verbose version numbers."
 msgstr "Показывать подробные номера версий."
 
+#: src/data/descriptions.vala:249
+msgid ""
+"Disables  downloading  of packages. This is best used with --ignore-missing "
+"to force APT to use only the .debs it has already downloaded."
+msgstr ""
+
 #: src/data/descriptions.vala:253
+msgid ""
+"Ignore  missing  packages;  If  packages  cannot be retrieved or fail the "
+"integrity check after retrieval (corrupted package files), hold back those "
+"packages and handle  the  result."
+msgstr ""
+
+#: src/data/descriptions.vala:265
 msgid "Download only - do NOT install or unpack archives."
 msgstr "Только для скачивания — НЕ устанавливать или распаковывать архивы."
 
-#: src/data/descriptions.vala:257
+#: src/data/descriptions.vala:269
 msgid "Show a list of upgraded packages as well."
 msgstr "Также отобразить список обновлённых пакетов."
 
-#: src/data/descriptions.vala:261
+#: src/data/descriptions.vala:273
 msgid "Also upgrade kernel."
 msgstr "Также обновить ядро."
 
-#: src/data/descriptions.vala:265
+#: src/data/descriptions.vala:277
 msgid "When removing packages, remove dependencies as possible."
 msgstr "При удалении пакетов, по возможности удалить зависимости"
 
-#: src/data/descriptions.vala:269
+#: src/data/descriptions.vala:281
 msgid "Reinstall packages."
 msgstr "Переустановить пакеты."
 
-#: src/data/descriptions.vala:273
+#: src/data/descriptions.vala:285
 msgid "Build the source package after fetching it."
 msgstr "Построить исходный пакет после его извлечения."
 
-#: src/data/descriptions.vala:280
+#: src/data/descriptions.vala:292
 msgid "No-act. Changes only shown, is not performed."
 msgstr "Ничего не делать. Изменения только отображаются, не приминяются."
 
-#: src/data/descriptions.vala:284
+#: src/data/descriptions.vala:296
 msgid ""
 "Need for the special case when you want to use hasher(7) together with a "
 "local APT configuration."
@@ -649,27 +666,35 @@ msgstr ""
 "Необходимо для особых случаев, когда вы хотите использовать hasher(7) вместе "
 "с локальной конфигурацией APT."
 
-#: src/data/descriptions.vala:288
+#: src/data/descriptions.vala:300
 msgid "List all repositories."
 msgstr "Список всех репозиториев."
 
-#: src/data/descriptions.vala:295
+#: src/data/descriptions.vala:307
 msgid "Print only packages names."
 msgstr "Показать только имена пакетов."
 
-#: src/data/descriptions.vala:299
+#: src/data/descriptions.vala:311
+msgid "Sort the output in alphabetical order."
+msgstr ""
+
+#: src/data/descriptions.vala:315
+msgid "Show packages sorted by installation date."
+msgstr ""
+
+#: src/data/descriptions.vala:319
 msgid "Print package files."
 msgstr "Показать файлы пакета."
 
-#: src/data/descriptions.vala:306
+#: src/data/descriptions.vala:326
 msgid "Search among the installed packages."
 msgstr "Искать среди установленных пакетов."
 
-#: src/data/descriptions.vala:310
+#: src/data/descriptions.vala:330
 msgid "To make the print more classic. Also removes the color selection."
 msgstr "Чтобы сделать вывод более классическим. Также убирается выбор цвета."
 
-#: src/data/descriptions.vala:314
+#: src/data/descriptions.vala:334
 msgid ""
 "Which branch of the repository to use for the search. It is ignored if the "
 "`--local' option is set. By default: `sisyphus'."
@@ -677,7 +702,7 @@ msgstr ""
 "Выбор ветки репозитория для поиска. Игнорируется, если установлен параметр "
 "`--local'. По умолчанию: `sisyphus'."
 
-#: src/data/descriptions.vala:318
+#: src/data/descriptions.vala:338
 msgid ""
 "In packages for which architecture to look for. It is ignored if the `--"
 "local' option is set. Used current arch by default."
@@ -685,47 +710,47 @@ msgstr ""
 "Для пакетов, у которых нужно указать архитектуру. Игнорируется, если "
 "установлен параметр `--local'. По умолчанию используется текущая архитектура."
 
-#: src/data/descriptions.vala:325
+#: src/data/descriptions.vala:345
 msgid "Find tasks by source package name."
 msgstr "Найти задания по названию исходного пакета."
 
-#: src/data/descriptions.vala:329
+#: src/data/descriptions.vala:349
 msgid "Task owner."
 msgstr "Владелец задания."
 
-#: src/data/descriptions.vala:333
+#: src/data/descriptions.vala:353
 msgid "Branch name."
 msgstr "Имя ветки."
 
-#: src/data/descriptions.vala:337
+#: src/data/descriptions.vala:357
 msgid "Task state."
 msgstr "Состояние задания."
 
-#: src/data/descriptions.vala:356
+#: src/data/descriptions.vala:376
 msgid "Add kernel headers to install."
 msgstr "Добавить заголовки ядра при установке."
 
-#: src/data/descriptions.vala:360
+#: src/data/descriptions.vala:380
 msgid "Select all available kernel modules to install."
 msgstr "Выбрать все доступные модули ядра при установке."
 
-#: src/data/descriptions.vala:364
+#: src/data/descriptions.vala:384
 msgid "Interactive modules selection."
 msgstr "Интерактивный выбор модулей."
 
-#: src/data/descriptions.vala:368
+#: src/data/descriptions.vala:388
 msgid "Add `-debuginfo' package to install."
 msgstr "Добавить `-debuginfo' пакет при установке."
 
-#: src/data/descriptions.vala:372
+#: src/data/descriptions.vala:392
 msgid "Include (add) external module (by a short name)."
 msgstr "Включить (добавить) внешний модуль (с кратким названием)."
 
-#: src/data/descriptions.vala:376
+#: src/data/descriptions.vala:396
 msgid "Exclude (del) external module from install."
 msgstr "Исключить (удалить) внешний модуль из установки."
 
-#: src/data/descriptions.vala:380
+#: src/data/descriptions.vala:400
 msgid ""
 "Select desired kernel flavour (def, rt, etc) by default it's the same as the "
 "booted kernel, special name `latest' selects the newest flavour."
@@ -734,7 +759,7 @@ msgstr ""
 "загруженным ядром, специальное название `latest' выбирает самый новый "
 "вариант."
 
-#: src/data/descriptions.vala:384
+#: src/data/descriptions.vala:404
 msgid ""
 "Desired kernel release for the current or specified flavour (allowed formats "
 "by example: old format: alt1, 5.7.19-alt1; classic kernel release: 5.7.19-"
