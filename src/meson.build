@@ -19,7 +19,7 @@ apa_no_main_code_sources = files (
 
   'apa/task/task-add.vala',
   'apa/task/task-install.vala',
-  'apa/task/task-list.vala',
+  'apa/task/task-list-packages.vala',
   'apa/task/task-search.vala',
   'apa/task/task-show.vala',
 

@@ -112,7 +112,7 @@ namespace Apa.Commands.Descriptions {
         return _("Install task by task number. You can pass tasks packages names next to task number.");
     }
 
-    public inline string task_list () {
+    public inline string task_list_packages () {
         return _("List task packages.");
     }
 

@@ -38,7 +38,7 @@ namespace Apa.Commands.Data {
     public const string TASK_SEARCH_SUBCOMMAND = "search";
     public const string TASK_SHOW_SUBCOMMAND = "show";
     public const string TASK_INSTALL_SUBCOMMAND = "install";
-    public const string TASK_LIST_SUBCOMMAND = "list";
+    public const string TASK_LIST_PACKAGES_SUBCOMMAND = "list-packages";
 
     public const string REPO_LIST_SUBCOMMAND = "list";
     public const string REPO_ADD_SUBCOMMAND = "add";
@@ -269,8 +269,8 @@ namespace Apa.Commands.Data {
                 true, true
             ),
             new CommandEntity (
-                TASK_LIST_SUBCOMMAND,
-                Descriptions.task_list (),
+                TASK_LIST_PACKAGES_SUBCOMMAND,
+                Descriptions.task_list_packages (),
                 AptRepo.Data.list_options (),
                 AptRepo.Data.list_arg_options (),
                 false, false

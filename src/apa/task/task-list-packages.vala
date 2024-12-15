@@ -18,7 +18,7 @@
  */
 
 namespace Apa.Task {
-    public async int list (
+    public async int list_packages (
         owned ArgsHandler args_handler,
         bool skip_unknown_options = false
     ) throws CommandError, OptionsError {

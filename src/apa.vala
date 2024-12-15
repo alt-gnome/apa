@@ -106,8 +106,8 @@ namespace Apa {
                         case Commands.Data.TASK_INSTALL_SUBCOMMAND:
                             return yield Task.install (args_handler);
 
-                        case Commands.Data.TASK_LIST_SUBCOMMAND:
-                            return yield Task.list (args_handler);
+                        case Commands.Data.TASK_LIST_PACKAGES_SUBCOMMAND:
+                            return yield Task.list_packages (args_handler);
 
                         default:
                             assert_not_reached ();
