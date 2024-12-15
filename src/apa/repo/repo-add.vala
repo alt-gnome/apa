@@ -24,7 +24,7 @@ namespace Apa.Repo {
     ) throws CommandError, OptionsError {
         var error = new Gee.ArrayList<string> ();
 
-        args_handler.check_args_size (4);
+        args_handler.check_args_size (null);
 
         while (true) {
             error.clear ();

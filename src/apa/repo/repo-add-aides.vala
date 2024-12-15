@@ -17,19 +17,38 @@
 
 namespace Apa.Repo {
 
-    const string AIDES_REPO_URL = "\"rpm http://ftp.aides.space repo/Sisyphus/x86_64 aides\"";
+    public string get_aides_repo_source (bool noarch) {
+        return "";
+    }
 
     public async int add_aides (
         owned ArgsHandler args_handler,
         bool skip_unknown_options = false
     ) throws CommandError, OptionsError {
-        return yield Repo.add (
+        int status = ExitCode.SUCCESS;
+
+        status = yield Repo.add (
             new ArgsHandler.with_data (
                 args_handler.options.to_array (),
                 args_handler.arg_options.to_array (),
-                { AIDES_REPO_URL }
+                { get_aides_repo_source (false) }
             ),
             skip_unknown_options
         );
+
+        if (status != ExitCode.SUCCESS) {
+            return status;
+        }
+
+        status = yield Repo.add (
+            new ArgsHandler.with_data (
+                args_handler.options.to_array (),
+                args_handler.arg_options.to_array (),
+                { get_aides_repo_source (true) }
+            ),
+            skip_unknown_options
+        );
+
+        return status;
     }
 }

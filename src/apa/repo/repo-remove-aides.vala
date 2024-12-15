@@ -21,13 +21,30 @@ namespace Apa.Repo {
         owned ArgsHandler args_handler,
         bool skip_unknown_options = false
     ) throws CommandError, OptionsError {
-        return yield Repo.remove (
+        int status = ExitCode.SUCCESS;
+
+        status = yield Repo.remove (
             new ArgsHandler.with_data (
                 args_handler.options.to_array (),
                 args_handler.arg_options.to_array (),
-                { AIDES_REPO_URL }
+                { get_aides_repo_source (false) }
             ),
             skip_unknown_options
         );
+
+        if (status != ExitCode.SUCCESS) {
+            return status;
+        }
+
+        status = yield Repo.remove (
+            new ArgsHandler.with_data (
+                args_handler.options.to_array (),
+                args_handler.arg_options.to_array (),
+                { get_aides_repo_source (true) }
+            ),
+            skip_unknown_options
+        );
+
+        return status;
     }
 }
