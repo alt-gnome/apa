@@ -1,19 +1,19 @@
 /*
  * Copyright (C) 2024 Vladimir Vaskov
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
- * 
+ *
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
@@ -37,11 +37,11 @@ namespace Apa.Commands.Descriptions {
     }
 
     public inline string reinstall () {
-        return _("Command to reinstall packages. Same as 'apa install --reinstall <..>'.");
+        return _("Command to reinstall packages. Same as `apa install --reinstall <..>'.");
     }
 
     public inline string remove () {
-        return _("Command to remove packages using a regex expression.");
+        return _("Command to remove packages using a regex.");
     }
 
     public inline string @do () {
@@ -49,15 +49,15 @@ namespace Apa.Commands.Descriptions {
     }
 
     public inline string update () {
-        return _("Need for resynchronize the package index files from their sources. The indexes of available packages are fetched from the location(s) specified in /etc/apt/sources.list.");
+        return _("Need for resynchronize the package index files from their sources. The indexes of available packages are fetched from the location(s) specified in `/etc/apt/sources.list'.");
     }
 
     public inline string upgrade () {
-        return _("Upgrade is used to install the newest versions of all packages currently installed on the system from the sources enumerated in /etc/apt/sources.list. Packages currently installed with new versions available are retrieved and upgraded; under no circumstances are currently installed packages removed, or packages not already installed retrieved and installed. New versions of currently installed packages that cannot be upgraded without changing the install status of another package will be left at their current version. An update must be performed first so that apa knows that new versions of packages are available. Performs automatic updates based on `auto-update' of the apa config.");
+        return _("The `upgrade' command is used to install the newest versions of all packages currently installed on the system from the sources enumerated in `/etc/apt/sources.list'. Packages currently installed with new versions available are retrieved and upgraded; under no circumstances are currently installed packages removed, or packages not already installed retrieved and installed. New versions of currently installed packages that cannot be upgraded without changing the install status of another package will be left at their current version. An update must be performed first so that apa knows that new versions of packages are available. Performs automatic updates based on `auto-update' of the APA config.");
     }
 
     public inline string search () {
-        return _("Search performs a full text search on all available package lists for the regex pattern given. It searches the package names and the descriptions for an occurrence of the regular expression and prints out the package name and the short description. If --full is given then output identical to show is produced for each matched package, and if --names-only is given then the long description is not searched, only the package name is.");
+        return _("The `search' command performs a full text search on all available package lists for the regex pattern given. It searches the package names and the descriptions for an occurrence of the regular expression and prints out the package name and the short description. If `--full' is given then output identical to show is produced for each matched package, and if `--names-only' is given then the long description is not searched, only the package name is.");
     }
 
     public inline string kernel () {
@@ -73,11 +73,11 @@ namespace Apa.Commands.Descriptions {
     }
 
     public inline string config () {
-        return _("A subcommand for working with the apa config.");
+        return _("A subcommand for working with the APA config.");
     }
 
     public inline string config_reset () {
-        return _("Reset config value by it key. You can reset entire config with --all option.");
+        return _("Reset config value by it key. You can reset entire config with `--all' option.");
     }
 
     public inline string config_list () {
@@ -89,7 +89,7 @@ namespace Apa.Commands.Descriptions {
     }
 
     public inline string config_set () {
-        return _("Set config value by pairs ob key=value.");
+        return _("Set config value by pairs ob `key=value'.");
     }
 
     public inline string task () {
@@ -157,7 +157,7 @@ namespace Apa.Commands.Descriptions {
     }
 
     public inline string search_file () {
-        return _("Perform a file search among the packages in the repository. It supports searching among installed packages using the --local option.");
+        return _("Perform a file search among the packages in the repository. It supports searching among installed packages using the `--local' option.");
     }
 
     public inline string help () {
@@ -165,7 +165,7 @@ namespace Apa.Commands.Descriptions {
     }
 
     public inline string version () {
-        return _("Print apa version. Same as `apa --version'.");
+        return _("Print APA version. Same as `apa --version'.");
     }
 }
 
@@ -176,7 +176,7 @@ namespace Apa.AptCache.Descriptions {
     }
 
     public inline string option_source_cache () {
-        return _("The file to store the source cache. The source is used only by gencaches and it stores a parsed version of the package information from remote sources. When building the package cache the source cache is used to advoid reparsing all of the package files.");
+        return _("The file to store the source cache. The source is used only by gencaches and it stores a parsed version of the package information from remote sources. When building the package cache the source cache is used to avoid reparsing all of the package files.");
     }
 
     public inline string option_hide_progress () {
@@ -234,7 +234,7 @@ namespace Apa.AptGet.Descriptions {
     }
 
     public inline string option_yes () {
-        return _("Assume Yes to all queries and do not prompt.");
+        return _("Assume `Yes' to all queries and do not prompt.");
     }
 
     public inline string option_fix () {
@@ -331,11 +331,11 @@ namespace Apa.SearchFile.Descriptions {
     }
 
     public inline string arg_option_branch () {
-        return _("Which branch of the repository to use for the search. It is ignored if the --local option is set. By default: 'sisyphus'.");
+        return _("Which branch of the repository to use for the search. It is ignored if the `--local' option is set. By default: `sisyphus'.");
     }
 
     public inline string arg_option_arch () {
-        return _("In packages for which architecture to look for. It is ignored if the --local option is set. Used current arch by default.");
+        return _("In packages for which architecture to look for. It is ignored if the `--local' option is set. Used current arch by default.");
     }
 }
 
@@ -385,7 +385,7 @@ namespace Apa.UpdateKernel.Descriptions {
     }
 
     public inline string option_debuginfo () {
-        return _("Add debuginfo package to install.");
+        return _("Add `-debuginfo' package to install.");
     }
 
     public inline string arg_option_add_module () {
@@ -397,7 +397,7 @@ namespace Apa.UpdateKernel.Descriptions {
     }
 
     public inline string arg_option_type () {
-        return _("Select desired kernel flavour (def, rt, etc) by default it's the same as the booted kernel, special name 'latest' selects the newest flavour.");
+        return _("Select desired kernel flavour (def, rt, etc) by default it's the same as the booted kernel, special name `latest' selects the newest flavour.");
     }
 
     public inline string arg_option_release () {
