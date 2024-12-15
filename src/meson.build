@@ -3,25 +3,25 @@ vapi_sources = files(
 )
 
 apa_no_main_code_sources = files (
-  'apa/config/get.vala',
-  'apa/config/list.vala',
-  'apa/config/reset.vala',
-  'apa/config/set.vala',
+  'apa/config/config-get.vala',
+  'apa/config/config-list.vala',
+  'apa/config/config-reset.vala',
+  'apa/config/config-set.vala',
 
-  'apa/kernel/list.vala',
-  'apa/kernel/upgrade.vala',
+  'apa/kernel/kernel-list.vala',
+  'apa/kernel/kernel-upgrade.vala',
 
-  'apa/repo/add-aides.vala',
-  'apa/repo/add.vala',
-  'apa/repo/list.vala',
-  'apa/repo/remove-aides.vala',
-  'apa/repo/remove.vala',
+  'apa/repo/repo-add-aides.vala',
+  'apa/repo/repo-add.vala',
+  'apa/repo/repo-list.vala',
+  'apa/repo/repo-remove-aides.vala',
+  'apa/repo/repo-remove.vala',
 
-  'apa/task/add.vala',
-  'apa/task/install.vala',
-  'apa/task/list.vala',
-  'apa/task/search.vala',
-  'apa/task/show.vala',
+  'apa/task/task-add.vala',
+  'apa/task/task-install.vala',
+  'apa/task/task-list.vala',
+  'apa/task/task-search.vala',
+  'apa/task/task-show.vala',
 
   'apa/autoremove.vala',
   'apa/do.vala',
@@ -37,9 +37,9 @@ apa_no_main_code_sources = files (
   'apa/update.vala',
   'apa/upgrade.vala',
 
-  'apt/cache.vala',
-  'apt/get.vala',
-  'apt/repo.vala',
+  'apt/apt-cache.vala',
+  'apt/apt-get.vala',
+  'apt/apt-repo.vala',
 
   'data/cache-data.vala',
   'data/commands-data.vala',

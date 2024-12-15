@@ -52,7 +52,7 @@ namespace Apa.SearchFile.Data {
                 Descriptions.arg_option_branch ()
             },
             {
-                OPTION_BRANCH_SHORT, OPTION_BRANCH_LONG,
+                OPTION_ARCH_SHORT, OPTION_ARCH_LONG,
                 null,
                 Descriptions.arg_option_arch ()
             },

@@ -62,7 +62,7 @@
                     Descriptions.option_interactive ()
                 },
                 {
-                    "-d", "--debuginfo",
+                    "-di", "--debuginfo",
                     "--debuginfo",
                     Descriptions.option_debuginfo ()
                 }
