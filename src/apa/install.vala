@@ -229,7 +229,7 @@ namespace Apa {
                         throw new CommandError.COMMON (_("Option `-c/--config' value is incorrect"));
 
                     case OriginErrorType.VERSION_NOT_FOUND:
-                        throw new CommandError.COMMON (error_message[0:error_message.length - 1]);
+                        throw new CommandError.COMMON (error_message);
 
                     case OriginErrorType.BROKEN_PACKAGES:
                         throw new CommandError.COMMON (_("Broken packages. Running `apa update' can help you"));
