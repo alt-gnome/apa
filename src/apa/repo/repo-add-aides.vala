@@ -18,7 +18,7 @@
 namespace Apa.Repo {
 
     public string get_aides_repo_source (bool noarch) {
-        return "";
+        return "rpm http://ftp.aides.space/repo/Sisyphus %s aides".printf (noarch ? "noarch" : get_arch ());
     }
 
     public async int add_aides (
