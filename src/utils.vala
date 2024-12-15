@@ -61,18 +61,6 @@ namespace Apa {
         return null;
     }
 
-    public Type detect_type (string str) {
-        if (bool.try_parse (str, null)) {
-            return Type.BOOLEAN;
-
-        } else if (int.try_parse (str, null)) {
-            return Type.INT;
-
-        } else {
-            return Type.STRING;
-        }
-    }
-
     public string? cut_of_command (ref string[] argv) {
         string? command = peek_command (ref argv);
 

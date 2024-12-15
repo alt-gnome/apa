@@ -22,6 +22,7 @@ public struct Apa.ConfigEntity {
     public string name;
     public string description;
     public string possible_values_pattern;
+    public string default_value;
 
     public static ConfigEntity? find (ConfigEntity[] config_entities, string name) {
         foreach (var config_entity in config_entities) {

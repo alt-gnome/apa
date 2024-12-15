@@ -98,9 +98,9 @@ namespace Apa.Config.Data {
 
     public ConfigEntity[] possible_config_keys () {
         return {
-            { AUTO_UPDATE, Descriptions.config_auto_update (), "(true|false)" },
-            { USE_FUZZY_SEARCH, Descriptions.config_use_fuzzy_search (), "(true|false)" },
-            { AUTO_UPGRADE_KERNEL, Descriptions.config_auto_upgrade_kernel (), "(true|false)" },
+            { AUTO_UPDATE, Descriptions.config_auto_update (), "([Tt][Rr][Uu][Ee]|[Ff][Aa][Ll][Ss][Ee])", "true" },
+            { USE_FUZZY_SEARCH, Descriptions.config_use_fuzzy_search (), "([Tt][Rr][Uu][Ee]|[Ff][Aa][Ll][Ss][Ee])", "true" },
+            { AUTO_UPGRADE_KERNEL, Descriptions.config_auto_upgrade_kernel (), "([Tt][Rr][Uu][Ee]|[Ff][Aa][Ll][Ss][Ee])", "false" },
         };
     }
 }

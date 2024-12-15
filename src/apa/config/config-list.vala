@@ -23,7 +23,7 @@ namespace Apa.Config {
         bool skip_unknown_options = false
     ) throws OptionsError {
         foreach (var possible_key in Data.possible_config_keys ()) {
-            print ("%s%s = %s".printf (
+            print ("%s%s: %s".printf (
                 Help.indx (1),
                 possible_key.name,
                 ConfigManager.get_default ().get_value (possible_key.name)
@@ -31,6 +31,10 @@ namespace Apa.Config {
             print ("%s%s".printf (
                 Help.indx (2),
                 possible_key.description
+            ));
+            print ("%sDefault value: %s".printf (
+                Help.indx (2),
+                possible_key.default_value
             ));
         }
 

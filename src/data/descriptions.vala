@@ -203,15 +203,15 @@ namespace Apa.Config.Descriptions {
     }
 
     public inline string config_auto_update () {
-        return _("Run `apa update' automatically before some commands. Type: bool.");
+        return _("Run `apa update' automatically before some commands.");
     }
 
     public inline string config_use_fuzzy_search () {
-        return _("Use fuzzy search in case of unsuccessful search via `apa search'. Type: bool.");
+        return _("Use fuzzy search in case of unsuccessful install via `apa install'.");
     }
 
     public inline string config_auto_upgrade_kernel () {
-        return _("Automatically upgrade the kernel when executing an `apa upgrade'. Type: bool.");
+        return _("Automatically upgrade the kernel when executing an `apa upgrade'.");
     }
 }
 

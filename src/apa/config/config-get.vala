@@ -22,15 +22,11 @@ namespace Apa.Config {
         owned ArgsHandler args_handler,
         bool skip_unknown_options = false
     ) throws CommandError, OptionsError {
-        args_handler.check_args_size (1);
+        args_handler.check_args_size (null);
 
-        var value = ConfigManager.get_default ().get_value (args_handler.args[0]);
-
-        if (value == null) {
-            throw new CommandError.COMMON (_("Unknown key, run to `apa config list' to list all posible keys"));
+        foreach (var arg in args_handler.args) {
+            print ("%s: %s".printf (arg, ConfigManager.get_default ().get_value (arg)));
         }
-
-        print (value);
 
         return 0;
     }

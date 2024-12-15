@@ -42,10 +42,8 @@ public sealed class Apa.ConfigManager : Object {
         }
     }
 
-    File default_config_file = File.new_build_filename (ApaConfig.KEY_DEFAULTS_DIR, "defaults");
-
-    File _editable_config_file = File.new_build_filename (ApaConfig.KEY_DEFAULTS_DIR, "apa.conf");
-    public File editable_config_file {
+    File? _editable_config_file = File.new_build_filename (ApaConfig.KEY_DEFAULTS_DIR, "apa.conf");
+    File? editable_config_file {
         get {
             try {
                 if (is_root ()) {
@@ -57,10 +55,10 @@ public sealed class Apa.ConfigManager : Object {
                     var tmp_config_file = File.new_build_filename (Environment.get_tmp_dir (), "apa-tmp-file");
                     if (_editable_config_file.query_exists ()) {
                         _editable_config_file.copy (tmp_config_file, FileCopyFlags.OVERWRITE);
+                        _editable_config_file = tmp_config_file;
                     } else {
-                        default_config_file.copy (tmp_config_file, FileCopyFlags.OVERWRITE);
+                        _editable_config_file = null;
                     }
-                    _editable_config_file = tmp_config_file;
                 }
 
             } catch (Error e) {
@@ -72,8 +70,7 @@ public sealed class Apa.ConfigManager : Object {
         }
     }
 
-    KeyFile key_file = new KeyFile ();
-    KeyFile system_key_file = new KeyFile ();
+    KeyFile? key_file = null;
 
     construct {
         update_configs ();
@@ -88,13 +85,20 @@ public sealed class Apa.ConfigManager : Object {
     }
 
     void update_configs () {
+        if (editable_config_file == null) {
+            return;
+        }
+
+        if (key_file == null) {
+            key_file = new KeyFile ();
+        }
+
         try {
             key_file.load_from_file (editable_config_file.peek_path (), GLib.KeyFileFlags.KEEP_COMMENTS);
-            system_key_file.load_from_file (default_config_file.peek_path (), GLib.KeyFileFlags.KEEP_COMMENTS);
 
-            foreach (var key in system_key_file.get_keys (GROUP_NAME)) {
-                if (!key_file.has_key (GROUP_NAME, key)) {
-                    key_file.set_value (GROUP_NAME, key, system_key_file.get_value (GROUP_NAME, key));
+            foreach (var key in Config.Data.possible_config_keys ()) {
+                if (!key_file.has_key (GROUP_NAME, key.name)) {
+                    key_file.set_value (GROUP_NAME, key.name, key.default_value);
                 }
             }
 
@@ -102,48 +106,44 @@ public sealed class Apa.ConfigManager : Object {
             key_file.load_from_file (editable_config_file.peek_path (), GLib.KeyFileFlags.KEEP_COMMENTS);
 
         } catch (KeyFileError e) {
-            resolve_key_file_error (e);
+            resolve_key_file_error ();
         } catch (FileError e) {
-            resolve_file_error (e);
+            resolve_file_error ();
         }
     }
 
     void recreate_editable_config () {
+        if (editable_config_file == null) {
+            return;
+        }
+
         FileUtils.remove (editable_config_file.peek_path ());
         update_configs ();
     }
 
-    void resolve_file_error (FileError e) {
-        print_error (_("Couldn't open configuration file: %s").printf (e.message));
+    void resolve_file_error () {
+        print_error (_("Couldn't open configuration file."));
         Process.exit (ExitCode.BASE_ERROR);
     }
 
-    void resolve_key_file_error (KeyFileError e) {
-        print_error (_("Error in config: `%s'.\nRecreating…").printf (e.message));
+    void resolve_key_file_error () {
+        print_error (_("Error in config. Recreating…"));
         recreate_editable_config ();
 
         Process.exit (ExitCode.BASE_ERROR);
     }
 
     public bool has_key (string key) {
-        try {
-            return system_key_file.has_key (GROUP_NAME, key);
-        } catch (KeyFileError e) {
-            resolve_key_file_error (e);
-        }
-        return false;
+        return ConfigEntity.find (Config.Data.possible_config_keys (), key) != null;
     }
 
     public void reset (string key) {
-        try {
-            if (has_key (key)) {
-                set_value (key, system_key_file.get_value (GROUP_NAME, key));
-            } else {
-                print_error (_("Key `%s' doesn't exists").printf (key));
-                Process.exit (ExitCode.BASE_ERROR);
-            }
-        } catch (KeyFileError e) {
-            resolve_key_file_error (e);
+        if (has_key (key)) {
+            set_value (key, ConfigEntity.find (Config.Data.possible_config_keys (), key).default_value);
+
+        } else {
+            print_error (_("Key `%s' doesn't exists").printf (key));
+            Process.exit (ExitCode.BASE_ERROR);
         }
     }
 
@@ -154,10 +154,23 @@ public sealed class Apa.ConfigManager : Object {
     }
 
     public string get_value (string key) {
+        var config_entity = ConfigEntity.find (Config.Data.possible_config_keys (), key);
+
+        if (key_file == null) {
+            if (config_entity != null) {
+                return config_entity.default_value;
+
+            } else {
+                print_error (_("Key `%s' doesn't exists").printf (key));
+                Process.exit (ExitCode.BASE_ERROR);
+            }
+        }
+
         try {
             if (!key_file.has_key (GROUP_NAME, key)) {
-                if (has_key (key)) {
-                    return system_key_file.get_value (GROUP_NAME, key);
+                if (config_entity != null) {
+                    return config_entity.default_value;
+
                 } else {
                     print_error (_("Key `%s' doesn't exists").printf (key));
                     Process.exit (ExitCode.BASE_ERROR);
@@ -166,35 +179,50 @@ public sealed class Apa.ConfigManager : Object {
 
             return key_file.get_value (GROUP_NAME, key);
         } catch (KeyFileError e) {
-            resolve_key_file_error (e);
+            resolve_key_file_error ();
         }
         return "";
     }
 
     public void set_value (string key, string value) {
-        if (!has_key (key)) {
+        if (key_file == null) {
+            return;
+        }
+
+        var config_entity = ConfigEntity.find (Config.Data.possible_config_keys (), key);
+
+        if (config_entity == null) {
             print_error (_("Key `%s' doesn't exists").printf (key));
             Process.exit (ExitCode.BASE_ERROR);
         }
 
-        if (detect_type (value) != detect_type (get_value (key))) {
-            wrong_type (detect_type (get_value (key)));
+        if (!Regex.match_simple (
+            config_entity.possible_values_pattern,
+            value,
+            RegexCompileFlags.OPTIMIZE,
+            RegexMatchFlags.NOTEMPTY
+        )) {
+            print_error (_("Wrong type."));
+            Process.exit (ExitCode.BASE_ERROR);
         }
 
         try {
             key_file.set_value (GROUP_NAME, key, value);
             key_file.save_to_file (editable_config_file.peek_path ());
         } catch (FileError e) {
-            resolve_file_error (e);
+            resolve_file_error ();
         }
     }
 
     public bool get_boolean (string key) {
-        try {
-            return key_file.get_boolean (GROUP_NAME, key);
-        } catch (KeyFileError e) {
-            resolve_key_file_error (e);
-            return false;
+        bool res;
+
+        if (bool.try_parse (get_value (key), out res)) {
+            return res;
+
+        } else {
+            resolve_key_file_error ();
+            Process.exit (ExitCode.BASE_ERROR);
         }
     }
 
@@ -203,49 +231,10 @@ public sealed class Apa.ConfigManager : Object {
     }
 
     public string get_string (string key) {
-        try {
-            return key_file.get_string (GROUP_NAME, key);
-        } catch (KeyFileError e) {
-            resolve_key_file_error (e);
-            return "";
-        }
+        return get_value (key);
     }
 
     public void set_string (string key, string value) {
         set_value (key, value);
-    }
-
-    public Type detect_config_type (string key) {
-        if (!has_key (key)) {
-            return Type.NONE;
-        }
-
-        var value = get_value (key);
-
-        return detect_type (value);
-    }
-
-    void wrong_type (Type possible_type) {
-        string expected;
-
-        switch (possible_type) {
-            case Type.BOOLEAN:
-                expected = "`true' or `false'";
-                break;
-
-            case Type.STRING:
-                expected = "string";
-                break;
-
-            case Type.INT:
-                expected = "number";
-                break;
-
-            default:
-                return;
-        }
-
-        print_error (_("Wrong config type. Expected %s").printf (expected));
-        Process.exit (ExitCode.BASE_ERROR);
     }
 }
