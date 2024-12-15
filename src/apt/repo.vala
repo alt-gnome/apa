@@ -48,7 +48,7 @@ namespace Apa.AptRepo {
     ) throws OptionsError {
         var command = new Command (ORIGIN, LIST);
 
-        command.fill_by_args_handler_with_args (
+        command.fill_by_args_handler (
             args_handler,
             AptRepo.Data.list_options (),
             AptRepo.Data.list_arg_options (),
