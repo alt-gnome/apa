@@ -27,15 +27,32 @@ namespace Apa.Rpm.Data {
         return {};
     }
 
+    public const string OPTION_SHORT_SHORT = "-s";
+    public const string OPTION_SHORT_LONG = "--short";
+    public const string OPTION_SORT_SHORT = "-S";
+    public const string OPTION_SORT_LONG = "--sort";
+    public const string OPTION_LAST_SHORT = "-l";
+    public const string OPTION_LAST_LONG = "--last";
+
     public OptionEntity?[] list_options () {
         return OptionEntity.concat (
             common_options (),
             {
                 {
-                    "-s", "--short",
+                    OPTION_SHORT_SHORT, OPTION_SHORT_LONG,
                     "--queryformat=%{NAME}\n",
                     Descriptions.option_short ()
-                }
+                },
+                {
+                    OPTION_SORT_SHORT, OPTION_SORT_LONG,
+                    null,
+                    Descriptions.option_sort ()
+                },
+                {
+                    OPTION_LAST_SHORT, OPTION_LAST_LONG,
+                    "--last",
+                    Descriptions.option_last ()
+                },
             }
         );
     }

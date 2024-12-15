@@ -20,10 +20,33 @@ namespace Apa {
         owned ArgsHandler args_handler,
         bool skip_unknown_options = false
     ) throws CommandError, OptionsError {
-        while (true) {
-            var error = new Gee.ArrayList<string> ();
+        var result = new Gee.ArrayList<string> ();
+        var error = new Gee.ArrayList<string> ();
 
-            var status = yield Rpm.list (args_handler, null, error, skip_unknown_options);
+        bool is_sort = false;
+
+        foreach (var option in args_handler.options) {
+            var option_data = OptionEntity.find_option (Rpm.Data.list_options (), option);
+
+            switch (option_data.short_option) {
+                case Rpm.Data.OPTION_SORT_SHORT:
+                    is_sort = true;
+                    args_handler.options.remove (Rpm.Data.OPTION_SORT_SHORT);
+                    args_handler.options.remove (Rpm.Data.OPTION_SORT_LONG);
+                    break;
+
+                case Rpm.Data.OPTION_SHORT_SHORT:
+                    args_handler.options.remove (Rpm.Data.OPTION_LAST_SHORT);
+                    args_handler.options.remove (Rpm.Data.OPTION_LAST_LONG);
+                    break;
+            }
+        }
+
+        while (true) {
+            result.clear ();
+            error.clear ();
+
+            var status = yield Rpm.list (args_handler, result, error, skip_unknown_options);
 
             if (status != ExitCode.SUCCESS && error.size > 0) {
                 string error_message = normalize_error (error);
@@ -36,6 +59,14 @@ namespace Apa {
                 }
 
             } else {
+                if (is_sort) {
+                    result.sort ();
+                }
+
+                foreach (var line in result) {
+                    print (line);
+                }
+
                 return status;
             }
         }

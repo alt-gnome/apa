@@ -299,6 +299,14 @@ namespace Apa.Rpm.Descriptions {
         return _("Print only packages names.");
     }
 
+    public inline string option_sort () {
+        return _("Sort the output in alphabetical order.");
+    }
+
+    public inline string option_last () {
+        return _("Show packages sorted by installation date.");
+    }
+
     public inline string option_files () {
         return _("Print package files.");
     }
