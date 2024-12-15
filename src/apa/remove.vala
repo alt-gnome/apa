@@ -36,9 +36,12 @@ namespace Apa {
 
             if (status != ExitCode.SUCCESS && error.size > 0) {
                 string error_message = normalize_error (error);
-                string? package_error_source;
-                switch (detect_error (error_message, out package_error_source)) {
+                string[] error_sources;
+
+                switch (detect_error (error_message, out error_sources)) {
                     case OriginErrorType.COULDNT_FIND_PACKAGE:
+                        var package_error_source = error_sources[0];
+
                         if (!ConfigManager.get_default ().use_fuzzy_search) {
                             print_error (_("Package `%s' not found").printf (package_error_source));
                             return status;

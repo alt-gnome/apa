@@ -52,10 +52,12 @@ namespace Apa {
 
             if (status != ExitCode.SUCCESS && error.size > 0) {
                 string error_message = normalize_error (error);
-                string? package_error_source;
+                string[] error_sources;
 
-                switch (detect_error (error_message, out package_error_source)) {
+                switch (detect_error (error_message, out error_sources)) {
                     case OriginErrorType.COULDNT_FIND_PACKAGE:
+                        var package_error_source = error_sources[0];
+
                         string[]? possible_package_names;
 
                         if (ConfigManager.get_default ().use_fuzzy_search) {
@@ -120,6 +122,8 @@ namespace Apa {
                         break;
 
                     case OriginErrorType.PACKAGE_VIRTUAL_WITH_MULTIPLE_GOOD_PROIDERS:
+                        var package_error_source = error_sources[0];
+
                         print (error_message[0:error_message.length - 1].replace (package_error_source, "`%s'".printf (package_error_source)));
 
                         var choice_packages = new Gee.ArrayList<string> ();
@@ -163,6 +167,8 @@ namespace Apa {
                         return status;
 
                     case OriginErrorType.NO_INSTALLATION_CANDIDAT:
+                        var package_error_source = error_sources[0];
+
                         print (error_message.replace (package_error_source, "`%s'".printf (package_error_source)));
 
                         // FIXME: need move error part of message to cerr in apt
@@ -219,10 +225,14 @@ namespace Apa {
                         return status;
 
                     case OriginErrorType.TASK_IS_UNKNOWN_OR_STILL_BUILDING:
-                        throw new CommandError.TASK_IS_UNKNOWN (package_error_source);
+                        throw new CommandError.TASK_IS_UNKNOWN (error_sources[0]);
 
                     case OriginErrorType.OPEN_CONFIGURATION_FILE_FAILED:
                         print_error (_("Option `-c/--config' value is incorrect"));
+                        return status;
+
+                    case OriginErrorType.VERSION_NOT_FOUND:
+                        print_error (error_message);
                         return status;
 
                     case OriginErrorType.NONE:

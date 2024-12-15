@@ -48,9 +48,9 @@ namespace Apa {
 
             if (status != ExitCode.SUCCESS && error.size > 0) {
                 string error_message = normalize_error (error);
-                string? package;
+                string[] error_sources;
 
-                switch (detect_error (error_message, out package)) {
+                switch (detect_error (error_message, out error_sources)) {
                     case OriginErrorType.UNABLE_TO_LOCK_DOWNLOAD_DIR:
                         print_error (_("APT is currently busy"));
                         return status;

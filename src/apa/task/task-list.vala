@@ -34,11 +34,11 @@ namespace Apa.Task {
 
             if (status != ExitCode.SUCCESS && error.size > 0) {
                 string error_message = normalize_error (error);
-                string? list;
+                string[] error_sources;
 
-                switch (detect_error (error_message, out list)) {
+                switch (detect_error (error_message, out error_sources)) {
                     case OriginErrorType.TASK_IS_UNKNOWN_OR_STILL_BUILDING:
-                        throw new CommandError.TASK_IS_UNKNOWN (list);
+                        throw new CommandError.TASK_IS_UNKNOWN (error_sources[0]);
 
                     case OriginErrorType.NONE:
                     default:

@@ -32,9 +32,9 @@ namespace Apa {
 
             if (status != ExitCode.SUCCESS && error.size > 0) {
                 string error_message = normalize_error (error);
-                string? package;
+                string[] error_sources;
 
-                switch (detect_error (error_message, out package)) {
+                switch (detect_error (error_message, out error_sources)) {
                     case OriginErrorType.CONFIGURATION_ITEM_SPECIFICATION_MUST_HAVE_AN_VAL:
                         print_error (_("Option `-o/--option' value is incorrect. It should look like `OptionName=val'"));
                         return status;

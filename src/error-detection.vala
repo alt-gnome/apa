@@ -30,6 +30,7 @@ namespace Apa {
         "Unknown source. See `man apt-repo` for details. at /bin/apt-repo line 352.",
         "Task %s is unknown or still building at /bin/apt-repo line 260.",
         "Nothing to add: bad source format. See `man apt-repo` for details.",
+        "Version %s'%s' for '%s' was not found"
     };
 
     public enum OriginErrorType {
@@ -44,13 +45,14 @@ namespace Apa {
         APT_REPO_UNKNOWN_SOURCE,
         TASK_IS_UNKNOWN_OR_STILL_BUILDING,
         NOTHING_TO_ADD_BAD_SOURCE_FORMAT,
+        VERSION_NOT_FOUND,
         NONE,
     }
 
-    public OriginErrorType detect_error (string error_message, out string package = null) {
+    public OriginErrorType detect_error (string error_message, out string[] error_sources = null) {
         string pattern;
         Regex regex;
-        package = null;
+        error_sources = {};
 
         try {
             for (int i = 0; i < ORIGIN_ERRORS.length; i++) {
@@ -67,7 +69,8 @@ namespace Apa {
 
                 MatchInfo match_info;
                 if (regex.match (error_message, 0, out match_info)) {
-                    package = match_info.fetch (1);
+                    var fetches = match_info.fetch_all ();
+                    error_sources = fetches[1:fetches.length];
                     return (OriginErrorType) i;
 
                 } else {

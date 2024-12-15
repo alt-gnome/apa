@@ -44,10 +44,12 @@ namespace Apa {
 
             if (status != ExitCode.SUCCESS && error.size > 0) {
                 string error_message = normalize_error (error);
-                string? package_error_source;
+                string[] error_sources;
 
-                switch (detect_error (error_message, out package_error_source)) {
+                switch (detect_error (error_message, out error_sources)) {
                     case OriginErrorType.COULDNT_FIND_PACKAGE:
+                        var package_error_source = error_sources[0];
+
                         string package_error_source_name = package_error_source[0:package_error_source.length - 1];
                         char package_error_source_operation = package_error_source[package_error_source.length - 1];
 
@@ -131,6 +133,8 @@ namespace Apa {
                         break;
 
                     case OriginErrorType.PACKAGE_VIRTUAL_WITH_MULTIPLE_GOOD_PROIDERS:
+                        var package_error_source = error_sources[0];
+
                         string do_package = find_package_in_do_list (args_handler.args, package_error_source);
                         char package_error_source_operation = do_package[do_package.length - 1];
 
@@ -177,6 +181,8 @@ namespace Apa {
                         break;
 
                     case OriginErrorType.NO_INSTALLATION_CANDIDAT:
+                        var package_error_source = error_sources[0];
+
                         string do_package = find_package_in_do_list (args_handler.args, package_error_source);
                         char package_error_source_operation = do_package[do_package.length - 1];
 
@@ -239,6 +245,10 @@ namespace Apa {
 
                     case OriginErrorType.OPEN_CONFIGURATION_FILE_FAILED:
                         print_error (_("Option `-c/--config' value is incorrect"));
+                        return status;
+
+                    case OriginErrorType.VERSION_NOT_FOUND:
+                        print_error (error_message);
                         return status;
 
                     case OriginErrorType.NONE:

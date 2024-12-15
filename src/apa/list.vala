@@ -50,9 +50,9 @@ namespace Apa {
 
             if (status != ExitCode.SUCCESS && error.size > 0) {
                 string error_message = normalize_error (error);
-                string? package;
+                string[] error_sources;
 
-                switch (detect_error (error_message, out package)) {
+                switch (detect_error (error_message, out error_sources)) {
                     case OriginErrorType.NONE:
                     default:
                         throw new CommandError.UNKNOWN_ERROR (error_message);

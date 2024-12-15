@@ -32,9 +32,9 @@ namespace Apa.Repo {
 
             if (status != ExitCode.SUCCESS && error.size > 0) {
                 string error_message = normalize_error (error);
-                string? package;
+                string[] error_sources;
 
-                switch (detect_error (error_message, out package)) {
+                switch (detect_error (error_message, out error_sources)) {
                     case OriginErrorType.NOTHING_TO_ADD_BAD_SOURCE_FORMAT:
                         throw new CommandError.COMMON (error_message);
 
