@@ -246,11 +246,11 @@ namespace Apa.AptGet.Descriptions {
     }
 
     public inline string option_no_download () {
-        return _("Disables  downloading  of packages. This is best used with --ignore-missing to force APT to use only the .debs it has already downloaded.");
+        return _("Disables downloading of packages. This is best used with `--ignore-missing' to force APT to use only the `.rpm' it has already downloaded.");
     }
 
     public inline string option_ignore_missing () {
-        return _("Ignore  missing  packages;  If  packages  cannot be retrieved or fail the integrity check after retrieval (corrupted package files), hold back those packages and handle  the  result.");
+        return _("Ignore missing packages; If packages cannot be retrieved or fail the integrity check after retrieval (corrupted package files), hold back those packages and handle the result.");
     }
 
     public inline string arg_option_option () {

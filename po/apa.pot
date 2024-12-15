@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: apa\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-15 21:26+0300\n"
+"POT-Creation-Date: 2024-12-15 21:45+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -545,15 +545,15 @@ msgstr ""
 
 #: src/data/descriptions.vala:249
 msgid ""
-"Disables  downloading  of packages. This is best used with --ignore-missing "
-"to force APT to use only the .debs it has already downloaded."
+"Disables downloading of packages. This is best used with `--ignore-missing' "
+"to force APT to use only the `.rpm' it has already downloaded."
 msgstr ""
 
 #: src/data/descriptions.vala:253
 msgid ""
-"Ignore  missing  packages;  If  packages  cannot be retrieved or fail the "
+"Ignore missing packages; If packages cannot be retrieved or fail the "
 "integrity check after retrieval (corrupted package files), hold back those "
-"packages and handle  the  result."
+"packages and handle the result."
 msgstr ""
 
 #: src/data/descriptions.vala:265

@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: apa\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-15 21:26+0300\n"
-"PO-Revision-Date: 2024-12-15 22:46+0300\n"
+"POT-Creation-Date: 2024-12-15 21:45+0300\n"
+"PO-Revision-Date: 2024-12-15 21:51+0300\n"
 "Last-Translator: David Sultaniiazov <x1z53@alt-gnome.ru>\n"
 "Language-Team: Russian\n"
 "Language: ru\n"
@@ -511,7 +511,7 @@ msgid ""
 "searching among installed packages using the `--local' option."
 msgstr ""
 "Поиск файлов среди пакетов в репозитории. Поддерживается поиск среди "
-"установленных пакетов с использованием опции\t\t\t\t `--local'."
+"установленных пакетов с использованием опции `--local'."
 
 #: src/data/descriptions.vala:164
 msgid "Show this help text. Same as `apa --help'."
@@ -619,16 +619,22 @@ msgstr "Показывать подробные номера версий."
 
 #: src/data/descriptions.vala:249
 msgid ""
-"Disables  downloading  of packages. This is best used with --ignore-missing "
-"to force APT to use only the .debs it has already downloaded."
+"Disables downloading of packages. This is best used with `--ignore-missing' "
+"to force APT to use only the `.rpm' it has already downloaded."
 msgstr ""
+"Отключает загрузку пакетов. Это лучше всего использовать с параметром `--"
+"ignore-missing', чтобы заставить APT использовать только те файлы `.rpm', "
+"которые он уже загрузил."
 
 #: src/data/descriptions.vala:253
 msgid ""
-"Ignore  missing  packages;  If  packages  cannot be retrieved or fail the "
+"Ignore missing packages; If packages cannot be retrieved or fail the "
 "integrity check after retrieval (corrupted package files), hold back those "
-"packages and handle  the  result."
+"packages and handle the result."
 msgstr ""
+"Игнорируйте отсутствующие пакеты; Если пакеты не могут быть извлечены или не "
+"прошли проверку целостности после извлечения (повреждённые файлы пакетов), "
+"эти пакеты будут отложены и будет обработан результат."
 
 #: src/data/descriptions.vala:265
 msgid "Download only - do NOT install or unpack archives."
@@ -676,11 +682,11 @@ msgstr "Показать только имена пакетов."
 
 #: src/data/descriptions.vala:311
 msgid "Sort the output in alphabetical order."
-msgstr ""
+msgstr "Отсортируйте выходные данные в алфавитном порядке."
 
 #: src/data/descriptions.vala:315
 msgid "Show packages sorted by installation date."
-msgstr ""
+msgstr "Показать пакеты, отсортированные по дате установки."
 
 #: src/data/descriptions.vala:319
 msgid "Print package files."
