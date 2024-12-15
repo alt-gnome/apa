@@ -21,7 +21,6 @@ namespace Apa.Repo {
         owned ArgsHandler args_handler,
         bool skip_unknown_options = false
     ) throws CommandError, OptionsError {
-
         return yield Repo.remove (
             new ArgsHandler.with_data (
                 args_handler.options.to_array (),

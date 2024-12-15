@@ -23,9 +23,7 @@ namespace Apa {
         while (true) {
             var error = new Gee.ArrayList<string> ();
 
-            if (args_handler.args.size == 0) {
-                throw new CommandError.COMMON (_("Nothing to show"));
-            }
+            args_handler.check_args_size (null);
 
             var status = yield Rpm.info (args_handler, null, error, skip_unknown_options);
 

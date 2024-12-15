@@ -22,9 +22,7 @@ namespace Apa {
     ) throws CommandError, OptionsError {
         var error = new Gee.ArrayList<string> ();
 
-        if (args_handler.args.size == 0) {
-            throw new CommandError.COMMON (_("Nothing to do"));
-        }
+        args_handler.check_args_size (null);
 
         foreach (var package_name in args_handler.args) {
             if (!package_name.has_suffix ("-") && !package_name.has_suffix ("+")) {

@@ -138,6 +138,9 @@ public sealed class Apa.ConfigManager : Object {
         try {
             if (has_key (key)) {
                 set_value (key, system_key_file.get_value (GROUP_NAME, key));
+            } else {
+                print_error (_("Key `%s' doesn't exists").printf (key));
+                Process.exit (ExitCode.BASE_ERROR);
             }
         } catch (KeyFileError e) {
             resolve_key_file_error (e);

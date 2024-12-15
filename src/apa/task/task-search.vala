@@ -23,9 +23,7 @@ namespace Apa.Task {
         var all_possible_options = Data.search_options ();
         var all_possible_arg_options = Data.search_arg_options ();
 
-        if (args_handler.args.size == 0) {
-            throw new CommandError.COMMON (_("Nothing to search"));
-        }
+        args_handler.check_args_size (1);
 
         foreach (string arg in args_handler.args) {
             if (arg.length <= 2) {
@@ -66,7 +64,7 @@ namespace Apa.Task {
                     break;
 
                 case Data.OPTION_STATE_SHORT:
-                    state.add (arg_option.value);
+                    state.add (arg_option.value.down ());
                     break;
 
                 default:

@@ -17,13 +17,12 @@
 
 namespace Apa.Repo {
 
-    const string AIDES_REPO_URL = "rpm http://ftp.aides.space repo/Sisyphus/x86_64 aides";
+    const string AIDES_REPO_URL = "\"rpm http://ftp.aides.space repo/Sisyphus/x86_64 aides\"";
 
     public async int add_aides (
         owned ArgsHandler args_handler,
         bool skip_unknown_options = false
     ) throws CommandError, OptionsError {
-
         return yield Repo.add (
             new ArgsHandler.with_data (
                 args_handler.options.to_array (),

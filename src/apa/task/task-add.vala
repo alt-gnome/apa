@@ -22,13 +22,7 @@ namespace Apa.Task {
         bool skip_unknown_options = false
     ) throws CommandError, OptionsError {
 
-        if (args_handler.args.size == 0) {
-            throw new CommandError.COMMON (_("Nothing to add"));
-        }
-
-        if (args_handler.args.size > 1) {
-            throw new CommandError.TOO_MANY_ARGS ("");
-        }
+        args_handler.check_args_size (1);
 
         return yield Repo.add (
             args_handler.copy (),

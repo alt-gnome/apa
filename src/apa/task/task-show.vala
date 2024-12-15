@@ -21,9 +21,7 @@ namespace Apa.Task {
         bool skip_unknown_options = false
     ) throws CommandError, ApiBase.CommonError, ApiBase.BadStatusCodeError, OptionsError {
 
-        if (args_handler.args.size == 0) {
-            throw new CommandError.COMMON (_("Nothing to show"));
-        }
+        args_handler.check_args_size (1);
 
         var client = new AltRepo.Client ();
 

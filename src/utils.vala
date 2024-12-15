@@ -24,6 +24,7 @@ public errordomain Apa.CommandError {
     COMMON,
     UNKNOWN_SUBCOMMAND,
     TOO_MANY_ARGS,
+    TOO_FEW_ARGS,
     UNKNOWN_ERROR,
     INVALID_TASK_ID,
     NO_PACKAGES_LEFT,

@@ -24,13 +24,7 @@ namespace Apa.Task {
     ) throws CommandError, OptionsError {
         var error = new Gee.ArrayList<string> ();
 
-        if (args_handler.args.size == 0) {
-            throw new CommandError.COMMON (_("Nothing to list"));
-        }
-
-        if (args_handler.args.size > 1) {
-            throw new CommandError.TOO_MANY_ARGS ("");
-        }
+        args_handler.check_args_size (1);
 
         args_handler.args.insert (0, "task");
 

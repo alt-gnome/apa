@@ -85,7 +85,7 @@ namespace Apa.Commands.Descriptions {
     }
 
     public inline string config_set () {
-        return _("Set config value.");
+        return _("Set config value by pairs ob key=value.");
     }
 
     public inline string task () {

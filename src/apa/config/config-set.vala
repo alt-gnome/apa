@@ -22,9 +22,7 @@ namespace Apa.Config {
         owned ArgsHandler args_handler,
         bool skip_unknown_options = false
     ) throws CommandError, OptionsError {
-        if (args_handler.args.size == 0) {
-            throw new CommandError.COMMON (_("Nothing to set, need key and value"));
-        }
+        args_handler.check_args_size (null);
 
         foreach (var pair in args_handler.args) {
             var parts = pair.split ("=");

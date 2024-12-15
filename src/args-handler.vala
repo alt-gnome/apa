@@ -140,4 +140,16 @@ public sealed class Apa.ArgsHandler : Object {
             }
         }
     }
+
+    public void check_args_size (int? max) throws CommandError {
+        if (args.size == 0) {
+            throw new CommandError.TOO_FEW_ARGS ("");
+        }
+
+        if (max != null) {
+            if (args.size > max) {
+                throw new CommandError.TOO_MANY_ARGS ("");
+            }
+        }
+    }
 }

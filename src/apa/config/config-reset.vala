@@ -39,21 +39,15 @@ namespace Apa.Config {
             }
         }
 
-        if (args_handler.args.size == 0) {
-            throw new CommandError.COMMON (_("Nothing to reset"));
-        }
-
-        var value = ConfigManager.get_default ().get_value (args_handler.args[0]);
-
-        if (value == null) {
-            throw new CommandError.COMMON (_("Unknown key, run to `apa config list' to list all posible keys"));
-        }
-
         if (all) {
             ConfigManager.get_default ().reset_all ();
 
         } else {
-            ConfigManager.get_default ().reset (args_handler.args[0]);
+            args_handler.check_args_size ( null);
+
+            foreach (var arg in args_handler.args) {
+                ConfigManager.get_default ().reset (arg);
+            }
         }
 
         return 0;

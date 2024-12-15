@@ -215,7 +215,11 @@ namespace Apa {
                     return ExitCode.BASE_ERROR;
 
                 case CommandError.TOO_MANY_ARGS:
-                    print_error (_("Too many arguments"));
+                    print_error (_("There are too many arguments"));
+                    return ExitCode.BASE_ERROR;
+
+                case CommandError.TOO_FEW_ARGS:
+                    print_error (_("There are too few arguments"));
                     return ExitCode.BASE_ERROR;
 
                 case CommandError.TASK_IS_UNKNOWN:

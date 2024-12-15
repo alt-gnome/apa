@@ -29,6 +29,7 @@ namespace Apa {
         "Opening configuration file some - ifstream::ifstream (2 No such file or directory)",
         "Unknown source. See `man apt-repo` for details. at /bin/apt-repo line 352.",
         "Task %s is unknown or still building at /bin/apt-repo line 260.",
+        "Nothing to add: bad source format. See `man apt-repo` for details.",
     };
 
     public enum OriginErrorType {
@@ -42,6 +43,7 @@ namespace Apa {
         OPEN_CONFIGURATION_FILE_FAILED,
         APT_REPO_UNKNOWN_SOURCE,
         TASK_IS_UNKNOWN_OR_STILL_BUILDING,
+        NOTHING_TO_ADD_BAD_SOURCE_FORMAT,
         NONE,
     }
 

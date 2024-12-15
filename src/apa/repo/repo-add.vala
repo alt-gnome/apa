@@ -24,31 +24,20 @@ namespace Apa.Repo {
     ) throws CommandError, OptionsError {
         var error = new Gee.ArrayList<string> ();
 
-        if (args_handler.args.size == 0) {
-            throw new CommandError.COMMON (_("Nothing to add"));
-        }
-
-        if (args_handler.args.size > 4) {
-            throw new CommandError.TOO_MANY_ARGS ("");
-        }
+        args_handler.check_args_size (4);
 
         while (true) {
             error.clear ();
-            var status = yield AptRepo.add (
-                new ArgsHandler.with_data (
-                    args_handler.options.to_array (),
-                    args_handler.arg_options.to_array (),
-                    { "\"" + string.joinv (" ", args_handler.args.to_array ()) + "\"" }
-                ),
-                error,
-                skip_unknown_options
-            );
+            var status = yield AptRepo.add (args_handler, error, skip_unknown_options);
 
             if (status != ExitCode.SUCCESS && error.size > 0) {
                 string error_message = normalize_error (error);
                 string? package;
 
                 switch (detect_error (error_message, out package)) {
+                    case OriginErrorType.NOTHING_TO_ADD_BAD_SOURCE_FORMAT:
+                        throw new CommandError.COMMON (error_message);
+
                     case OriginErrorType.APT_REPO_UNKNOWN_SOURCE:
                         throw new CommandError.COMMON (_("Unknown source"));
 

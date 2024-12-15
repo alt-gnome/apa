@@ -24,6 +24,8 @@ namespace Apa {
         owned ArgsHandler args_handler,
         bool skip_unknown_options = false
     ) throws CommandError, ApiBase.CommonError, ApiBase.BadStatusCodeError, OptionsError {
+        args_handler.check_args_size (null);
+
         var all_possible_options = SearchFile.Data.common_options ();
         var all_possible_arg_options = SearchFile.Data.common_arg_options ();
 
@@ -54,20 +56,16 @@ namespace Apa {
 
             switch (option_data.short_option) {
                 case SearchFile.Data.OPTION_BRANCH_SHORT:
-                    branch = arg_option.value;
+                    branch = arg_option.value.down ();
                     break;
 
                 case SearchFile.Data.OPTION_ARCH_SHORT:
-                    arch = arg_option.value;
+                    arch = arg_option.value.down ();
                     break;
 
                 default:
                     assert_not_reached ();
             }
-        }
-
-        if (args_handler.args.size == 0) {
-            throw new CommandError.COMMON (_("Nothing to search"));
         }
 
         if (is_local) {
@@ -131,10 +129,6 @@ namespace Apa {
             if (!founded_file.contains (" ")) {
                 search_files.add (founded_file);
             }
-        }
-
-        if (search_files.size == 0) {
-            throw new ApiBase.BadStatusCodeError.NOT_FOUND ("");
         }
 
         var result = yield client.post_package_packages_by_file_names_async (new AltRepo.PackagesByFileNamesJson () {

@@ -24,9 +24,7 @@ namespace Apa.Task {
     ) throws CommandError, OptionsError {
         var error = new Gee.ArrayList<string> ();
 
-        if (args_handler.args.size == 0) {
-            throw new CommandError.COMMON (_("Nothing to install"));
-        }
+        args_handler.check_args_size (1);
 
         while (true) {
             error.clear ();

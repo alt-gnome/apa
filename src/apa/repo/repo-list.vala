@@ -24,10 +24,6 @@ namespace Apa.Repo {
     ) throws CommandError, OptionsError {
         var error = new Gee.ArrayList<string> ();
 
-        if (args_handler.args.size > 0) {
-            throw new CommandError.TOO_MANY_ARGS ("");
-        }
-
         while (true) {
             error.clear ();
             var status = yield AptRepo.list (args_handler, error, skip_unknown_options);

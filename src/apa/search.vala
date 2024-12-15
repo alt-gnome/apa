@@ -24,9 +24,7 @@ namespace Apa {
     ) throws CommandError, OptionsError {
         var error = new Gee.ArrayList<string> ();
 
-        if (args_handler.args.size == 0) {
-            throw new CommandError.COMMON (_("Nothing to search"));
-        }
+        args_handler.check_args_size (null);
 
         while (true) {
             error.clear ();
