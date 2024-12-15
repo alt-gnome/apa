@@ -381,7 +381,7 @@ namespace Apa {
                 continue;
             }
 
-            if ((c.to_string () in "\\.+- $#%:=@{}")) {
+            if ((c.to_string () in "/.+- $#%:=@{}")) {
                 continue;
             }
 
