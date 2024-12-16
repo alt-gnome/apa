@@ -43,7 +43,7 @@ namespace Apa.Config {
             ConfigManager.get_default ().reset_all ();
 
         } else {
-            args_handler.check_args_size ( null);
+            args_handler.check_args_size ( false, null);
 
             foreach (var arg in args_handler.args) {
                 ConfigManager.get_default ().reset (arg);

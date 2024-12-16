@@ -149,7 +149,7 @@ namespace Apa.Commands.Descriptions {
     }
 
     public inline string list () {
-        return _("Display a list of installed packages.");
+        return _("Display a list of installed packages. You can pass arguments to search through the list.");
     }
 
     public inline string info () {
@@ -157,7 +157,7 @@ namespace Apa.Commands.Descriptions {
     }
 
     public inline string search_file () {
-        return _("Perform a file search among the packages in the repository. It supports searching among installed packages using the `--local' option.");
+        return _("Perform a file search among the packages in the repository. It supports searching among installed packages using the `--installed' option.");
     }
 
     public inline string help () {
@@ -187,8 +187,20 @@ namespace Apa.AptCache.Descriptions {
         return _("Print only important dependencies; for use with unmet. Causes only Depends and Pre-Depends relations to be printed.");
     }
 
+    public inline string option_full () {
+        return _("Print full package records when searching.");
+    }
+
+    public inline string option_recursive () {
+        return _("Make  depends  recursive  so that all packages mentioned are printed once.");
+    }
+
     public inline string option_names_only () {
         return _("Only search on the package names, not the long descriptions.");
+    }
+
+    public inline string option_installed () {
+        return _("Search among installed packages. Works well with `--names-only' option");
     }
 
     public inline string arg_option_option () {
@@ -303,16 +315,24 @@ namespace Apa.AptRepo.Descriptions {
 
 namespace Apa.Rpm.Descriptions {
 
-    public inline string option_short () {
-        return _("Print only packages names.");
+    public inline string arg_option_queryformat () {
+        return _("RPM information output format.");
     }
 
     public inline string option_sort () {
         return _("Sort the output in alphabetical order.");
     }
 
-    public inline string option_last () {
+    public inline string option_asort () {
+        return _("Sorts in the opposite direction of the --sort option.");
+    }
+
+    public inline string option_with_date () {
         return _("Show packages sorted by installation date.");
+    }
+
+    public inline string option_rpm () {
+        return _("Show package names. Equal to `rpm -qa'");
     }
 
     public inline string option_files () {
@@ -331,11 +351,11 @@ namespace Apa.SearchFile.Descriptions {
     }
 
     public inline string arg_option_branch () {
-        return _("Which branch of the repository to use for the search. It is ignored if the `--local' option is set. By default: `sisyphus'.");
+        return _("Which branch of the repository to use for the search. It is ignored if the `--installed' option is set. By default: `sisyphus'.");
     }
 
     public inline string arg_option_arch () {
-        return _("In packages for which architecture to look for. It is ignored if the `--local' option is set. Used current arch by default.");
+        return _("In packages for which architecture to look for. It is ignored if the `--installed' option is set. Used current arch by default.");
     }
 }
 

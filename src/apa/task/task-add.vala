@@ -22,7 +22,7 @@ namespace Apa.Task {
         bool skip_unknown_options = false
     ) throws CommandError, OptionsError {
 
-        args_handler.check_args_size (1);
+        args_handler.check_args_size (false, 1);
 
         return yield Repo.add (
             args_handler.copy (),

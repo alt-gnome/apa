@@ -27,40 +27,56 @@ namespace Apa.Rpm.Data {
         return {};
     }
 
-    public const string OPTION_SHORT_SHORT = "-s";
-    public const string OPTION_SHORT_LONG = "--short";
-    public const string OPTION_SORT_SHORT = "-S";
+    public const string OPTION_SORT_SHORT = "-s";
     public const string OPTION_SORT_LONG = "--sort";
-    public const string OPTION_LAST_SHORT = "-l";
-    public const string OPTION_LAST_LONG = "--last";
+    public const string OPTION_ASORT_SHORT = "-as";
+    public const string OPTION_ASORT_LONG = "--asort";
+    public const string OPTION_WITH_DATE_SHORT = "-d";
+    public const string OPTION_WITH_DATE_LONG = "--with-date";
+    public const string OPTION_RPM_SHORT = "-r";
+    public const string OPTION_RPM_LONG = "--rpm";
 
     public OptionEntity?[] list_options () {
         return OptionEntity.concat (
             common_options (),
             {
                 {
-                    OPTION_SHORT_SHORT, OPTION_SHORT_LONG,
-                    "--queryformat=%{NAME}\n",
-                    Descriptions.option_short ()
-                },
-                {
                     OPTION_SORT_SHORT, OPTION_SORT_LONG,
                     null,
                     Descriptions.option_sort ()
                 },
                 {
-                    OPTION_LAST_SHORT, OPTION_LAST_LONG,
+                    OPTION_ASORT_SHORT, OPTION_ASORT_LONG,
+                    null,
+                    Descriptions.option_asort ()
+                },
+                {
+                    OPTION_WITH_DATE_SHORT, OPTION_WITH_DATE_LONG,
                     "--last",
-                    Descriptions.option_last ()
+                    Descriptions.option_with_date ()
+                },
+                {
+                    OPTION_RPM_SHORT, OPTION_RPM_LONG,
+                    null,
+                    Descriptions.option_rpm ()
                 },
             }
         );
     }
 
+    public const string OPTION_QUERYFORMAT_SHORT = "-qf";
+    public const string OPTION_QUERYFORMAT_LONG = "--queryformat";
+
     public OptionEntity?[] list_arg_options () {
         return OptionEntity.concat (
             common_arg_options (),
-            {}
+            {
+                {
+                    OPTION_QUERYFORMAT_SHORT, OPTION_QUERYFORMAT_LONG,
+                    "--queryformat",
+                    Descriptions.arg_option_queryformat ()
+                },
+            }
         );
     }
 

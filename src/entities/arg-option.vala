@@ -41,6 +41,6 @@ public struct Apa.ArgOption {
     }
 
     public static bool equal_func (ArgOption? a, ArgOption? b) {
-        return a?.name == b?.name && a?.value == b?.value;
+        return a?.name == b?.name;
     }
 }

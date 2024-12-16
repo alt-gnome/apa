@@ -54,6 +54,8 @@ namespace Apa.Commands.Data {
     public const string[] HIDED_COMMANDS = {
         MOO_COMMAND,
         AptGet.SOURCE,
+        REMOVE_AIDES_SUBCOMMAND,
+        ADD_AIDES_SUBCOMMAND
     };
 
     public CommandEntity[] all_commands () {

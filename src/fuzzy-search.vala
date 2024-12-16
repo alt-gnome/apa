@@ -43,7 +43,7 @@ namespace Apa {
      *
      * @return      Similar query in data
      */
-    public string?[]? fuzzy_search (string query, string[] data) {
+    public string?[]? fuzzy_search (string query, string[] data, int max_results = -1) {
         string aquery = query.replace ("-", "").down ();
 
         foreach (string str in data) {
@@ -80,7 +80,7 @@ namespace Apa {
             return null;
         }
 
-        string?[] results = new string?[9];
+        string?[] results = new string?[max_results == -1 ? 100000 : max_results];
 
         for (int i = 0; i < results.length && i < pre_results.size; i++) {
             if (pre_results[i].distance < aquery.length / 2) {

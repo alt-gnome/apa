@@ -23,7 +23,7 @@ namespace Apa.Task {
         var all_possible_options = Data.search_options ();
         var all_possible_arg_options = Data.search_arg_options ();
 
-        args_handler.check_args_size (1);
+        args_handler.check_args_size (false, 1);
 
         foreach (string arg in args_handler.args) {
             if (arg.length <= 2) {

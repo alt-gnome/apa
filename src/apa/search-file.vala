@@ -24,7 +24,7 @@ namespace Apa {
         owned ArgsHandler args_handler,
         bool skip_unknown_options = false
     ) throws CommandError, ApiBase.CommonError, ApiBase.BadStatusCodeError, OptionsError {
-        args_handler.check_args_size (null);
+        args_handler.check_args_size (false, null);
 
         var all_possible_options = SearchFile.Data.common_options ();
         var all_possible_arg_options = SearchFile.Data.common_arg_options ();
@@ -38,7 +38,7 @@ namespace Apa {
             var option_data = OptionEntity.find_option (all_possible_options, option);
 
             switch (option_data.short_option) {
-                case SearchFile.Data.OPTION_LOCAL_SHORT:
+                case SearchFile.Data.OPTION_INSTALLED_SHORT:
                     is_local = true;
                     break;
 

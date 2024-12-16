@@ -23,7 +23,7 @@ namespace Apa {
         while (true) {
             var error = new Gee.ArrayList<string> ();
 
-            args_handler.check_args_size (null);
+            args_handler.check_args_size (false, null);
 
             var status = yield Rpm.info (args_handler, null, error, skip_unknown_options);
 

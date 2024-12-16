@@ -19,15 +19,15 @@
 
 namespace Apa.SearchFile.Data {
 
-    public const string OPTION_LOCAL_SHORT = "-l";
-    public const string OPTION_LOCAL_LONG = "--local";
+    public const string OPTION_INSTALLED_SHORT = "-i";
+    public const string OPTION_INSTALLED_LONG = "--installed";
     public const string OPTION_SHORT_SHORT = "-s";
     public const string OPTION_SHORT_LONG = "--short";
 
     public OptionEntity?[] common_options () {
         return {
             {
-                OPTION_LOCAL_SHORT, OPTION_LOCAL_LONG,
+                OPTION_INSTALLED_SHORT, OPTION_INSTALLED_LONG,
                 null,
                 Descriptions.option_local ()
             },

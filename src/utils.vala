@@ -43,6 +43,27 @@ public enum Apa.ChoiceResult {
     EXIT,
 }
 
+public struct Apa.PackageSearchInfo {
+    public string name;
+    public string? description;
+
+    public static PackageSearchInfo from_string (string str) {
+        var parts = str.split (" - ");
+
+        return {
+            name: parts[0].strip (),
+            description: parts.length > 1 ? parts[1].strip () : null,
+        };
+    }
+
+    public string to_string () {
+        return "%s - %s".printf (
+            name,
+            description != null ? this.description : ""
+        );
+    }
+}
+
 namespace Apa {
 
     public async int bebra (owned ArgsHandler args_handler) throws CommandError, ApiBase.CommonError, ApiBase.BadStatusCodeError, OptionsError {
@@ -109,20 +130,14 @@ namespace Apa {
      *
      * @param array array with str to short
      */
-    public void do_short_array_list (ref Gee.ArrayList<string> array) {
-        for (int i = 0; i < array.size; i++) {
-            array[i] = do_short (array[i]);
-        }
-    }
+    public PackageSearchInfo[] parse_search (string[] array) {
+        var res = new PackageSearchInfo[array.length];
 
-    public void do_short_data (ref string[] data) {
-        for (int i = 0; i < data.length; i++) {
-            data[i] = do_short (data[i]);
+        for (int i = 0; i < array.length; i++) {
+            res[i] = PackageSearchInfo.from_string (array[i]);
         }
-    }
 
-    public string do_short (string str) {
-        return str.split (" ")[0];
+        return res;
     }
 
     public bool is_root () {

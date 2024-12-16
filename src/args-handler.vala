@@ -141,8 +141,8 @@ public sealed class Apa.ArgsHandler : Object {
         }
     }
 
-    public void check_args_size (int? max) throws CommandError {
-        if (args.size == 0) {
+    public void check_args_size (bool can_be_empty, int? max) throws CommandError {
+        if (args.size == 0 && !can_be_empty) {
             throw new CommandError.TOO_FEW_ARGS ("");
         }
 
@@ -151,5 +151,10 @@ public sealed class Apa.ArgsHandler : Object {
                 throw new CommandError.TOO_MANY_ARGS ("");
             }
         }
+    }
+
+    public void remove_option (string name) {
+        options.remove (name);
+        arg_options.remove ({ name: name, value: "" });
     }
 }

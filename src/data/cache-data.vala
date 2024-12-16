@@ -41,6 +41,11 @@ namespace Apa.AptCache.Data {
                 "-i",
                 Descriptions.option_important_only ()
             },
+            {
+                "-r", "--recursive",
+                "--recursive",
+                Descriptions.option_recursive ()
+            },
         };
     }
 
@@ -59,6 +64,11 @@ namespace Apa.AptCache.Data {
         };
     }
 
+    public const string OPTION_INSTALLED_SHORT = "-i";
+    public const string OPTION_INSTALLED_LONG = "--installed";
+    public const string OPTION_NAMES_ONLY_SHORT = "-n";
+    public const string OPTION_NAMES_ONLY_LONG = "--names-only";
+
     public OptionEntity?[] search_options () {
         return OptionEntity.concat (
             common_options (),
@@ -71,7 +81,12 @@ namespace Apa.AptCache.Data {
                 {
                     "-f", "--full",
                     "-f",
-                    Descriptions.option_names_only ()
+                    Descriptions.option_full ()
+                },
+                {
+                    OPTION_INSTALLED_SHORT, OPTION_INSTALLED_LONG,
+                    null,
+                    Descriptions.option_installed ()
                 },
             }
         );

@@ -22,7 +22,7 @@ namespace Apa.Config {
         owned ArgsHandler args_handler,
         bool skip_unknown_options = false
     ) throws CommandError, OptionsError {
-        args_handler.check_args_size (null);
+        args_handler.check_args_size (false, null);
 
         foreach (var pair in args_handler.args) {
             var parts = pair.split ("=");

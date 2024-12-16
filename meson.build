@@ -46,6 +46,7 @@ add_project_arguments(
 version_suffix = ''
 
 find_program ('apt-get', required: true)
+find_program ('apt-cache', required: true)
 find_program ('rpm', required: true)
 find_program ('apt-repo', required: true)
 find_program('update-kernel', dirs: ['/sbin'], required: true)

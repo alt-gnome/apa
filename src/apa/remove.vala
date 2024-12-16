@@ -22,7 +22,7 @@ namespace Apa {
     ) throws CommandError, OptionsError {
         var error = new Gee.ArrayList<string> ();
 
-        args_handler.check_args_size (null);
+        args_handler.check_args_size (false, null);
 
         foreach (string package_name in args_handler.args) {
             if (!(yield check_package_name_no_action (package_name))) {
@@ -49,11 +49,11 @@ namespace Apa {
 
                         var installed_result = new Gee.ArrayList<string> ();
                         yield Rpm.list (
-                            new ArgsHandler ({ "-s" }),
+                            new ArgsHandler ({ "--queryformat=%{NAME}" }),
                             installed_result
                         );
 
-                        string[]? possible_package_names = fuzzy_search (package_error_source, installed_result.to_array ());
+                        string[]? possible_package_names = fuzzy_search (package_error_source, installed_result.to_array (), 9);
 
                         if (possible_package_names == null) {
                             print_error (_("Package `%s' not found").printf (package_error_source));

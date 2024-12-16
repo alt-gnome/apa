@@ -22,7 +22,7 @@ namespace Apa {
     ) throws CommandError, OptionsError {
         var error = new Gee.ArrayList<string> ();
 
-        args_handler.check_args_size (null);
+        args_handler.check_args_size (false, null);
 
         foreach (string package_name in args_handler.args) {
             if (!(yield check_package_name_no_action (package_name))) {
@@ -70,9 +70,12 @@ namespace Apa {
                                 ),
                                 search_result
                             );
-                            do_short_array_list (ref search_result);
+                            var package_names = new Gee.ArrayList<string> ();
+                            foreach (var package_info in parse_search (search_result.to_array ())) {
+                                package_names.add (package_info.name);
+                            }
 
-                            possible_package_names = fuzzy_search (package_error_source, search_result.to_array ());
+                            possible_package_names = fuzzy_search (package_error_source, package_names.to_array (), 9);
 
                         } else {
                             var search_result = new Gee.ArrayList<string> ();
@@ -84,9 +87,12 @@ namespace Apa {
                                 ),
                                 search_result
                             );
-                            do_short_array_list (ref search_result);
+                            var package_names = new Gee.ArrayList<string> ();
+                            foreach (var package_info in parse_search (search_result.to_array ())) {
+                                package_names.add (package_info.name);
+                            }
 
-                            possible_package_names = search_result.to_array ();
+                            possible_package_names = package_names.to_array ();
 
                             if (possible_package_names.length == 0) {
                                 possible_package_names = null;
