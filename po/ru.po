@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: apa\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-16 21:02+0300\n"
-"PO-Revision-Date: 2024-12-15 21:51+0300\n"
+"POT-Creation-Date: 2024-12-16 22:53+0300\n"
+"PO-Revision-Date: 2024-12-16 22:55+0300\n"
 "Last-Translator: David Sultaniiazov <x1z53@alt-gnome.ru>\n"
 "Language-Team: Russian\n"
 "Language: ru\n"
@@ -98,7 +98,7 @@ msgstr "Значение опции `-c/--config' некорректно"
 
 #: src/apa/do.vala:256 src/apa/install.vala:241
 msgid "Broken packages. Running `apa update' can help you"
-msgstr ""
+msgstr "Пакеты повреждены. Запуск `apa update' может помочь вам"
 
 #: src/apa/install.vala:29 src/apa/remove.vala:29
 msgid "For operation like `<package>+/-' use `do' command instead"
@@ -197,7 +197,7 @@ msgstr "  Имеет %d подзаданий"
 
 #: src/apa/task/task-search.vala:96
 msgid "  Subtasks: "
-msgstr "  Подзадания:"
+msgstr "  Подзадания: "
 
 #: src/apa/task/task-show.vala:39
 #, c-format
@@ -506,19 +506,20 @@ msgid ""
 "Display a list of installed packages. You can pass arguments to search "
 "through the list."
 msgstr ""
+"Показать список установленных пакетов. Вы можете передать аргументы для "
+"поиска по списку."
 
 #: src/data/descriptions.vala:156
 msgid "Show information about package."
 msgstr "Показать информацию о пакете"
 
 #: src/data/descriptions.vala:160
-#, fuzzy
 msgid ""
 "Perform a file search among the packages in the repository. It supports "
 "searching among installed packages using the `--installed' option."
 msgstr ""
-"Поиск файлов среди пакетов в репозитории. Поддерживается поиск среди "
-"установленных пакетов с использованием опции `--local'."
+"Выполняет поиск файлов среди пакетов в репозитории. Поддерживается поиск "
+"среди установленных пакетов с использованием параметра `--installed'."
 
 #: src/data/descriptions.vala:164
 msgid "Show this help text. Same as `apa --help'."
@@ -562,21 +563,24 @@ msgstr ""
 
 #: src/data/descriptions.vala:191
 msgid "Print full package records when searching."
-msgstr ""
+msgstr "Показать полные записи о пакетах при поиске."
 
 #: src/data/descriptions.vala:195
 msgid ""
-"Make  depends  recursive  so that all packages mentioned are printed once."
+"Make dependencies recursive so that all packages mentioned are printed once."
 msgstr ""
+"Сделать зависимости рекурсивными, чтобы все упомянутые пакеты печатались "
+"один раз."
 
 #: src/data/descriptions.vala:199
 msgid "Only search on the package names, not the long descriptions."
 msgstr "Поиск только по названиям пакетов, а не по длинным описаниям."
 
 #: src/data/descriptions.vala:203
-#, fuzzy
 msgid "Search among installed packages. Works well with `--names-only' option"
-msgstr "Искать среди установленных пакетов."
+msgstr ""
+"Выполняет поиск среди установленных пакетов. Хорошо работает с параметром `--"
+"names-only'."
 
 #: src/data/descriptions.vala:207
 msgid ""
@@ -698,17 +702,16 @@ msgid "List all repositories."
 msgstr "Список всех репозиториев."
 
 #: src/data/descriptions.vala:319
-#, fuzzy
 msgid "RPM information output format."
-msgstr "Показать информацию о пакете"
+msgstr "Формат вывода информации RPM."
 
 #: src/data/descriptions.vala:323
 msgid "Sort the output in alphabetical order."
 msgstr "Отсортируйте выходные данные в алфавитном порядке."
 
 #: src/data/descriptions.vala:327
-msgid "Sorts in the opposite direction of the --sort option."
-msgstr ""
+msgid "Sorts in the opposite direction of the `--sort' option."
+msgstr "Сортировка выполняется в направлении, параметру `--sort'."
 
 #: src/data/descriptions.vala:331
 msgid "Show packages sorted by installation date."
@@ -716,7 +719,7 @@ msgstr "Показать пакеты, отсортированные по да�
 
 #: src/data/descriptions.vala:335
 msgid "Show package names. Equal to `rpm -qa'"
-msgstr ""
+msgstr "Показывать имена пакетов. То же, что и `rpm -qa'"
 
 #: src/data/descriptions.vala:339
 msgid "Print package files."
@@ -731,22 +734,21 @@ msgid "To make the print more classic. Also removes the color selection."
 msgstr "Чтобы сделать вывод более классическим. Также убирается выбор цвета."
 
 #: src/data/descriptions.vala:354
-#, fuzzy
 msgid ""
 "Which branch of the repository to use for the search. It is ignored if the "
 "`--installed' option is set. By default: `sisyphus'."
 msgstr ""
-"Выбор ветки репозитория для поиска. Игнорируется, если установлен параметр "
-"`--local'. По умолчанию: `sisyphus'."
+"Какую ветку репозитория использовать для поиска. Если задан параметр `--"
+"installed', он игнорируется. По умолчанию: `sisyphus'."
 
 #: src/data/descriptions.vala:358
-#, fuzzy
 msgid ""
 "In packages for which architecture to look for. It is ignored if the `--"
 "installed' option is set. Used current arch by default."
 msgstr ""
-"Для пакетов, у которых нужно указать архитектуру. Игнорируется, если "
-"установлен параметр `--local'. По умолчанию используется текущая архитектура."
+"В пакетах, для которых требуется указать архитектуру. Если установлен "
+"параметр `--installed', он игнорируется. По умолчанию используется текущая "
+"архитектура."
 
 #: src/data/descriptions.vala:365
 msgid "Find tasks by source package name."
@@ -823,7 +825,7 @@ msgstr "Доступные команды:"
 
 #: src/utils.vala:190
 msgid "Error:"
-msgstr ""
+msgstr "Ошибка:"
 
 #. Translators: %s is 'to install', 'to remove' etc
 #: src/utils.vala:202

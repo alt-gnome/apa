@@ -192,7 +192,7 @@ namespace Apa.AptCache.Descriptions {
     }
 
     public inline string option_recursive () {
-        return _("Make  depends  recursive  so that all packages mentioned are printed once.");
+        return _("Make dependencies recursive so that all packages mentioned are printed once.");
     }
 
     public inline string option_names_only () {
@@ -324,7 +324,7 @@ namespace Apa.Rpm.Descriptions {
     }
 
     public inline string option_asort () {
-        return _("Sorts in the opposite direction of the --sort option.");
+        return _("Sorts in the opposite direction of the `--sort' option.");
     }
 
     public inline string option_with_date () {

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: apa\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-16 21:02+0300\n"
+"POT-Creation-Date: 2024-12-16 22:53+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -500,7 +500,7 @@ msgstr ""
 
 #: src/data/descriptions.vala:195
 msgid ""
-"Make  depends  recursive  so that all packages mentioned are printed once."
+"Make dependencies recursive so that all packages mentioned are printed once."
 msgstr ""
 
 #: src/data/descriptions.vala:199
@@ -622,7 +622,7 @@ msgid "Sort the output in alphabetical order."
 msgstr ""
 
 #: src/data/descriptions.vala:327
-msgid "Sorts in the opposite direction of the --sort option."
+msgid "Sorts in the opposite direction of the `--sort' option."
 msgstr ""
 
 #: src/data/descriptions.vala:331
