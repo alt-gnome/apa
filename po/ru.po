@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: apa\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-15 21:45+0300\n"
+"POT-Creation-Date: 2024-12-16 21:02+0300\n"
 "PO-Revision-Date: 2024-12-15 21:51+0300\n"
 "Last-Translator: David Sultaniiazov <x1z53@alt-gnome.ru>\n"
 "Language-Team: Russian\n"
@@ -51,31 +51,31 @@ msgstr "Неизвестная операция `%c' в `%s'"
 msgid "Don't known what to do with %s"
 msgstr "Неизвестно, что делать с %s"
 
-#: src/apa/do.vala:108 src/apa/install.vala:101 src/apa/remove.vala:60
+#: src/apa/do.vala:116 src/apa/install.vala:109 src/apa/remove.vala:63
 #, c-format
 msgid "Package `%s' not found, but packages with a similar name were found"
 msgstr "Пакет `%s' не найден, но были найдены пакеты с похожим названием"
 
-#: src/apa/do.vala:110 src/apa/remove.vala:62
+#: src/apa/do.vala:118 src/apa/remove.vala:65
 msgid "to remove"
 msgstr "для удаления"
 
-#: src/apa/do.vala:116 src/apa/do.vala:162 src/apa/do.vala:211
+#: src/apa/do.vala:124 src/apa/do.vala:172 src/apa/do.vala:223
 msgid "There are no packages left to do"
 msgstr "Не осталось пакетов для оперирование"
 
-#: src/apa/do.vala:156 src/apa/do.vala:205 src/apa/install.vala:103
-#: src/apa/install.vala:142 src/apa/install.vala:194
+#: src/apa/do.vala:166 src/apa/do.vala:217 src/apa/install.vala:111
+#: src/apa/install.vala:152 src/apa/install.vala:206
 msgid "to install"
 msgstr "для установки"
 
-#: src/apa/do.vala:229 src/apa/install.vala:162 src/apa/remove.vala:86
+#: src/apa/do.vala:241 src/apa/install.vala:172 src/apa/remove.vala:89
 #: src/apa/task/task-install.vala:39 src/apa/update.vala:35
 #: src/apa/upgrade.vala:55
 msgid "APT is currently busy"
 msgstr "APT в данный момент занят"
 
-#: src/apa/do.vala:233 src/apa/install.vala:214 src/apa/upgrade.vala:59
+#: src/apa/do.vala:244 src/apa/install.vala:226 src/apa/upgrade.vala:59
 msgid ""
 "Unable to fetch some archives. Check your connection to repository. Run `apa "
 "update' or try use `--fix-missing' option"
@@ -83,18 +83,22 @@ msgstr ""
 "Не удалось получить некоторые архивы. Проверьте подключение к репозиторию. "
 "Запустите `apa update' или попробуйте использовать опцию `--fix-missing'."
 
-#: src/apa/do.vala:237 src/apa/install.vala:218 src/apa/remove.vala:90
-#: src/apa/search.vala:39
+#: src/apa/do.vala:247 src/apa/install.vala:229 src/apa/remove.vala:93
+#: src/apa/search.vala:151
 msgid ""
 "Option `-o/--option' value is incorrect. It should look like `OptionName=val'"
 msgstr ""
 "Значение опция `-o/--option' некорректно. Оно должно выглядеть как "
 "`OptionName=val'"
 
-#: src/apa/do.vala:241 src/apa/install.vala:225 src/apa/remove.vala:94
-#: src/apa/search.vala:43
+#: src/apa/do.vala:250 src/apa/install.vala:235 src/apa/remove.vala:97
+#: src/apa/search.vala:155
 msgid "Option `-c/--config' value is incorrect"
 msgstr "Значение опции `-c/--config' некорректно"
+
+#: src/apa/do.vala:256 src/apa/install.vala:241
+msgid "Broken packages. Running `apa update' can help you"
+msgstr ""
 
 #: src/apa/install.vala:29 src/apa/remove.vala:29
 msgid "For operation like `<package>+/-' use `do' command instead"
@@ -105,12 +109,12 @@ msgstr "Для такой операции, как '<пакет>+/-', испол
 msgid "Found task `%s' in packages. Skipping other"
 msgstr "Найдено задание `%s' в пакетах. Пропуск других"
 
-#: src/apa/install.vala:97 src/apa/remove.vala:43 src/apa/remove.vala:56
+#: src/apa/install.vala:105 src/apa/remove.vala:46 src/apa/remove.vala:59
 #, c-format
 msgid "Package `%s' not found"
 msgstr "Пакет `%s' не найден"
 
-#: src/apa/install.vala:109 src/apa/install.vala:148 src/apa/install.vala:200
+#: src/apa/install.vala:117 src/apa/install.vala:158 src/apa/install.vala:212
 msgid "There are no packages left to install"
 msgstr "Не осталось пакетов для установки"
 
@@ -130,7 +134,7 @@ msgstr ""
 msgid "Have you mooed today?"
 msgstr ""
 
-#: src/apa/remove.vala:68
+#: src/apa/remove.vala:71
 msgid "There are no packages left to remove"
 msgstr "Не осталось пакетов для удаления"
 
@@ -282,21 +286,21 @@ msgstr "Нужны привелегии суперпользователя дл�
 msgid "PackageKit is running"
 msgstr "Запущен PackageKit"
 
-#: src/config-manager.vala:125
+#: src/config-manager.vala:134
 msgid "Couldn't open configuration file."
 msgstr "Не удалось открыть конфигурационный файл"
 
-#: src/config-manager.vala:130
+#: src/config-manager.vala:139
 msgid "Error in config. Recreating…"
 msgstr "Ошибка в конфигурации. Пересоздание…"
 
-#: src/config-manager.vala:145 src/config-manager.vala:164
-#: src/config-manager.vala:175 src/config-manager.vala:195
+#: src/config-manager.vala:154 src/config-manager.vala:173
+#: src/config-manager.vala:184 src/config-manager.vala:204
 #, c-format
 msgid "Key `%s' doesn't exists"
 msgstr "Ключа `%s' не существует"
 
-#: src/config-manager.vala:205
+#: src/config-manager.vala:214
 msgid "Wrong type."
 msgstr "Неверный тип"
 
@@ -498,17 +502,20 @@ msgstr ""
 "используйте эту команду осторожно."
 
 #: src/data/descriptions.vala:152
-msgid "Display a list of installed packages."
-msgstr "Показать список установленных пакетов"
+msgid ""
+"Display a list of installed packages. You can pass arguments to search "
+"through the list."
+msgstr ""
 
 #: src/data/descriptions.vala:156
 msgid "Show information about package."
 msgstr "Показать информацию о пакете"
 
 #: src/data/descriptions.vala:160
+#, fuzzy
 msgid ""
 "Perform a file search among the packages in the repository. It supports "
-"searching among installed packages using the `--local' option."
+"searching among installed packages using the `--installed' option."
 msgstr ""
 "Поиск файлов среди пакетов в репозитории. Поддерживается поиск среди "
 "установленных пакетов с использованием опции `--local'."
@@ -554,10 +561,24 @@ msgstr ""
 "только зависимые и предзависимые отношения."
 
 #: src/data/descriptions.vala:191
+msgid "Print full package records when searching."
+msgstr ""
+
+#: src/data/descriptions.vala:195
+msgid ""
+"Make  depends  recursive  so that all packages mentioned are printed once."
+msgstr ""
+
+#: src/data/descriptions.vala:199
 msgid "Only search on the package names, not the long descriptions."
 msgstr "Поиск только по названиям пакетов, а не по длинным описаниям."
 
-#: src/data/descriptions.vala:195
+#: src/data/descriptions.vala:203
+#, fuzzy
+msgid "Search among installed packages. Works well with `--names-only' option"
+msgstr "Искать среди установленных пакетов."
+
+#: src/data/descriptions.vala:207
 msgid ""
 "Set a APT Configuration Option; This will set an arbitrary configuration "
 "option. The syntax is `-o Foo::Bar=bar' or `--option=Foo::Bar=bar'."
@@ -566,7 +587,7 @@ msgstr ""
 "параметр конфигурации. Синтаксис: `-o Foo::Bar=bar' или `--option=Foo::"
 "Bar=bar'."
 
-#: src/data/descriptions.vala:199
+#: src/data/descriptions.vala:211
 msgid ""
 "Path to APT Configuration File; Specify a configuration file to use. The "
 "program will read the default configuration file and then this configuration "
@@ -580,44 +601,44 @@ msgstr ""
 "необходимо задать параметры конфигурации, укажите файл с переменной среды "
 "APT_CONFIG. Смотрите apt.conf(5) для получения информации о синтаксисе."
 
-#: src/data/descriptions.vala:206
+#: src/data/descriptions.vala:218
 msgid "Reset entire config to defaults values."
 msgstr "Сбросить всю конфигурацию до значений по умолчанию."
 
-#: src/data/descriptions.vala:210
+#: src/data/descriptions.vala:222
 msgid "Run `apa update' automatically before some commands."
 msgstr "Запуск `apa update' автоматически перед некоторыми командами."
 
-#: src/data/descriptions.vala:214
+#: src/data/descriptions.vala:226
 msgid "Use fuzzy search in case of unsuccessful install via `apa install'."
 msgstr ""
 "Использовать нечёткий поиск в случае неудачной установки через `apa install'."
 
-#: src/data/descriptions.vala:218
+#: src/data/descriptions.vala:230
 msgid "Automatically upgrade the kernel when executing an `apa upgrade'."
 msgstr "Автоматически обновлять ядро, когда запускается `apa upgrade'."
 
-#: src/data/descriptions.vala:229
+#: src/data/descriptions.vala:241
 msgid "Don't print any to stdout."
 msgstr "Ничего не выводить в стандартный вывод."
 
-#: src/data/descriptions.vala:233
+#: src/data/descriptions.vala:245
 msgid "No-act. Perform ordering simulation."
 msgstr "Ничего не делать. Сымитировать действия."
 
-#: src/data/descriptions.vala:237
+#: src/data/descriptions.vala:249
 msgid "Assume `Yes' to all queries and do not prompt."
 msgstr "Ответить `Да' на все запросы и не спрашивать."
 
-#: src/data/descriptions.vala:241
+#: src/data/descriptions.vala:253
 msgid "Attempt to continue if the integrity check fails."
 msgstr "Попытаться продолжить, если проверка целостности завершится неудачей."
 
-#: src/data/descriptions.vala:245
+#: src/data/descriptions.vala:257
 msgid "Show verbose version numbers."
 msgstr "Показывать подробные номера версий."
 
-#: src/data/descriptions.vala:249
+#: src/data/descriptions.vala:261
 msgid ""
 "Disables downloading of packages. This is best used with `--ignore-missing' "
 "to force APT to use only the `.rpm' it has already downloaded."
@@ -626,7 +647,7 @@ msgstr ""
 "ignore-missing', чтобы заставить APT использовать только те файлы `.rpm', "
 "которые он уже загрузил."
 
-#: src/data/descriptions.vala:253
+#: src/data/descriptions.vala:265
 msgid ""
 "Ignore missing packages; If packages cannot be retrieved or fail the "
 "integrity check after retrieval (corrupted package files), hold back those "
@@ -636,35 +657,35 @@ msgstr ""
 "прошли проверку целостности после извлечения (повреждённые файлы пакетов), "
 "эти пакеты будут отложены и будет обработан результат."
 
-#: src/data/descriptions.vala:265
+#: src/data/descriptions.vala:277
 msgid "Download only - do NOT install or unpack archives."
 msgstr "Только для скачивания — НЕ устанавливать или распаковывать архивы."
 
-#: src/data/descriptions.vala:269
+#: src/data/descriptions.vala:281
 msgid "Show a list of upgraded packages as well."
 msgstr "Также отобразить список обновлённых пакетов."
 
-#: src/data/descriptions.vala:273
+#: src/data/descriptions.vala:285
 msgid "Also upgrade kernel."
 msgstr "Также обновить ядро."
 
-#: src/data/descriptions.vala:277
+#: src/data/descriptions.vala:289
 msgid "When removing packages, remove dependencies as possible."
 msgstr "При удалении пакетов, по возможности удалить зависимости"
 
-#: src/data/descriptions.vala:281
+#: src/data/descriptions.vala:293
 msgid "Reinstall packages."
 msgstr "Переустановить пакеты."
 
-#: src/data/descriptions.vala:285
+#: src/data/descriptions.vala:297
 msgid "Build the source package after fetching it."
 msgstr "Построить исходный пакет после его извлечения."
 
-#: src/data/descriptions.vala:292
+#: src/data/descriptions.vala:304
 msgid "No-act. Changes only shown, is not performed."
 msgstr "Ничего не делать. Изменения только отображаются, не приминяются."
 
-#: src/data/descriptions.vala:296
+#: src/data/descriptions.vala:308
 msgid ""
 "Need for the special case when you want to use hasher(7) together with a "
 "local APT configuration."
@@ -672,91 +693,102 @@ msgstr ""
 "Необходимо для особых случаев, когда вы хотите использовать hasher(7) вместе "
 "с локальной конфигурацией APT."
 
-#: src/data/descriptions.vala:300
+#: src/data/descriptions.vala:312
 msgid "List all repositories."
 msgstr "Список всех репозиториев."
 
-#: src/data/descriptions.vala:307
-msgid "Print only packages names."
-msgstr "Показать только имена пакетов."
+#: src/data/descriptions.vala:319
+#, fuzzy
+msgid "RPM information output format."
+msgstr "Показать информацию о пакете"
 
-#: src/data/descriptions.vala:311
+#: src/data/descriptions.vala:323
 msgid "Sort the output in alphabetical order."
 msgstr "Отсортируйте выходные данные в алфавитном порядке."
 
-#: src/data/descriptions.vala:315
+#: src/data/descriptions.vala:327
+msgid "Sorts in the opposite direction of the --sort option."
+msgstr ""
+
+#: src/data/descriptions.vala:331
 msgid "Show packages sorted by installation date."
 msgstr "Показать пакеты, отсортированные по дате установки."
 
-#: src/data/descriptions.vala:319
+#: src/data/descriptions.vala:335
+msgid "Show package names. Equal to `rpm -qa'"
+msgstr ""
+
+#: src/data/descriptions.vala:339
 msgid "Print package files."
 msgstr "Показать файлы пакета."
 
-#: src/data/descriptions.vala:326
+#: src/data/descriptions.vala:346
 msgid "Search among the installed packages."
 msgstr "Искать среди установленных пакетов."
 
-#: src/data/descriptions.vala:330
+#: src/data/descriptions.vala:350
 msgid "To make the print more classic. Also removes the color selection."
 msgstr "Чтобы сделать вывод более классическим. Также убирается выбор цвета."
 
-#: src/data/descriptions.vala:334
+#: src/data/descriptions.vala:354
+#, fuzzy
 msgid ""
 "Which branch of the repository to use for the search. It is ignored if the "
-"`--local' option is set. By default: `sisyphus'."
+"`--installed' option is set. By default: `sisyphus'."
 msgstr ""
 "Выбор ветки репозитория для поиска. Игнорируется, если установлен параметр "
 "`--local'. По умолчанию: `sisyphus'."
 
-#: src/data/descriptions.vala:338
+#: src/data/descriptions.vala:358
+#, fuzzy
 msgid ""
 "In packages for which architecture to look for. It is ignored if the `--"
-"local' option is set. Used current arch by default."
+"installed' option is set. Used current arch by default."
 msgstr ""
 "Для пакетов, у которых нужно указать архитектуру. Игнорируется, если "
 "установлен параметр `--local'. По умолчанию используется текущая архитектура."
 
-#: src/data/descriptions.vala:345
+#: src/data/descriptions.vala:365
 msgid "Find tasks by source package name."
 msgstr "Найти задания по названию исходного пакета."
 
-#: src/data/descriptions.vala:349
+#: src/data/descriptions.vala:369
 msgid "Task owner."
 msgstr "Владелец задания."
 
-#: src/data/descriptions.vala:353
+#: src/data/descriptions.vala:373
 msgid "Branch name."
 msgstr "Имя ветки."
 
-#: src/data/descriptions.vala:357
+#: src/data/descriptions.vala:377
 msgid "Task state."
 msgstr "Состояние задания."
 
-#: src/data/descriptions.vala:376
+#: src/data/descriptions.vala:396
 msgid "Add kernel headers to install."
 msgstr "Добавить заголовки ядра при установке."
 
-#: src/data/descriptions.vala:380
+#: src/data/descriptions.vala:400
 msgid "Select all available kernel modules to install."
 msgstr "Выбрать все доступные модули ядра при установке."
 
-#: src/data/descriptions.vala:384
+#: src/data/descriptions.vala:404
 msgid "Interactive modules selection."
 msgstr "Интерактивный выбор модулей."
 
-#: src/data/descriptions.vala:388
+#: src/data/descriptions.vala:408
 msgid "Add `-debuginfo' package to install."
 msgstr "Добавить `-debuginfo' пакет при установке."
 
-#: src/data/descriptions.vala:392
+#: src/data/descriptions.vala:412
 msgid "Include (add) external module (by a short name)."
 msgstr "Включить (добавить) внешний модуль (с кратким названием)."
 
-#: src/data/descriptions.vala:396
+#: src/data/descriptions.vala:416
 msgid "Exclude (del) external module from install."
 msgstr "Исключить (удалить) внешний модуль из установки."
 
-#: src/data/descriptions.vala:400
+#: src/data/descriptions.vala:420
 msgid ""
 "Select desired kernel flavour (def, rt, etc) by default it's the same as the "
 "booted kernel, special name `latest' selects the newest flavour."
@@ -765,7 +797,7 @@ msgstr ""
 "загруженным ядром, специальное название `latest' выбирает самый новый "
 "вариант."
 
-#: src/data/descriptions.vala:404
+#: src/data/descriptions.vala:424
 msgid ""
 "Desired kernel release for the current or specified flavour (allowed formats "
 "by example: old format: alt1, 5.7.19-alt1; classic kernel release: 5.7.19-"
@@ -789,25 +821,35 @@ msgstr "Нет справки для `%s %s'"
 msgid "Available commands:"
 msgstr "Доступные команды:"
 
+#: src/utils.vala:190
+msgid "Error:"
+msgstr ""
+
 #. Translators: %s is 'to install', 'to remove' etc
-#: src/utils.vala:187
+#: src/utils.vala:202
 #, c-format
 msgid "Choose package %s:"
 msgstr "Выберите пакет для %s:"
 
 #. Translators: IMPORTANT! space symbol in the end
-#: src/utils.vala:204
+#: src/utils.vala:219
 msgid "[0 - exit; -1 - skip] "
 msgstr "[0 - выход; -1 - пропустить] "
 
-#: src/utils.vala:264
+#: src/utils.vala:279
 #, c-format
 msgid "You should %s"
 msgstr "Вы должны %s"
 
-#: src/utils.vala:272
+#: src/utils.vala:287
 msgid "create issue↗️"
 msgstr "создать ишью↗️"
+
+#~ msgid "Display a list of installed packages."
+#~ msgstr "Показать список установленных пакетов"
+
+#~ msgid "Print only packages names."
+#~ msgstr "Показать только имена пакетов."
 
 #, fuzzy, c-format
 #~ msgid "Package `%s' not found, but packages with a similar name were found:"
