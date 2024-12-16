@@ -23,6 +23,7 @@ namespace Apa {
         bool skip_unknown_options = false
     ) throws CommandError, OptionsError {
         var error = new Gee.ArrayList<string> ();
+        var result = new Gee.ArrayList<string> ();
 
         args_handler.check_args_size (false, null);
 
@@ -43,9 +44,11 @@ namespace Apa {
             }
         }
 
-        if (installed) {
-            var result = new Gee.ArrayList<string> ();
+        for (int i = 0; i < args_handler.args.size; i++) {
+            args_handler.args[i] = fix_regex (args_handler.args[i]);
+        }
 
+        if (installed) {
             while (true) {
                 result.clear ();
                 error.clear ();
@@ -75,23 +78,54 @@ namespace Apa {
 
                 } else {
                     var search_result = new Gee.ArrayList<string> ();
+                    var matches = new Gee.ArrayList<string> ();
 
                     foreach (var package_info in parse_search (result.to_array ())) {
                         bool name_good = false;
                         bool desc_good = false;
+                        matches.clear ();
 
                         foreach (var pattern in args_handler.args) {
-                            if (!name_good) {
-                                name_good = Regex.match_simple (pattern, package_info.name);
-                            }
+                            try {
+                                var regex = new Regex (
+                                    pattern,
+                                    RegexCompileFlags.OPTIMIZE,
+                                    RegexMatchFlags.NOTEMPTY
+                                );
+                                MatchInfo match_info;
 
-                            if (!names_only && !desc_good) {
-                                desc_good = Regex.match_simple (pattern, package_info.description);
+                                if (!name_good) {
+                                    if (regex.match (package_info.name, 0, out match_info)) {
+                                        name_good = true;
+                                        matches.add_all_array (match_info.fetch_all ());
+                                    }
+                                }
+
+                                if (!names_only && !desc_good) {
+                                    if (regex.match (package_info.description, 0, out match_info)) {
+                                        desc_good = true;
+                                        matches.add_all_array (match_info.fetch_all ());
+                                    }
+                                }
+
+                            } catch (Error e) {
+                                throw new CommandError.COMMON (e.message);
                             }
                         }
 
                         if (name_good || desc_good) {
-                            search_result.add (package_info.to_string ());
+                            if (names_only) {
+                                search_result.add ("%s - %s".printf (
+                                    mark_text (package_info.name, matches.to_array ()),
+                                    package_info.description
+                                ));
+
+                            } else {
+                                search_result.add (mark_text (
+                                    package_info.to_string (),
+                                    matches.to_array ()
+                                ));
+                            }
                         }
                     }
 
@@ -106,7 +140,7 @@ namespace Apa {
         } else {
             while (true) {
                 error.clear ();
-                var status = yield AptCache.search (args_handler, null, error);
+                var status = yield AptCache.search (args_handler, result, error);
 
                 if (status != ExitCode.SUCCESS && error.size > 0) {
                     string error_message = normalize_error (error);
@@ -127,6 +161,66 @@ namespace Apa {
                     }
 
                 } else {
+                    var search_result = new Gee.ArrayList<string> ();
+                    var matches = new Gee.ArrayList<string> ();
+                    var regexes = new Gee.ArrayList<Regex> ();
+
+                    foreach (var pattern in args_handler.args) {
+                        try {
+                            regexes.add (new Regex (
+                                pattern,
+                                RegexCompileFlags.CASELESS | RegexCompileFlags.OPTIMIZE,
+                                RegexMatchFlags.NOTEMPTY
+                            ));
+
+                        } catch (Error e) {
+                            throw new CommandError.COMMON (e.message);
+                        }
+                    }
+
+                    foreach (var package_info in parse_search (result.to_array ())) {
+                        bool name_good = false;
+                        bool desc_good = false;
+
+                        foreach (var regex in regexes) {
+                            MatchInfo match_info;
+
+                            if (!name_good) {
+                                if (regex.match (package_info.name, 0, out match_info)) {
+                                    name_good = true;
+                                    matches.add_all_array (match_info.fetch_all ());
+                                }
+                            }
+
+                            if (!names_only && !desc_good) {
+                                if (regex.match (package_info.description, 0, out match_info)) {
+                                    desc_good = true;
+                                    matches.add_all_array (match_info.fetch_all ());
+                                }
+                            }
+                        }
+
+                        if (name_good || desc_good) {
+                            if (names_only) {
+                                message (package_info.name);
+                                search_result.add ("%s - %s".printf (
+                                    mark_text (package_info.name, matches.to_array ()),
+                                    package_info.description
+                                ));
+
+                            } else {
+                                search_result.add (mark_text (
+                                    package_info.to_string (),
+                                    matches.to_array ()
+                                ));
+                            }
+                        }
+                    }
+
+                    foreach (var line in search_result) {
+                        print (line);
+                    }
+
                     return status;
                 }
             }

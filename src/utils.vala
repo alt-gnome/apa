@@ -56,8 +56,8 @@ public struct Apa.PackageSearchInfo {
         };
     }
 
-    public string to_string () {
-        return "%s - %s".printf (
+    public string to_string (string format = "%s - %s") {
+        return format.printf (
             name,
             description != null ? this.description : ""
         );
@@ -289,6 +289,27 @@ namespace Apa {
             )
         ));
     }
+
+    public string fix_regex (string regex) {
+        StringBuilder builder = new StringBuilder ();
+
+        for (int i = 0; i < regex.length; i++) {
+            char current = regex[i];
+
+            if (current == '*') {
+                if (i == 0) {
+                    builder.append_c ('.');
+
+                } else if (regex[i - 1] != '.') {
+                    builder.append_c ('.');
+                }
+            }
+
+            builder.append_c (current);
+        }
+
+        return builder.free_and_steal ();
+    } 
 
     public async bool check_package_name_no_action (string package_name) {
         if (package_name.has_suffix ("-") || package_name.has_suffix ("+")) {

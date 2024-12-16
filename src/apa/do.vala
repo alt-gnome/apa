@@ -102,7 +102,7 @@ namespace Apa {
                             case '-':
                                 var installed_result = new Gee.ArrayList<string> ();
                                 yield Rpm.list (
-                                    new ArgsHandler ({ "--queryformat=%{NAME}" }),
+                                    new ArgsHandler ({ "--queryformat=%{NAME}\n" }),
                                     installed_result
                                 );
 
@@ -113,7 +113,7 @@ namespace Apa {
                                 assert_not_reached ();
                         }
 
-                        print (_("Package `%s' not found, but packages with a similar name were found").printf (package_error_source));
+                        print (_("Package `%s' not found, but packages with a similar name were found").printf (package_error_source_name));
                         string? answer;
                         var result = give_choice (possible_package_names, _("to remove"), out answer);
 
