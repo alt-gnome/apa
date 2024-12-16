@@ -1,7 +1,7 @@
 project(
   'apa',
   ['vala', 'c'],
-  version : '0.1.2.alpha',
+  version : '0.1.3.alpha',
   meson_version: '>= 1.0.0',
   license: 'GPL-3.0-or-later',
   default_options: ['prefix=/usr']
