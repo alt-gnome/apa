@@ -172,7 +172,7 @@ namespace Apa {
     }
 
     public void print_error (string str) {
-        print_err (red_text ("E: %s".printf (str)));
+        print_err (red_text ("%s %s").printf (bold_text (_("Error:")), str));
     }
 
     public ChoiceResult give_choice (string[] variants, string action_name, out string? result = null) {
