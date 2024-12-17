@@ -182,6 +182,8 @@ namespace Apa {
                         bool name_good = false;
                         bool desc_good = false;
 
+                        matches.clear ();
+
                         foreach (var regex in regexes) {
                             MatchInfo match_info;
 
