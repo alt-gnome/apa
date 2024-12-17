@@ -37,7 +37,7 @@ namespace Apa.AptCache.Data {
                 Descriptions.option_hide_progress ()
             },
             {
-                "-i", "--important-only",
+                "-I", "--important-only",
                 "-i",
                 Descriptions.option_important_only ()
             },
