@@ -17,7 +17,11 @@
 
 namespace Apa {
 
+    Pk.Client client;
+
     public async int run (owned string[] argv) {
+
+        client = new Pk.Client ();
 
         if ("-v" in argv || "--version" in argv) {
             print_version ();

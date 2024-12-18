@@ -48,6 +48,7 @@ apa_no_main_code_sources = files (
   'data/get-data.vala',
   'data/repo-data.vala',
   'data/rpm-data.vala',
+  'data/search-data.vala',
   'data/search-file-data.vala',
   'data/task-data.vala',
   'data/update-kernel-data.vala',

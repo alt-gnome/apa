@@ -27,6 +27,7 @@ namespace Apa.Commands.Data {
     public const string TASK_COMMAND = "task";
     public const string HELP_COMMAND = "help";
     public const string VERSION_COMMAND = "version";
+    public const string SEARCH_COMMAND = "search";
     public const string SEARCH_FILE_COMMAND = "search-file";
     public const string REPO_COMMAND = "repo";
     public const string REINSTALL_COMMAND = "reinstall";
@@ -110,9 +111,9 @@ namespace Apa.Commands.Data {
                 true, true
             ),
             new CommandEntity (
-                AptCache.SEARCH,
+                SEARCH_COMMAND,
                 Descriptions.search (),
-                AptCache.Data.search_options (),
+                Search.Data.options (),
                 AptCache.Data.search_arg_options (),
                 false, false
             ),

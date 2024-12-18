@@ -19,9 +19,7 @@
 
 public static int main (string[] argv) {
     Intl.bindtextdomain (ApaConfig.GETTEXT_PACKAGE, ApaConfig.GNOMELOCALEDIR);
-    Intl.bindtextdomain ("apt", ApaConfig.GNOMELOCALEDIR);
     Intl.bind_textdomain_codeset (ApaConfig.GETTEXT_PACKAGE, "UTF-8");
-    Intl.bind_textdomain_codeset ("apt", "UTF-8");
 
     if (!Apa.locale_init ()) {
         warning ("Locale not supported by C library.\n\tUsing the fallback `C' locale.");
