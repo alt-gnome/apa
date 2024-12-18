@@ -17,21 +17,29 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+public class Apa.Package : Object {
+
+    public string name { get; set; }
+    public string description { get; set; }
+    public string version { get; set; }
+}
+
 namespace Apa {
     public async int search (
         owned ArgsHandler args_handler,
         bool skip_unknown_options = false
     ) throws CommandError, OptionsError {
-        var error = new Gee.ArrayList<string> ();
-        var result = new Gee.ArrayList<string> ();
-
         args_handler.check_args_size (false, null);
+
+        for (int i = 0; i < args_handler.args.size; i++) {
+            args_handler.args[i] = fix_regex (args_handler.args[i]);
+        }
 
         bool installed = false;
         bool names_only = false;
 
         foreach (var option in args_handler.options) {
-            var option_data = OptionEntity.find_option (AptCache.Data.search_options (), option);
+            var option_data = OptionEntity.find_option (Search.Data.options (), option);
 
             switch (option_data.short_option) {
                 case AptCache.Data.OPTION_INSTALLED_SHORT:
@@ -44,187 +52,91 @@ namespace Apa {
             }
         }
 
-        for (int i = 0; i < args_handler.args.size; i++) {
-            args_handler.args[i] = fix_regex (args_handler.args[i]);
+        Pk.Results result;
+
+        try {
+            result = yield client.get_packages_async (Pk.Filter.NONE, null, () => {});
+        } catch (Error e) {
+            throw new CommandError.COMMON (e.message);
         }
 
-        if (installed) {
-            while (true) {
-                result.clear ();
-                error.clear ();
+        var packages_sack = result.get_package_sack ();
+        var all_packages = packages_sack.get_array ();
 
-                var status = yield Rpm.list (
-                    new ArgsHandler.with_data (
-                        {},
-                        {
-                            { name: Rpm.Data.OPTION_QUERYFORMAT_LONG, value: "%{NAME} - %{SUMMARY}\n" }
-                        },
-                        {}
-                    ),
-                    result,
-                    error,
-                    skip_unknown_options
-                );
+        var search_result = new Gee.ArrayList<string> ();
+        var matches = new Gee.ArrayList<string> ();
+        var regexes = new Gee.ArrayList<Regex> ();
 
-                if (status != ExitCode.SUCCESS && error.size > 0) {
-                    string error_message = normalize_error (error);
-                    string[] error_sources;
+        foreach (var pattern in args_handler.args) {
+            try {
+                regexes.add (new Regex (
+                    pattern,
+                    RegexCompileFlags.OPTIMIZE | RegexCompileFlags.CASELESS,
+                    RegexMatchFlags.NOTEMPTY
+                ));
 
-                    switch (detect_error (error_message, out error_sources)) {
-                        case OriginErrorType.NONE:
-                        default:
-                            throw new CommandError.UNKNOWN_ERROR (error_message);
+            } catch (Error e) {
+                throw new CommandError.COMMON (e.message);
+            }
+        }
+
+        foreach (var package in all_packages) {
+            var p = new Package () {
+                name = package.get_name (),
+                description = package.summary,
+                version = package.get_version ()
+            };
+            var a = ApiBase.Jsoner.serialize (p, ApiBase.Case.KEBAB);
+            print (a);
+
+            bool name_good = false;
+            bool desc_good = false;
+
+            var package_name = package.get_name ();
+            var package_desc = package.summary;
+            matches.clear ();
+
+            foreach (var regex in regexes) {
+                MatchInfo match_info;
+
+                if (!name_good) {
+                    if (regex.match (package_name, 0, out match_info)) {
+                        name_good = true;
+                        matches.add_all_array (match_info.fetch_all ());
                     }
+                }
 
-                } else {
-                    var search_result = new Gee.ArrayList<string> ();
-                    var matches = new Gee.ArrayList<string> ();
-
-                    foreach (var package_info in parse_search (result.to_array ())) {
-                        bool name_good = false;
-                        bool desc_good = false;
-                        matches.clear ();
-
-                        foreach (var pattern in args_handler.args) {
-                            try {
-                                var regex = new Regex (
-                                    pattern,
-                                    RegexCompileFlags.OPTIMIZE,
-                                    RegexMatchFlags.NOTEMPTY
-                                );
-                                MatchInfo match_info;
-
-                                if (!name_good) {
-                                    if (regex.match (package_info.name, 0, out match_info)) {
-                                        name_good = true;
-                                        matches.add_all_array (match_info.fetch_all ());
-                                    }
-                                }
-
-                                if (!names_only && !desc_good) {
-                                    if (regex.match (package_info.description, 0, out match_info)) {
-                                        desc_good = true;
-                                        matches.add_all_array (match_info.fetch_all ());
-                                    }
-                                }
-
-                            } catch (Error e) {
-                                throw new CommandError.COMMON (e.message);
-                            }
-                        }
-
-                        if (name_good || desc_good) {
-                            if (names_only) {
-                                search_result.add ("%s - %s".printf (
-                                    mark_text (package_info.name, matches.to_array ()),
-                                    package_info.description
-                                ));
-
-                            } else {
-                                search_result.add (mark_text (
-                                    package_info.to_string (),
-                                    matches.to_array ()
-                                ));
-                            }
-                        }
+                if (!names_only && !desc_good) {
+                    if (regex.match (package_desc, 0, out match_info)) {
+                        desc_good = true;
+                        matches.add_all_array (match_info.fetch_all ());
                     }
-
-                    foreach (var line in search_result) {
-                        print (line);
-                    }
-
-                    return status;
                 }
             }
 
-        } else {
-            while (true) {
-                error.clear ();
-                var status = yield AptCache.search (args_handler, result, error);
-
-                if (status != ExitCode.SUCCESS && error.size > 0) {
-                    string error_message = normalize_error (error);
-                    string[] error_sources;
-
-                    switch (detect_error (error_message, out error_sources)) {
-                        case OriginErrorType.CONFIGURATION_ITEM_SPECIFICATION_MUST_HAVE_AN_VAL:
-                            print_error (_("Option `-o/--option' value is incorrect. It should look like `OptionName=val'"));
-                            return status;
-
-                        case OriginErrorType.OPEN_CONFIGURATION_FILE_FAILED:
-                            print_error (_("Option `-c/--config' value is incorrect"));
-                            return status;
-
-                        case OriginErrorType.NONE:
-                        default:
-                            throw new CommandError.UNKNOWN_ERROR (error_message);
-                    }
+            if (name_good || desc_good) {
+                if (names_only) {
+                    search_result.add ("%s - %s".printf (
+                        mark_text (package_name, matches.to_array ()),
+                        package_desc
+                    ));
 
                 } else {
-                    var search_result = new Gee.ArrayList<string> ();
-                    var matches = new Gee.ArrayList<string> ();
-                    var regexes = new Gee.ArrayList<Regex> ();
-
-                    foreach (var pattern in args_handler.args) {
-                        try {
-                            regexes.add (new Regex (
-                                pattern,
-                                RegexCompileFlags.CASELESS | RegexCompileFlags.OPTIMIZE,
-                                RegexMatchFlags.NOTEMPTY
-                            ));
-
-                        } catch (Error e) {
-                            throw new CommandError.COMMON (e.message);
-                        }
-                    }
-
-                    foreach (var package_info in parse_search (result.to_array ())) {
-                        bool name_good = false;
-                        bool desc_good = false;
-
-                        matches.clear ();
-
-                        foreach (var regex in regexes) {
-                            MatchInfo match_info;
-
-                            if (!name_good) {
-                                if (regex.match (package_info.name, 0, out match_info)) {
-                                    name_good = true;
-                                    matches.add_all_array (match_info.fetch_all ());
-                                }
-                            }
-
-                            if (!names_only && !desc_good) {
-                                if (regex.match (package_info.description, 0, out match_info)) {
-                                    desc_good = true;
-                                    matches.add_all_array (match_info.fetch_all ());
-                                }
-                            }
-                        }
-
-                        if (name_good || desc_good) {
-                            if (names_only) {
-                                search_result.add ("%s - %s".printf (
-                                    mark_text (package_info.name, matches.to_array ()),
-                                    package_info.description
-                                ));
-
-                            } else {
-                                search_result.add (mark_text (
-                                    package_info.to_string (),
-                                    matches.to_array ()
-                                ));
-                            }
-                        }
-                    }
-
-                    foreach (var line in search_result) {
-                        print (line);
-                    }
-
-                    return status;
+                    search_result.add (mark_text (
+                        "%s - %s".printf (
+                            package_name,
+                            package_desc
+                        ),
+                        matches.to_array ()
+                    ));
                 }
             }
         }
+
+        foreach (var line in search_result) {
+            print (line);
+        }
+
+        return 0;
     }
 }
