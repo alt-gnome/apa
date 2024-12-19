@@ -20,6 +20,7 @@ gee_dep = dependency ('gee-0.8')
 pk_dep = dependency('packagekit-glib2')
 libalt_repo_dep = dependency('libalt-repo-1', version: '>= 1.19.16', fallback : ['libalt-repo', 'lib_dep'])
 libvazzy_dep = dependency('libvazzy-1', version: '>= 1.4', fallback : ['libvazzy', 'lib_dep'])
+libapi_base = dependency('libapi-base-1')
 
 apa_dependencies = [
   glib_dep,
@@ -29,6 +30,7 @@ apa_dependencies = [
   pk_dep,
   libalt_repo_dep,
   libvazzy_dep,
+  libapi_base
 ]
 
 add_project_arguments(
