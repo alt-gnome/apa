@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: apa\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-16 22:53+0300\n"
-"PO-Revision-Date: 2024-12-16 22:55+0300\n"
+"POT-Creation-Date: 2024-12-20 00:18+0300\n"
+"PO-Revision-Date: 2024-12-20 00:18+0300\n"
 "Last-Translator: David Sultaniiazov <x1z53@alt-gnome.ru>\n"
 "Language-Team: Russian\n"
 "Language: ru\n"
@@ -831,7 +831,7 @@ msgstr "Ошибка:"
 #: src/utils.vala:202
 #, c-format
 msgid "Choose package %s:"
-msgstr "Выберите пакет для %s:"
+msgstr "Выберите пакет %s:"
 
 #. Translators: IMPORTANT! space symbol in the end
 #: src/utils.vala:219
