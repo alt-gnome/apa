@@ -204,7 +204,6 @@ namespace Apa {
 
                         if (name_good || desc_good) {
                             if (names_only) {
-                                message (package_info.name);
                                 search_result.add ("%s - %s".printf (
                                     mark_text (package_info.name, matches.to_array ()),
                                     package_info.description
