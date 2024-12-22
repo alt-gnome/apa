@@ -41,6 +41,10 @@ apa_no_main_code_sources = files (
   'apt/apt-get.vala',
   'apt/apt-repo.vala',
 
+  'cachier/cachier.vala',
+  'cachier/package-list.vala',
+  'cachier/package.vala',
+
   'data/cache-data.vala',
   'data/commands-data.vala',
   'data/config-data.vala',

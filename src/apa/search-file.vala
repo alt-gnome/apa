@@ -68,32 +68,32 @@ namespace Apa {
             }
         }
 
-        if (is_local) {
-            foreach (var arg in args_handler.args) {
-                if (!file_exists (arg)) {
-                    throw new CommandError.COMMON (_("No such file or directory: `%s'").printf (arg));
-                }
-            }
+        //  if (is_local) {
+        //      foreach (var arg in args_handler.args) {
+        //          if (!file_exists (arg)) {
+        //              throw new CommandError.COMMON (_("No such file or directory: `%s'").printf (arg));
+        //          }
+        //      }
 
-            var search_error = new Gee.ArrayList<string> ();
+        //      var search_error = new Gee.ArrayList<string> ();
 
-            var status = yield Rpm.serch_file (
-                new ArgsHandler.with_data (
-                    {},
-                    {},
-                    args_handler.args.to_array ()
-                ),
-                null,
-                search_error
-            );
+        //      var status = yield Rpm.serch_file (
+        //          new ArgsHandler.with_data (
+        //              {},
+        //              {},
+        //              args_handler.args.to_array ()
+        //          ),
+        //          null,
+        //          search_error
+        //      );
 
-            if (search_error.size != 0) {
-                string error_message = search_error[0].strip ();
-                throw new CommandError.COMMON ("%c%s".printf (error_message[0].toupper (), error_message[1:error_message.length]));
-            }
+        //      if (search_error.size != 0) {
+        //          string error_message = search_error[0].strip ();
+        //          throw new CommandError.COMMON ("%c%s".printf (error_message[0].toupper (), error_message[1:error_message.length]));
+        //      }
 
-            return status;
-        }
+        //      return status;
+        //  }
 
         var client = new AltRepo.Client ();
 

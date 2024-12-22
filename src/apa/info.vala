@@ -20,26 +20,28 @@ namespace Apa {
         owned ArgsHandler args_handler,
         bool skip_unknown_options = false
     ) throws CommandError, OptionsError {
-        while (true) {
-            var error = new Gee.ArrayList<string> ();
+        //  while (true) {
+        //      var error = new Gee.ArrayList<string> ();
 
-            args_handler.check_args_size (false, null);
+        //      args_handler.check_args_size (false, null);
 
-            var status = yield Rpm.info (args_handler, null, error, skip_unknown_options);
+        //      var status = yield Rpm.info (args_handler, null, error, skip_unknown_options);
 
-            if (status != ExitCode.SUCCESS && error.size > 0) {
-                string error_message = normalize_error (error);
-                string[] error_sources;
+        //      if (status != ExitCode.SUCCESS && error.size > 0) {
+        //          string error_message = normalize_error (error);
+        //          string[] error_sources;
 
-                switch (detect_error (error_message, out error_sources)) {
-                    case OriginErrorType.NONE:
-                    default:
-                        throw new CommandError.UNKNOWN_ERROR (error_message);
-                }
+        //          switch (detect_error (error_message, out error_sources)) {
+        //              case OriginErrorType.NONE:
+        //              default:
+        //                  throw new CommandError.UNKNOWN_ERROR (error_message);
+        //          }
 
-            } else {
-                return status;
-            }
-        }
+        //      } else {
+        //          return status;
+        //      }
+        //  }
+
+        return 100;
     }
 }

@@ -101,26 +101,28 @@ namespace Apa {
 
             print_devel ("Child process created");
 
-            if (error != null) {
-                IOChannel error_channel = new IOChannel.unix_new (std_error);
-                error_channel.add_watch (IOCondition.IN | IOCondition.HUP, (channel, condition) => {
-                    if (condition == IOCondition.HUP) {
-                        return false;
-                    }
+            IOChannel error_channel = new IOChannel.unix_new (std_error);
+            error_channel.add_watch (IOCondition.IN | IOCondition.HUP, (channel, condition) => {
+                if (condition == IOCondition.HUP) {
+                    return false;
+                }
 
-                    try {
-                        string line;
-                        channel.read_line (out line, null, null);
+                try {
+                    string line;
+                    channel.read_line (out line, null, null);
 
+                    if (error != null) {
                         error.add (line);
-
-                    } catch (Error e) {
-                        print_error (e.message);
+                    } else {
+                        print_error (line);
                     }
 
-                    return true;
-                });
-            }
+                } catch (Error e) {
+                    print_error (e.message);
+                }
+
+                return true;
+            });
 
             ChildWatch.add (child_pid, (pid, wait_status) => {
                 Process.close_pid (pid);
