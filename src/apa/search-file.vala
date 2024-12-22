@@ -121,7 +121,7 @@ namespace Apa {
             founded_files.add_all_iterator (result.files.map<string> (file => { return file.file_name; }));
         }
 
-        var search_files = new Gee.ArrayList<string> ();q
+        var search_files = new Gee.ArrayList<string> ();
 
         var result = yield client.post_package_packages_by_file_names_async (new AltRepo.PackagesByFileNamesJson () {
             branch = branch,
