@@ -101,10 +101,10 @@ namespace Apa {
 
                             case '-':
                                 var installed_result = new Gee.ArrayList<string> ();
-                                yield Rpm.list (
-                                    new ArgsHandler ({ "--queryformat=%{NAME}\n" }),
-                                    installed_result
-                                );
+                                //  yield Rpm.list (
+                                //      new ArgsHandler ({ "--queryformat=%{NAME}\n" }),
+                                //      installed_result
+                                //  );
 
                                 possible_package_names = fuzzy_search (package_error_source, installed_result.to_array (), 9);
                                 break;

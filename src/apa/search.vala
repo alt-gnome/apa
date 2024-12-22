@@ -17,13 +17,6 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-public class Apa.Package : Object {
-
-    public string name { get; set; }
-    public string description { get; set; }
-    public string version { get; set; }
-}
-
 namespace Apa {
     public async int search (
         owned ArgsHandler args_handler,
@@ -52,16 +45,22 @@ namespace Apa {
             }
         }
 
-        Pk.Results result;
+        var cachier = Cachier.get_default ();
+        Package[] all_packages;
 
+<<<<<<< HEAD
         try {
             result = yield client.get_packages_async (Pk.Filter.NONE, null, () => {});
         } catch (Error e) {
             throw new CommandError.COMMON (e.message);
-        }
+=======
+        if (installed) {
+            all_packages = yield cachier.get_installed_packages ();
 
-        var packages_sack = result.get_package_sack ();
-        var all_packages = packages_sack.get_array ();
+        } else {
+            all_packages = yield cachier.get_all_packages ();
+>>>>>>> 1587380 (wip)
+        }
 
         var search_result = new Gee.ArrayList<string> ();
         var matches = new Gee.ArrayList<string> ();
@@ -81,18 +80,10 @@ namespace Apa {
         }
 
         foreach (var package in all_packages) {
-            var p = new Package () {
-                name = package.get_name (),
-                description = package.summary,
-                version = package.get_version ()
-            };
-            var a = ApiBase.Jsoner.serialize (p, ApiBase.Case.KEBAB);
-            print (a);
-
             bool name_good = false;
             bool desc_good = false;
 
-            var package_name = package.get_name ();
+            var package_name = package.name;
             var package_desc = package.summary;
             matches.clear ();
 

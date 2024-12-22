@@ -48,10 +48,10 @@ namespace Apa {
                         }
 
                         var installed_result = new Gee.ArrayList<string> ();
-                        yield Rpm.list (
-                            new ArgsHandler ({ "--queryformat=%{NAME}" }),
-                            installed_result
-                        );
+                        //  yield Rpm.list (
+                        //      new ArgsHandler ({ "--queryformat=%{NAME}" }),
+                        //      installed_result
+                        //  );
 
                         string[]? possible_package_names = fuzzy_search (package_error_source, installed_result.to_array (), 9);
 

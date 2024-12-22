@@ -114,49 +114,51 @@ namespace Apa {
             result.clear ();
             error.clear ();
 
-            var status = yield Rpm.list (args_handler, result, error, skip_unknown_options);
+            //  var status = yield Rpm.list (args_handler, result, error, skip_unknown_options);
 
-            if (status != ExitCode.SUCCESS && error.size > 0) {
-                string error_message = normalize_error (error);
-                string[] error_sources;
+            //  if (status != ExitCode.SUCCESS && error.size > 0) {
+            //      string error_message = normalize_error (error);
+            //      string[] error_sources;
 
-                switch (detect_error (error_message, out error_sources)) {
-                    case OriginErrorType.NONE:
-                    default:
-                        throw new CommandError.UNKNOWN_ERROR (error_message);
-                }
+            //      switch (detect_error (error_message, out error_sources)) {
+            //          case OriginErrorType.NONE:
+            //          default:
+            //              throw new CommandError.UNKNOWN_ERROR (error_message);
+            //      }
 
-            } else {
-                if (sort) {
-                    if (!rpm && query_format == null && with_date) {
-                        var result_with_date = new Gee.ArrayList<RpmDate?> ();
+            //  } else {
+            //      if (sort) {
+            //          if (!rpm && query_format == null && with_date) {
+            //              var result_with_date = new Gee.ArrayList<RpmDate?> ();
 
-                        foreach (var line in result) {
-                            var parts = line.split ("::::");
+            //              foreach (var line in result) {
+            //                  var parts = line.split ("::::");
 
-                            result_with_date.add ({
-                                install_date: new DateTime.from_unix_local (int64.parse (parts[0])),
-                                other: parts[1]
-                            });
-                        }
-                        result.clear ();
+            //                  result_with_date.add ({
+            //                      install_date: new DateTime.from_unix_local (int64.parse (parts[0])),
+            //                      other: parts[1]
+            //                  });
+            //              }
+            //              result.clear ();
 
-                        result_with_date.sort ((a, b) => b.install_date.compare (a.install_date) * sort_mod);
-                        result.add_all_iterator (result_with_date.map<string> (x => x.other));
+            //              result_with_date.sort ((a, b) => b.install_date.compare (a.install_date) * sort_mod);
+            //              result.add_all_iterator (result_with_date.map<string> (x => x.other));
 
-                    } else {
-                        result.sort ((a, b) => {
-                            return strcmp (a, b) * sort_mod;
-                        });
-                    }
-                }
+            //          } else {
+            //              result.sort ((a, b) => {
+            //                  return strcmp (a, b) * sort_mod;
+            //              });
+            //          }
+            //      }
 
-                foreach (var line in result) {
-                    print (line);
-                }
+            //      foreach (var line in result) {
+            //          print (line);
+            //      }
 
-                return status;
-            }
+            //      return status;
+            //  }
+
+            return 100;
         }
     }
 }
