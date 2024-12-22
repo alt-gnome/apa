@@ -23,7 +23,7 @@ apt-get install apa
 
 ```bash
 su -
-apt-get install meson vala  gettext-tools \
+apt-get install meson vala gettext-tools \
                 libgee0.8-devel libgee0.8-gir-devel \
                 libjson-glib-devel libjson-glib-gir-devel \
                 libpackagekit-glib-devel gobject-introspection-devel
@@ -32,11 +32,10 @@ apt-get install meson vala  gettext-tools \
 #### Сборка и установка
 
 ```bash
-su -
 git clone https://github.com/alt-gnome/apa.git
 cd apa
 meson setup _build
-ninja install -C _build
+su - -c "ninja install -C `pwd`/_build"
 ```
 
 ## Удаление
@@ -47,6 +46,12 @@ ninja install -C _build
 su -
 ninja uninstall -C _build
 ```
+
+## Помощь в переводе
+
+Для того, чтобы предложить свой вариант перевода, выполните следующие действия:
+
+1. Проделайте операции, описанные в разделе [«Из исходного кода»] сегмента
 
 ## Развитие проекта
 
