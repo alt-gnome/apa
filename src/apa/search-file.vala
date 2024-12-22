@@ -121,15 +121,7 @@ namespace Apa {
             founded_files.add_all_iterator (result.files.map<string> (file => { return file.file_name; }));
         }
 
-        var search_files = new Gee.ArrayList<string> ();
-
-        // ALT Repo API issue fix. It can't invalidate pathes with spaces
-        // https://bugzilla.altlinux.org/show_bug.cgi?id=52411
-        foreach (var founded_file in founded_files) {
-            if (!founded_file.contains (" ")) {
-                search_files.add (founded_file);
-            }
-        }
+        var search_files = new Gee.ArrayList<string> ();q
 
         var result = yield client.post_package_packages_by_file_names_async (new AltRepo.PackagesByFileNamesJson () {
             branch = branch,
