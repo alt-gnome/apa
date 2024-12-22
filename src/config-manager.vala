@@ -56,6 +56,12 @@ public sealed class Apa.ConfigManager : Object {
         get {
             try {
                 if (is_root ()) {
+                    var dir_file = File.new_for_path (ApaConfig.KEY_DEFAULTS_DIR);
+
+                    if (!dir_file.query_exists ()) {
+                        dir_file.make_directory_with_parents ();
+                    }
+
                     if (!_editable_config_file.query_exists ()) {
                         _editable_config_file.create (GLib.FileCreateFlags.PRIVATE);
                         FileUtils.set_contents (_editable_config_file.peek_path (), "[settings]\n");
