@@ -77,6 +77,7 @@ apa_no_main_code_sources = files (
   'error-detection.vala',
   'fuzzy-search.vala',
   'help.vala',
+  'progress.vala',
   'spawn-command.vala',
   'utils.vala',
 )

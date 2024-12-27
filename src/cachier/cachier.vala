@@ -43,18 +43,6 @@ public sealed class Apa.Cachier : Object {
         return instance;
     }
 
-    string simple_dencode (string data) {
-        return data;
-        var old_data = data.data;
-        var new_data = new uint8[old_data.length];
-
-        for (int i = 0; i < old_data.length; i++) {
-            new_data[i] = old_data[i] ^ 0xFF;
-        }
-
-        return (string) new_data;
-    }
-
     async PackageList get_packages_list () {
         try {
             var pk_client = new Pk.Client ();
@@ -76,15 +64,17 @@ public sealed class Apa.Cachier : Object {
     public async Package[] get_all_packages () {
         File cache_file = File.new_build_filename (cache_dir_file.peek_path (), "packages.cache");
 
-        if (!cache_file.query_exists ()) {
-            yield update_packages_cache ();
+        // Temporary disabled, becaoues of bad working
+        //  if (!cache_file.query_exists ()) {
+        if (true) {
+            return yield update_packages_cache ();
         }
 
         try {
             string json_data;
             FileUtils.get_contents (cache_file.peek_path (), out json_data);
 
-            var jsoner = new ApiBase.Jsoner (simple_dencode (json_data), null, ApiBase.Case.KEBAB);
+            var jsoner = new ApiBase.Jsoner (json_data, null, ApiBase.Case.KEBAB);
             var package_list = (PackageList) yield jsoner.deserialize_object_async (typeof (PackageList));
 
             return package_list.packages.to_array ();
@@ -125,7 +115,7 @@ public sealed class Apa.Cachier : Object {
         return package_list.packages.to_array ();
     }
 
-    public async void update_packages_cache () {
+    public async Package[] update_packages_cache () {
         File cache_file = File.new_build_filename (cache_dir_file.peek_path (), "packages.cache");
 
         var package_list = yield get_packages_list ();
@@ -133,9 +123,11 @@ public sealed class Apa.Cachier : Object {
         string json_data = yield ApiBase.Jsoner.serialize_async (package_list, ApiBase.Case.KEBAB);
 
         try {
-            FileUtils.set_contents (cache_file.peek_path (), simple_dencode (json_data));
+            FileUtils.set_contents (cache_file.peek_path (), json_data);
         } catch (Error e) {
             print_error (e.message);
         }
+
+        return package_list.packages.to_array ();
     }
 }
