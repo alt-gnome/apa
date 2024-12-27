@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+set -e
+
+echo 'Linter failed'
+io.elementary.vala-lint -d . -c vala-lint.conf
+
+echo 'Empty lines check failed'
+python3 vala-checkers/empty_lines_checker.py .
+
+echo 'Indentation check failed'
+python3 vala-checkers/indentation_checker.py .

@@ -309,7 +309,7 @@ namespace Apa {
         }
 
         return builder.free_and_steal ();
-    } 
+    }
 
     public async bool check_package_name_no_action (string package_name) {
         if (package_name.has_suffix ("-") || package_name.has_suffix ("+")) {
