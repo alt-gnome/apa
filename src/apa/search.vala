@@ -48,18 +48,11 @@ namespace Apa {
         var cachier = Cachier.get_default ();
         Package[] all_packages;
 
-<<<<<<< HEAD
-        try {
-            result = yield client.get_packages_async (Pk.Filter.NONE, null, () => {});
-        } catch (Error e) {
-            throw new CommandError.COMMON (e.message);
-=======
         if (installed) {
             all_packages = yield cachier.get_installed_packages ();
 
         } else {
             all_packages = yield cachier.get_all_packages ();
->>>>>>> 1587380 (wip)
         }
 
         var search_result = new Gee.ArrayList<string> ();

@@ -36,8 +36,6 @@ public class Apa.Package : Object {
 
         //  if (parts.length > 0) {
         //      var parts2 = parts[0].split (":");
-
-
         //  }
 
         Object (

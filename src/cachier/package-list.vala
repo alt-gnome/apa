@@ -19,5 +19,5 @@
 
 public sealed class Apa.PackageList : Object {
 
-    public Gee.ArrayList<Package> packages { get; set; default = new Gee.ArrayList<Package> (); } 
+    public Gee.ArrayList<Package> packages { get; set; default = new Gee.ArrayList<Package> (); }
 }
