@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: apa\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-23 23:51+0300\n"
+"POT-Creation-Date: 2024-12-28 22:40+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -74,13 +74,11 @@ msgid ""
 msgstr ""
 
 #: src/apa/do.vala:247 src/apa/install.vala:229 src/apa/remove.vala:93
-#: src/apa/search.vala:151
 msgid ""
 "Option `-o/--option' value is incorrect. It should look like `OptionName=val'"
 msgstr ""
 
 #: src/apa/do.vala:250 src/apa/install.vala:235 src/apa/remove.vala:97
-#: src/apa/search.vala:155
 msgid "Option `-c/--config' value is incorrect"
 msgstr ""
 
@@ -128,11 +126,6 @@ msgstr ""
 
 #: src/apa/repo/repo-add.vala:42
 msgid "Unknown source"
-msgstr ""
-
-#: src/apa/search-file.vala:74
-#, c-format
-msgid "No such file or directory: `%s'"
 msgstr ""
 
 #: src/apa/search-file.vala:108
@@ -201,92 +194,92 @@ msgid "Invalid task id `%s'"
 msgstr ""
 
 #. print (command);
-#: src/apa.vala:39
+#: src/apa.vala:43
 #, c-format
 msgid "Unknown command `%s'"
 msgstr ""
 
-#: src/apa.vala:51
+#: src/apa.vala:55
 #, c-format
 msgid "Unknown subcommand `%s' of `%s' command"
 msgstr ""
 
-#: src/apa.vala:60
+#: src/apa.vala:64
 #, c-format
 msgid "No subcommand. Try `apa %s --help'"
 msgstr ""
 
-#: src/apa.vala:209
+#: src/apa.vala:213
 #, c-format
 msgid "Unknown error message: `%s'"
 msgstr ""
 
-#: src/apa.vala:214
+#: src/apa.vala:218
 #, c-format
 msgid "Unknown subcommand `%s'"
 msgstr ""
 
-#: src/apa.vala:218
+#: src/apa.vala:222
 msgid "There are too many arguments"
 msgstr ""
 
-#: src/apa.vala:222
+#: src/apa.vala:226
 msgid "There are too few arguments"
 msgstr ""
 
-#: src/apa.vala:226
+#: src/apa.vala:230
 #, c-format
 msgid "Task `%s' is unknown or still building"
 msgstr ""
 
-#: src/apa.vala:256
+#: src/apa.vala:260
 msgid "Nothing found"
 msgstr ""
 
-#: src/apa.vala:260
+#: src/apa.vala:264
 #, c-format
 msgid "Bad status code: `%d: %s'"
 msgstr ""
 
-#: src/apa.vala:269 src/args-handler.vala:106
+#: src/apa.vala:273 src/args-handler.vala:106
 #, c-format
 msgid "Option `%s' need value"
 msgstr ""
 
-#: src/apa.vala:273
+#: src/apa.vala:277
 #, c-format
 msgid "Unknown option: `%s'"
 msgstr ""
 
-#: src/apa.vala:277
+#: src/apa.vala:281
 #, c-format
 msgid "Unknown option with value: `%s'"
 msgstr ""
 
-#: src/apa.vala:294
+#: src/apa.vala:298
 #, c-format
 msgid "Need root previlegies for `%s' command"
 msgstr ""
 
-#: src/apa.vala:307
+#: src/apa.vala:311
 msgid "PackageKit is running"
 msgstr ""
 
-#: src/config-manager.vala:134
+#: src/config-manager.vala:140
 msgid "Couldn't open configuration file."
 msgstr ""
 
-#: src/config-manager.vala:139
+#: src/config-manager.vala:145
 msgid "Error in config. Recreating…"
 msgstr ""
 
-#: src/config-manager.vala:154 src/config-manager.vala:173
-#: src/config-manager.vala:184 src/config-manager.vala:204
+#: src/config-manager.vala:160 src/config-manager.vala:179
+#: src/config-manager.vala:190 src/config-manager.vala:210
 #, c-format
 msgid "Key `%s' doesn't exists"
 msgstr ""
 
-#: src/config-manager.vala:214
+#: src/config-manager.vala:220
 msgid "Wrong type."
 msgstr ""
 
@@ -349,10 +342,8 @@ msgid ""
 "The `search' command performs a full text search on all available package "
 "lists for the regex pattern given. It searches the package names and the "
 "descriptions for an occurrence of the regular expression and prints out the "
-"package name and the short description. If `--full' is given then output "
-"identical to show is produced for each matched package, and if `--names-"
-"only' is given then the long description is not searched, only the package "
-"name is."
+"package name and the short description. Has `--installed' flag to search "
+"only among the installed packages."
 msgstr ""
 
 #: src/data/descriptions.vala:64
@@ -503,11 +494,11 @@ msgid ""
 "Make dependencies recursive so that all packages mentioned are printed once."
 msgstr ""
 
-#: src/data/descriptions.vala:199
+#: src/data/descriptions.vala:199 src/data/descriptions.vala:319
 msgid "Only search on the package names, not the long descriptions."
 msgstr ""
 
-#: src/data/descriptions.vala:203
+#: src/data/descriptions.vala:203 src/data/descriptions.vala:323
 msgid "Search among installed packages. Works well with `--names-only' option"
 msgstr ""
 
@@ -613,97 +604,97 @@ msgstr ""
 msgid "List all repositories."
 msgstr ""
 
-#: src/data/descriptions.vala:319
+#: src/data/descriptions.vala:330
 msgid "RPM information output format."
 msgstr ""
 
-#: src/data/descriptions.vala:323
+#: src/data/descriptions.vala:334
 msgid "Sort the output in alphabetical order."
 msgstr ""
 
-#: src/data/descriptions.vala:327
+#: src/data/descriptions.vala:338
 msgid "Sorts in the opposite direction of the `--sort' option."
 msgstr ""
 
-#: src/data/descriptions.vala:331
+#: src/data/descriptions.vala:342
 msgid "Show packages sorted by installation date."
 msgstr ""
 
-#: src/data/descriptions.vala:335
+#: src/data/descriptions.vala:346
 msgid "Show package names. Equal to `rpm -qa'"
 msgstr ""
 
-#: src/data/descriptions.vala:339
+#: src/data/descriptions.vala:350
 msgid "Print package files."
 msgstr ""
 
-#: src/data/descriptions.vala:346
+#: src/data/descriptions.vala:357
 msgid "Search among the installed packages."
 msgstr ""
 
-#: src/data/descriptions.vala:350
+#: src/data/descriptions.vala:361
 msgid "To make the print more classic. Also removes the color selection."
 msgstr ""
 
-#: src/data/descriptions.vala:354
+#: src/data/descriptions.vala:365
 msgid ""
 "Which branch of the repository to use for the search. It is ignored if the "
 "`--installed' option is set. By default: `sisyphus'."
 msgstr ""
 
-#: src/data/descriptions.vala:358
+#: src/data/descriptions.vala:369
 msgid ""
 "In packages for which architecture to look for. It is ignored if the `--"
 "installed' option is set. Used current arch by default."
 msgstr ""
 
-#: src/data/descriptions.vala:365
+#: src/data/descriptions.vala:376
 msgid "Find tasks by source package name."
 msgstr ""
 
-#: src/data/descriptions.vala:369
+#: src/data/descriptions.vala:380
 msgid "Task owner."
 msgstr ""
 
-#: src/data/descriptions.vala:373
+#: src/data/descriptions.vala:384
 msgid "Branch name."
 msgstr ""
 
-#: src/data/descriptions.vala:377
+#: src/data/descriptions.vala:388
 msgid "Task state."
 msgstr ""
 
-#: src/data/descriptions.vala:396
+#: src/data/descriptions.vala:407
 msgid "Add kernel headers to install."
 msgstr ""
 
-#: src/data/descriptions.vala:400
+#: src/data/descriptions.vala:411
 msgid "Select all available kernel modules to install."
 msgstr ""
 
-#: src/data/descriptions.vala:404
+#: src/data/descriptions.vala:415
 msgid "Interactive modules selection."
 msgstr ""
 
-#: src/data/descriptions.vala:408
+#: src/data/descriptions.vala:419
 msgid "Add `-debuginfo' package to install."
 msgstr ""
 
-#: src/data/descriptions.vala:412
+#: src/data/descriptions.vala:423
 msgid "Include (add) external module (by a short name)."
 msgstr ""
 
-#: src/data/descriptions.vala:416
+#: src/data/descriptions.vala:427
 msgid "Exclude (del) external module from install."
 msgstr ""
 
-#: src/data/descriptions.vala:420
+#: src/data/descriptions.vala:431
 msgid ""
 "Select desired kernel flavour (def, rt, etc) by default it's the same as the "
 "booted kernel, special name `latest' selects the newest flavour."
 msgstr ""
 
-#: src/data/descriptions.vala:424
+#: src/data/descriptions.vala:435
 msgid ""
 "Desired kernel release for the current or specified flavour (allowed formats "
 "by example: old format: alt1, 5.7.19-alt1; classic kernel release: 5.7.19-"
