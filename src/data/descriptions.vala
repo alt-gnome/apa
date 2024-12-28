@@ -57,7 +57,7 @@ namespace Apa.Commands.Descriptions {
     }
 
     public inline string search () {
-        return _("The `search' command performs a full text search on all available package lists for the regex pattern given. It searches the package names and the descriptions for an occurrence of the regular expression and prints out the package name and the short description. If `--full' is given then output identical to show is produced for each matched package, and if `--names-only' is given then the long description is not searched, only the package name is.");
+        return _("The `search' command performs a full text search on all available package lists for the regex pattern given. It searches the package names and the descriptions for an occurrence of the regular expression and prints out the package name and the short description. Has `--installed' flag to search only among the installed packages.");
     }
 
     public inline string kernel () {
