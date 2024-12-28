@@ -32,8 +32,9 @@ namespace Apa.Config {
                 Help.indx (2),
                 possible_key.description
             ));
-            print ("%sDefault value: %s".printf (
+            print ("%s%s %s".printf (
                 Help.indx (2),
+                _("Default value:"),
                 possible_key.default_value
             ));
         }
