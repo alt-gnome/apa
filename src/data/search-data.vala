@@ -29,14 +29,12 @@ namespace Apa.Search.Data {
             {
                 OPTION_NAMES_ONLY_SHORT, OPTION_NAMES_ONLY_LONG,
                 null,
-                //  Descriptions.option_names_only ()
-                ""
+                Descriptions.option_names_only ()
             },
             {
                 OPTION_INSTALLED_SHORT, OPTION_INSTALLED_LONG,
                 null,
-                //  Descriptions.option_installed ()
-                ""
+                Descriptions.option_installed ()
             },
         };
     }

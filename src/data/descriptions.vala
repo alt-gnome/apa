@@ -313,6 +313,17 @@ namespace Apa.AptRepo.Descriptions {
     }
 }
 
+namespace Apa.Search.Descriptions {
+
+    public inline string option_names_only () {
+        return _("Only search on the package names, not the long descriptions.");
+    }
+
+    public inline string option_installed () {
+        return _("Search among installed packages. Works well with `--names-only' option");
+    }
+}
+
 namespace Apa.Rpm.Descriptions {
 
     public inline string arg_option_queryformat () {
