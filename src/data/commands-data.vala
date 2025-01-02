@@ -114,7 +114,7 @@ namespace Apa.Commands.Data {
                 SEARCH_COMMAND,
                 Descriptions.search (),
                 Search.Data.options (),
-                AptCache.Data.search_arg_options (),
+                Search.Data.arg_options (),
                 false, false
             ),
             new CommandEntity.root (
