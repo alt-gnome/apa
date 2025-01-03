@@ -154,8 +154,8 @@ namespace Apa.Commands.Data {
             new CommandEntity (
                 LIST_COMMAND,
                 Descriptions.list (),
-                Rpm.Data.list_options (),
-                Rpm.Data.list_arg_options (),
+                List.Data.options (),
+                List.Data.arg_options (),
                 false, false
             ),
             new CommandEntity (

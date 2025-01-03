@@ -149,7 +149,7 @@ namespace Apa.Commands.Descriptions {
     }
 
     public inline string list () {
-        return _("Display a list of installed packages. You can pass arguments to search through the list.");
+        return _("Display a list of installed packages.");
     }
 
     public inline string info () {

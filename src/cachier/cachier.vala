@@ -112,6 +112,11 @@ public sealed class Apa.Cachier : Object {
                     break;
             }
         }
+
+        package_list.packages.sort ((a, b) => {
+            return strcmp (a.name, b.name);
+        });
+
         return package_list.packages.to_array ();
     }
 

@@ -16,149 +16,140 @@
  */
 
 namespace Apa {
-
-    struct RpmDate {
-        public DateTime install_date;
-        public string other;
-    }
-
     public async int list (
         owned ArgsHandler args_handler,
         bool skip_unknown_options = false
     ) throws CommandError, OptionsError {
-        var result = new Gee.ArrayList<string> ();
-        var error = new Gee.ArrayList<string> ();
+        var cachier = Cachier.get_default ();
+        Package[] all_packages;
 
-        bool sort = false;
-        int sort_mod = 1;
-        bool with_date = false;
-        bool rpm = false;
-        string? query_format = null;
+        all_packages = yield cachier.get_installed_packages ();
 
-        foreach (var option in args_handler.options) {
-            var option_data = OptionEntity.find_option (Rpm.Data.list_options (), option);
-
-            switch (option_data.short_option) {
-                case Rpm.Data.OPTION_SORT_SHORT:
-                    sort = true;
-                    break;
-
-                case Rpm.Data.OPTION_ASORT_SHORT:
-                    sort = true;
-                    sort_mod = -1;
-                    break;
-
-                case Rpm.Data.OPTION_RPM_SHORT:
-                    rpm = true;
-                    break;
-
-                case Rpm.Data.OPTION_WITH_DATE_SHORT:
-                    with_date = true;
-                    break;
-            }
+        foreach (var package in all_packages) {
+            print ("%s-%s".printf (package.name, package.version));
         }
 
-        foreach (var option in args_handler.arg_options) {
-            var option_data = OptionEntity.find_option (Rpm.Data.list_arg_options (), option.name);
+        return 0;
 
-            switch (option_data.short_option) {
-                case Rpm.Data.OPTION_QUERYFORMAT_SHORT:
-                    query_format = option.value;
-                    break;
-            }
-        }
+        //  var result = new Gee.ArrayList<string> ();
+        //  var error = new Gee.ArrayList<string> ();
 
-        if (rpm) {
-            args_handler.remove_option (Rpm.Data.OPTION_RPM_SHORT);
-            args_handler.remove_option (Rpm.Data.OPTION_RPM_LONG);
+        //  bool sort = false;
+        //  int sort_mod = 1;
+        //  bool with_date = false;
+        //  bool rpm = false;
+        //  string? query_format = null;
 
-            if (query_format != null) {
-                args_handler.remove_option (Rpm.Data.OPTION_QUERYFORMAT_LONG);
-                args_handler.remove_option (Rpm.Data.OPTION_QUERYFORMAT_SHORT);
-            }
+        //  foreach (var option in args_handler.options) {
+        //      var option_data = OptionEntity.find_option (Rpm.Data.list_options (), option);
 
-        } else {
-            if (query_format != null) {
-                if (with_date) {
-                    args_handler.remove_option (Rpm.Data.OPTION_WITH_DATE_SHORT);
-                    args_handler.remove_option (Rpm.Data.OPTION_WITH_DATE_LONG);
-                }
+        //      switch (option_data.short_option) {
+        //          case Rpm.Data.OPTION_SORT_SHORT:
+        //              sort = true;
+        //              break;
 
-            } else {
-                if (with_date) {
-                    args_handler.remove_option (Rpm.Data.OPTION_WITH_DATE_SHORT);
-                    args_handler.remove_option (Rpm.Data.OPTION_WITH_DATE_LONG);
+        //          case Rpm.Data.OPTION_ASORT_SHORT:
+        //              sort = true;
+        //              sort_mod = -1;
+        //              break;
 
-                    args_handler.arg_options.add ({ name: Rpm.Data.OPTION_QUERYFORMAT_LONG, value: "%{INSTALLTIME}::::%{INSTALLTIME:date} : %{NAME} - %{SUMMARY}\n" });
-                } else {
-                    args_handler.arg_options.add ({ name: Rpm.Data.OPTION_QUERYFORMAT_LONG, value: "%{NAME} - %{SUMMARY}\n" });
-                }
-            }
-        }
+        //          case Rpm.Data.OPTION_RPM_SHORT:
+        //              rpm = true;
+        //              break;
 
-        foreach (var option in args_handler.arg_options) {
-            var option_data = OptionEntity.find_option (Rpm.Data.list_arg_options (), option.name);
+        //          case Rpm.Data.OPTION_WITH_DATE_SHORT:
+        //              with_date = true;
+        //              break;
+        //      }
+        //  }
 
-            switch (option_data.short_option) {
-                case Rpm.Data.OPTION_QUERYFORMAT_SHORT:
-                    if (option.value != null) {
-                        if (!option.value.has_suffix ("\n")) {
-                            option.value += "\n";
-                        }
-                    }
-                    break;
-            }
-        }
+        //  foreach (var option in args_handler.arg_options) {
+        //      var option_data = OptionEntity.find_option (Rpm.Data.list_arg_options (), option.name);
 
-        while (true) {
-            result.clear ();
-            error.clear ();
+        //      switch (option_data.short_option) {
+        //          case Rpm.Data.OPTION_QUERYFORMAT_SHORT:
+        //              query_format = option.value;
+        //              break;
+        //      }
+        //  }
 
-            //  var status = yield Rpm.list (args_handler, result, error, skip_unknown_options);
+        //  if (rpm) {
+        //      args_handler.remove_option (Rpm.Data.OPTION_RPM_SHORT);
+        //      args_handler.remove_option (Rpm.Data.OPTION_RPM_LONG);
 
-            //  if (status != ExitCode.SUCCESS && error.size > 0) {
-            //      string error_message = normalize_error (error);
-            //      string[] error_sources;
+        //      if (query_format != null) {
+        //          args_handler.remove_option (Rpm.Data.OPTION_QUERYFORMAT_LONG);
+        //          args_handler.remove_option (Rpm.Data.OPTION_QUERYFORMAT_SHORT);
+        //      }
 
-            //      switch (detect_error (error_message, out error_sources)) {
-            //          case OriginErrorType.NONE:
-            //          default:
-            //              throw new CommandError.UNKNOWN_ERROR (error_message);
-            //      }
+        //  } else {
+        //      if (query_format != null) {
+        //          if (with_date) {
+        //              args_handler.remove_option (Rpm.Data.OPTION_WITH_DATE_SHORT);
+        //              args_handler.remove_option (Rpm.Data.OPTION_WITH_DATE_LONG);
+        //          }
 
-            //  } else {
-            //      if (sort) {
-            //          if (!rpm && query_format == null && with_date) {
-            //              var result_with_date = new Gee.ArrayList<RpmDate?> ();
+        //      } else {
+        //          if (with_date) {
+        //              args_handler.remove_option (Rpm.Data.OPTION_WITH_DATE_SHORT);
+        //              args_handler.remove_option (Rpm.Data.OPTION_WITH_DATE_LONG);
 
-            //              foreach (var line in result) {
-            //                  var parts = line.split ("::::");
+        //              args_handler.arg_options.add ({ name: Rpm.Data.OPTION_QUERYFORMAT_LONG, value: "%{INSTALLTIME}::::%{INSTALLTIME:date} : %{NAME} - %{SUMMARY}\n" });
+        //          } else {
+        //              args_handler.arg_options.add ({ name: Rpm.Data.OPTION_QUERYFORMAT_LONG, value: "%{NAME} - %{SUMMARY}\n" });
+        //          }
+        //      }
+        //  }
 
-            //                  result_with_date.add ({
-            //                      install_date: new DateTime.from_unix_local (int64.parse (parts[0])),
-            //                      other: parts[1]
-            //                  });
-            //              }
-            //              result.clear ();
+        //  foreach (var option in args_handler.arg_options) {
+        //      var option_data = OptionEntity.find_option (Rpm.Data.list_arg_options (), option.name);
 
-            //              result_with_date.sort ((a, b) => b.install_date.compare (a.install_date) * sort_mod);
-            //              result.add_all_iterator (result_with_date.map<string> (x => x.other));
+        //      switch (option_data.short_option) {
+        //          case Rpm.Data.OPTION_QUERYFORMAT_SHORT:
+        //              if (option.value != null) {
+        //                  if (!option.value.has_suffix ("\n")) {
+        //                      option.value += "\n";
+        //                  }
+        //              }
+        //              break;
+        //      }
+        //  }
 
-            //          } else {
-            //              result.sort ((a, b) => {
-            //                  return strcmp (a, b) * sort_mod;
-            //              });
-            //          }
-            //      }
+        //  while (true) {
+        //      result.clear ();
+        //      error.clear ();
 
-            //      foreach (var line in result) {
-            //          print (line);
-            //      }
+        //      var status = yield Rpm.list ();
 
-            //      return status;
-            //  }
+        //      if (sort) {
+        //          if (!rpm && query_format == null && with_date) {
+        //              var result_with_date = new Gee.ArrayList<RpmDate?> ();
 
-            return 100;
-        }
+        //              foreach (var line in result) {
+        //                  var parts = line.split ("::::");
+
+        //                  result_with_date.add ({
+        //                      install_date: new DateTime.from_unix_local (int64.parse (parts[0])),
+        //                      other: parts[1]
+        //                  });
+        //              }
+        //              result.clear ();
+
+        //              result_with_date.sort ((a, b) => b.install_date.compare (a.install_date) * sort_mod);
+        //              result.add_all_iterator (result_with_date.map<string> (x => x.other));
+
+        //          } else {
+        //              result.sort ((a, b) => {
+        //                  return strcmp (a, b) * sort_mod;
+        //              });
+        //          }
+        //      }
+
+        //      foreach (var line in result) {
+        //          print (line);
+        //      }
+
+        //      return 0;
+        //  }
     }
 }
