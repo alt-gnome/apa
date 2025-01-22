@@ -122,6 +122,7 @@ namespace Apa {
         }
 
         var search_files = new Gee.ArrayList<string> ();
+        search_files.add_all (founded_files);
 
         var result = yield client.post_package_packages_by_file_names_async (new AltRepo.PackagesByFileNamesJson () {
             branch = branch,
