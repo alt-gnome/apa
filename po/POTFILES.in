@@ -1,3 +1,4 @@
+src/apa/config/config-list.vala
 src/apa/config/config-set.vala
 src/apa/do.vala
 src/apa/install.vala
@@ -5,7 +6,6 @@ src/apa/moo.vala
 src/apa/remove.vala
 src/apa/repo/repo-add.vala
 src/apa/search-file.vala
-src/apa/search.vala
 src/apa/task/task-install.vala
 src/apa/task/task-search.vala
 src/apa/task/task-show.vala

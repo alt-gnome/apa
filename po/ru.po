@@ -3,14 +3,14 @@
 # This file is distributed under the same license as the apa package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # Vladimir Vaskov <rirusha@altlinux.org>, 2024.
-# David Sultaniiazov <x1z53@alt-gnome.ru>, 2024.
+# David Sultaniiazov <x1z53@alt-gnome.ru>, 2024-2025.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: apa\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-03 22:07+0300\n"
-"PO-Revision-Date: 2024-12-24 00:01+0300\n"
+"POT-Creation-Date: 2025-02-11 13:09+0300\n"
+"PO-Revision-Date: 2025-02-11 13:12+0300\n"
 "Last-Translator: David Sultaniiazov <x1z53@alt-gnome.ru>\n"
 "Language-Team: Russian\n"
 "Language: ru\n"
@@ -20,6 +20,10 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Gtranslator 47.1\n"
+
+#: src/apa/config/config-list.vala:37
+msgid "Default value:"
+msgstr "Значение по умолчанию"
 
 #: src/apa/config/config-set.vala:30
 msgid "Invalid key-value pair, need key and value"
@@ -81,7 +85,7 @@ msgid ""
 "update' or try use `--fix-missing' option"
 msgstr ""
 "Не удалось получить некоторые архивы. Проверьте подключение к репозиторию. "
-"Запустите `apa update' или попробуйте использовать опцию `--fix-missing'."
+"Запустите `apa update' или попробуйте использовать опцию `--fix-missing'"
 
 #: src/apa/do.vala:247 src/apa/install.vala:229 src/apa/remove.vala:93
 msgid ""
@@ -281,7 +285,7 @@ msgstr "Запущен PackageKit"
 
 #: src/config-manager.vala:140
 msgid "Couldn't open configuration file."
-msgstr "Не удалось открыть конфигурационный файл"
+msgstr "Не удалось открыть конфигурационный файл."
 
 #: src/config-manager.vala:145
 msgid "Error in config. Recreating…"
@@ -295,7 +299,7 @@ msgstr "Ключа `%s' не существует"
 
 #: src/config-manager.vala:220
 msgid "Wrong type."
-msgstr "Неверный тип"
+msgstr "Неверный тип."
 
 #: src/data/descriptions.vala:25
 msgid ""
@@ -339,7 +343,7 @@ msgid ""
 "+' is used for installation, and for deletion `-'."
 msgstr ""
 "Команда, совмещающая установку и удаление пакетов. Постфикс `+' используется "
-"для установки, `-' — для удаления"
+"для установки, `-' — для удаления."
 
 #: src/data/descriptions.vala:52
 msgid ""
@@ -377,7 +381,6 @@ msgstr ""
 "конфигурации APA."
 
 #: src/data/descriptions.vala:60
-#, fuzzy
 msgid ""
 "The `search' command performs a full text search on all available package "
 "lists for the regex pattern given. It searches the package names and the "
@@ -385,7 +388,7 @@ msgid ""
 "package name and the short description. Has `--installed' flag to search "
 "only among the installed packages."
 msgstr ""
-"Команда `search` выполняет полнотекстовый поиск по всем доступным спискам "
+"Команда `search' выполняет полнотекстовый поиск по всем доступным спискам "
 "пакетов в поисках заданного шаблона регулярных выражений. Она выполняет "
 "поиск по именам пакетов и описаниям на предмет наличия регулярного выражения "
 "и выводит название пакета и краткое описание. Если задано значение `--full', "
@@ -494,13 +497,12 @@ msgstr ""
 "используйте эту команду осторожно."
 
 #: src/data/descriptions.vala:152
-#, fuzzy
 msgid "Display a list of installed packages."
-msgstr "Искать среди установленных пакетов."
+msgstr "Показать список установленных пакетов."
 
 #: src/data/descriptions.vala:156
 msgid "Show information about package."
-msgstr "Показать информацию о пакете"
+msgstr "Показать информацию о пакете."
 
 #: src/data/descriptions.vala:160
 msgid ""
@@ -569,7 +571,7 @@ msgstr "Поиск только по названиям пакетов, а не 
 msgid "Search among installed packages. Works well with `--names-only' option"
 msgstr ""
 "Выполняет поиск среди установленных пакетов. Хорошо работает с параметром `--"
-"names-only'."
+"names-only'"
 
 #: src/data/descriptions.vala:207
 msgid ""
@@ -664,7 +666,7 @@ msgstr "Также обновить ядро."
 
 #: src/data/descriptions.vala:289
 msgid "When removing packages, remove dependencies as possible."
-msgstr "При удалении пакетов, по возможности удалить зависимости"
+msgstr "При удалении пакетов, по возможности удалить зависимости."
 
 #: src/data/descriptions.vala:293
 msgid "Reinstall packages."
@@ -835,14 +837,3 @@ msgstr "Вы должны %s"
 #: src/utils.vala:287
 msgid "create issue↗️"
 msgstr "создать задачу↗️"
-
-#~ msgid ""
-#~ "Display a list of installed packages. You can pass arguments to search "
-#~ "through the list."
-#~ msgstr ""
-#~ "Показать список установленных пакетов. Вы можете передать аргументы для "
-#~ "поиска по списку."
-
-#, c-format
-#~ msgid "No such file or directory: `%s'"
-#~ msgstr "Не существует файла или директории: `%s'"
