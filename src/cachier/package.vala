@@ -17,75 +17,48 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-public class Apa.Package : Object {
+public enum Apa.PackageStatus {
+    INSTALLED,
+    NOT_INSTALLED,
+    CAN_BE_UPGRADED;
 
-    public string package_id { get; set; }
+    public string to_string () {
+        switch (this) {
+            case INSTALLED:
+                return _("Installed");
+            case NOT_INSTALLED:
+                return _("Not installed");
+            case CAN_BE_UPGRADED:
+                return _("Can be upgraded");
+            default:
+                assert_not_reached ();
+        }
+    }
+}
+
+public class Apa.Package : Object {
 
     public string name { get; set; }
 
-    public string summary { get; set; }
+    public string category { get; set; }
 
-    public string version { get; set; }
+    public RpmEVR evr { get; set; }
 
-    public string dist_tag { get; set; }
+    public Gee.ArrayList<string> pre_depends { get; set; default = new Gee.ArrayList<string> (); }
+
+    public Gee.ArrayList<string> depends { get; set; default = new Gee.ArrayList<string> (); }
+
+    public Gee.ArrayList<string> provides { get; set; default = new Gee.ArrayList<string> (); }
 
     public string arch { get; set; }
 
-    public Package.from_pk (Pk.Package package) {
-        //  var parts = package.get_version ().split ("@");
+    public string summary { get; set; }
 
-        //  if (parts.length > 0) {
-        //      var parts2 = parts[0].split (":");
-        //  }
+    public string description { get; set; }
 
-        Object (
-            package_id: package.package_id,
-            name: package.get_name (),
-            summary: package.summary,
-            version: package.get_version (),
-            arch: package.get_arch ()
-        );
-    }
+    //  public int64 installed_size { get; set; }
 
-    public Package.from_rpm (string rpm_name) {
-        var result = simple_exec ({"rpm", "-qi", rpm_name}).split ("\n");
+    //  public int64 size { get; set; }
 
-        string name = "";
-        string summary = "";
-        string version = "";
-        string dist_tag = "";
-        string arch = "";
-
-        foreach (var line in result) {
-            var parts = line.split (":", 1);
-            var vname = parts[0].strip ();
-            var value = parts[1].strip ();
-
-            switch (vname) {
-                case "Name":
-                    name = value;
-                    break;
-                case "Version":
-                    version = value;
-                    break;
-                case "Summary":
-                    version = value;
-                    break;
-                case "DistTag":
-                    dist_tag = value;
-                    break;
-                case "Architecture":
-                    arch = value;
-                    break;
-            }
-        }
-
-        Object (
-            package_id: "",
-            name: name,
-            summary: summary,
-            version: version,
-            arch: arch
-        );
-    }
+    public PackageStatus status { get; set; default = PackageStatus.NOT_INSTALLED; }
 }

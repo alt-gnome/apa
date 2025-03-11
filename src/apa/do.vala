@@ -58,35 +58,29 @@ namespace Apa {
                         switch (package_error_source_operation) {
                             case '+':
                                 if (ConfigManager.get_default ().use_fuzzy_search) {
-                                    var search_result = new Gee.ArrayList<string> ();
-                                    yield AptCache.search (
-                                        new ArgsHandler.with_data (
-                                            { "--names-only" },
-                                            args_handler.arg_options.to_array (),
-                                            { string.joinv (".*", split_chars (package_error_source)) }
-                                        ),
-                                        search_result
-                                    );
                                     var package_names = new Gee.ArrayList<string> ();
-                                    foreach (var package_info in parse_search (search_result.to_array ())) {
-                                        package_names.add (package_info.name);
+                                    var all_packages = yield Cachier.get_default ().get_all_packages (
+                                        args_handler,
+                                        null,
+                                        true
+                                    );
+                                    foreach (var package in all_packages) {
+                                        package_names.add (package.name);
                                     }
 
                                     possible_package_names = fuzzy_search (package_error_source, package_names.to_array (), 9);
 
                                 } else {
-                                    var search_result = new Gee.ArrayList<string> ();
-                                    yield AptCache.search (
-                                        new ArgsHandler.with_data (
-                                            { "--names-only" },
-                                            args_handler.arg_options.to_array (),
-                                            { package_error_source }
-                                        ),
-                                        search_result
-                                    );
                                     var package_names = new Gee.ArrayList<string> ();
-                                    foreach (var package_info in parse_search (search_result.to_array ())) {
-                                        package_names.add (package_info.name);
+                                    var all_packages = yield Cachier.get_default ().simple_search (
+                                        package_error_source,
+                                        true,
+                                        args_handler,
+                                        null,
+                                        true
+                                    );
+                                    foreach (var package in all_packages) {
+                                        package_names.add (package.name);
                                     }
 
                                     possible_package_names = package_names.to_array ();

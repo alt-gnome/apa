@@ -17,12 +17,7 @@
 
 namespace Apa {
 
-    Pk.Client client;
-
     public async int run (owned string[] argv) {
-
-        client = new Pk.Client ();
-
         if ("-v" in argv || "--version" in argv) {
             print_version ();
             return ExitCode.SUCCESS;
@@ -74,9 +69,6 @@ namespace Apa {
 
         if (current_entity.need_root) {
             check_is_root (current_entity.name);
-        }
-        if (current_entity.need_no_packagekit) {
-            check_pk_is_not_running ();
         }
 
         try {
@@ -180,7 +172,7 @@ namespace Apa {
                 case AptGet.SOURCE:
                     return yield source (args_handler);
 
-                case AptCache.SEARCH:
+                case Commands.Data.SEARCH_COMMAND:
                     return yield search (args_handler);
 
                 case Commands.Data.LIST_COMMAND:
@@ -296,19 +288,6 @@ namespace Apa {
         }
 
         print_error (_("Need root previlegies for `%s' command").printf (command));
-        Process.exit (ExitCode.BASE_ERROR);
-    }
-
-    public void check_pk_is_not_running () {
-        try {
-            if (!pk_is_running ()) {
-                return;
-            }
-        } catch (Error e) {
-            print_error (e.message);
-        }
-
-        print_error (_("PackageKit is running"));
         Process.exit (ExitCode.BASE_ERROR);
     }
 }

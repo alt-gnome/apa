@@ -26,7 +26,7 @@ su -
 apt-get install meson vala gettext-tools \
                 libgee0.8-devel libgee0.8-gir-devel \
                 libjson-glib-devel libjson-glib-gir-devel \
-                libpackagekit-glib-devel gobject-introspection-devel
+                gobject-introspection-devel
 ```
 
 #### Сборка и установка

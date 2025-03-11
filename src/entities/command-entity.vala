@@ -31,15 +31,12 @@ public sealed class Apa.CommandEntity : Object {
 
     public bool need_root { get; construct; }
 
-    public bool need_no_packagekit { get; construct; }
-
     public CommandEntity (
         string name,
         string description,
         OptionEntity?[] options,
         OptionEntity?[] arg_options,
-        bool need_root,
-        bool need_no_packagekit
+        bool need_root
     ) {
         Object (
             name: name,
@@ -47,8 +44,7 @@ public sealed class Apa.CommandEntity : Object {
             subcommands: null,
             options: new Gee.ArrayList<OptionEntity?>.wrap (options.copy (), OptionEntity.equal),
             arg_options: new Gee.ArrayList<OptionEntity?>.wrap (arg_options.copy (), OptionEntity.equal),
-            need_root: need_root,
-            need_no_packagekit: need_no_packagekit
+            need_root: need_root
         );
     }
 

@@ -43,27 +43,6 @@ public enum Apa.ChoiceResult {
     EXIT,
 }
 
-public struct Apa.PackageSearchInfo {
-    public string name;
-    public string? description;
-
-    public static PackageSearchInfo from_string (string str) {
-        var parts = str.split (" - ");
-
-        return {
-            name: parts[0].strip (),
-            description: parts.length > 1 ? parts[1].strip () : null,
-        };
-    }
-
-    public string to_string (string format = "%s - %s") {
-        return format.printf (
-            name,
-            description != null ? this.description : ""
-        );
-    }
-}
-
 namespace Apa {
 
     public async int bebra (owned ArgsHandler args_handler) throws CommandError, ApiBase.CommonError, ApiBase.BadStatusCodeError, OptionsError {
@@ -120,24 +99,6 @@ namespace Apa {
             ApaConfig.NAME,
             ApaConfig.VERSION
         ));
-    }
-
-    /*
-     * Meke every array string shorter.
-     *
-     * Example:
-     * "package_name - Cool package" -> "package_name"
-     *
-     * @param array array with str to short
-     */
-    public PackageSearchInfo[] parse_search (string[] array) {
-        var res = new PackageSearchInfo[array.length];
-
-        for (int i = 0; i < array.length; i++) {
-            res[i] = PackageSearchInfo.from_string (array[i]);
-        }
-
-        return res;
     }
 
     public bool is_root () {
@@ -327,11 +288,6 @@ namespace Apa {
             current_locale,
             string.joinv (" ", argv)
         );
-    }
-
-    public bool pk_is_running () throws Error {
-        var ch = new Pk.Control ();
-        return ch.get_transaction_list ().length > 0;
     }
 
     public string get_arch () {

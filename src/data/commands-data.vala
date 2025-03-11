@@ -66,56 +66,56 @@ namespace Apa.Commands.Data {
                 Descriptions.moo (),
                 {},
                 {},
-                false, false
+                false
             ),
             new CommandEntity (
                 AptGet.INSTALL,
                 Descriptions.install (),
                 AptGet.Data.install_options (),
                 AptGet.Data.install_arg_options (),
-                true, true
+                true
             ),
             new CommandEntity (
                 REINSTALL_COMMAND,
                 Descriptions.reinstall (),
                 AptGet.Data.install_options (),
                 AptGet.Data.install_arg_options (),
-                true, true
+                true
             ),
             new CommandEntity (
                 AptGet.REMOVE,
                 Descriptions.remove (),
                 AptGet.Data.remove_options (),
                 AptGet.Data.remove_arg_options (),
-                true, true
+                true
             ),
             new CommandEntity (
                 AptGet.DO,
                 Descriptions.do (),
                 AptGet.Data.do_options (),
                 AptGet.Data.do_arg_options (),
-                true, true
+                true
             ),
             new CommandEntity (
                 AptGet.UPDATE,
                 Descriptions.update (),
                 AptGet.Data.update_options (),
                 AptGet.Data.update_arg_options (),
-                true, true
+                true
             ),
             new CommandEntity (
                 AptGet.UPGRADE,
                 Descriptions.upgrade (),
                 AptGet.Data.upgrade_options (),
                 AptGet.Data.upgrade_arg_options (),
-                true, true
+                true
             ),
             new CommandEntity (
                 SEARCH_COMMAND,
                 Descriptions.search (),
                 Search.Data.options (),
                 Search.Data.arg_options (),
-                false, false
+                false
             ),
             new CommandEntity.root (
                 KERNEL_COMMAND,
@@ -142,49 +142,49 @@ namespace Apa.Commands.Data {
                 Descriptions.autoremove (),
                 AptGet.Data.autoremove_options (),
                 AptGet.Data.autoremove_arg_options (),
-                true, true
+                true
             ),
             new CommandEntity (
                 AptGet.SOURCE,
                 Descriptions.source (),
                 AptGet.Data.source_options (),
                 AptGet.Data.source_arg_options (),
-                true, true
+                true
             ),
             new CommandEntity (
                 LIST_COMMAND,
                 Descriptions.list (),
                 List.Data.options (),
                 List.Data.arg_options (),
-                false, false
+                false
             ),
             new CommandEntity (
                 INFO_COMMAND,
                 Descriptions.info (),
                 Rpm.Data.info_options (),
                 Rpm.Data.info_arg_options (),
-                false, false
+                false
             ),
             new CommandEntity (
                 SEARCH_FILE_COMMAND,
                 Descriptions.search_file (),
                 SearchFile.Data.common_options (),
                 SearchFile.Data.common_arg_options (),
-                false, false
+                false
             ),
             new CommandEntity (
                 HELP_COMMAND,
                 Descriptions.help (),
                 {},
                 {},
-                false, false
+                false
             ),
             new CommandEntity (
                 VERSION_COMMAND,
                 Descriptions.version (),
                 {},
                 {},
-                false, false
+                false
             ),
         };
     }
@@ -196,14 +196,14 @@ namespace Apa.Commands.Data {
                 Descriptions.kernel_upgrade (),
                 UpdateKernel.Data.update_options (),
                 UpdateKernel.Data.update_arg_options (),
-                true, true
+                true
             ),
             new CommandEntity (
                 KERNEL_LIST_SUBCOMMAND,
                 Descriptions.kernel_list (),
                 UpdateKernel.Data.list_options (),
                 UpdateKernel.Data.list_arg_options (),
-                false, false
+                false
             ),
         };
     }
@@ -215,28 +215,28 @@ namespace Apa.Commands.Data {
                 Descriptions.config_reset (),
                 Config.Data.reset_options (),
                 Config.Data.reset_arg_options (),
-                true, false
+                true
             ),
             new CommandEntity (
                 CONFIG_LIST_SUBCOMMAND,
                 Descriptions.config_list (),
                 Config.Data.list_options (),
                 Config.Data.list_arg_options (),
-                false, false
+                false
             ),
             new CommandEntity (
                 CONFIG_GET_SUBCOMMAND,
                 Descriptions.config_get (),
                 Config.Data.get_options (),
                 Config.Data.get_arg_options (),
-                false, false
+                false
             ),
             new CommandEntity (
                 CONFIG_SET_SUBCOMMAND,
                 Descriptions.config_set (),
                 Config.Data.set_options (),
                 Config.Data.set_arg_options (),
-                true, false
+                true
             ),
         };
     }
@@ -248,35 +248,35 @@ namespace Apa.Commands.Data {
                 Descriptions.task_add (),
                 AptRepo.Data.add_options (),
                 AptRepo.Data.add_arg_options (),
-                true, false
+                true
             ),
             new CommandEntity (
                 TASK_SEARCH_SUBCOMMAND,
                 Descriptions.task_search (),
                 Task.Data.search_options (),
                 Task.Data.search_arg_options (),
-                false, false
+                false
             ),
             new CommandEntity (
                 TASK_SHOW_SUBCOMMAND,
                 Descriptions.task_show (),
                 Task.Data.show_options (),
                 Task.Data.show_arg_options (),
-                false, false
+                false
             ),
             new CommandEntity (
                 TASK_INSTALL_SUBCOMMAND,
                 Descriptions.task_install (),
                 AptRepo.Data.test_options (),
                 AptRepo.Data.test_arg_options (),
-                true, true
+                true
             ),
             new CommandEntity (
                 TASK_LIST_PACKAGES_SUBCOMMAND,
                 Descriptions.task_list_packages (),
                 AptRepo.Data.list_options (),
                 AptRepo.Data.list_arg_options (),
-                false, false
+                false
             ),
         };
     }
@@ -288,35 +288,35 @@ namespace Apa.Commands.Data {
                 Descriptions.repo_list (),
                 AptRepo.Data.list_options (),
                 AptRepo.Data.list_arg_options (),
-                false, false
+                false
             ),
             new CommandEntity (
                 REPO_ADD_SUBCOMMAND,
                 Descriptions.repo_add (),
                 AptRepo.Data.add_options (),
                 AptRepo.Data.add_arg_options (),
-                true, false
+                true
             ),
             new CommandEntity (
                 ADD_AIDES_SUBCOMMAND,
                 Descriptions.repo_add_aides (),
                 AptRepo.Data.add_options (),
                 AptRepo.Data.add_arg_options (),
-                true, false
+                true
             ),
             new CommandEntity (
                 REPO_REMOVE_SUBCOMMAND,
                 Descriptions.repo_remove (),
                 AptRepo.Data.rm_options (),
                 AptRepo.Data.rm_arg_options (),
-                true, false
+                true
             ),
             new CommandEntity (
                 REMOVE_AIDES_SUBCOMMAND,
                 Descriptions.repo_remove_aides (),
                 AptRepo.Data.rm_options (),
                 AptRepo.Data.rm_arg_options (),
-                true, false
+                true
             ),
         };
     }

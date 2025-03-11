@@ -23,10 +23,48 @@ namespace Apa {
         var cachier = Cachier.get_default ();
         Package[] all_packages;
 
-        all_packages = yield cachier.get_installed_packages ();
+        var installed = false;
+        var can_be_upgraded = false;
+
+        foreach (var option in args_handler.options) {
+            var option_data = OptionEntity.find_option (List.Data.options (), option);
+
+            switch (option_data.short_option) {
+                case List.Data.OPTION_INSTALLED_SHORT:
+                    installed = true;
+                    break;
+
+                case List.Data.OPTION_CAN_BE_UPGRADED_SHORT:
+                    can_be_upgraded = true;
+                    break;
+            }
+        }
+
+        if (installed) {
+            all_packages = yield cachier.get_installed_packages (args_handler, null, true);
+        } else if (can_be_upgraded) {
+            all_packages = yield cachier.get_upgradable_packages (args_handler, null, true);
+        } else {
+            all_packages = yield cachier.get_all_packages (args_handler, null, true);
+        }
 
         foreach (var package in all_packages) {
-            print ("%s-%s".printf (package.name, package.version));
+            string text_status = "";
+
+            if (installed) {
+                text_status = package.status == PackageStatus.CAN_BE_UPGRADED ? " (%s)".printf (package.status.to_string ()) : "";
+            } else if (can_be_upgraded) {
+                text_status = "";
+            } else {
+                text_status = package.status != PackageStatus.NOT_INSTALLED ? " (%s)".printf (package.status.to_string ()) : "";
+            }
+
+            print ("%s-%s%s - %s".printf (
+                package.name,
+                package.evr.evr_string,
+                text_status,
+                package.summary
+            ));
         }
 
         return 0;

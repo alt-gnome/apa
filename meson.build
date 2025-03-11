@@ -17,20 +17,20 @@ glib_dep = dependency ('glib-2.0', version: '>= ' + MIN_GLIB_VERSION)
 gobject_dep = dependency ('gobject-2.0')
 gio_dep = dependency ('gio-2.0')
 gee_dep = dependency ('gee-0.8')
-pk_dep = dependency('packagekit-glib2')
 libalt_repo_dep = dependency('libalt-repo-1', version: '>= 1.19.16', fallback : ['libalt-repo', 'lib_dep'])
 libvazzy_dep = dependency('libvazzy-1', version: '>= 1.4', fallback : ['libvazzy', 'lib_dep'])
-libapi_base = dependency('libapi-base-1')
+libapi_base_dep = dependency('libapi-base-1')
+rpm_dep = dependency('rpm')
 
 apa_dependencies = [
   glib_dep,
   gobject_dep,
   gio_dep,
   gee_dep,
-  pk_dep,
   libalt_repo_dep,
   libvazzy_dep,
-  libapi_base
+  libapi_base_dep,
+  rpm_dep,
 ]
 
 add_project_arguments(
@@ -41,7 +41,7 @@ add_project_arguments(
 
 add_project_arguments(
   '--target-glib', MIN_GLIB_VERSION,
-  '--vapidir', meson.current_source_dir(),
+  '--vapidir', meson.current_source_dir() / 'vapi',
   language: ['vala']
 )
 
@@ -74,5 +74,6 @@ config_h_dir = include_directories('.')
 
 subdir('data')
 subdir('po')
+subdir('vapi')
 subdir('src')
 subdir('tests')

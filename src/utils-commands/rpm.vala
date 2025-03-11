@@ -24,14 +24,25 @@ namespace Apa.Rpm {
     public const string LIST = "list";
     public const string INFO = "info";
 
-    public static async string[] list () {
+    public static async int list (
+        ArgsHandler args_handler,
+        Gee.ArrayList<string>? result = null,
+        Gee.ArrayList<string>? error = null,
+        bool skip_unknown_options = false
+    ) throws OptionsError {
         var command = new Command (ORIGIN);
 
         command.spawn_vector.add ("-q");
         command.spawn_vector.add ("-a");
 
-        var result = new Gee.ArrayList<string> ();
-        yield spawn_command_full (command.spawn_vector, result, null);
+        command.fill_by_args_handler (
+            args_handler,
+            Rpm.Data.list_options (),
+            Rpm.Data.list_arg_options (),
+            skip_unknown_options
+        );
+
+        var status = yield spawn_command_full (command.spawn_vector, result, error);
 
         if (result != null) {
             for (int i = 0; i < result.size; i++) {
@@ -39,45 +50,48 @@ namespace Apa.Rpm {
             }
         }
 
-        return result.to_array ();
+        return status;
     }
 
-    public static async string[] info (
-        string[] rpm_names
-    ) {
+    public static async int info (
+        ArgsHandler args_handler,
+        Gee.ArrayList<string>? result = null,
+        Gee.ArrayList<string>? error = null,
+        bool skip_unknown_options = false
+    ) throws OptionsError {
         var command = new Command (ORIGIN);
 
         command.spawn_vector.add ("-q");
         command.spawn_vector.add ("-i");
-        command.spawn_vector.add_all_array (rpm_names);
 
-        var result = new Gee.ArrayList<string> ();
-        yield spawn_command_full (command.spawn_vector, result, null);
+        command.fill_by_args_handler_with_args (
+            args_handler,
+            Rpm.Data.info_options (),
+            Rpm.Data.info_arg_options (),
+            skip_unknown_options
+        );
 
-        return result.to_array ();
+        return yield spawn_command_full (command.spawn_vector, result, error);
     }
 
-    /**
-     * Filename HAVE TO exist
-     */
-    public static async string? serch_file (
-        string filename
-    ) {
+    public static async int search_file (
+        ArgsHandler args_handler,
+        Gee.ArrayList<string>? result = null,
+        Gee.ArrayList<string>? error = null,
+        bool skip_unknown_options = false
+    ) throws OptionsError {
         var command = new Command (ORIGIN);
 
         command.spawn_vector.add ("-q");
         command.spawn_vector.add ("-f");
-        command.spawn_vector.add (filename);
 
-        var result = new Gee.ArrayList<string> ();
-        if ((yield spawn_command_full (command.spawn_vector, result, null)) != 0) {
-            return null;
-        }
+        command.fill_by_args_handler_with_args (
+            args_handler,
+            Rpm.Data.common_options (),
+            Rpm.Data.common_arg_options (),
+            skip_unknown_options
+        );
 
-        if (result.size == 0) {
-            return null;
-        }
-
-        return result.to_array ()[0];
+        return yield spawn_command_full (command.spawn_vector, result, error);
     }
 }

@@ -19,8 +19,24 @@
 
  namespace Apa.List.Data {
 
+    public const string OPTION_INSTALLED_SHORT = "-i";
+    public const string OPTION_INSTALLED_LONG = "--installed";
+    public const string OPTION_CAN_BE_UPGRADED_SHORT = "-u";
+    public const string OPTION_CAN_BE_UPGRADED_LONG = "--can-be-upgraded";
+
     public OptionEntity?[] options () {
-        return {};
+        return {
+            {
+                OPTION_INSTALLED_SHORT, OPTION_INSTALLED_LONG,
+                null,
+                Descriptions.option_installed ()
+            },
+            {
+                OPTION_CAN_BE_UPGRADED_SHORT, OPTION_CAN_BE_UPGRADED_LONG,
+                null,
+                Descriptions.option_can_be_upgraded ()
+            }
+        };
     }
 
     public OptionEntity?[] arg_options () {

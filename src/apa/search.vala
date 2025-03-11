@@ -49,10 +49,10 @@ namespace Apa {
         Package[] all_packages;
 
         if (installed) {
-            all_packages = yield cachier.get_installed_packages ();
+            all_packages = yield cachier.get_installed_packages (args_handler, null, false);
 
         } else {
-            all_packages = yield cachier.get_all_packages ();
+            all_packages = yield cachier.get_all_packages (args_handler, null, false);
         }
 
         var search_result = new Gee.ArrayList<string> ();

@@ -21,36 +21,20 @@ namespace Apa.AptCache {
 
     const string ORIGIN = "apt-cache";
 
-    public const string SEARCH = "search";
+    public const string DUMPAVAIL = "dumpavail";
 
-    public static async int search_all (
-        owned ArgsHandler args_handler,
-        Gee.ArrayList<string>? result = null,
-        Gee.ArrayList<string>? error = null
-    ) throws OptionsError {
-        return yield search (
-            new ArgsHandler.with_data (
-                args_handler.options.to_array (),
-                args_handler.arg_options.to_array (),
-                { ".*" }
-            ),
-            result,
-            error
-        );
-    }
-
-    public static async int search (
+    public static async int dumpavail (
         owned ArgsHandler args_handler,
         Gee.ArrayList<string>? result = null,
         Gee.ArrayList<string>? error = null,
         bool skip_unknown_options = false
     ) throws OptionsError {
-        var command = new Command (ORIGIN, SEARCH);
+        var command = new Command (ORIGIN, DUMPAVAIL);
 
-        command.fill_by_args_handler_with_args (
+        command.fill_by_args_handler (
             args_handler,
-            AptCache.Data.search_options (),
-            AptCache.Data.search_arg_options (),
+            AptCache.Data.dumpavail_options (),
+            AptCache.Data.dumpavail_arg_options (),
             skip_unknown_options
         );
 

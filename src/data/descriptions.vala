@@ -298,6 +298,17 @@ namespace Apa.AptGet.Descriptions {
     }
 }
 
+namespace Apa.List.Descriptions {
+
+    public inline string option_installed () {
+        return _("Show installed packages.");
+    }
+
+    public inline string option_can_be_upgraded () {
+        return _("Show packages that can be upgraded.");
+    }
+}
+
 namespace Apa.AptRepo.Descriptions {
 
     public inline string option_simulate () {

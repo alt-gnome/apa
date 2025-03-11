@@ -1,8 +1,8 @@
-vapi_sources = files(
+vapi_sources += files(
   'config.vapi',
 )
 
-apa_no_main_code_sources = files (
+vala_no_main_sources = files (
   'apa/config/config-get.vala',
   'apa/config/config-list.vala',
   'apa/config/config-reset.vala',
@@ -44,6 +44,7 @@ apa_no_main_code_sources = files (
   'cachier/cachier.vala',
   'cachier/package-list.vala',
   'cachier/package.vala',
+  'cachier/rpm-evr.vala',
 
   'data/cache-data.vala',
   'data/commands-data.vala',
@@ -78,18 +79,18 @@ apa_no_main_code_sources = files (
   'error-detection.vala',
   'fuzzy-search.vala',
   'help.vala',
-  'progress.vala',
+  # 'progress.vala',
   'spawn-command.vala',
   'utils.vala',
 )
 
-apa_no_main_sources = [
+no_main_sources = [
   vapi_sources,
-  apa_no_main_code_sources,
+  vala_no_main_sources,
 ]
 
-apa_sources = [
-  apa_no_main_sources,
+sources = [
+  no_main_sources,
   files (
     'main.vala'
   )
@@ -97,7 +98,7 @@ apa_sources = [
 
 executable (
   meson.project_name(),
-  apa_sources,
+  sources,
   include_directories: config_h_dir,
   dependencies: apa_dependencies,
   install: true,

@@ -74,14 +74,9 @@ namespace Apa.AptCache.Data {
             common_options (),
             {
                 {
-                    "-n", "--names-only",
-                    "-n",
+                    OPTION_NAMES_ONLY_SHORT, OPTION_NAMES_ONLY_LONG,
+                    null,
                     Descriptions.option_names_only ()
-                },
-                {
-                    "-f", "--full",
-                    "-f",
-                    Descriptions.option_full ()
                 },
                 {
                     OPTION_INSTALLED_SHORT, OPTION_INSTALLED_LONG,
@@ -93,6 +88,20 @@ namespace Apa.AptCache.Data {
     }
 
     public OptionEntity?[] search_arg_options () {
+        return OptionEntity.concat (
+            common_arg_options (),
+            {}
+        );
+    }
+
+    public OptionEntity?[] dumpavail_options () {
+        return OptionEntity.concat (
+            common_options (),
+            {}
+        );
+    }
+
+    public OptionEntity?[] dumpavail_arg_options () {
         return OptionEntity.concat (
             common_arg_options (),
             {}

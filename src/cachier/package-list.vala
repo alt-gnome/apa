@@ -17,7 +17,19 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-public sealed class Apa.PackageList : Object {
+public sealed class Apa.PackagesList : Object {
 
-    public Gee.ArrayList<Package> packages { get; set; default = new Gee.ArrayList<Package> (); }
+    public Gee.HashMap<string, Package> packages { get; set; default = new Gee.HashMap<string, Package> (); }
+
+    public Package[] get_array () {
+        var array = new Package[packages.size];
+
+        var i = 0;
+        foreach (var entry in packages) {
+            array[i] = entry.value;
+            i++;
+        }
+
+        return array;
+    }
 }
