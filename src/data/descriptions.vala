@@ -22,7 +22,7 @@ namespace Apa.Descriptions {
     public const string NO_DESCRIPTION = "NO DESCRIPTION";
 
     public inline string apa () {
-        return _("APA — ALT Packages Assistant. Your best friend in this cruel world of many package tools.");
+        return _("APA — ALT Package Assistant. Your best friend in this cruel world of many package tools.");
     }
 }
 
