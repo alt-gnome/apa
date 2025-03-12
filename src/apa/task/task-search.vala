@@ -64,7 +64,7 @@ namespace Apa.Task {
                     break;
 
                 case Data.OPTION_STATE_SHORT:
-                    state.add (arg_option.value.down ());
+                    state.add (arg_option.value.up ());
                     break;
 
                 default:
@@ -76,7 +76,7 @@ namespace Apa.Task {
             args_handler.args.to_array (),
             owner,
             branch,
-            state.size == 0 ? (string[]?) null : state.to_array (),
+            state.size == 0 ? null : state.to_array (),
             11,
             by_package
         );
