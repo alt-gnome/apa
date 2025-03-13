@@ -289,7 +289,7 @@ msgstr ""
 
 #: src/data/descriptions.vala:25
 msgid ""
-"APA — ALT Packages Assistant. Your best friend in this cruel world of many "
+"APA — ALT Package Assistant. Your best friend in this cruel world of many "
 "package tools."
 msgstr ""
 

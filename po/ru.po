@@ -303,10 +303,10 @@ msgstr "Неверный тип."
 
 #: src/data/descriptions.vala:25
 msgid ""
-"APA — ALT Packages Assistant. Your best friend in this cruel world of many "
+"APA — ALT Package Assistant. Your best friend in this cruel world of many "
 "package tools."
 msgstr ""
-"APA — ALT Packages Assistant. Ваш лучший друг в этом жестоком мире множества "
+"APA — ALT Package Assistant. Ваш лучший друг в этом жестоком мире множества "
 "инструментов для упаковки."
 
 #: src/data/descriptions.vala:32
